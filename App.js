@@ -13,6 +13,7 @@ import {
   ScrollView,
   View,
   Text,
+  Image,
   StatusBar,
 } from 'react-native';
 
@@ -27,7 +28,8 @@ import {
 const App: () => React$Node = () => {
   return (
     <View style={styles.container}>
-      <Text>Hello world!</Text>
+      <Text style={styles.textstyle}>Hello world!</Text>
+      <Image source={require('./assets/cat.jpeg')}/>
     </View>
   );
 };
@@ -37,6 +39,10 @@ const styles = StyleSheet.create({
       flex : 1,
       justifyContent:'center',
       alignItems:'center'
+  },
+  textstyle:{
+    fontSize:20,
+    fontWeight:'bold'
   }
 });
 
