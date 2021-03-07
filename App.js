@@ -18,14 +18,6 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
 class Cat extends Component{
   render () {
     let catimg=''
