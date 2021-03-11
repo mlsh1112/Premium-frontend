@@ -10,4 +10,8 @@ Common factors
  - node.js : 14.16.0
  - target SDK : 29
 
+ for android
+
+ for ios
+
  
