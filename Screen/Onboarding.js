@@ -14,7 +14,7 @@ class Onboarding extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.textposition}><Text style={styles.textstyle}>공부 하자</Text></View>
-                <TouchableOpacity style={styles.buttonposition} onPress={() => this.props.navigation.navigate("Signin")} >
+                <TouchableOpacity style={styles.buttonposition} onPress={() => this.props.navigation.navigate("AuthLoading")} >
                 <Text style={styles.buttonstyle}>Get Started</Text>
                 </TouchableOpacity>
           </View>
