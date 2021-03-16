@@ -9,11 +9,12 @@ import {
 
 
 class Onboarding extends Component {
+    
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.textposition}><Text style={styles.textstyle}>공부 하자</Text></View>
-                <TouchableOpacity style={styles.buttonposition} >
+                <TouchableOpacity style={styles.buttonposition} onPress={() => this.props.navigation.navigate("Signin")} >
                 <Text style={styles.buttonstyle}>Get Started</Text>
                 </TouchableOpacity>
           </View>

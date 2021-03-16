@@ -9,6 +9,8 @@
 import React, {Component} from 'react';
 import Onboarding from './Screen/Onboarding';
 import Signin from './Screen/SigninScreen';
+import {NavigationContainer} from "@react-navigation/native";
+import Stack from "./Navigation/StackNavigation"
 import {
   StyleSheet,
   View,
@@ -20,13 +22,17 @@ class App extends Component {
 
   render(){
   return (
-    <View style={styles.container}>
-      <Onboarding/>
-      {/* <Signin />*/} 
-    </View>
+    <NavigationContainer>
+      <Stack />
+    </NavigationContainer>
+    //<View style={styles.container}>
+    //  <Onboarding/>
+    //  {/* <Signin />*/} 
+    //</View>
   );
   }
 };
+
 
 const styles = StyleSheet.create({
   container:{
