@@ -8,6 +8,7 @@
 
 import React, {Component} from 'react';
 import Onboarding from './Screen/Onboarding';
+import Signin from './Screen/SigninScreen';
 import {
   StyleSheet,
   View,
@@ -21,6 +22,7 @@ class App extends Component {
   return (
     <View style={styles.container}>
       <Onboarding/>
+      {/* <Signin />*/} 
     </View>
   );
   }
