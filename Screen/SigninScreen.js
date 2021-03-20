@@ -59,10 +59,10 @@
         <View style={styles.FormStyle}>
             <TextInput style={styles.InputStyle}
               placeholder={"Password"}
-             onChangeText={userPassword => setUserPassword(userPassword)}
-             ref={passwordInputRef}
-             secureTextEntry={true}
-             returnKeyType="next"
+              onChangeText={userPassword => setUserPassword(userPassword)}
+              ref={passwordInputRef}
+              secureTextEntry={true}
+              returnKeyType="next"
             />
         </View>
         <View >
