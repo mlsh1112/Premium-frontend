@@ -7,13 +7,13 @@
  */
 
  import React, {Component, useState,createRef} from 'react';
+ import {Button} from '../src/components'
  import {
    SafeAreaView,
    StyleSheet,
    ScrollView,
    View,
    Text,
-   Button,
    Image,
    StatusBar,
    TextInput,
@@ -66,11 +66,8 @@
             />
         </View>
         <View >
-            <TouchableOpacity style={styles.buttonStyle}
-              activeOpacity={0.5}
-              onPress={handleSubmitPress}>
-              <Text style={styles.buttonTextStyle}>LOGIN</Text>
-            </TouchableOpacity>
+            <Button onPress={handleSubmitPress}>LOGIN</Button>
+            <Text style={styles.SignUpQStyle}>Don't have any account?  </Text>
             <Text style={styles.SignUpStyle}
               //onPress={() => navigation.navigate('SignUpScreen')}
               >
@@ -108,21 +105,12 @@
     borderRadius: 30,
     borderColor: '#dadae8',
   },
-  buttonStyle: {
-    backgroundColor: '#7DE24E',
-    borderWidth: 0,
-    color: '#FFFFFF',
-    borderColor: '#7DE24E',
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 10,
-    marginLeft: 35,
-    marginRight: 35,
-    marginTop: 20,
-    marginBottom: 25,
-    paddingLeft: 10,
-    paddingRight: 10,
+  SignUpQStyle: {
+    color: "black",
+    textAlign: 'center',
+    fontSize: 14,
+    alignSelf: 'center',
+    padding: 10,
   },
   SignUpStyle: {
     color: "blue",
@@ -130,7 +118,7 @@
     fontWeight: 'bold',
     fontSize: 14,
     alignSelf: 'center',
-    padding: 10,
+    padding: 5,
   },
  });
  

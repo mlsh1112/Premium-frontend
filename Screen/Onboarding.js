@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import colors from '../src/colors';
+import {Button} from '../src/components'
 import {
     StyleSheet,
     TouchableOpacity,
@@ -14,23 +14,25 @@ class Onboarding extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.textposition}><Text style={styles.textstyle}>공부 하자</Text></View>
-                <TouchableOpacity style={styles.buttonposition} onPress={() => this.props.navigation.navigate("AuthLoading")} >
-                <Text style={styles.buttonstyle}>Get Started</Text>
-                </TouchableOpacity>
+                <Button  onPress={() => this.props.navigation.navigate("AuthLoading")}>Get Started</Button>
           </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'space-around',
+    container : {
+        flex : 1,
+        justifyContent:'center',
+        alignItems:'center',
     },
     textposition:{
-        position: 'absolute',
-        left: '27%',
-        top: '20%'
+        flexDirection: 'row',
+        height: 500,
+        marginTop: 0,
+        marginLeft: 35,
+        marginRight: 35,
+        margin: 10,
     },
     textstyle:{
         fontStyle: 'normal',
@@ -38,22 +40,7 @@ const styles = StyleSheet.create({
         fontSize: 50,
         color: '#2E3E5C'
     },
-    buttonposition:{
-        position: 'absolute',
-        width: 327,
-        height: 56,
-        left: '10%',
-        top: '75%',
-        backgroundColor: colors.maincolor,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 32
-    },
-    buttonstyle:{
-        color:'white',
-        fontWeight: 'bold',
-        fontSize: 20,
-    }
+
   });
 
 export default Onboarding;
