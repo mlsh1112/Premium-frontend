@@ -8,6 +8,7 @@
 
  import React, {Component, useState,createRef} from 'react';
  import {Button} from '../src/components'
+ import axios from 'axios'
  import {
    SafeAreaView,
    StyleSheet,
@@ -37,8 +38,15 @@
        alert("Please enter Password")
        return ;
      }
-     console.log(userEmail);
-     console.log(userPassword);
+
+     axios.get('http://localhost:3000/users')
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    
    }
    return (
      <View style={styles.container}>
