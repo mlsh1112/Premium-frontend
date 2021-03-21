@@ -21,15 +21,23 @@
    TouchableOpacity,  
  } from 'react-native';
  
- 
+import {login,signup} from '../src/Api';
+
  const Signin = () => {
    const [userEmail,setUserEmail] = useState('');
    const [userPassword,setUserPassword] = useState('');
    //const [loading,setLoading] = useState('');
    //const [errortext,SetErrorText]=useState('');
    const passwordInputRef = createRef();
-  
+   
+   //let notification = JSON.stringify({
+   //  "user":{
+   //   "email":userEmail,
+   //   "password":userPassword
+   //  }
+   //})
    const handleSubmitPress = ()=>{
+
      if (!userEmail){
        alert("Please enter Email");
        return ;
@@ -38,15 +46,23 @@
        alert("Please enter Password")
        return ;
      }
-
-     axios.get('http://localhost:3000/users')
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-    
+     else {
+      signup({
+        "email":userEmail,
+        "password":userPassword
+      }).then(res => {
+        console.log("1233213")
+        console.log(res.data.token)
+      });
+      // axios.post("http://10.0.2.2:3000/users/sign_in",notification,headers).then(response => {
+      //     console.log(response.data)
+      //   }).catch(error => {
+      //     console.log(error)
+      //   })
+      // }
+     }
+      console.log(userEmail);
+      console.log(userPassword);
    }
    return (
      <View style={styles.container}>
@@ -77,7 +93,7 @@
             <Button onPress={handleSubmitPress}>LOGIN</Button>
             <Text style={styles.SignUpQStyle}>Don't have any account?  </Text>
             <Text style={styles.SignUpStyle}
-              //onPress={() => navigation.navigate('SignUpScreen')}
+              //onPress={() => this.props.navigation.navigate("Signup")}
               >
               Sign Up
             </Text>
