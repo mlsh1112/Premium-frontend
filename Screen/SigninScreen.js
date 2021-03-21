@@ -21,22 +21,16 @@
  } from 'react-native';
  
 import {login} from '../src/Api';
+import {setToken} from '../src/Asyncstorage';
 
- const Signin = () => {
+ const Signin = (props) => {
    const [userEmail,setUserEmail] = useState('');
    const [userPassword,setUserPassword] = useState('');
    //const [loading,setLoading] = useState('');
    //const [errortext,SetErrorText]=useState('');
    const passwordInputRef = createRef();
-   
-   //let notification = JSON.stringify({
-   //  "user":{
-   //   "email":userEmail,
-   //   "password":userPassword
-   //  }
-   //})
-   const handleSubmitPress = ()=>{
 
+   const handleSubmitPress = ()=>{
      if (!userEmail){
        alert("Please enter Email");
        return ;
@@ -50,15 +44,13 @@ import {login} from '../src/Api';
         "email":userEmail,
         "password":userPassword
       }).then(res => {
-        console.log("1233213")
-        console.log(res.data.token)
+        console.log(res.data.token);
+        setToken(res.data.token);
+      }).catch(error => {
+        console.error(error);
       });
-      // axios.post("http://10.0.2.2:3000/users/sign_in",notification,headers).then(response => {
-      //     console.log(response.data)
-      //   }).catch(error => {
-      //     console.log(error)
-      //   })
-      // }
+      props.navigation.replace('Home');
+      console.log("Go to Home from sign in ");
      }
       console.log(userEmail);
       console.log(userPassword);
