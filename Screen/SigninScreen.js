@@ -8,6 +8,7 @@
 
  import React, {Component, useState,createRef} from 'react';
  import {Button} from '../src/components'
+ import axios from 'axios'
  import {
    SafeAreaView,
    StyleSheet,
@@ -19,9 +20,8 @@
    TextInput,
    TouchableOpacity,  
  } from 'react-native';
- 
-import {login} from '../src/Api';
-import {setToken} from '../src/Asyncstorage';
+
+import {login,signup} from '../src/Api';
 
  const Signin = (props) => {
    const [userEmail,setUserEmail] = useState('');
@@ -40,7 +40,7 @@ import {setToken} from '../src/Asyncstorage';
        return ;
      }
      else {
-      login({
+      signup({
         "email":userEmail,
         "password":userPassword
       }).then(res => {
@@ -84,7 +84,7 @@ import {setToken} from '../src/Asyncstorage';
             <Button onPress={handleSubmitPress}>LOGIN</Button>
             <Text style={styles.SignUpQStyle}>Don't have any account?  </Text>
             <Text style={styles.SignUpStyle}
-              //onPress={() => navigation.navigate('SignUpScreen')}
+              //onPress={() => this.props.navigation.navigate("Signup")}
               >
               Sign Up
             </Text>
