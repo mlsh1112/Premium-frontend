@@ -16,17 +16,10 @@ const AuthLoading = (props) => {
             console.log("AsyncStorage remove Error: " + error.message);
         };
     }
-    const setTokenForTest = async() => { //asyncstorage 테스트용 token 생성
-        try{
-            await AsyncStorage.setItem('token','temptokenforusertoken');
-        }
-        catch (error){
-            console.log("AsyncStorage setting Error: " + error.message);
-        };
-    };
     const CheckUserToken = async() => {
         try{
             const item = await AsyncStorage.getItem('token');
+            console.log("token in authloading : " + item)
             if (item){
                 props.navigation.replace('Home');
                 console.log("Go to Home");
@@ -41,7 +34,6 @@ const AuthLoading = (props) => {
         };
     };
     useEffect(() => {
-        //setTokenForTest();
         //deletokenfortest();
         CheckUserToken();
     });
