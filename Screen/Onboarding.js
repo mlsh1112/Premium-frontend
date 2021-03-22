@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button} from '../src/components'
+import {Button} from '../src/components';
 import {
     StyleSheet,
     TouchableOpacity,
@@ -13,7 +13,7 @@ class Onboarding extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.textposition}><Text style={styles.textstyle}>공부 하자</Text></View>
+                <View style={styles.textposition}><Text style={styles.textstyle}>따 숲</Text></View>
                 <Button  onPress={() => this.props.navigation.navigate("AuthLoading")}>Get Started</Button>
           </View>
         );
