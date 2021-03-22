@@ -16,13 +16,14 @@ const AuthLoading = (props) => {
             console.log("AsyncStorage remove Error: " + error.message);
         };
     }
-    const CheckUserToken = async() => {
+    const CheckUserToken = async(props) => {
         try{
             const item = await AsyncStorage.getItem('token');
             console.log("token in authloading : " + item)
             if (item){
-                props.navigation.replace('Home');
-                console.log("Go to Home");
+                console.log("there is token")
+                props.navigation.replace('Main');
+                console.log("Go to Main");
             }
             else{
                 props.navigation.replace('Signin');
@@ -30,12 +31,12 @@ const AuthLoading = (props) => {
             }
         }
         catch (error){
-            console.log("AsyncStorage Error: " + error.message);
+            console.log("AsyncStorage Error!!!!!!!: " + error.message);
         };
     };
     useEffect(() => {
         //deletokenfortest();
-        CheckUserToken();
+        CheckUserToken(props);
     });
     return (
         <View style={styles.container}>
