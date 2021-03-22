@@ -6,104 +6,120 @@
  * @flow strict-local
  */
 
-import React, {useState,createRef} from 'react';
+import React from 'react';
 import {Button} from '../src/components'
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
-  Image,
-  StatusBar,
-  TextInput,
-  TouchableOpacity,  
+  TextInput,  
 } from 'react-native';
-import {login,signup} from '../src/Api';
+import {login} from '../src/Api';
 import {setToken} from '../src/Asyncstorage';
+import { Formik } from "formik";
+import * as Yup from "yup";
 
- const Signin = (props) => {
-   const [userEmail,setUserEmail] = useState('');
-   const [userPassword,setUserPassword] = useState('');
-   //const [loading,setLoading] = useState('');
-   //const [errortext,SetErrorText]=useState('');
-   const passwordInputRef = createRef();
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .required("이메일을 입력해주세요.")
+    .email("이메일 형식이 아닙니다."),
+  password: Yup.string()
+    .required("비밀번호를 입력해주세요")
+});
+const Signin = (props) => {
+  const handleSubmitPress = (values) =>{
+     login({
+       "email":values.email,
+       "password":values.password
+     }).then(res => {
+       console.log(res.data.token);
+       setToken(res.data.token);
+     }).then(() => {
+       props.navigation.replace('AuthLoading');
+       console.log("Go to Home from sign in ");
+     }).catch(error => {
+       alert("이메일 혹은 패스워드를 확인해주세요.")
+       console.log(error);
+     });
+  }
    
-   const handleSubmitPress = ()=>{
-     if (!userEmail){
-       alert("Please enter Email");
-       return ;
-     }
-     else if (!userPassword){
-       alert("Please enter Password")
-       return ;
-     }
-     else {
-      login({
-        "email":userEmail,
-        "password":userPassword
-      }).then(res => {
-        console.log(res.data.token);
-        setToken(res.data.token);
-      }).then(() => {
-        props.navigation.replace('AuthLoading');
-        console.log("Go to Home from sign in ");
-      }).catch(error => {
-        alert("login failed!!!")
-        console.log(error);
-      });
-     }
-      console.log(userEmail);
-      console.log(userPassword);
-   }
-   return (
-     <View style={styles.container}>
-        <View>
-            <Text>Welcome</Text>
-        </View>
-        <View style={styles.FormStyle}>
-            <TextInput style={styles.InputStyle}
-              placeholder={"Email"} 
-              onChangeText={userEmail => setUserEmail(userEmail)}
-              keyboardType="email-address"
-              onSubmitEditing={() => {
-                  passwordInputRef.current.focus();
-                }
-              }
-            />
-        </View>
-        <View style={styles.FormStyle}>
-            <TextInput style={styles.InputStyle}
-              placeholder={"Password"}
-              onChangeText={userPassword => setUserPassword(userPassword)}
-              ref={passwordInputRef}
-              secureTextEntry={true}
-              returnKeyType="next"
-            />
-        </View>
-        <View >
-            <Button onPress={handleSubmitPress}>LOGIN</Button>
-            <Text style={styles.SignUpQStyle}>Don't have any account?  </Text>
+  return (
+   <View style={styles.container}>
+     <View >
+       <Text style={styles.title}>Welcome to 따숲</Text>
+     </View>
+     <Formik
+       style={styles.FormStyle}
+       validationSchema={validationSchema}
+       initialValues={{ email: '', password: '' }}
+       onSubmit={values => {
+         console.log(values)
+         handleSubmitPress(values)
+       }}
+     >
+       {({ handleChange, handleBlur, handleSubmit, values, errors,touched,}) => (
+       
+         <>
+           <TextInput
+             name="email"
+             placeholder="Email Address"
+             style={styles.textInput}
+             onChangeText={handleChange('email')}
+             onBlur={handleBlur('email')}
+             value={values.email}
+             keyboardType="email-address"
+           />
+           {(errors.email && touched.email) &&
+           <Text style={styles.errorText}>{errors.email}</Text>
+           }
+           <TextInput
+             name="password"
+             placeholder="Password"
+             style={styles.textInput}
+             onChangeText={handleChange('password')}
+             onBlur={handleBlur('password')}
+             value={values.password}
+             secureTextEntry
+           />
+           {(errors.password && touched.password) &&
+           <Text style={styles.errorText}>{errors.password}</Text>
+           }
+           <View style={styles.button}>
+             <Button onPress={handleSubmit}>Log in</Button>
+           </View>
+           <Text style={styles.SignUpQStyle}>따숲이 처음이신가요?</Text>
             <Text style={styles.SignUpStyle}
               onPress={() => props.navigation.navigate("Signup")}
               >
               Sign Up
             </Text>
-        </View>
-     </View>
-   );
- };
+         </>
+       )}
+     </Formik>
+   </View>
+  );
+};
  
- const styles = StyleSheet.create({
-   container : {
-       flex : 1,
-       justifyContent:'center',
-       alignItems:'center',
-   },
-   textstyle:{
-     fontSize:20,
-     fontWeight:'bold'
-   },
+const styles = StyleSheet.create({
+  container : {
+      flex : 1,
+      justifyContent:'center',
+      alignItems:'center',
+  },
+  textInput: {
+    height: 40,
+    width: '90%',
+    margin: 10,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderRadius: 10,
+    fontSize:15,
+    fontWeight:'bold'
+  },
+  errorText: {
+    fontSize: 12,
+    color: 'red',
+  },
    FormStyle: {
     flexDirection: 'row',
     height: 40,
@@ -124,9 +140,10 @@ import {setToken} from '../src/Asyncstorage';
   SignUpQStyle: {
     color: "black",
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: 15,
+    fontWeight: "bold",
     alignSelf: 'center',
-    padding: 10,
+    marginTop:10,
   },
   SignUpStyle: {
     color: "blue",
@@ -134,8 +151,19 @@ import {setToken} from '../src/Asyncstorage';
     fontWeight: 'bold',
     fontSize: 14,
     alignSelf: 'center',
-    padding: 5,
+    borderBottomWidth: 1,
+    paddingBottom: 1,
+    borderBottomColor: "blue",
   },
+  button: {
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 36,
+    fontWeight: "bold",
+    marginBottom:10,
+  }
  });
  
  export default Signin;
