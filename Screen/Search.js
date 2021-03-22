@@ -8,14 +8,13 @@ import {
   } from 'react-native';
 
 
-class Home extends Component {
+class Search extends Component {
     
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.textposition}>
-                    <Text style={styles.textstyle}>따 숲</Text>
-                    <Text style={styles.textstyle}>HOME</Text>
+                    <Text style={styles.textstyle}>검색 화면</Text>
                 </View>
           </View>
         );
@@ -56,4 +55,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default Home;
+export default Search;
