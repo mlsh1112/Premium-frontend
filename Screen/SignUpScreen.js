@@ -10,7 +10,7 @@ import React, {Component, useState,createRef} from 'react';
    Image,
    StatusBar,
    TextInput,
-   TouchableOpacity,  
+   TouchableOpacity,
  } from 'react-native';
 
 
@@ -32,8 +32,8 @@ class SignUpScreen extends Component {
     render() {
         const { email, password, password_confirmation, name, phonenumber,user_type,error, loading } = this.state;
         return (
-            <View style={form}>
-          <View style={section}>
+            <View style={styles.form}>
+          <View style={styles.section}>
             <Input
               placeholder="user@email.com"
               label="Email"
@@ -42,7 +42,7 @@ class SignUpScreen extends Component {
             />
           </View>
 
-          <View style={section}>
+          <View style={styles.section}>
             <Input
               secureTextEntry
               placeholder="password"
@@ -52,7 +52,7 @@ class SignUpScreen extends Component {
             />
           </View>
 
-          <View style={section}>
+          <View style={styles.section}>
             <Input
               secureTextEntry
               placeholder="confirm password"
@@ -62,7 +62,7 @@ class SignUpScreen extends Component {
             />
           </View>
 
-          <View style={section}>
+          <View style={styles.section}>
             <Input
               placeholder="name"
               label="Name"

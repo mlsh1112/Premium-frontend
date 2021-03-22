@@ -4,7 +4,6 @@ import Onboarding from '../Screen/Onboarding';
 import AuthLoading from '../Screen/AuthLoadingScreen';
 import Signin from '../Screen/SigninScreen';
 import Signup from '../Screen/SignUpScreen'
-import Home from '../Screen/Home';
 import Tabnavigation from './BottomTabNav';
 
 const Stack = createStackNavigator();

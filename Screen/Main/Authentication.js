@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import colors from '../src/colors';
+import colors from '../../src/colors';
 import {
     StyleSheet,
     TouchableOpacity,
@@ -14,7 +14,8 @@ class Authentication extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.textposition}>
-                    <Text style={styles.textstyle}>프로젝트 일일 인증 진행화면</Text>
+                    <Text style={styles.textstyle}>프로젝트 일일</Text>
+                    <Text style={styles.textstyle}>인증 진행화면</Text>
                 </View>
           </View>
         );

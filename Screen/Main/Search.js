@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import colors from '../src/colors';
+import colors from '../../src/colors';
 import {
     StyleSheet,
     TouchableOpacity,
@@ -8,13 +8,13 @@ import {
   } from 'react-native';
 
 
-class Profile extends Component {
+class Search extends Component {
     
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.textposition}>
-                    <Text style={styles.textstyle}>프로필 화면</Text>
+                    <Text style={styles.textstyle}>검색 화면</Text>
                 </View>
           </View>
         );
@@ -55,4 +55,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default Profile;
+export default Search;
