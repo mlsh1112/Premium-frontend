@@ -6,22 +6,21 @@
  * @flow strict-local
  */
 
- import React, {Component, useState,createRef} from 'react';
- import {Button} from '../src/components'
- import axios from 'axios'
- import {
-   SafeAreaView,
-   StyleSheet,
-   ScrollView,
-   View,
-   Text,
-   Image,
-   StatusBar,
-   TextInput,
-   TouchableOpacity,  
- } from 'react-native';
-
+import React, {useState,createRef} from 'react';
+import {Button} from '../src/components'
+import {
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  Image,
+  StatusBar,
+  TextInput,
+  TouchableOpacity,  
+} from 'react-native';
 import {login,signup} from '../src/Api';
+import {setToken} from '../src/Asyncstorage';
 
  const Signin = (props) => {
    const [userEmail,setUserEmail] = useState('');
@@ -29,7 +28,7 @@ import {login,signup} from '../src/Api';
    //const [loading,setLoading] = useState('');
    //const [errortext,SetErrorText]=useState('');
    const passwordInputRef = createRef();
-
+   
    const handleSubmitPress = ()=>{
      if (!userEmail){
        alert("Please enter Email");
@@ -40,17 +39,19 @@ import {login,signup} from '../src/Api';
        return ;
      }
      else {
-      signup({
+      login({
         "email":userEmail,
         "password":userPassword
       }).then(res => {
         console.log(res.data.token);
         setToken(res.data.token);
+      }).then(() => {
+        props.navigation.replace('AuthLoading');
+        console.log("Go to Home from sign in ");
       }).catch(error => {
-        console.error(error);
+        alert("login failed!!!")
+        console.log(error);
       });
-      props.navigation.replace('Home');
-      console.log("Go to Home from sign in ");
      }
       console.log(userEmail);
       console.log(userPassword);
@@ -84,7 +85,7 @@ import {login,signup} from '../src/Api';
             <Button onPress={handleSubmitPress}>LOGIN</Button>
             <Text style={styles.SignUpQStyle}>Don't have any account?  </Text>
             <Text style={styles.SignUpStyle}
-              //onPress={() => this.props.navigation.navigate("Signup")}
+              onPress={() => props.navigation.navigate("Signup")}
               >
               Sign Up
             </Text>
