@@ -7,7 +7,7 @@
  */
 
  import React from 'react';
- import {Button} from '../src/components'
+ import {Button} from '../../src/components'
  import {
    StyleSheet,
    View,

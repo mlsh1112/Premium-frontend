@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import colors from '../src/colors';
+import colors from '../../src/colors';
 import {
     StyleSheet,
     TouchableOpacity,
