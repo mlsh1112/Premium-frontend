@@ -3,7 +3,7 @@
 buildscript {
     ext {
         buildToolsVersion = "29.0.2"
-        minSdkVersion = 16
+        minSdkVersion = 21 //image picker 사용시 설정 필요
         compileSdkVersion = 29
         targetSdkVersion = 29
     }
