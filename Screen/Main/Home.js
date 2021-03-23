@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import colors from '../../src/colors';
+import RNPickerSelect from 'react-native-picker-select';
 import {
     StyleSheet,
     TouchableOpacity,
@@ -14,12 +14,21 @@ class Home extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.textposition}>따숲</Text>
-                <ScrollView style={styles.textposition}>
+                <Text style={styles.textposition}>따 숲</Text>
+                <RNPickerSelect 
+                    onValueChange={(value) => console.log(value)}
+                    items={[
+                        { label: '국어', value: 'korean' },
+                        { label: '영어', value: 'english' },
+                        { label: '수학', value: 'math' },
+                    ]}
+                />
+                <ScrollView >
                     <Text style={styles.welcome}>Welcome to React Native</Text>
                     <Text style={styles.welcome}>Welcome to React Native</Text>
                     <Text style={styles.welcome}>Welcome to React Native</Text>
                 </ScrollView>
+                
           </View>
         );
     }
@@ -31,22 +40,15 @@ const styles = StyleSheet.create({
         justifyContent:'center',
     },
     textposition:{
-        flex:1,
-        position: 'absolute',
-        left: '27%',
-        top: '20%'
+        marginTop:70,
+        marginLeft:50,
+        fontSize:30,
+        fontWeight:'bold'
     },
-    textstyle:{
-        flex:1,
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        fontSize: 50,
-        color: '#2E3E5C',
-        margin:20,
+    pickerposition:{
+        margin:10
     },
     welcome: {
-        flex: 1,
-        margin: 20,
         backgroundColor: 'orange',
         margin: 10,
         textAlign: 'center',
