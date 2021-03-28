@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, useState} from 'react';
 import RNPickerSelect from 'react-native-picker-select';
+import Projectcard from '../../src/components/Projectcard'
+import {projects} from '../../src/Api'
 import {
     StyleSheet,
     TouchableOpacity,
@@ -7,32 +9,43 @@ import {
     View,
     Text,
   } from 'react-native';
-
+import { FlatList } from 'react-native';
 
 class Home extends Component {
-    
+    state={
+        subject:'',
+        project:[{
+            experience_period: 7,
+            deposit: 15000,
+            description: "algorithm",
+            image: null
+        },
+    ]
+    };
     render() {
         return (
             <View style={styles.container}>
                 <Text style={styles.textposition}>따 숲</Text>
                 <View style={styles.pickerstyle}>
                     <RNPickerSelect 
-                        placeholder={{ label: "과목", value: null }}
+                        placeholder={{ label: '과목 전체', value: 'all' }}
                         onValueChange={(value) => console.log(value)}
                         useNativeAndroidPickerStyle={false}
                         items={[
-                            { label: '전체', value: 'all' },
                             { label: '국어', value: 'korean' },
                             { label: '영어', value: 'english' },
                             { label: '수학', value: 'math' },
                        ]}
                 /></View>
-                <ScrollView >
-                    <Text style={styles.welcome}>Welcome to React Native</Text>
-                    <Text style={styles.welcome}>Welcome to React Native</Text>
-                    <Text style={styles.welcome}>Welcome to React Native</Text>
-                </ScrollView>
-                
+                <FlatList
+                ListHeaderComponent={
+                    <View>
+                        <Projectcard data={this.state.project[0]} /> 
+                        <Projectcard data={this.state.project[0]} /> 
+                        <Projectcard data={this.state.project[0]} /> 
+                    </View>
+                }
+                />
           </View>
         );
     }
