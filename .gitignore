@@ -57,6 +57,3 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
-
-# App.js
-src/Api.js

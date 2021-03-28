@@ -3,6 +3,9 @@ import { StyleSheet, View, Image,Text } from 'react-native';
 import cat from '../../assets/cat2.png'
 class Projectcard extends Component {
 
+    componentDidMount(){
+        //console.log(this.props.data)
+    }
     render() {
         return (
         <View style={styles.card}>
@@ -18,6 +21,7 @@ class Projectcard extends Component {
                         <Text style={styles.profileStyle3}>00 대학교 000 학과</Text>
                 </View>
             </View>
+
             <View>
                 <Text style={styles.projectName}>{this.props.data.description}</Text>
                 <Text style={styles.bookname}>교재명 : 수능 특강</Text>

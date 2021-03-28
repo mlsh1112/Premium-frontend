@@ -1,6 +1,6 @@
 import React, { Component, useState} from 'react';
 import RNPickerSelect from 'react-native-picker-select';
-import Projectcard from '../../src/components/Projectcard'
+import Projectcard from '../../src/components/Projectcard';
 import {projects} from '../../src/Api'
 import {
     StyleSheet,
@@ -14,12 +14,18 @@ import { FlatList } from 'react-native';
 class Home extends Component {
     state={
         subject:'',
-        project:[{
+        projects:[{
             experience_period: 7,
             deposit: 15000,
             description: "algorithm",
             image: null
         },
+        {
+            "experience_period": 10,
+            "deposit": 15000,
+            "description": "rails study",
+            "image": null
+            }
     ]
     };
     render() {
@@ -29,7 +35,7 @@ class Home extends Component {
                 <View style={styles.pickerstyle}>
                     <RNPickerSelect 
                         placeholder={{ label: '과목 전체', value: 'all' }}
-                        onValueChange={(value) => console.log(value)}
+                        onValueChange={(value) => this.setState({subject:value})}
                         useNativeAndroidPickerStyle={false}
                         items={[
                             { label: '국어', value: 'korean' },
@@ -37,12 +43,16 @@ class Home extends Component {
                             { label: '수학', value: 'math' },
                        ]}
                 /></View>
+               <View style={styles.bar}>
+                   
+               </View>
                 <FlatList
                 ListHeaderComponent={
                     <View>
-                        <Projectcard data={this.state.project[0]} /> 
-                        <Projectcard data={this.state.project[0]} /> 
-                        <Projectcard data={this.state.project[0]} /> 
+                        {this.state.projects.map(project=>{
+                            {console.log(project)}
+                           return <Projectcard data={project}/>
+                        })}
                     </View>
                 }
                 />
@@ -71,12 +81,15 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingRight: 30,
     },
-    welcome: {
-        backgroundColor: 'orange',
-        margin: 10,
-        textAlign: 'center',
-        fontSize: 20,
-        paddingTop: 70,
+    bar: {
+        flex:1,
+        marginTop:10,
+        position: 'absolute',
+        width: '100%',
+        height: 5,
+        left: 0,
+        top: 179,
+        backgroundColor: '#ced4da'
       }
   });
 
