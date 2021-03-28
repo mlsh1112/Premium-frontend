@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -28,7 +28,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {TabView, TabBar} from 'react-native-tab-view';
 
 import colors from '../../src/colors'
-
+import {getMyProfile} from '../../src/Api';
 
 const EachTabViewsProjects = (props) => {
   return(
@@ -69,7 +69,15 @@ const Profile = (props) => {
   const [school,setSchool] = useState('아주대학교');
   const [followers,setFollower] = useState(1287);
   const [following,setFollowing] = useState(224);
- 
+  
+  
+    console.log("hi");
+    getMyProfile().then(res => {
+      console.log(res);
+    }).catch(error => {
+      console.log(error);
+    });
+  
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -101,7 +109,10 @@ const Profile = (props) => {
      await AsyncStorage.removeItem('token');
      props.navigation.popToTop()
   }
-  
+  const goToCreateProject = () => {
+    console.log("프로젝트 생성하러가기");
+    props.navigation.navigate('ProjectForm');
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoSection}>
@@ -126,7 +137,7 @@ const Profile = (props) => {
           <Text style={{color:"#777777", marginLeft: 20,textAlignVertical:'center'}}>{school}</Text>
         </View>
         { whoami === "tutor" 
-            ? (<TouchableOpacity style={styles.buttonposition_createpro} onPress={()=>console.log("프로젝트 생성하러가기")}>
+            ? (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToCreateProject}>
                 <Text style={styles.buttonstyle}>프로젝트 생성</Text>
                </TouchableOpacity>)
             : (<TouchableOpacity style={styles.buttonposition_createpro} onPress={()=>console.log("인증하러가기")}>
