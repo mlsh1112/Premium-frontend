@@ -34,6 +34,19 @@ function Search() {
     const animOpacity=React.useRef();
     const textRef=React.useRef();
 
+    const [text,setText]=useState();
+    const [newtext,setNewtext]=useState();
+
+    const TextChangeHendler=(text)=>{        
+        setNewtext(text);
+    }
+    
+    const addText=()=>{
+        setText([...text,newtext]);
+        console.log(text);
+    }
+    
+    
     const onFocus=()=>{
         setIsOpened(true);
         Animated.timing(animPosition.current,{
@@ -44,7 +57,6 @@ function Search() {
     };
 
     const onBlur=()=>{
-
         Animated.timing(animPosition.current,{
             toValue:centerPosition,
             duration:300,
@@ -113,15 +125,16 @@ function Search() {
                     paddingHorizontal: 10,
                     fontSize: 14,
                     }}
+                    onChangeText={(text)=>TextChangeHendler(text)}
         />
         {isOpened && (
           <Animated.Text
-            onPress={textRef.current.blur}
+            onPress={addText}
             style={{ position: 'absolute', right: 10, padding: 10, opacity:animOpacity.current }}>
-            {'닫기'}
+            검색
           </Animated.Text>
         )}
-            </Animated.View>
+        </Animated.View>
         </View>
     )
  
