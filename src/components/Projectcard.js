@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image,Text } from 'react-native';
+import { Card } from 'react-native-paper';
 import cat from '../../assets/cat2.png'
 class Projectcard extends Component {
 
     componentDidMount(){
         //console.log(this.props.data)
     }
+    cardclick(){
+        
+    }
     render() {
         return (
-        <View style={styles.card}>
-        <View style={{margin:20}}>
+        <Card onPress={this.cardclick}>
+            <View style={styles.card} >
+            <View style={{margin:20}}>
             
             <View style={styles.profilePosition}>
                 <Image style={styles.imageStyle} source={cat}/>
@@ -30,8 +35,9 @@ class Projectcard extends Component {
                 <Text style={styles.project_bio}>기출 문제 기반의 반복 학습을 통한 성적 향상법!!</Text>
             </View>
 
-        </View>
-        </View>
+            </View>
+            </View>
+        </Card>
         );
     }
 }

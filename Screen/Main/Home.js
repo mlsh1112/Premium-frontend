@@ -50,7 +50,6 @@ class Home extends Component {
                 ListHeaderComponent={
                     <View>
                         {this.state.projects.map(project=>{
-                            {console.log(project)}
                            return <Projectcard data={project}/>
                         })}
                     </View>
