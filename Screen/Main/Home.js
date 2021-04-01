@@ -36,7 +36,6 @@ class Home extends Component {
                     <RNPickerSelect 
                         placeholder={{ label: '과목 전체', value: 'all' }}
                         onValueChange={(value) => this.setState({subject:value})}
-                        useNativeAndroidPickerStyle={false}
                         items={[
                             { label: '국어', value: 'korean' },
                             { label: '영어', value: 'english' },
@@ -50,7 +49,9 @@ class Home extends Component {
                 ListHeaderComponent={
                     <View>
                         {this.state.projects.map(project=>{
-                           return <Projectcard data={project}/>
+                           return <Projectcard 
+                           navigation={this.props.navigation}
+                           data={project}/>
                         })}
                     </View>
                 }

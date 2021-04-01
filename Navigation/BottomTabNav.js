@@ -6,13 +6,14 @@ import Home from '../Screen/Main/Home';
 import Search from '../Screen/Main/Search';
 import Authentication from '../Screen/Main/Authentication';
 import Profile from '../Screen/Main/Profile';
+import ProjectNavi from './ProjectNavigation';
 
 const TabNavigator = createBottomTabNavigator();
 
 export default function Tabnavigation(){
     return (
         <TabNavigator.Navigator initialRouteName='Home'>
-            <TabNavigator.Screen name="Home" component={Home} options={{
+            <TabNavigator.Screen name="Home" component={ProjectNavi} options={{
                                 tabBarLabel: 'Home',
                                 tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="home" color={color} size={26} />

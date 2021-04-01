@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image,Text } from 'react-native';
 import { Card } from 'react-native-paper';
 import cat from '../../assets/cat2.png'
+import { withNavigation } from 'react-navigation';
 class Projectcard extends Component {
 
-    componentDidMount(){
-        //console.log(this.props.data)
-    }
-    cardclick(){
-        
-    }
+    
     render() {
+        
         return (
-        <Card onPress={this.cardclick}>
+        <View>
+        <Card onPress={() => {
+            this.props.navigation.navigate('ProjectDetail')
+          }}>
             <View style={styles.card} >
             <View style={{margin:20}}>
             
@@ -38,6 +38,9 @@ class Projectcard extends Component {
             </View>
             </View>
         </Card>
+      </View>
+
+      
         );
     }
 }
