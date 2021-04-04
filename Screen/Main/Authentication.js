@@ -68,11 +68,11 @@ const Authentication = () => {
                               URI: {file.uri ? file.uri : ''}
                               {'\n'}
                                 <TouchableOpacity
-                                style={{backgroundColor:colors.maincolor,padding:3,margin:3,borderRadius:3}} 
+                                style={styles.cancelButton} 
                                 onPress={(e)=>{
                                     deleteFiles(key);
                                 }}>
-                                    <Icon name="file-cancel" color="white" size={20}/>
+                                    <Text stlye={styles.cancelText}>Cancel</Text>
                                 </TouchableOpacity>
                             </Text>
                         </View>
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     },
     textStyle: {
       padding: 10,
-      backgroundColor: '#fff',
+      backgroundColor: 'white',
       fontSize: 15,
       marginTop: 16,
       color: 'black',
@@ -168,6 +168,17 @@ const styles = StyleSheet.create({
       borderRadius: 30,
       borderColor: '#dadae8',
     },
+    cancelButton: {
+        backgroundColor:colors.maincolor,
+        padding:3,
+        margin:3,
+        borderRadius:5,
+        alignItems: 'flex-end'
+    },
+    cancelText: {
+        color: 'red',
+        fontWeight: "bold",
+    }
   });
 
 export default Authentication;
