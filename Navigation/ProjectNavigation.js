@@ -2,7 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from '../Screen/Main/Home'
 import Projectcard from '../src/components/Projectcard'
-import ProjectDetail from '../src/components/ProjectPopup'
+import ProjectDetail from '../src/components/ProjectDetail'
 
 const Stack = createStackNavigator();
 

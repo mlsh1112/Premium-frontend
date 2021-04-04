@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image,Text } from 'react-native';
 import { Card } from 'react-native-paper';
 import cat from '../../assets/cat2.png'
-import { withNavigation } from 'react-navigation';
 class Projectcard extends Component {
 
     
