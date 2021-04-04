@@ -52,7 +52,7 @@ class ProjectTrial extends Component {
                 </View>
                 </Card>
                 <View style={styles.buttonStyle}>
-                <Button onPress={()=>this.props.navigation.navigate('Authentication')}>오늘 인증하기</Button>
+                    <Button onPress={()=>this.props.navigation.navigate('Authentication')}>Today 인증하기</Button>
                 </View>
             </View>
         );
@@ -110,7 +110,7 @@ const styles={
       marginBottom:30
     },
     buttonStyle:{
-        margin:25
+        margin:20
       }
 }
 
