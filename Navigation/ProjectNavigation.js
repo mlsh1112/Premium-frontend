@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Home from '../Screen/Main/Home'
 import Projectcard from '../src/components/Projectcard'
 import ProjectDetail from '../src/components/ProjectDetail'
+import ProjectTrial from '../src/components/ProjectTrial'
 
 const Stack = createStackNavigator();
 
@@ -12,6 +13,7 @@ export default function ProjectNavigation(){
             <Stack.Screen name="Home" component={Home} options={{headerShown: false}} />
             <Stack.Screen name="Projectcard" component={Projectcard} options={{headerShown: false}}/>
             <Stack.Screen name="ProjectDetail" component={ProjectDetail} />
+            <Stack.Screen name="ProjectTrial" component={ProjectTrial} options={{headerShown: false}}/>
         </Stack.Navigator>
     );
 }

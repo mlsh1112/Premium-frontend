@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image,Text,TouchableOpacity,ScrollView } from 'react-native';
+import { Modal, View, Image,Text,TouchableOpacity,ScrollView,Alert } from 'react-native';
 import {  Card,IconButton,Colors } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import colors from '../colors';
 import {Button} from '../components';
 
 class ProjectDetail extends Component {
-  state = { liked: false };
+  state = { 
+    liked: false,
+    visual:false,
+    isJoin:false,
+   };
 
   _toggle = () => {
     let localLiked = this.state.liked;
@@ -27,9 +30,9 @@ class ProjectDetail extends Component {
             <Text style={styles.subjectStyle}>고등 수학 / 수학</Text>
             <TouchableOpacity style={styles.likeStyle} onPress={()=>this._toggle()}>
             {this.state.liked === false ? (
-              <MaterialCommunityIcons name='heart-outline' size={26} color={colors.maincolor}/>
+              <MaterialCommunityIcons name='heart-outline' size={20} color={colors.maincolor}/>
             ) : (
-              <MaterialCommunityIcons name='heart' size={26} color={colors.maincolor}/>
+              <MaterialCommunityIcons name='heart' size={20} color={colors.maincolor}/>
             )}<Text style={styles.likeText}>273 LIKES</Text>
             </TouchableOpacity>
             </View>
@@ -67,7 +70,16 @@ class ProjectDetail extends Component {
         </ScrollView>
         </Card>
         <View style={styles.buttonStyle}>
-           <Button>프로젝트 시작하기</Button> 
+          { this.state.isJoin === false ? (
+           <Button onPress={()=>{
+            Alert.alert('7일 체험이 신청되었습니다.')
+            this.props.navigation.navigate('ProjectTrial')
+          }}>7 DAYS  체험하기</Button> 
+          ):(
+            <Button onPress={()=>{
+            }}>진행 중인 프로젝트 입니다.</Button> 
+          )
+          }
         </View>
       </View>
     );
@@ -101,14 +113,14 @@ class ProjectDetail extends Component {
     likeText:{
       fontWeight:'bold',
       color:colors.maincolor,
-      fontSize:20,
+      fontSize:17,
       marginLeft:5
     },
     eee:{
     width: '100%',
     justifyContent: 'space-between',
     borderColor:'#eee',
-    borderBottomWidth:3,
+    borderBottomWidth:2,
     padding: 5,
     marginTop:10
 
