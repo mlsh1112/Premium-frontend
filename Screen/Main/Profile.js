@@ -51,8 +51,10 @@ function PrintProject({project}){
       );
 }
 
+
 const Profile = (props) => {
-  const [whoami,setWhoami] = useState('tutor');
+  const [showscreen,setShowscreen]=useState(false)
+  const [whoami,setWhoami] = useState('');
   //const [whoami,setWhoami] = useState('tutee');
   const [project,setProject] = useState([
     {id: 1,title: "수학2 마스터하기", info:"반복학습을 통한 수학2 마스터하기"},
@@ -70,7 +72,16 @@ const Profile = (props) => {
   const [followers,setFollower] = useState(1287);
   const [following,setFollowing] = useState(224);
   
-  
+  useEffect(() => {
+    async function getData(){
+      const type = await AsyncStorage.getItem('type');
+      const status = await AsyncStorage.getItem('status');
+      console.log(type)
+      setWhoami(type)
+      setShowscreen(true)
+    }
+    getData()
+  })
     //console.log("hi");
     //getMyProfile().then(res => {
     //  console.log(res);
@@ -115,6 +126,7 @@ const Profile = (props) => {
   }
   return (
     <SafeAreaView style={styles.container}>
+    {showscreen && (
       <View style={styles.userInfoSection}>
         <View style={{flexDirection: 'row', marginTop: 15}}>
           <Text style={styles.avatar} />
@@ -130,13 +142,15 @@ const Profile = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-
+    )}
+    
+    {showscreen && (
       <View style={styles.userInfoSection}>
         <View style={styles.row}>
           <Icon name="school" color="#777777" size={20} style={{textAlignVertical:'center'}}/>
           <Text style={{color:"#777777", marginLeft: 20,textAlignVertical:'center'}}>{school}</Text>
         </View>
-        { whoami === "tutor" 
+        { whoami === "Tutor" 
             ? (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToCreateProject}>
                 <Text style={styles.buttonstyle}>프로젝트 생성</Text>
                </TouchableOpacity>)
@@ -144,7 +158,9 @@ const Profile = (props) => {
                 <Text style={styles.buttonstyle}> 인증하러가기</Text>
                </TouchableOpacity>)}
       </View>
+    )}
 
+    {showscreen && (
       <View style={styles.infoBoxWrapper}>
         <View style={styles.infoBox}>
           <Title>{project.length}</Title>
@@ -159,10 +175,16 @@ const Profile = (props) => {
           <Caption>Followers</Caption>
         </View>
       </View>
+    )}
+    
+    {showscreen && (
       <View style={styles.menuItem}>
         <Icon name="book" color="black" size={25}/>
         <Text style={styles.menuItemText}>Projects</Text>
       </View>
+    )}
+    
+    {showscreen && (
       <TabView
         renderTabBar={renderTabBar}
         navigationState={{ index, routes }}
@@ -170,6 +192,7 @@ const Profile = (props) => {
         onIndexChange={setIndex}
         initialLayout={{ width: layout.width }}
       />
+    )}
     </SafeAreaView >
   );
 };
