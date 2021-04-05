@@ -4,8 +4,10 @@ import {  Card,IconButton,Colors } from 'react-native-paper';
 import cat from '../../assets/cat2.png'
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from '../components'
+import ProjectMini from './ProjectMini'
 
-function ProfileView(){
+function ProfileView({navigation: { navigate }}){
+    
     return(
         <View>
             <Card style={styles.cardStyle}>
@@ -51,8 +53,7 @@ function ProfileView(){
                 horizontal={true}
                 showsHorizontalScrollIndicator = {true}
                 style={styles.projectScroll}>
-                    <Text>dddd</Text>
-
+                    <ProjectMini></ProjectMini>
             </ScrollView>
             </View>
         </Card>
