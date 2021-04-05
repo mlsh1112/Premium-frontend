@@ -7,7 +7,7 @@ class  ProjectMini extends Component{
   render(){
   return (
     <View>
-        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('ProfileDetail')}}>
+        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('ProjectDetail')}}>
             <ImageBackground source={cat} style={styles.imgStyle} opacity={0.4} blurRadius={5}>
                 <View style={{margin:10}}>
                 <Text style={styles.titleStyle}>기출 문제 중심의 반복 학습과 함께하는 확통 정복하기!</Text>

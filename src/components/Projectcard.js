@@ -3,10 +3,9 @@ import { StyleSheet, View, Image,Text, TouchableOpacity } from 'react-native';
 import { Card } from 'react-native-paper';
 import cat from '../../assets/cat2.png'
 class Projectcard extends Component {
-
+    
     
     render() {
-        
         return (
         <View>
         <Card onPress={() => {

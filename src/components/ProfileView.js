@@ -6,8 +6,7 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from '../components'
 import ProjectMini from './ProjectMini'
 
-function ProfileView({navigation: { navigate }}){
-    
+function ProfileView({ navigation }){
     return(
         <View>
             <Card style={styles.cardStyle}>
@@ -53,7 +52,7 @@ function ProfileView({navigation: { navigate }}){
                 horizontal={true}
                 showsHorizontalScrollIndicator = {true}
                 style={styles.projectScroll}>
-                    <ProjectMini></ProjectMini>
+                    <ProjectMini navigation={navigation}></ProjectMini>
             </ScrollView>
             </View>
         </Card>
