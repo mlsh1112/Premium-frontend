@@ -6,7 +6,9 @@ import Home from '../Screen/Main/Home';
 import Search from '../Screen/Main/Search';
 import Authentication from '../Screen/Main/Authentication';
 import Profile from '../Screen/Main/Profile';
+import createProjectStackNav from './CreateProjectStackNav';
 import ProjectNavi from './ProjectNavigation';
+
 
 const TabNavigator = createBottomTabNavigator();
 
@@ -34,7 +36,7 @@ export default function Tabnavigation(){
           ),
         }}
       />
-            <TabNavigator.Screen name="Profile" component={Profile} options={{
+            <TabNavigator.Screen name="Profile" component={createProjectStackNav} options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color }) => (
             <Ionicons name="person" color={color} size={26} />
