@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image,Text } from 'react-native';
+import { StyleSheet, View, Image,Text, TouchableOpacity } from 'react-native';
 import { Card } from 'react-native-paper';
 import cat from '../../assets/cat2.png'
 class Projectcard extends Component {
@@ -15,7 +15,9 @@ class Projectcard extends Component {
             <View style={styles.card} >
             <View style={{margin:20}}>
             
-            <View style={styles.profilePosition}>
+            <TouchableOpacity style={styles.profilePosition}
+                            onPress={()=>{this.props.navigation.navigate('ProfileView')}}
+            >
                 <Image style={styles.imageStyle} source={cat}/>
                 <View>
                     <View style={{flexDirection:'row', marginBottom:6}}>
@@ -24,7 +26,7 @@ class Projectcard extends Component {
                     </View>
                         <Text style={styles.profileStyle3}>00 대학교 000 학과</Text>
                 </View>
-            </View>
+            </TouchableOpacity>
 
             <View>
                 <Text style={styles.projectName}>{this.props.data.description}</Text>
@@ -62,7 +64,7 @@ const styles={
         marginRight:20,
         width: 60,
         height: 60,
-        borderRadius:10
+        borderRadius:50
     },
     profileStyle1:{
         top:'5%',
