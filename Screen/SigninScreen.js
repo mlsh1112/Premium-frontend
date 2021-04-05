@@ -15,7 +15,7 @@ import {
   TextInput,  
 } from 'react-native';
 import {login} from '../src/Api';
-import {setToken} from '../src/Asyncstorage';
+import {setToken,setType,setStatus} from '../src/Asyncstorage';
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -34,6 +34,10 @@ const Signin = (props) => {
      }).then(res => {
        console.log(res.data.token);
        setToken(res.data.token);
+       console.log(res.data.type)
+       setType(res.data.type);
+       console.log(res.data.status)
+       setStatus(res.data.status);
      }).then(() => {
        props.navigation.replace('AuthLoading');
        console.log("Go to Home from sign in ");
