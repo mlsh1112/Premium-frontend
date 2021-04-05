@@ -71,12 +71,12 @@ const Profile = (props) => {
   const [following,setFollowing] = useState(224);
   
   
-    console.log("hi");
-    getMyProfile().then(res => {
-      console.log(res);
-    }).catch(error => {
-      console.log(error);
-    });
+    //console.log("hi");
+    //getMyProfile().then(res => {
+    //  console.log(res);
+    //}).catch(error => {
+    //  console.log(error);
+    //});
   
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
