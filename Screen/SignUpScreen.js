@@ -1,11 +1,12 @@
-import React, {Component, useState,createRef} from 'react';
- import {Button} from '../src/components'
- import axios from 'axios'
- import {
+import React, {Component, useState,createRef,useEffect} from 'react';
+import {Button} from '../src/components'
+import axios from 'axios'
+import {
    SafeAreaView,
    StyleSheet,
    ScrollView,
    View,
+   CheckBox,
    Text,
    Image,
    StatusBar,
@@ -13,100 +14,121 @@ import React, {Component, useState,createRef} from 'react';
    TouchableOpacity,
  } from 'react-native';
  
-import {login,signup} from '../src/Api';
+import {signup} from '../src/Api';
 import {setToken} from '../src/Asyncstorage';
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
 
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .required("이메일을 입력해주세요.")
+    .email("이메일 형식이 아닙니다."),
+  password: Yup.string()
+    .required("비밀번호를 입력해주세요"),
+  Comfirm_password: Yup.string()
+    .required("비밀번호 확인을 입력해주세요")
+ });
 
 const SignUp=(props)=>{
-  const [userEmail,setUserEmail] = useState('');
-  const [userPassword,setUserPassword] = useState('');
-  const [userPasswordAagin,setUserPasswordAagin] = useState('');
   
-  const passwordInputRef = createRef();
 
-  const userpasswordInputRef = createRef();
-  
-  const handleSubmitPress = ()=>{
-    if (!userEmail){
-      alert("Please enter Email");
-      return ;
-    }
-    else if (!userPassword){
-      alert("Please enter Password")
-      return ;
-    }
-    else if(!userPasswordAagin){
-      alert("Please enter PasswordAagin")
-      return;
-    }
-    else if(userPasswordAagin!==userPassword){
-      alert("Passwords do not match!")    
-      return;
-    }
-    else {
-     signup({
-       "email":userEmail,
-       "password":userPassword
-     }).then(res => {
-       console.log(res.data.token);
-       setToken(res.data.token);
-     }).then(() => {
-       props.navigation.replace('AuthLoading');
-       console.log("complete sign up! ");
-     }).catch(error => {
-       alert("logup failed!!!")
-       console.log(error);
-     });
-    }
-     console.log(userEmail);
-     console.log(userPassword);
-     console.log(userPasswordAagin);
+  var userType;
+  const [isSelected,setSelection]=useState(false);
 
-  }
+  useEffect(()=>{
+    userType=isSelected?"튜터":"튜티"
+    console.log(userType);
+  })
 
+  const handleSubmitPress = (values)=>{  
+    signup({
+      "email":values.email,
+      "password":values.password,
+      "name":"dfdgsfdg",
+      "phone":null,
+      "user_type":userType
+     }
+    ).then(res => {
+      console.log(res.data.token);
+      setToken(res.data.token);
+    }).then(() => {
+      props.navigation.replace('AuthLoading');
+      console.log("Go to Home from sign in ");
+    }).catch(error => {
+      alert("이메일 혹은 패스워드를 확인해주세요.")
+      console.log(error);
+    });
+  }  
 
   return(
     <View style={styles.container}>
-    <View>
-        <Text>Sign_up</Text>
-    </View>
-    <View style={styles.FormStyle}>
-        <TextInput style={styles.InputStyle}
-          placeholder={"Email"} 
-          onChangeText={userEmail => setUserEmail(userEmail)}
-          keyboardType="email-address"
-          onSubmitEditing={() => {
-              passwordInputRef.current.focus();
-            }
-          }
-        />
-    </View>
-    <View style={styles.FormStyle}>
-        <TextInput style={styles.InputStyle}
-          placeholder={"Password"}
-          onChangeText={userPassword => setUserPassword(userPassword)}
-          ref={passwordInputRef}
-          secureTextEntry={true}
-          returnKeyType="next"
-        />
-    </View>
-    <View style={styles.FormStyle}>
-        <TextInput style={styles.InputStyle}
-          placeholder={"PasswordAagin"}
-          onChangeText={userPasswordAagin => setUserPasswordAagin(userPasswordAagin)}
-          ref={userpasswordInputRef}
-          secureTextEntry={true}
-          returnKeyType="next"
-        />
-    </View>
-    <View >
-        <Button onPress={handleSubmitPress}>SignUp</Button>
-        <Text style={styles.SignUpStyle}
-          onPress={() => props.navigation.navigate("Signin")}
-          >
-        </Text>
-    </View>
- </View>
+     <View >
+       <Text style={styles.title}>Welcome to 따숲</Text>
+     </View>
+     <Formik
+       style={styles.FormStyle}
+       validationSchema={validationSchema}
+       initialValues={{ email: '', password: '',Comfirm_password:'', }}
+       onSubmit={values => {
+         console.log(values)
+         handleSubmitPress(values)
+       }}
+     >
+       {({ handleChange, handleBlur, handleSubmit, values, errors,touched,}) => (
+       
+         <>
+           <TextInput
+             name="email"
+             placeholder="Email Address"
+             style={styles.textInput}
+             onChangeText={handleChange('email')}
+             onBlur={handleBlur('email')}
+             value={values.email}
+             keyboardType="email-address"
+           />
+           {(errors.email && touched.email) &&
+           <Text style={styles.errorText}>{errors.email}</Text>
+           }
+           <TextInput
+             name="password"
+             placeholder="Password"
+             style={styles.textInput}
+             onChangeText={handleChange('password')}
+             onBlur={handleBlur('password')}
+             value={values.password}
+             secureTextEntry
+           />
+           {(errors.password && touched.password) &&
+           <Text style={styles.errorText}>{errors.password}</Text>
+           }
+           <TextInput
+             name="Confirm_password"
+             placeholder="Confirm_Password"
+             style={styles.textInput}
+             onChangeText={handleChange('Comfirm_password')}
+             onBlur={handleBlur('Comfrim_password')}
+             value={values.Comfirm_password}
+             secureTextEntry
+           />
+           {(errors.Comfirm_password && touched.Comfirm_password) &&
+           <Text style={styles.errorText}>{errors.password}</Text>
+           }
+           <View>
+              <CheckBox
+                value={isSelected}
+                onValueChange={setSelection}
+                style={styles.checkbox}
+              />
+              <Text style={styles.lable}>당신은 튜터 입니까?</Text>
+           </View>
+           <View style={styles.button}>
+             <Button onPress={handleSubmit}>Sing Up</Button>
+           </View>
+         </>
+       )}
+     </Formik>
+   </View>
 
   )
 }
@@ -153,6 +175,12 @@ const styles = StyleSheet.create({
    alignSelf: 'center',
    padding: 5,
  },
+ checkbox:{
+  alignSelf:"center",
+},
+lable:{
+  margin:9,
+},
 });
 
 

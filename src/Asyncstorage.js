@@ -10,3 +10,20 @@ export const setToken = async(token) => { //asyncstorage token 생성
     };
 };
 
+export const setType = async(type) => { //asyncstorage token 생성
+    try{
+        await AsyncStorage.setItem('type',type);
+    }
+    catch (error){
+        console.log("AsyncStorage setting type Error: " + error.message);
+    };
+};
+
+export const setStatus = async(status) => { //asyncstorage token 생성
+    try{
+        await AsyncStorage.setItem('status',status);
+    }
+    catch (error){
+        console.log("AsyncStorage setting Error: " + error.message);
+    };
+};
