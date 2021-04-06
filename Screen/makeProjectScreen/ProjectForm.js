@@ -68,6 +68,7 @@ const ProjectForm =()=> {
                   />
                   {isDateTimePickerVisible && (
                       <RNDateTimePicker
+                      style={{width: 320, backgroundColor: "white"}}
                         value={new Date()}
                         onChange={(event,selectedDate)=> {
                             setIsDateTimePickerVisible(false)
