@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
         width: "100%",
         justifyContent:'center',
         alignItems: 'center',
+        margin:'3%',
     },
     textposition:{
         marginTop:70,
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
     },
     pickerstyle:{
         width: "90%",
-        marginTop:30,
+        marginTop:'1%',
         paddingVertical: 10,
         paddingHorizontal: 12,
         borderWidth: 1,
@@ -158,6 +159,7 @@ const styles = StyleSheet.create({
     },
     InputStyle: {
       width: "90%",
+      height:"10%",
       margin: 10,
       color: "black",
       paddingLeft: 15,
@@ -176,7 +178,7 @@ const styles = StyleSheet.create({
     cancelText: {
         color: 'red',
         fontWeight: "bold",
-    }
+    },
   });
 
 export default TuteeAuthentication;
