@@ -55,6 +55,7 @@ function PrintProject({project}){
 const Profile = (props) => {
   const [showscreen,setShowscreen]=useState(false)
   const [whoami,setWhoami] = useState('');
+  const [status,setStatus] = useState('');
   //const [whoami,setWhoami] = useState('tutee');
   const [project,setProject] = useState([
     {id: 1,title: "수학2 마스터하기", info:"반복학습을 통한 수학2 마스터하기"},
@@ -78,6 +79,7 @@ const Profile = (props) => {
       const status = await AsyncStorage.getItem('status');
       console.log(type)
       setWhoami(type)
+      setStatus(status)
       setShowscreen(true)
     }
     getData()
@@ -150,7 +152,7 @@ const Profile = (props) => {
           <Icon name="school" color="#777777" size={20} style={{textAlignVertical:'center'}}/>
           <Text style={{color:"#777777", marginLeft: 20,textAlignVertical:'center'}}>{school}</Text>
         </View>
-        { whoami === "Tutor" 
+        { whoami === "Tutor" && status === "approved"
             ? (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToCreateProject}>
                 <Text style={styles.buttonstyle}>프로젝트 생성</Text>
                </TouchableOpacity>)
