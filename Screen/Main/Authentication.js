@@ -6,6 +6,7 @@ import {
   } from 'react-native';
 import TuteeAuthentication from '../AuthenticationScreen/TuteeAuthentication'
 import TutorAuthentication from '../AuthenticationScreen/TutorAuthentication'
+import Tutor from '../AuthenticationScreen/TutorAuthCheck';
 
 const isTutee = false;
 const Authentication = () => {
