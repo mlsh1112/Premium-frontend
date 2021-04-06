@@ -7,7 +7,7 @@ import {
 import TuteeAuthentication from '../AuthenticationScreen/TuteeAuthentication'
 import TutorAuthentication from '../AuthenticationScreen/TutorAuthentication'
 
-const isTutee = true;
+const isTutee = false;
 const Authentication = () => {
     return (
         <View style={styles.container}>
