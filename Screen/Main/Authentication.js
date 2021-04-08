@@ -6,7 +6,6 @@ import {
   } from 'react-native';
 import TuteeAuthentication from '../AuthenticationScreen/TuteeAuthentication'
 import TutorAuthentication from '../AuthenticationScreen/TutorAuthentication'
-import Tutor from '../AuthenticationScreen/TutorAuthCheck';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const Authentication = ({navigation}) => {

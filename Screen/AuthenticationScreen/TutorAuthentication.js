@@ -26,7 +26,7 @@ function TuteeListComponent({tutee,navigation}){
         <View style={styles.tuteeBarStyle}>
             <Icons name='face' size={30} style={{marginLeft:'8%'}} ></Icons>
             <Text style={styles.tuteenameStyle}>{tutee.name}</Text>
-            <TouchableOpacity style={styles.tuteeBtnPosition} onPress={()=>{navigation.navigate('TutorAuthCheck')}}>
+            <TouchableOpacity style={styles.tuteeBtnPosition} onPress={()=>{navigation.push('TutorAuthCheck',tutee)}}>
                 <View>
                     <Text style={styles.BtntextStyle}>인증 확인</Text>
                 </View>

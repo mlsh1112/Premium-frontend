@@ -13,15 +13,12 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from '../../src/components';
 
 
-const TutorAuthCheck = ({}) => {
-    const [tutee,settutee] = useState([
-        {id: 1,name: "LEE", info:"반복학습을 통한 수학2 마스터하기"},
-      ]);
+const TutorAuthCheck = ({navigation, route}) => {
     return (
         <View style={styles.container}>
             <View style={styles.tuteeBarStyle}>
             <Icons name='face' size={30}></Icons>
-            <Text style={styles.tuteenameStyle}>{tutee[0].name}</Text>
+            <Text style={styles.tuteenameStyle}>{route.params.name}</Text>
         </View>
         <View style={styles.tuteeBarStyle}>
             <Text style={styles.textStyle}>Today 인증 내용 👍</Text>
@@ -30,7 +27,7 @@ const TutorAuthCheck = ({}) => {
 
         </View>
 
-        <Button >Today 인증 확인 ✌️</Button>
+        <Button onPress={() => navigation.popToTop()}>Today 인증 확인 ✌️</Button>
         </View>
     );
     
