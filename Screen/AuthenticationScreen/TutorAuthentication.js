@@ -21,12 +21,12 @@ function makeItem(project){
     return temp;
 }
 
-function TuteeListComponent({tutee}){
+function TuteeListComponent({tutee,navigation}){
     return(
         <View style={styles.tuteeBarStyle}>
             <Icons name='face' size={30} style={{marginLeft:'8%'}} ></Icons>
             <Text style={styles.tuteenameStyle}>{tutee.name}</Text>
-            <TouchableOpacity style={styles.tuteeBtnPosition} >
+            <TouchableOpacity style={styles.tuteeBtnPosition} onPress={()=>{navigation.navigate('TutorAuthCheck')}}>
                 <View>
                     <Text style={styles.BtntextStyle}>인증 확인</Text>
                 </View>
@@ -37,7 +37,7 @@ function TuteeListComponent({tutee}){
 
 
 
-const TutorAuthentication = () => {
+const TutorAuthentication = ({navigation}) => {
     const [project,setProject] = useState([
         {id: 1,title: "수학2 마스터하기", info:"반복학습을 통한 수학2 마스터하기"},
         {id:2,title: "비문학 마스터하기", info:"회독을 통한 비문학 마스터하기"},
@@ -94,7 +94,8 @@ const TutorAuthentication = () => {
             <ScrollView style={{marginLeft:'20%', width:'100%'}}>
                 {tutees.map(tutee=>{
                            return <TuteeListComponent 
-                           tutee={tutee}/>
+                           tutee={tutee}
+                           navigation={navigation}/>
                         })}
             </ScrollView>
 

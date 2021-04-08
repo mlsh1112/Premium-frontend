@@ -9,7 +9,7 @@ import TutorAuthentication from '../AuthenticationScreen/TutorAuthentication'
 import Tutor from '../AuthenticationScreen/TutorAuthCheck';
 import AsyncStorage from '@react-native-community/async-storage';
 
-const Authentication = () => {
+const Authentication = ({navigation}) => {
     [userType, setuserType] = useState('');
 
     useEffect(() => {
@@ -30,9 +30,9 @@ const Authentication = () => {
         </View>
             {
                 userType==='Tutee' ? (
-                    <TuteeAuthentication></TuteeAuthentication>
+                    <TuteeAuthentication ></TuteeAuthentication>
                 ):(
-                    <TutorAuthentication></TutorAuthentication>
+                    <TutorAuthentication navigation={navigation}></TutorAuthentication>
                 )
             }
             

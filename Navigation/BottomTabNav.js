@@ -8,7 +8,7 @@ import Authentication from '../Screen/Main/Authentication';
 import Profile from '../Screen/Main/Profile';
 import createProjectStackNav from './CreateProjectStackNav';
 import ProjectNavi from './ProjectNavigation';
-
+import AuthNamvi from './AuthNavigation';
 
 const TabNavigator = createBottomTabNavigator();
 
@@ -29,7 +29,7 @@ export default function Tabnavigation(){
           ),
         }}
       />
-            <TabNavigator.Screen name="Authentication" component={Authentication} options={{
+            <TabNavigator.Screen name="Authentication" component={AuthNamvi} options={{
           tabBarLabel: 'Authentication',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="checkbox-marked-outline" color={color} size={26} />
