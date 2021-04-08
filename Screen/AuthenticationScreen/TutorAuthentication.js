@@ -1,6 +1,5 @@
 import React, { Component,useState } from 'react';
 import colors from '../../src/colors';
-import {Button} from '../../src/components';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
     StyleSheet,
@@ -46,8 +45,8 @@ const TutorAuthentication = ({navigation}) => {
     const listitem = makeItem(project)
     const [selectedpr,setSelectedpr] = useState('')
     const [tutees,settutees] = useState([
-        {id: 1,name: "LEE", info:"반복학습을 통한 수학2 마스터하기"},
-        {id: 1,name: "KIM", info:"반복학습을 통한 수학2 마스터하기"},
+        {id: 1,name: "LEE", auth:"1+1=2"},
+        {id: 1,name: "KIM", auth:"5*5=25"},
       ]);
     const handleSubmitAuthenticatoin = () => {
         Keyboard.dismiss();

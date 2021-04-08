@@ -2,12 +2,8 @@ import React, { Component,useState } from 'react';
 import colors from '../../src/colors';
 import {
     StyleSheet,
-    TouchableOpacity,
     View,
     Text,
-    ScrollView,
-    TextInput,
-    Keyboard,
   } from 'react-native';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from '../../src/components';
@@ -24,10 +20,10 @@ const TutorAuthCheck = ({navigation, route}) => {
             <Text style={styles.textStyle}>Today 인증 내용 👍</Text>
         </View>
         <View style={styles.fileboxStyle}>
-
+            <Text>{route.params.auth}</Text>
         </View>
 
-        <Button onPress={() => navigation.popToTop()}>Today 인증 확인 ✌️</Button>
+        <Button onPress={() => navigation.popToTop()}>{route.params.name} 님 인증 확인 ✌️</Button>
         </View>
     );
     
