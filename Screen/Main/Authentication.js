@@ -1,4 +1,4 @@
-import React, { Component,useState } from 'react';
+import React, { Component,useState,useEffect } from 'react';
 import {
     StyleSheet,
     View,
@@ -7,9 +7,21 @@ import {
 import TuteeAuthentication from '../AuthenticationScreen/TuteeAuthentication'
 import TutorAuthentication from '../AuthenticationScreen/TutorAuthentication'
 import Tutor from '../AuthenticationScreen/TutorAuthCheck';
+import AsyncStorage from '@react-native-community/async-storage';
 
-const isTutee = false;
 const Authentication = () => {
+    [userType, setuserType] = useState('');
+
+    useEffect(() => {
+    async function getData(){
+        const type = await AsyncStorage.getItem('type');
+        console.log(type)
+        setuserType(type)
+      }
+      getData()
+    })
+
+
     return (
         <View style={styles.container}>
             <View style={{borderColor:'#9FA5C0',
@@ -17,7 +29,7 @@ const Authentication = () => {
         <Text style={styles.projecttextStyle}>프로젝트 인증하기</Text>
         </View>
             {
-                isTutee===true ? (
+                userType==='Tutee' ? (
                     <TuteeAuthentication></TuteeAuthentication>
                 ):(
                     <TutorAuthentication></TutorAuthentication>
