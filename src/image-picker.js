@@ -1,17 +1,12 @@
 import React, { useState,useEffect } from 'react';
 import {
-    SafeAreaView,
     StyleSheet,
-    ScrollView,
     View,
     Text,
-    Button,
     Image,
-    StatusBar,
-    PermissionsAndroid, 
-    Platform,
+    TouchableOpacity,
   } from 'react-native';
-
+import colors from './colors';
 import { launchCamera,launchImageLibrary } from 'react-native-image-picker';
 
 const Imagepicker = (props) => {
@@ -61,10 +56,17 @@ const Imagepicker = (props) => {
   //})
   return (
     <View style={styles.container}>
-        { imageSource ? (<Image style={styles.Photo} source={{uri : imageSource}} />) : (<Text style={styles.Photo}>Empty</Text>)}
+        <View style={styles.pickedImage}>
+
+          { imageSource ? (<Image style={styles.Photo} source={{uri : imageSource}} />) : (<Text style={styles.Photo}></Text>)}
+        </View>
         <View style={styles.buttonview}>
-            <Button title="카메라" style={styles.ImagepickerButton} onPress={showCamera} />
-            <Button title="갤러리" style={styles.ImagepickerButton} onPress={showCameraRoll} />
+            <TouchableOpacity style={styles.ImagepickerButton} onPress={showCamera}>
+              <Text styles={styles.textstyle}>카메라</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.ImagepickerButton} onPress={showCameraRoll}>
+              <Text styles={styles.textstyle}>갤러리</Text>
+            </TouchableOpacity>
             {/*<Button title="test" style={styles.ImagepickerButton} onPress={testfunction} />*/}
         </View>
     </View >
@@ -72,36 +74,42 @@ const Imagepicker = (props) => {
 };
 const styles = StyleSheet.create({
     container : {
-        flex : 1,
-        justifyContent:'space-around',
-        alignItems:'center',
-        width: "100%",
+      flex:1,
+      alignItems: 'center',
+    },
+    textstyle:{
+     
+    },
+    pickedImage:{
+      flex:2,
+      alignItems: 'center',
+      margin: 15,
     },
     buttonview : {
-        flex : 0,
-        justifyContent: 'space-around',
-        alignContent: 'center',
-        flexDirection: 'row',
-        width: "70%",
+      flex:1,
+      margin:30,
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      width: '80%',
     },
     Photo : {
-        width: 200,
-        height: 200,
-        borderRadius: 8,
-        borderColor: 'black',
-        borderWidth: 2,
-        margin: 10,
+      flex:1,
+      width: 200,
+      height: 200,
+      borderWidth: 2,
+      borderRadius: 10,
+      borderColor:'black',
+      backgroundColor: 'white',
     },
     ImagepickerButton : {
-        width:50,
-        borderWidth: 1,
-        borderRadius: 8,
-        borderColor: "#CCCCCC",
-        paddingRight: 32,
-        paddingLeft: 32,
-        paddingTop: 8,
-        paddingBottom: 8,
-        marginTop: 16,
+      flex:1,
+      alignItems: 'center',
+      backgroundColor: colors.maincolor,
+      borderRadius: 5,
+      paddingVertical: 10,
+      paddingHorizontal: 15,
+      height:'40%',
+      marginHorizontal: 10,
     },
   });
 export default Imagepicker;
