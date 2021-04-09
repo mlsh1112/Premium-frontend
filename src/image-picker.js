@@ -31,6 +31,8 @@ const Imagepicker = (props) => {
       }
       else {
         console.log("user take picture!!")
+        console.log(response.uri)
+        props.getImage(response)
         setImageSource(response.uri);
       }
     });
@@ -44,6 +46,7 @@ const Imagepicker = (props) => {
       else {
         console.log("user pick picture!!")
         console.log(response.uri)
+        props.getImage(response)
         setImageSource(response.uri);
       }
     });
