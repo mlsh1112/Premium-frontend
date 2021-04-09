@@ -126,6 +126,15 @@ const Profile = (props) => {
     console.log("프로젝트 생성하러가기");
     props.navigation.navigate('ProjectForm');
   }
+  const goToAuth = () => {
+    console.log("인증하러 하러가기");
+    if(whoami == 'Tutor'){
+      props.navigation.navigate('SchoolAuth');
+    }
+    else if(whoami == 'Tutee'){
+      props.navigation.navigate('Authentication')
+    }
+  }
   return (
     <SafeAreaView style={styles.container}>
     {showscreen && (
@@ -156,7 +165,7 @@ const Profile = (props) => {
             ? (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToCreateProject}>
                 <Text style={styles.buttonstyle}>프로젝트 생성</Text>
                </TouchableOpacity>)
-            : (<TouchableOpacity style={styles.buttonposition_createpro} onPress={()=>console.log("인증하러가기")}>
+            : (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToAuth}>
                 <Text style={styles.buttonstyle}> 인증하러가기</Text>
                </TouchableOpacity>)}
       </View>
