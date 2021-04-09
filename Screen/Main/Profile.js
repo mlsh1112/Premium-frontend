@@ -68,7 +68,7 @@ const Profile = (props) => {
   const [likeproject,setLikeproject] = useState([
     {id: 1,title: "화학1 마스터하기", info:"화학1 중 원소주기율표 마스터하기"},
   ]);
-  const [name,setName] = useState('이모씨');
+  const [name,setName] = useState('');
   const [school,setSchool] = useState('아주대학교');
   const [followers,setFollower] = useState(1287);
   const [following,setFollowing] = useState(224);
@@ -77,9 +77,11 @@ const Profile = (props) => {
     async function getData(){
       const type = await AsyncStorage.getItem('type');
       const status = await AsyncStorage.getItem('status');
+      const name = await AsyncStorage.getItem('name');
       console.log(type)
       setWhoami(type)
       setStatus(status)
+      setName(name)
       setShowscreen(true)
     }
     getData()
