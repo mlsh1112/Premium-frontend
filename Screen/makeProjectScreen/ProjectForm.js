@@ -13,6 +13,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import RNDateTimePicker from '@react-native-community/datetimepicker'; 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Keyboard } from 'react-native';
 
 const validationSchema = Yup.object().shape({
     title: Yup.string().min(5,"프로젝트 명이 너무 짧습니다.(최소 5글자 최대 30글자)").max(30,"프로젝트 명이 너무 깁니다.(최소 2글자 최대 30글자)").required("프로젝트 이름을 입력해주세요."),
@@ -27,15 +28,17 @@ const ProjectForm =()=> {
     const [isDateTimePickerVisible,setIsDateTimePickerVisible] = useState(false)
     const handleSubmitPress = (values) =>{
         console.log("프로젝트 제출 : " + JSON.stringify(values))
-     }
-     const [date,setDate ] = useState(new Date())
+    }
+    const [date,setDate ] = useState(new Date())
+    const now = new Date()
+    const tommorow = now.setDate(now.getDate() + 1)
     return (
         <ScrollView>
         <View style={styles.container}>
             <Formik
               style={styles.FormStyle}
               validationSchema={validationSchema}
-              initialValues={{ title: '',startDate: new Date(), duration: '',dailyStudyTime: '',howToAuth:'',projectIntroduce:''}}
+              initialValues={{ title: '',startDate: tommorow, duration: '',dailyStudyTime: '',howToAuth:'',projectIntroduce:''}}
               onSubmit={values => {   
                 handleSubmitPress(values)
               }}
@@ -58,30 +61,34 @@ const ProjectForm =()=> {
                   <Text style={styles.subtitle}>2. 프로젝트 시작 일자</Text>
                   <TextInput
                     name="startDate"
-                    placeholder="YYYY-MM-DD"
                     style={styles.textInput}
                     value={date.toISOString().substring(0,10)}
-                    onChangeText={(e)=>{
-                        handleChange(e)
-                        values.startDate = new Date(date)
-                    }}
+                    onChangeText={handleChange}
+                    onFocus={()=>{
+                      Keyboard.dismiss()
+                      setIsDateTimePickerVisible(true)
+                      }
+                    }
                   />
                   {isDateTimePickerVisible && (
                       <RNDateTimePicker
-                      style={{width: 320, backgroundColor: "white"}}
+                        style={{width: 320, backgroundColor: "white"}}
                         value={new Date()}
+                        minimumDate={tommorow}
                         onChange={(event,selectedDate)=> {
+                          console.log(event)
+                          if (event.type === 'set'){
                             setIsDateTimePickerVisible(false)
                             setDate(selectedDate)
-                            
                             setFieldValue('startDate',selectedDate)
-                            //console.log("selected is "+current)
+                          }
+                          else {
+                            setIsDateTimePickerVisible(false)
+                            console.log("cancel test")
+                          }
                         }}
                       />
                   )}
-                  <TouchableOpacity style={{position:"relative",bottom:43, left: 140}} onPress={()=>setIsDateTimePickerVisible(true)}>
-                    <Icon name="calendar" color="#777777" size={24} style={{textAlignVertical:'center'}}/>
-                  </TouchableOpacity>
                   {(errors.startDate && touched.startDate) &&
                   <Text style={styles.errorText}>{errors.startDate}</Text>
                   }
