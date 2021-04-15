@@ -1,7 +1,7 @@
 import React, { Component, useState} from 'react';
 import RNPickerSelect from 'react-native-picker-select';
 import Projectcard from '../../src/components/Projectcard';
-import {projects} from '../../src/Api'
+import {getprojects} from '../../src/Api'
 import {
     StyleSheet,
     TouchableOpacity,
@@ -14,20 +14,23 @@ import { FlatList } from 'react-native';
 class Home extends Component {
     state={
         subject:'',
-        projects:[{
-            experience_period: 7,
-            deposit: 15000,
-            description: "algorithm",
-            image: null
-        },
-        {
-            "experience_period": 10,
-            "deposit": 15000,
-            "description": "rails study",
-            "image": null
-            }
-    ]
+        projects:[]
     };
+    constructor(props) {
+        super(props);
+    }
+    componentWillMount() {
+        getprojects()
+        .then(res=>{
+            console.log(res.data)
+            this.setState({
+                projects: res.data
+            })
+        }).catch(err=>
+            console.log(err)
+        )
+    }
+
     render() {
         return (
             <View style={styles.container}>
