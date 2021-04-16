@@ -35,3 +35,11 @@ export const setName = async(name) => { //asyncstorage token 생성
         console.log("AsyncStorage setting Error: " + error.message);
     };
 };
+export const setUser = async(info) => { //asyncstorage token 생성
+    try{
+        await AsyncStorage.setItem('userinfo',JSON.stringify(info));
+    }
+    catch (error){
+        console.log("AsyncStorage setting Error: " + error.message);
+    };
+};
