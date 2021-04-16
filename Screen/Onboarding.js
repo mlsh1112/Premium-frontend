@@ -4,16 +4,17 @@ import {
     StyleSheet,
     TouchableOpacity,
     View,
+    Image,
     Text,
   } from 'react-native';
-
+import icon from '../assets/icon2.png'
 
 class Onboarding extends Component {
     
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.textposition}><Text style={styles.textstyle}>따 숲</Text></View>
+                <View style={styles.textposition}><Image source={icon} style={styles.iconstyle}></Image></View>
                 <Button  onPress={() => this.props.navigation.navigate("AuthLoading")}>Get Started</Button>
           </View>
         );
@@ -34,11 +35,9 @@ const styles = StyleSheet.create({
         marginRight: 35,
         margin: 10,
     },
-    textstyle:{
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        fontSize: 50,
-        color: '#2E3E5C'
+    iconstyle:{
+        width:"90%",
+        height:"90%"
     },
 
   });
