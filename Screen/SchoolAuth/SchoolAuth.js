@@ -9,14 +9,61 @@ import {
   
 import {Button} from '../../src/components/Button';
 import Imagepicker from '../../src/image-picker';
-
+import authrequest from '../../src/Api';
+import axios from 'axios';
+import baseurl from '../../config';
+import AsyncStorage from '@react-native-community/async-storage';
+let headers = {
+  headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': ''
+  }
+}
+const PORT = baseurl.port
+console.log(PORT)
+const API = axios.create(headers);
+API.interceptors.request.use(
+    async function (config){
+        const token = await AsyncStorage.getItem('token')
+        config.headers['Authorization'] = token
+        console.log(config)
+        return config;
+    },
+    function(error){
+        return Promise.reject(error)
+    }
+);
 const SchoolAuth = (props) => {
     const [imageinfo,setImageinfo] = useState();
     const submitPhoto = () => {
-        if(imageinfo !== undefined){
-            console.log(imageinfo.uri)
+      const image = new File(
+        [imageinfo], 
+        imageinfo.fileName, {
+          type: "image/*",
+        });
+        //console.log(image)
+        var reader = new FileReader();
+        reader.onload = () =>  {
+          // The file's text will be printed here
+          console.log(reader.result)
+        };
+        reader.readAsArrayBuffer(imageinfo);
+      const formData = new FormData();
+      //formData.append('image', {uri: imageinfo.uri, name: imageinfo.filename, type: imageinfo.type})
+      formData.append('auth[images_attributes][0][image]', imageinfo);
+      //console.log(formData)
+      //formData.append('auth[authable_type]', "Tutor");
+      //formData.append('auth[description]', 'fdsafdsfd');
+      //formData.append('auth[authable_id]', 6);
+      if(imageinfo !== undefined){
+          //authrequest(formData).then(res => console.log(res)).catch(error => console.log(error))
+          API.post(PORT+"/auths/", formData)
+          .then(res => console.log(res))
+          .catch(error => console.log(error))  
+          console.log("===========================")
             console.log(imageinfo.type)
-            console.log(imageinfo.fileName)
+            console.log("===========================")
             console.log('사진제출!!')
         }
         else {
