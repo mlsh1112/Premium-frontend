@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image,Text, TouchableOpacity } from 'react-native';
 import { Card } from 'react-native-paper';
-import cat from '../../assets/cat2.png'
+import cat from '../../assets/cat2.png';
+import colors from '../../src/colors'
 class Projectcard extends Component {
     
     
@@ -47,7 +48,7 @@ class Projectcard extends Component {
 
 const styles={
     card:{
-        backgroundColor:'rgba(31, 204, 121, 0.08)',
+        backgroundColor:colors.subcolor,
         borderWidth:0,
         borderRadius:20,
         margin:10,
