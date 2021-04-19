@@ -29,28 +29,26 @@ import {TabView, TabBar} from 'react-native-tab-view';
 
 import colors from '../../src/colors'
 import {getproject} from '../../src/Api';
+import ProjectMini from '../../src/components/ProjectMini';
 
 const EachTabViewsProjects = (props) => {
   return(
     <ScrollView style={styles.menuWrapper}>
-            <View>
+            <View style={{marginRight:-20, flex:1,flexDirection:'row',justifyContent:'space-between',flexWrap: 'wrap'}}>
               {props.project.map((pr, index )=> {
-                return <PrintProject project={pr} key={index}/>
+                //return <PrintProject project={pr} key={index}/>
+                return(
+                  <View key={index} style={{marginVertical:8}}>
+                    <ProjectMini navigation={props.navigation} data={pr} key={index}></ProjectMini>
+                  </View>
+                )
+                //return <ProjectMini navigation={props.navigation} data={pr} key={index}></ProjectMini>
               })}  
             </View>
+            
     </ScrollView>
   );
 }
-
-function PrintProject({project}){
-  return(
-        <TouchableOpacity style={styles.CardContainer} onPress={()=> console.log(project.id)}>
-            <Text style={styles.CardTitle}>{project.title}</Text>
-            <Text style={styles.CardContent}>{project.info}</Text>
-        </TouchableOpacity>
-      );
-}
-
 
 const Profile = (props) => {
    
@@ -59,9 +57,7 @@ const Profile = (props) => {
   
   const [userid,setUserid] = useState(8);
   
-  const [project,setProject] = useState([
-    {id: 1,title: "수학2 마스터하기", description:"반복학습을 통한 수학2 마스터하기", experience_period: 7, deposit: 10000},
-  ])
+  const [project,setProject] = useState([])
   const [finishedproject,setFinishedProject] = useState([
     {id: 1,title: "수학1 마스터하기", info:"반복학습을 통한 수학1 마스터하기"},
   ]);
@@ -93,7 +89,7 @@ const Profile = (props) => {
       })
     }
     
-    getApiData()
+    //getApiData()
     setShowscreen(true)
   
   },[])
@@ -117,7 +113,7 @@ const Profile = (props) => {
   const renderScene = ({route}) =>{
     switch (route.key) {
       case 'first':
-        return <EachTabViewsProjects project={project} />;
+        return <EachTabViewsProjects project={project} navigation={props.navigation}/>;
       case 'second':
         return <EachTabViewsProjects project={finishedproject}/>
       case 'third':
@@ -248,7 +244,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   menuWrapper: {
+    padding: 10,
+    width: "100%",
     marginTop: 5,
+
   },
   menuItem: {
     flexDirection: 'row',
