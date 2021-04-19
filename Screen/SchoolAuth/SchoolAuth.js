@@ -9,6 +9,7 @@ import {
   
 import {Button} from '../../src/components/Button';
 import Imagepicker from '../../src/image-picker';
+import Cropimagepicker from '../../src/Crop-image-picker'
 import authrequest from '../../src/Api';
 import axios from 'axios';
 import baseurl from '../../config';
@@ -16,7 +17,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 let headers = {
   headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      //'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
       'Authorization': ''
   }
 }
@@ -37,21 +39,23 @@ API.interceptors.request.use(
 const SchoolAuth = (props) => {
     const [imageinfo,setImageinfo] = useState();
     const submitPhoto = () => {
-      const image = new File(
-        [imageinfo], 
-        imageinfo.fileName, {
-          type: "image/*",
-        });
-        //console.log(image)
-        var reader = new FileReader();
-        reader.onload = () =>  {
-          // The file's text will be printed here
-          console.log(reader.result)
-        };
-        reader.readAsArrayBuffer(imageinfo);
+      //const image = new File(
+      //  [imageinfo], 
+      //  imageinfo.fileName, {
+      //    type: "image/*",
+      //  });
+      //  //console.log(image)
+      //  var reader = new FileReader();
+      //  reader.onload = () =>  {
+      //    // The file's text will be printed here
+      //    console.log(reader.result)
+      //  };
+      //  reader.readAsArrayBuffer(imageinfo);
       const formData = new FormData();
       //formData.append('image', {uri: imageinfo.uri, name: imageinfo.filename, type: imageinfo.type})
-      formData.append('auth[images_attributes][0][image]', imageinfo);
+      //formData.append('auth[images_attributes][0][image]', imageinfo);
+      //formData.append('auth[images_attributes][0][image]', {uri: imageinfo.uri.replace('file:///','file://'), name: imageinfo.filename, type: imageinfo.type});
+      formData.append('auth[images_attributes][0][image]', {uri: imageinfo.path, type: imageinfo.mime});
       //console.log(formData)
       //formData.append('auth[authable_type]', "Tutor");
       //formData.append('auth[description]', 'fdsafdsfd');
@@ -62,8 +66,10 @@ const SchoolAuth = (props) => {
           .then(res => console.log(res))
           .catch(error => console.log(error))  
           console.log("===========================")
-            console.log(imageinfo.type)
-            console.log("===========================")
+          // console.log(typeof(imageinfo))
+             console.log(JSON.stringify(imageinfo))
+          //console.log(imageinfo.uri.replace('file:///','file://'))  
+          console.log("===========================")
             console.log('사진제출!!')
         }
         else {
@@ -77,7 +83,8 @@ const SchoolAuth = (props) => {
                 <View style={styles.ImagepickerStyle}>
                 <Text style={styles.info}>공부 하자는 튜터인증을 위해 학교 인증을 진행 하고있습니다. 학교 인증을 위해 학생증과 함께 
 자신의 모습이 나오게 사진을 찍어 전송해주세요</Text>
-                    <Imagepicker getImage={setImageinfo}/>
+                    <Cropimagepicker getImage={setImageinfo}/>
+                    
                 </View>
                 <View styles={styles.confirm}>
                     <Button  onPress={submitPhoto}>사진 제출</Button>
