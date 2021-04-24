@@ -45,9 +45,9 @@ const SchoolAuth = (props) => {
      
       if(imageinfo !== undefined){
           //authrequest(formData).then(res => console.log(res)).catch(error => console.log(error))
-          //API.post(PORT+"/auths/", formData)
-          //.then(res => console.log(res))
-          //.catch(error => console.log(error))  
+          API.post(PORT+"/auths/", formData)
+          .then(res => console.log(res))
+          .catch(error => console.log(error))  
           Alert.alert("","제출이 완료되었습니다!",[
           { text: "OK", onPress: () => {
               console.log("확인 누름")
