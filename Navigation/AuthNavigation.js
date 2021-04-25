@@ -5,7 +5,6 @@ import TutorAuthentication from '../Screen/AuthenticationScreen/TutorAuthenticat
 import TutorAuthCheck from '../Screen/AuthenticationScreen/TutorAuthCheck';
 import TuteeAuthentication from '../Screen/AuthenticationScreen/TuteeAuthentication'
 import AuthPayBack from '../Screen/AuthenticationScreen/AuthPayBack';
-import ExperiencedAuth from '../Screen/AuthenticationScreen/ExperiencedAuth'
 import ProjectDetail from '../src/components/ProjectDetail'
 const StackForAuth = createStackNavigator();
 

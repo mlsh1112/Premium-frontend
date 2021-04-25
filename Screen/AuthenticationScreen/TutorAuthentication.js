@@ -67,6 +67,7 @@ const TutorAuthentication = ({navigation}) => {
                         setProject(getProject(value,projectlist))
                         if(project)
                             setFin(project[0].fin)
+                       
                       }
                       
                     }}
@@ -78,6 +79,7 @@ const TutorAuthentication = ({navigation}) => {
                     <Text>{selectedpr}</Text>
                 </RNPickerSelect>
             </View>
+            <View></View>
 
             <View style={{flexDirection:'row',borderColor:'#D0DBEA',
         borderBottomWidth:2,width:'80%',marginBottom:'5%',
