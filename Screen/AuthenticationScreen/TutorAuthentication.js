@@ -21,7 +21,7 @@ function makeItem(projectlist){
 }
 const getProject=(title,projectlist)=>{
     const project =  projectlist.filter(project=>project.title==title)
-    return project[0]
+    return project
 }
 function TuteeListComponent({tutee,navigation}){
     return(
@@ -66,7 +66,8 @@ const TutorAuthentication = ({navigation}) => {
                       console.log(value,index)
                       if (value!=null){
                         setProject(getProject(value,projectlist))
-                        setFin(project.fin)
+                        if(project)
+                            setFin(project[0].fin)
                       }
                       
                     }}
@@ -116,7 +117,7 @@ const TutorAuthentication = ({navigation}) => {
                 <Text style={styles.paytxtStyle}>보증금을 신청하세요!</Text>
                 </View>
             <Button onPress={()=>{
-                    navigation.push('AuthPayBack')}}
+                    navigation.push('AuthPayBack', {project})}}
                     style={{width:'100%'}}>
                         <Text>보증금 환급 받기!</Text>
             </Button>

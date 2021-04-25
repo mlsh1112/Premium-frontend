@@ -9,7 +9,7 @@ import {
 import colors from '../../src/colors'
 import {Button} from '../../src/components'
 import cat from '../../assets/cat2.png'
-const AuthPay=({project})=>{
+const AuthPay=({project,route})=>{
     const [rate,setRate]=useState([
             {id:0,title:'Auhrate',rate:30},
             {id:1,title:'Progressrate',rate:100}
@@ -22,7 +22,6 @@ const AuthPay=({project})=>{
         console.log('press')
         Alert.alert('보증금 환급 신청이 완료되었습니다.')
     }
-
     return(
     <View style={styles.container}>
         <View style={{borderColor:'#9FA5C0',
@@ -35,7 +34,7 @@ const AuthPay=({project})=>{
 
             <ImageBackground source={cat} style={styles.imgStyle} opacity={0.3} blurRadius={5}>
                 <View style={{margin:10}}>
-                    <Text style={styles.titleStyle}>고등 수학 부시기</Text>
+                    <Text style={styles.titleStyle}>{route.params.project[0].title}</Text>
                     <Text style={styles.subStyle}>고등 수학 / 수학</Text>
                     <Text style={styles.dayStyle}>60 DAYS</Text>
                 </View>

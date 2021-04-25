@@ -22,7 +22,7 @@ function makeItem(projectlist){
 }
 const getProject=(title,projectlist)=>{
     const project =  projectlist.filter(project=>project.title==title)
-    return project[0]
+    return project
 }
 const TuteeAuthentication = ({navigation}) => {
     const [projectlist,setProjectlist] = useState([
@@ -98,7 +98,8 @@ const TuteeAuthentication = ({navigation}) => {
                       console.log(value,index)
                       if (value!=null){
                         setProject(getProject(value,projectlist))
-                        setFin(project.fin)
+                        if(project)
+                            setFin(project[0].fin)
                       }
                     }}
                     items={listitem}
@@ -132,7 +133,7 @@ const TuteeAuthentication = ({navigation}) => {
             <View style={{margin: 10}}>
                 {fin?
                 <Button onPress={()=>{
-                    navigation.push('AuthPayBack')
+                    navigation.push('AuthPayBack',{project})
                 }}><Text>보증금 환급 받기!</Text></Button>
                 :
                 <Button onPress={handleSubmitAuthenticatoin}><Text>인증 완료</Text></Button>
