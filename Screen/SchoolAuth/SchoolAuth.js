@@ -12,7 +12,6 @@ import {Button} from '../../src/components/Button';
 import Imagepicker from '../../src/image-picker';
 import authrequest from '../../src/Api';
 import axios from 'axios';
-import baseurl from '../../config';
 import AsyncStorage from '@react-native-community/async-storage';
 
 let headers = {
@@ -22,7 +21,7 @@ let headers = {
       'Authorization': ''
   }
 }
-const PORT = baseurl.port
+const PORT = "http://localhost:3000"
 console.log(PORT)
 const API = axios.create(headers);
 API.interceptors.request.use(

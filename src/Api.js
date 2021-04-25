@@ -1,6 +1,6 @@
 import axios from 'axios';
-import baseurl from '../config';
 import AsyncStorage from '@react-native-community/async-storage';
+import Qs from 'qs';
 
 let headers = {
     headers: {
@@ -9,8 +9,9 @@ let headers = {
         'Authorization': ''
     }
 }
+// const PORT = "http://52.79.97.255:80"
+const PORT = "http://200.200.13.129:3000"
 
-const PORT = baseurl.port
 console.log(PORT)
 const API = axios.create(headers);
 API.interceptors.request.use(
@@ -18,6 +19,12 @@ API.interceptors.request.use(
         const token = await AsyncStorage.getItem('token')
         config.headers['Authorization'] = token
         console.log(config)
+        config.paramsSerializer = params => {
+            return Qs.stringify(params, {
+                arrayFormat: "brackets",
+                encode: false,
+            });
+        };
         return config;
     },
     function(error){
@@ -25,9 +32,11 @@ API.interceptors.request.use(
     }
 );
 //const token = await AsyncStorage.getItem('token')
-export const login = (user) => API.post(PORT+"/users/sign_in", { user })
-export const signup = (user) => API.post(PORT+"/users/sign_up",{ user })
+export const login = (user) => API.post(PORT+"/login", { user })
+export const signup = (user) => API.post(PORT+"/signup",{ user })
 export const authrequest = (image) => API.post(PORT+"/auths/", image )
 export const getauth = () => API.get(PORT+"/auths")
 export const getproject = (projectid) => API.get(PORT+`/projects/${projectid}`)
-export const getprojects = () => API.get(PORT+`/projects/`)
+export const getprojects = ( params ) => API.get(`${PORT}/projects`, { params })
+
+
