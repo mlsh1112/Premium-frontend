@@ -3,10 +3,12 @@ import {
     View,
     Text,
     StyleSheet,
-    TouchableOpacity
+    ImageBackground,
+    Alert
 }from 'react-native';
 import colors from '../../src/colors'
 import {Button} from '../../src/components'
+import cat from '../../assets/cat2.png'
 const AuthPay=({project})=>{
     const [rate,setRate]=useState([
             {id:0,title:'Auhrate',rate:30},
@@ -18,29 +20,29 @@ const AuthPay=({project})=>{
     ]);
     function handleSubmit(){
         console.log('press')
-        alert('보증금 환급 신청이 완료되었습니다.')
+        Alert.alert('보증금 환급 신청이 완료되었습니다.')
     }
 
     return(
     <View style={styles.container}>
         <View style={{borderColor:'#9FA5C0',
-                            borderBottomWidth:2,width:'100%',marginBottom:'5%'}}>
+                            borderBottomWidth:2,width:'100%',marginBottom:'3%'}}>
                 <Text style={styles.projecttextStyle}> 보증금 환급받기</Text>
         </View>
         
         <View style={{margin:20}}>
             
-            <View style={{marginBottom:30}}>
-                    <Text> 김모씨</Text>
-            </View>
 
-            <View>
-                <Text>고등 수학 정복하기</Text>
-                <Text></Text>
-            </View>
-            <View >
-                <Text>프로젝트 인증 기한이 끝났습니다 !</Text>
-                 <Text>고생하셨습니다 👏</Text>
+            <ImageBackground source={cat} style={styles.imgStyle} opacity={0.3} blurRadius={5}>
+                <View style={{margin:10}}>
+                    <Text style={styles.titleStyle}>고등 수학 부시기</Text>
+                    <Text style={styles.subStyle}>고등 수학 / 수학</Text>
+                    <Text style={styles.dayStyle}>60 DAYS</Text>
+                </View>
+            </ImageBackground>
+            <View style={styles.textPosition}>
+                <Text style={styles.textStyle}>프로젝트 인증 기한이 끝났습니다 !</Text>
+                 <Text style={styles.textStyle}>고생하셨습니다 👏</Text>
             </View>
             <View style={{flexDirection:'row',marginBottom:'5%',
                             justifyContent:'center',alignItems: 'center',}}>
@@ -70,11 +72,12 @@ const AuthPay=({project})=>{
                     <Text style={styles.authBarTextStyle}>{rate[0].rate}%</Text>
                 </View>
             </View>
-
-            <Button >보증금 환급 신청</Button>
+            <View style={styles.textPosition}>
+                <Text style={styles.paytxtStyle}>환급 될 보증금은 3000원 입니다.</Text>
+                <Button onPress={()=>handleSubmit()}>보증금 환급 신청</Button>
+            </View>
+            
         </View>
-
-        
     </View>
     )
 }
@@ -102,7 +105,8 @@ const styles = StyleSheet.create({
         fontSize:18,
         color:colors.maincolor,
         marginBottom:'20%'
-    },authTextStyle:{
+    },
+    authTextStyle:{
         fontWeight:'bold',
         fontSize:18,
         color:'#FF6464',
@@ -126,6 +130,46 @@ const styles = StyleSheet.create({
         color:'#FF6464',
         marginLeft:10
     },
+    textStyle:{
+        fontSize:20,
+        fontWeight:'bold'
+    },
+    textPosition:{
+        marginTop:20,
+        justifyContent:'center',
+        alignItems: 'center',
+    },
+    paytxtStyle:{
+        fontWeight:'bold',
+        fontSize:18,
+        color:colors.maincolor,
+        marginBottom:30
+    },
+    imgStyle:{
+        width:'100%',
+        height:180,
+        justifyContent:'center',
+    },
+    titleStyle:{
+        fontWeight:'bold',
+        fontSize:20,
+        marginBottom:25
+
+    },
+    subStyle:{
+        fontWeight:'bold',
+        fontSize:18,
+        marginBottom:20,
+        color:'#2E3E5C',
+        marginLeft:5
+    },
+    dayStyle:{
+        fontWeight:'bold',
+        fontSize:15,
+        color:'#2E3E5C',
+        marginLeft:5
+    }
+
   });
 
 export default AuthPay;
