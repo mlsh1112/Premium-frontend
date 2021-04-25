@@ -140,10 +140,11 @@ const TuteeAuthentication = ({navigation}) => {
                     <Button onPress={()=>{
                         navigation.push('ProjectDetail',{project})
                     }}><Text>프로젝트 신청하기</Text></Button></View>
-                    :
+                    :<View>
+                    <Text style={{marginBottom:30,fontWeight:'bold',fontSize:17}}>이 프로젝트는 인증 기간이 완료된 프로젝트 입니다.</Text>
                     <Button onPress={()=>{
                         navigation.push('AuthPayBack',{project})
-                    }}><Text>보증금 환급 받기!</Text></Button>
+                    }}><Text>보증금 환급 받기!</Text></Button></View>
                     }
                 </View>
                 :

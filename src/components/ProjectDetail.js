@@ -10,6 +10,7 @@ class ProjectDetail extends Component {
     liked: false,
     visual:false,
     isJoin:false,
+    isExperienced:false
    };
 
   _toggle = () => {
@@ -70,16 +71,33 @@ class ProjectDetail extends Component {
         </ScrollView>
         </Card>
         <View style={styles.buttonStyle}>
-          { this.state.isJoin === false ? (
-           <Button onPress={()=>{
-            Alert.alert('7일 체험이 신청되었습니다.')
-            this.props.navigation.navigate('ProjectTrial')
-          }}>7 DAYS  체험하기</Button> 
-          ):(
-            <Button onPress={()=>{
-            }}>진행 중인 프로젝트 입니다.</Button> 
-          )
+          {
+            this.state.isExperienced ?
+                <View>
+              { this.state.isJoin === false ? (
+              <Button onPress={()=>{
+                Alert.alert('7일 체험이 신청되었습니다.')
+                this.props.navigation.navigate('ProjectTrial')
+              }}>7 DAYS  체험하기</Button> 
+              ):(
+                <Button onPress={()=>{
+                }}>진행 중인 프로젝트 입니다.</Button> 
+              )
+              }</View>
+              :
+              <View>
+              { this.state.isJoin === false ? (
+              <Button onPress={()=>{
+                Alert.alert('프로젝트가 신청되었습니다.')
+                this.props.navigation.navigate('Authentication')
+              }}>프로젝트 신청하기</Button> 
+              ):(
+                <Button onPress={()=>{
+                }}>진행 중인 프로젝트 입니다.</Button> 
+              )
+              }</View>
           }
+          
         </View>
       </View>
     );
