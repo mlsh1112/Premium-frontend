@@ -28,7 +28,7 @@ const Authentication = ({navigation}) => {
         <Text style={styles.projecttextStyle}>프로젝트 인증하기</Text>
         </View>
             {
-                userType==='Tutee' ? (
+                userType==='Tutor' ? (
                     <TutorAuthentication navigation={navigation}></TutorAuthentication>
                 ):(
                     <TuteeAuthentication navigation={navigation}></TuteeAuthentication>
