@@ -28,68 +28,71 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {TabView, TabBar} from 'react-native-tab-view';
 
 import colors from '../../src/colors'
-import {getMyProfile} from '../../src/Api';
+import {getproject} from '../../src/Api';
+import ProjectMini from '../../src/components/ProjectMini';
 
 const EachTabViewsProjects = (props) => {
   return(
     <ScrollView style={styles.menuWrapper}>
-            <View>
-              {props.project.map(pr => {
-                return <PrintProject project={pr} key={pr.id}/>
+            <View style={{marginRight:-20, flex:1,flexDirection:'row',justifyContent:'space-between',flexWrap: 'wrap'}}>
+              {props.project.map((pr, index )=> {
+                //return <PrintProject project={pr} key={index}/>
+                return(
+                  <View key={index} style={{marginVertical:8}}>
+                    <ProjectMini navigation={props.navigation} data={pr} key={index}></ProjectMini>
+                  </View>
+                )
+                //return <ProjectMini navigation={props.navigation} data={pr} key={index}></ProjectMini>
               })}  
             </View>
+            
     </ScrollView>
   );
 }
 
-function PrintProject({project}){
-  return(
-        <TouchableOpacity style={styles.CardContainer} onPress={()=> console.log(project.id)}>
-            <Text style={styles.CardTitle}>{project.title}</Text>
-            <Text style={styles.CardContent}>{project.info}</Text>
-        </TouchableOpacity>
-      );
-}
-
-
 const Profile = (props) => {
+   
+  const [userinfo,setUserinfo] = useState(new Object())
   const [showscreen,setShowscreen]=useState(false)
-  const [whoami,setWhoami] = useState('');
-  const [status,setStatus] = useState('');
-  //const [whoami,setWhoami] = useState('tutee');
-  const [project,setProject] = useState([
-    {id: 1,title: "수학2 마스터하기", info:"반복학습을 통한 수학2 마스터하기"},
-    {id:2,title: "비문학 마스터하기", info:"회독을 통한 비문학 마스터하기"},
-    {id:3,title: "국사 마스터하기", info:"중요파트 집중을 통한 국사 마스터하기"}
-  ]);
-  const [finishedproject,setfinishedProject] = useState([
+  
+  const [userid,setUserid] = useState(8);
+  
+  const [project,setProject] = useState([])
+  const [finishedproject,setFinishedProject] = useState([
     {id: 1,title: "수학1 마스터하기", info:"반복학습을 통한 수학1 마스터하기"},
   ]);
   const [likeproject,setLikeproject] = useState([
     {id: 1,title: "화학1 마스터하기", info:"화학1 중 원소주기율표 마스터하기"},
   ]);
-  const [name,setName] = useState('이모씨');
+
   const [school,setSchool] = useState('아주대학교');
-  const [followers,setFollower] = useState(1287);
-  const [following,setFollowing] = useState(224);
+  const [like,setLike] = useState(1287);
   
-  useEffect(() => {
-    async function getData(){
-      const type = await AsyncStorage.getItem('type');
-      const status = await AsyncStorage.getItem('status');
-      console.log(type)
-      setWhoami(type)
-      setStatus(status)
-      setShowscreen(true)
+    useEffect(() => {
+      const getData = async() => {
+        try {
+         await AsyncStorage.getItem('userinfo').then(res => {
+           setUserinfo(JSON.parse(res))
+         })
+        } catch (error) {
+          console.log("get user info error")
+        } 
     }
     getData()
-  })
-    //console.log("hi");
-    //getMyProfile().then(res => {
-    //  console.log(res);
-    //}).catch(error => {
-    //  console.log(error);
-    //});
+
+    const getApiData = () => {
+      getproject(userid).then(res=>{
+        console.log("response is : "+ JSON.stringify(res.data))
+        setProject(pr => [...pr,res.data])
+      }).catch(error=>{
+        console.log("get project error: "+error)
+      })
+    }
+    
+    //getApiData()
+    setShowscreen(true)
+  
+  },[])
   
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
@@ -110,7 +113,7 @@ const Profile = (props) => {
   const renderScene = ({route}) =>{
     switch (route.key) {
       case 'first':
-        return <EachTabViewsProjects project={project} />;
+        return <EachTabViewsProjects project={project} navigation={props.navigation}/>;
       case 'second':
         return <EachTabViewsProjects project={finishedproject}/>
       case 'third':
@@ -126,6 +129,18 @@ const Profile = (props) => {
     console.log("프로젝트 생성하러가기");
     props.navigation.navigate('ProjectForm');
   }
+  const goToAuth = () => {
+    console.log("인증하러 하러가기");
+    if(userinfo.type == 'Tutor'){
+      props.navigation.navigate('SchoolAuth');
+    }
+    else if(userinfo.type == 'Tutee'){
+      props.navigation.navigate('Authentication')
+    }
+    else {
+      console.log("check userinfo type!!!!")
+    }
+  }
   return (
     <SafeAreaView style={styles.container}>
     {showscreen && (
@@ -133,10 +148,10 @@ const Profile = (props) => {
         <View style={{flexDirection: 'row', marginTop: 15}}>
           <Text style={styles.avatar} />
           <View style={{marginLeft: 20}}>
-            <Title style={[styles.title, {marginTop:15,marginBottom: 5,}]}>{name}</Title>
+            <Title style={[styles.title, {marginTop:15,marginBottom: 5,}]}>{userinfo.name}</Title>
             <View>
               <Icon name="teach" color="red" size={20}/>
-              <Text style={styles.caption,{color:"red"}}>{whoami}</Text>
+              <Text style={styles.caption,{color:"red"}}>{userinfo.type}</Text>
             </View>
           </View>
           <TouchableOpacity style={styles.buttonposition} onPress={handleLogoutPress}>
@@ -152,11 +167,11 @@ const Profile = (props) => {
           <Icon name="school" color="#777777" size={20} style={{textAlignVertical:'center'}}/>
           <Text style={{color:"#777777", marginLeft: 20,textAlignVertical:'center'}}>{school}</Text>
         </View>
-        { whoami === "Tutor" && status === "approved"
+        { userinfo.type === "Tutor" && userinfo.status === "approved"
             ? (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToCreateProject}>
                 <Text style={styles.buttonstyle}>프로젝트 생성</Text>
                </TouchableOpacity>)
-            : (<TouchableOpacity style={styles.buttonposition_createpro} onPress={()=>console.log("인증하러가기")}>
+            : (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToAuth}>
                 <Text style={styles.buttonstyle}> 인증하러가기</Text>
                </TouchableOpacity>)}
       </View>
@@ -169,12 +184,8 @@ const Profile = (props) => {
           <Caption>Projects</Caption>
         </View>
         <View style={styles.infoBox}>
-          <Title>{following}</Title>
-          <Caption>Following</Caption>
-        </View>
-        <View style={styles.infoBox}>
-          <Title>{followers}</Title>
-          <Caption>Followers</Caption>
+          <Title>{like}</Title>
+          <Caption>좋아요 개수</Caption>
         </View>
       </View>
     )}
@@ -233,7 +244,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   menuWrapper: {
+    padding: 10,
+    width: "100%",
     marginTop: 5,
+
   },
   menuItem: {
     flexDirection: 'row',

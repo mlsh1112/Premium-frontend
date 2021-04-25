@@ -39,10 +39,10 @@ const TuteeAuthentication = ({navigation}) => {
     const savePickedFiles = async() => {
         console.log("pick file")
         const pickedfiles = await PickMultipleFile();
-        if(pickedfiles[0] != null){
+        if(pickedfiles != null){
             //console.log("user picked : " + JSON.stringify(pickedfiles))
             //setFiles(files => [...files,pickedfiles[0]]);
-            setFiles(files => files.concat(pickedfiles[0]))
+            setFiles(files => files.concat(pickedfiles))
         }
     }
     const deleteFiles = (key) => {
