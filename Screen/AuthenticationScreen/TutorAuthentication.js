@@ -21,7 +21,7 @@ function makeItem(projectlist){
 }
 const getProject=(title,projectlist)=>{
     const project =  projectlist.filter(project=>project.title==title)
-    return project
+    return project[0]
 }
 function TuteeListComponent({tutee,navigation}){
     return(
@@ -66,7 +66,7 @@ const TutorAuthentication = ({navigation}) => {
                       console.log(value,index)
                       if (value!=null){
                         setProject(getProject(value,projectlist))
-                        setFin(project[0].fin)
+                        setFin(project.fin)
                       }
                       
                     }}
