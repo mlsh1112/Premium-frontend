@@ -21,11 +21,15 @@ const validationSchema = Yup.object().shape({
     duration: Yup.number().min(10,"프로젝트 최소 기간은 10일 이상입니다.").required("올바른 프로젝트 기간을 정수 값으로 입력해주세요"),
     dailyStudyTime: Yup.number().min(0,"일일 최소학습 시간을 설정해주세요.").required("일일 최소학습 시간을 기입해주세요"),
     howToAuth: Yup.string().min(5,"인증 방식을 올바르게 기입해주세요.").required("프로젝트 인증 방식을 기입해주세요."),
-    projectIntroduce: Yup.string().min(5,"프로젝트 소개를 올바르게 기입해주세요.").required("프로젝트 소개를 올바르게 기입해주세요."),
+    projectIntroduce: Yup.string().min(5,"프로젝트 소개를 올바르게 기입해주세요. 소개문구는 최소 5글자 이상입니다. ").required("프로젝트 소개를 올바르게 기입해주세요."),
+    repeatstrength: Yup.number().min(0,"최소 복습 강도는 0%입니다.").max(99,"최대 복습 강도는 99%입니다.").required("복습 강도를 입력해주세요"),
   });
 
 const ProjectForm =()=> {
     const [isDateTimePickerVisible,setIsDateTimePickerVisible] = useState(false)
+    const goToBookSearch = () => {
+      console.log("책 검색하러가기")
+    }
     const handleSubmitPress = (values) =>{
         console.log("프로젝트 제출 : " + JSON.stringify(values))
     }
@@ -38,7 +42,7 @@ const ProjectForm =()=> {
             <Formik
               style={styles.FormStyle}
               validationSchema={validationSchema}
-              initialValues={{ title: '',startDate: tommorow, duration: '',dailyStudyTime: '',howToAuth:'',projectIntroduce:''}}
+              initialValues={{ title: '',startDate: tommorow, duration: '',repeatstrength: '',dailyStudyTime: '',howToAuth:'',projectIntroduce:'',chapter: []}}
               onSubmit={values => {   
                 handleSubmitPress(values)
               }}
@@ -138,7 +142,30 @@ const ProjectForm =()=> {
                   {(errors.dailyStudyTime && touched.dailyStudyTime) &&
                   <Text style={styles.errorText}>{errors.dailyStudyTime}</Text>
                   }
-                  <Text style={styles.subtitle}>5. 프로젝트 인증 방식</Text>
+                  <Text style={styles.subtitle}>5. 복습 강도</Text>
+                  <TextInput
+                    name="repeatstrength"
+                    placeholder="복습 강도(단위 %)"
+                    style={styles.textInput}
+                    onChangeText={value => {
+                        console.log(value)
+                        const parsedvalue = parseInt(value)
+                        if (!isNaN(parsedvalue)){
+                            console.log(parsedvalue)
+                            setFieldValue('repeatstrength',parsedvalue,10);
+                        }
+                        else {
+                            values.dailyStudyTime =''
+                            console.log("string is typed")
+                        }
+                    }}
+                    onBlur={handleBlur('repeatstrength')}
+                    keyboardType='numeric'
+                  />
+                  {(errors.repeatstrength && touched.repeatstrength) &&
+                  <Text style={styles.errorText}>{errors.repeatstrength}</Text>
+                  }
+                  <Text style={styles.subtitle}>6. 프로젝트 인증 방식</Text>
                   <TextInput
                     name="howToAuth"
                     placeholder="프로젝트 일일 인증 방식을 입력해주세요"
@@ -151,7 +178,7 @@ const ProjectForm =()=> {
                   {(errors.howToAuth && touched.howToAuth) &&
                   <Text style={styles.errorText}>{errors.howToAuth}</Text>
                   }
-                  <Text style={styles.subtitle}>6. 프로젝트 소개</Text>
+                  <Text style={styles.subtitle}>7. 프로젝트 소개</Text>
                   <TextInput
                     name="projectIntroduce"
                     placeholder="프로젝트 소개를 입력해주세요"
@@ -164,6 +191,10 @@ const ProjectForm =()=> {
                   {(errors.projectIntroduce && touched.projectIntroduce) &&
                   <Text style={styles.errorText}>{errors.projectIntroduce}</Text>
                   }
+                  <Text style={styles.subtitle}>8. 프로젝트 교재 검색</Text>
+                  <View style={styles.button}>
+                    <Button onPress={goToBookSearch}>책 검색하러가기</Button>
+                  </View>
                   <View style={styles.button}>
                     <Button onPress={handleSubmit}>프로젝트 생성하기</Button>
                   </View>
