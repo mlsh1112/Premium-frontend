@@ -29,11 +29,13 @@ const Authentication = ({navigation}) => {
         </View>
             {
                 userType==='Tutee' ? (
-                    <TuteeAuthentication ></TuteeAuthentication>
-                ):(
                     <TutorAuthentication navigation={navigation}></TutorAuthentication>
+                ):(
+                    <TuteeAuthentication navigation={navigation}></TuteeAuthentication>
+                    
                 )
             }
+            
             
       </View>
     );
