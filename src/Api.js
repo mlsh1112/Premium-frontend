@@ -23,9 +23,8 @@ API.interceptors.request.use(
     }
 );
 //const token = await AsyncStorage.getItem('token')
-export const login = (user) => API.post(PORT+"/users/sign_in", { user })
-export const signup = (user) => API.post(PORT+"/users/sign_up",{ user })
+export const login = (user) => API.post(PORT+"/login", { user })
+export const signup = (user) => API.post(PORT+"/signup",{ user })
 export const authrequest = (image) => API.post(PORT+"/auths/", image )
 export const getauth = () => API.get(PORT+"/auths")
 export const getprojects = () => API.get(PORT+`/projects/`)
-export const getproject = (id) => API.get(PORT+`/projects/${id}`)

@@ -33,7 +33,6 @@ class Home extends Component {
     componentDidMount() {
         getprojects()
         .then(res=>{
-            
             this.setState({
                 projects: res.data
             })

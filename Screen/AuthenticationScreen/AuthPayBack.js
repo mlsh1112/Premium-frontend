@@ -135,7 +135,8 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     },
     textPosition:{
-        marginTop:20,
+        marginTop:30,
+        marginBottom:10,
         justifyContent:'center',
         alignItems: 'center',
     },

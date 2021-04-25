@@ -101,7 +101,7 @@ const TuteeAuthentication = ({navigation}) => {
                     onValueChange={(value,index) => {
                       setSelectedpr(value)
                       console.log(value,index)
-                      setFin(isFinish(index))
+                      setFin(isFinish(index-1))
                     }}
                     items={listitem}
                     placeholder={{  // 값이 없을때 보일 값, 없어도 된다면 이 안의 내용을 지운다. placeholder={{}} 이건 남겨둠.. 이부분까지 지우면 기본값으로 설정됨.
