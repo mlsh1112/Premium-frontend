@@ -22,6 +22,7 @@ const AuthPay=({project,route})=>{
         console.log('press')
         Alert.alert('보증금 환급 신청이 완료되었습니다.')
     }
+    
     return(
     <View style={styles.container}>
         <View style={{borderColor:'#9FA5C0',
@@ -35,7 +36,7 @@ const AuthPay=({project,route})=>{
             <ImageBackground source={cat} style={styles.imgStyle} opacity={0.3} blurRadius={5}>
                 <View style={{margin:10}}>
                     <Text style={styles.titleStyle}>{route.params.project[0].title}</Text>
-                    <Text style={styles.subStyle}>고등 수학 / 수학</Text>
+                    <Text style={styles.subStyle}>{route.params.project[0].info}</Text>
                     <Text style={styles.dayStyle}>60 DAYS</Text>
                 </View>
             </ImageBackground>
@@ -73,7 +74,9 @@ const AuthPay=({project,route})=>{
             </View>
             <View style={styles.textPosition}>
                 <Text style={styles.paytxtStyle}>환급 될 보증금은 3000원 입니다.</Text>
-                <Button onPress={()=>handleSubmit()}>보증금 환급 신청</Button>
+                 <Button onPress={()=>handleSubmit()}>보증금 환급 신청</Button>
+                
+               
             </View>
             
         </View>

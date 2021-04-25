@@ -5,6 +5,8 @@ import TutorAuthentication from '../Screen/AuthenticationScreen/TutorAuthenticat
 import TutorAuthCheck from '../Screen/AuthenticationScreen/TutorAuthCheck';
 import TuteeAuthentication from '../Screen/AuthenticationScreen/TuteeAuthentication'
 import AuthPayBack from '../Screen/AuthenticationScreen/AuthPayBack';
+import ExperiencedAuth from '../Screen/AuthenticationScreen/ExperiencedAuth'
+import ProjectDetail from '../src/components/ProjectDetail'
 const StackForAuth = createStackNavigator();
 
 export default function createProjectStackNav(){
@@ -15,6 +17,7 @@ export default function createProjectStackNav(){
             <StackForAuth.Screen name="TutorAuthCheck" component={TutorAuthCheck} options={{headerTitle: 'Tutee 인증 내용'}}/>
             <StackForAuth.Screen name="TuteeAuthentication" component={TuteeAuthentication}/>
             <StackForAuth.Screen name="AuthPayBack" component={AuthPayBack} options={{headerShown: false}} />
+            <StackForAuth.Screen name="ProjectDetail" component={ProjectDetail} />
         </StackForAuth.Navigator>
     );
 }

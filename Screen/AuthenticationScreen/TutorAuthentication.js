@@ -37,7 +37,6 @@ function TuteeListComponent({tutee,navigation}){
     )
 }
 
-
 const TutorAuthentication = ({navigation}) => {
     const [projectlist,setProjectlist] = useState([
         {id:1,title: "수학2 마스터하기", info:"반복학습을 통한 수학2 마스터하기", fin:true},
@@ -84,6 +83,7 @@ const TutorAuthentication = ({navigation}) => {
         borderBottomWidth:2,width:'80%',marginBottom:'5%',
         justifyContent:'center',
         alignItems: 'center',}}>
+            
                 <View style={styles.precentPosition}>
                     <Text style={styles.presentTextStyle}>현재 진행률</Text>
                     <Text style={styles.percentStyle}>30%</Text>
@@ -99,33 +99,29 @@ const TutorAuthentication = ({navigation}) => {
             <View style={{marginRight:'55%', marginBottom:'5%'}}>
             <Text style={styles.authtuteeStyle}>인증 한 튜티</Text>
             </View>
-
-            {fin ? 
-            <ScrollView style={{marginLeft:'20%', width:'100%'}}>
-                {tutees.map((tutee,index)=>{
-                           return <TuteeListComponent 
-                           tutee={tutee}
-                           navigation={navigation}
-                           key={index}
-                           />
-                        })}
-            </ScrollView>
-            :
-            <View >
-                <View style={{marginTop:100,marginBottom:150}}>
-                <Text style={styles.paytxtStyle}>이 프로젝트는 완료된 프로젝트 입니다!</Text>
-                <Text style={styles.paytxtStyle}>보증금을 신청하세요!</Text>
-                </View>
-            <Button onPress={()=>{
-                    navigation.push('AuthPayBack', {project})}}
-                    style={{width:'100%'}}>
-                        <Text>보증금 환급 받기!</Text>
-            </Button>
-            </View>   
-            }
-
-            
-      </View>
+                {fin ? 
+                        <ScrollView style={{marginLeft:'20%', width:'100%'}}>
+                            {tutees.map((tutee,index)=>{
+                                    return <TuteeListComponent 
+                                    tutee={tutee}
+                                    navigation={navigation}
+                                    key={index}
+                                    />
+                                    })}
+                        </ScrollView>
+                        :
+                        <View >
+                            <View style={{marginTop:100,marginBottom:195}}>
+                            <Text style={styles.paytxtStyle}>이 프로젝트는 완료된 프로젝트 입니다!</Text>
+                            </View>
+                        <Button onPress={()=>{
+                                navigation.push('AuthPayBack', {project})}}
+                                style={{width:'100%'}}>
+                                    <Text>보증금 환급 받기!</Text>
+                        </Button>
+                        </View>   
+                }
+            </View>
     );
     
 }
@@ -209,7 +205,8 @@ const styles = StyleSheet.create({
     },
     paytxtStyle:{
             fontSize:20,
-            fontWeight:'bold'
+            fontWeight:'bold',
+            
         
     },
   });
