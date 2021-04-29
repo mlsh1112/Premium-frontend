@@ -1,4 +1,5 @@
 import React, { Component, useState } from 'react';
+import { CircularCard } from "react-native-circular-card-view";
 import { useEffect } from 'react';
 import {
     Text,
@@ -17,8 +18,9 @@ import {
   } from 'react-native';
 import {Searchbar } from 'react-native-paper'
 import { getprojects } from '../../src/Api';
+import ProjectMini from '../../src/components/ProjectMini'
 
-function Search() {
+function Search({navigation}) {
   const [Searchblur,SetSearchblur]=useState(false);
   const [SearchData,SetSearchData]=useState("");
 
@@ -43,6 +45,7 @@ function Search() {
       const query = {title_or_description_i_cont: SearchData}
       const data = (await getprojects({ q: query})).data
 
+      console.log(data)
       SetreqData(data)
     }
     
@@ -50,7 +53,8 @@ function Search() {
       if(Searchblur){
         SetSearchblur(false)
       }
-      
+      console.log(navigation
+)
     },[reqData])
   
   return(
@@ -73,9 +77,10 @@ function Search() {
           style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':'white'}}
           data={reqData}
           renderItem={({item})=>
-              <TouchableOpacity>
-                <Text style={{padding:20,fontSize:15}}>{item.title}</Text>
-              </TouchableOpacity>
+         <TouchableOpacity onPress={()=>{navigation.navigate('ProjectDetail')}}>
+
+            <Text style={{padding:20,fontSize:15}}>{item.title}</Text>
+          </TouchableOpacity>
           } 
         />
     </View>
