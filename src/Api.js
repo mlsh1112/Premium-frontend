@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import Qs from 'qs';
-
+import baseurl from '../config'
 let headers = {
     headers: {
         'Accept': 'application/json',
@@ -9,8 +9,8 @@ let headers = {
         'Authorization': ''
     }
 }
-// const PORT = "http://52.79.97.255:80"
-const PORT = "http://200.200.13.129:3000"
+const PORT = "http://52.79.97.255:80"
+//const PORT = "http://200.200.13.129:3000"
 
 console.log(PORT)
 const API = axios.create(headers);
