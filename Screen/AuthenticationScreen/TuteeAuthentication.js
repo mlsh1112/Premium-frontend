@@ -90,26 +90,7 @@ const TuteeAuthentication = ({navigation}) => {
 }
     return (
         <View style={styles.container}>
-            <View style={styles.pickerstyle}>
-                <RNPickerSelect
-                    useNativeAndroidPickerStyle={false}
-                    onValueChange={(value,index) => {
-                      setSelectedpr(value)
-                      console.log(value,index)
-                      if (value!=null){
-                        setProject(getProject(value,projectlist))
-                        if(project)
-                            setFin(project[0].fin)
-                      }
-                    }}
-                    items={listitem}
-                    placeholder={{  // 값이 없을때 보일 값, 없어도 된다면 이 안의 내용을 지운다. placeholder={{}} 이건 남겨둠.. 이부분까지 지우면 기본값으로 설정됨.
-                     label: '인증할 프로젝트를 선택하세요',
-                      value: '인증할 프로젝트를 선택하세요',
-                    }}>
-                    <Text>{selectedpr}</Text>
-                </RNPickerSelect>
-            </View>
+            
             <View style={styles.InputStyle}>
                 <TextInput 
                     placeholder="인증할 내용을 입력해주세요." 
@@ -193,7 +174,7 @@ const styles = StyleSheet.create({
     },
     InputStyle: {
       width: "90%",
-      height:"10%",
+      height:"30%",
       margin: 10,
       color: "black",
       paddingLeft: 15,
