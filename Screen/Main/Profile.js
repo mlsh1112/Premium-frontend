@@ -78,7 +78,7 @@ const Profile = (props) => {
           console.log("get user info error")
         } 
     }
-    getData()
+    //getData()
 
     const getApiData = () => {
       getproject(userid).then(res=>{
@@ -160,6 +160,15 @@ const Profile = (props) => {
         </View>
       </View>
     )}
+    {showscreen && (
+      <View style={styles.userInfoSection}>
+        <View style={{flexDirection: 'row', marginTop: 15}}>
+          <TouchableOpacity style={styles.buttonposition} onPress={handleLogoutPress}>
+              <Text style={styles.buttonstyle}>로그 아웃</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    )}
     
     {showscreen && (
       <View style={styles.userInfoSection}>
@@ -167,7 +176,7 @@ const Profile = (props) => {
           <Icon name="school" color="#777777" size={20} style={{textAlignVertical:'center'}}/>
           <Text style={{color:"#777777", marginLeft: 20,textAlignVertical:'center'}}>{school}</Text>
         </View>
-        { userinfo.type === "Tutor" && userinfo.status === "approved"
+        { true
             ? (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToCreateProject}>
                 <Text style={styles.buttonstyle}>프로젝트 생성</Text>
                </TouchableOpacity>)
