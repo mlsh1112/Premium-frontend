@@ -24,7 +24,7 @@ const getProject=(title,projectlist)=>{
     const project =  projectlist.filter(project=>project.title==title)
     return project
 }
-const TuteeAuthentication = ({navigation}) => {
+const TuteeAuthentication = ({navigation, route}) => {
     const [projectlist,setProjectlist] = useState([
         {id:0,title: "수학2 마스터하기", info:"반복학습을 통한 수학2 마스터하기",fin:true,experience:true},
         {id:1,title: "비문학 마스터하기", info:"회독을 통한 비문학 마스터하기",fin:false,experience:false},

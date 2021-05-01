@@ -19,10 +19,6 @@ function makeItem(projectlist){
     }));
     return temp;
 }
-const getProject=(title,projectlist)=>{
-    const project =  projectlist.filter(project=>project.title==title)
-    return project
-}
 function TuteeListComponent({tutee,navigation}){
     return(
         <View style={styles.tuteeBarStyle}>
@@ -37,7 +33,7 @@ function TuteeListComponent({tutee,navigation}){
     )
 }
 
-const TutorAuthentication = ({navigation}) => {
+const TutorAuthentication = ({navigation,route }) => {
     const [projectlist,setProjectlist] = useState([
         {id:1,title: "수학2 마스터하기", info:"반복학습을 통한 수학2 마스터하기", fin:true},
         {id:2,title: "비문학 마스터하기", info:"회독을 통한 비문학 마스터하기", fin:false},
@@ -57,8 +53,8 @@ const TutorAuthentication = ({navigation}) => {
     
     return (
         <View style={styles.container}>
-            <View style={{flexDirection:'row',marginRight:250,}}>
-                <Text style={styles.prjtitlestlye}>Project 1</Text>
+            <View style={{flexDirection:'row',}}>
+                <Text style={styles.prjtitlestlye}>{route.params.project.title}</Text>
             </View>
 
             <View style={{flexDirection:'row',borderColor:'#D0DBEA',
