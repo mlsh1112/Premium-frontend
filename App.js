@@ -6,9 +6,17 @@
  * @flow strict-local
  */
 
+ import axios from 'axios';
 import React, {Component} from 'react';
 import {NavigationContainer} from "@react-navigation/native";
 import Stack from "./Navigation/StackNavigation";
+import test from "./config"
+
+
+const BookAPI = axios.create({
+  headers: { 'Authorization': test },
+});
+
 
 
 import {
