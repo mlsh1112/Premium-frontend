@@ -1,11 +1,6 @@
 import axios from 'axios';
-<<<<<<< HEAD
 import Qs from 'qs';
-import baseurl from '../config';
-=======
->>>>>>> develop
 import AsyncStorage from '@react-native-community/async-storage';
-import Qs from 'qs';
 import baseurl from '../config'
 let headers = {
     headers: {

@@ -7,6 +7,7 @@ import {
 import TuteeAuthentication from '../AuthenticationScreen/TuteeAuthentication'
 import TutorAuthentication from '../AuthenticationScreen/TutorAuthentication'
 import TuteeAuthList from '../AuthenticationScreen/TuteeAuthList'
+import TutorAuthList from '../AuthenticationScreen/TutorAuthList'
 import AsyncStorage from '@react-native-community/async-storage';
 import {getproject} from '../../src/Api'
 const Authentication = ({navigation}) => {
@@ -29,8 +30,8 @@ const Authentication = ({navigation}) => {
         <Text style={styles.projecttextStyle}>프로젝트 인증하기</Text>
         </View>
             {
-                userType==='Tutee' ? (
-                    <TutorAuthentication navigation={navigation}></TutorAuthentication>
+                userType==='Tutor' ? (
+                    <TutorAuthList navigation={navigation}></TutorAuthList>
                 ):(
                     <TuteeAuthList navigation={navigation}></TuteeAuthList>
                     

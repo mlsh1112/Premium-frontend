@@ -57,29 +57,9 @@ const TutorAuthentication = ({navigation}) => {
     
     return (
         <View style={styles.container}>
-            <View style={styles.pickerstyle}>
-                <RNPickerSelect
-                    useNativeAndroidPickerStyle={false}
-                    onValueChange={(value,index) => {
-                      setSelectedpr(value)
-                      console.log(value,index)
-                      if (value!=null){
-                        setProject(getProject(value,projectlist))
-                        if(project)
-                            setFin(project[0].fin)
-                       
-                      }
-                      
-                    }}
-                    items={listitem}
-                    placeholder={{  // 값이 없을때 보일 값, 없어도 된다면 이 안의 내용을 지운다. placeholder={{}} 이건 남겨둠.. 이부분까지 지우면 기본값으로 설정됨.
-                     label: '인증할 프로젝트를 선택하세요',
-                      value: null,
-                    }}>
-                    <Text>{selectedpr}</Text>
-                </RNPickerSelect>
+            <View style={{flexDirection:'row',marginRight:250,}}>
+                <Text style={styles.prjtitlestlye}>Project 1</Text>
             </View>
-            <View></View>
 
             <View style={{flexDirection:'row',borderColor:'#D0DBEA',
         borderBottomWidth:2,width:'80%',marginBottom:'5%',
@@ -211,6 +191,10 @@ const styles = StyleSheet.create({
             
         
     },
+    prjtitlestlye:{
+        fontSize:27,
+        fontWeight:'bold',
+    }
   });
 
 export default TutorAuthentication;
