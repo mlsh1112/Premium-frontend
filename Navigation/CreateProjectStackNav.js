@@ -10,6 +10,7 @@ import ProjectTrial from '../src/components/ProjectTrial'
 import ProfileView from '../src/components/ProfileView'
 import ProjectMini from '../src/components/ProjectMini'
 import CardNews from '../src/components/CardNews'
+import Book from '../Screen/makeProjectScreen/Book';
 
 const StackForCreatePrj = createStackNavigator();
 
@@ -18,6 +19,7 @@ export default function createProjectStackNav(){
         <StackForCreatePrj.Navigator initialRouteName='Profile'>
             <StackForCreatePrj.Screen name="Profile" component={Profile} options={{headerShown: false}}/>
             <StackForCreatePrj.Screen name="ProjectForm" component={ProjectForm} options={{headerTitle: "프로젝트 생성"}}/>
+            <StackForCreatePrj.Screen name="Book" component={Book} options={{headerTitle: "책 선택"}}/>
             <StackForCreatePrj.Screen name="Authentication" component={AuthNamvi} />
             <StackForCreatePrj.Screen name="SchoolAuth" component={SchoolAuth} options={{headerTitle: "학교 인증"}}/>
             <StackForCreatePrj.Screen name="Projectcard" component={Projectcard} options={{headerShown: false}}/>
