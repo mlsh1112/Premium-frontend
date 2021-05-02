@@ -2,24 +2,21 @@ import React,{ Component } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground } from 'react-native';
 import colors from '../colors'
 import cat from '../../assets/cat2.png'
-
-class  ProjectMini extends Component{
-  render(){
+const ProjectMini=({navigation,project})=>{
   return (
     <View style={{marginRight:20}}>
-        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('ProjectDetail')}}>
+        <TouchableOpacity onPress={()=>{navigation.navigate('ProjectDetail',{project})}}>
             <ImageBackground source={cat} style={styles.imgStyle} opacity={0.3} blurRadius={5}>
                 <View style={{margin:10}}>
-                <Text style={styles.titleStyle}>{this.props.data.title}</Text>
+                <Text style={styles.titleStyle}>{project.title}</Text>
                 <Text style={styles.subStyle}>고등 수학 / 수학</Text>
-                <Text style={styles.dayStyle}>60 DAYS</Text>
+                <Text style={styles.dayStyle}>{project.experience_period} DAYS</Text>
                 </View>
             </ImageBackground>
         </TouchableOpacity>
     </View>
   );
-  }
-};
+}
 
 const styles={
     imgStyle:{

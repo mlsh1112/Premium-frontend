@@ -1,6 +1,6 @@
 import axios from 'axios';
-import AsyncStorage from '@react-native-community/async-storage';
 import Qs from 'qs';
+import AsyncStorage from '@react-native-community/async-storage';
 import baseurl from '../config'
 let headers = {
     headers: {
@@ -16,8 +16,10 @@ const kakaoBook = axios.create({
 const PORT = baseurl.port
 //const PORT = "http://52.79.97.255:80"
 //const PORT = "http://200.200.13.129:3000"
+//const PORT = baseurl.port
 
 console.log(PORT)
+
 const API = axios.create(headers);
 API.interceptors.request.use(
     async function (config){
@@ -35,11 +37,11 @@ API.interceptors.request.use(
     function(error){
         return Promise.reject(error)
     }
-);
+)
 //const token = await AsyncStorage.getItem('token')
 export const login = (user) => API.post(PORT+"/login", { user })
+export const logout = () => API.delete(PORT+"/logout")
 export const signup = (user) => API.post(PORT+"/signup",{ user })
-export const logout = () => API.delete(PORT+'/logout')
 export const authrequest = (image) => API.post(PORT+"/auths/", image )
 export const getauth = () => API.get(PORT+"/auths")
 export const getproject = (projectid) => API.get(PORT+`/projects/${projectid}`)
@@ -49,4 +51,6 @@ export const getBook = (params) => kakaoBook.get("https://dapi.kakao.com/v3/sear
 export const createBook = (info) => API.post(PORT+'/books',info)
 export const getprojects = ( params ) => API.get(`${PORT}/projects`, { params })
 export const postoptions = ( params ) => API.post(`${PORT}/options`,{ params })
+export const getattendances = () => API.get(PORT+"/attendances")
+
 

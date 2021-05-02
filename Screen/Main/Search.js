@@ -77,7 +77,7 @@ function Search({navigation}) {
           style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':'white'}}
           data={reqData}
           renderItem={({item})=>
-         <TouchableOpacity onPress={()=>{navigation.navigate('ProjectDetail')}}>
+         <TouchableOpacity onPress={()=>{navigation.navigate('ProjectDetail',{project:item})}}>
 
             <Text style={{padding:20,fontSize:15}}>{item.title}</Text>
           </TouchableOpacity>

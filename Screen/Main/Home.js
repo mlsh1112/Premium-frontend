@@ -1,5 +1,4 @@
 import React, { Component, useState} from 'react';
-import RNPickerSelect from 'react-native-picker-select';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import TodayProject from '../../src/components/TodayProjectHome'
@@ -16,26 +15,20 @@ import {
     Text,
     Image
   } from 'react-native';
-import { FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class Home extends Component {
     state={
         subject:'',
         projects:[],
-        user:[
-            {
-                "name":"hee"
-            }
-        ]
+        user:[]
     };
     constructor(props) {
         super(props);
     }
-    componentWillMount() {
+    componentDidMount() {
         getprojects()
         .then(res=>{
-            
             this.setState({
                 projects: res.data
             })
@@ -43,12 +36,15 @@ class Home extends Component {
             console.log(err)
         )
 
-        async function getData(){
-            const type = await AsyncStorage.getItem('type');
-            const status = await AsyncStorage.getItem('status');
-            console.log(type)
-          }
+        const getData = async()=>{
+            await AsyncStorage.getItem('userinfo')
+            .then(res=>{
+                this.setState({user:JSON.parse(res)})
+            })
+            .catch(err=>console.log(err))
+        }
         getData()
+    
     }
 
     render() {
@@ -59,12 +55,14 @@ class Home extends Component {
                <ScrollView >
 
                 <View style={styles.today}>
-                    <Text style={styles.todaytext}>{this.state.user.name}HEE 님의 오늘의 인증!</Text>
+                    <Text style={styles.todaytext}>{this.state.user.name} 님의 오늘의 인증!</Text>
                     <ScrollView horizontal={true} style={{width:"100%",height:"100%"}}>
-                    {this.state.projects.map(project=>{
+                    {this.state.projects.map((project,index)=>{
                            return <TodayProject 
                            navigation={this.props.navigation}
-                           data={project}/>
+                           data={project}
+                           key={index}
+                           />
                         })}
                     </ScrollView>
                 </View>
@@ -93,8 +91,8 @@ class Home extends Component {
                         horizontal={true}
                         showsHorizontalScrollIndicator = {true}
                         style={styles.projectScroll}>
-                    {this.state.projects.map(project=>{
-                           return <ProjectMini navigation={this.props.navigation} data={project}></ProjectMini>
+                    {this.state.projects.map((project,index)=>{
+                           return <ProjectMini navigation={this.props.navigation} project={project} key={index}></ProjectMini>
                         })}
                     
                     </ScrollView>
@@ -106,8 +104,8 @@ class Home extends Component {
                         horizontal={true}
                         showsHorizontalScrollIndicator = {true}
                         style={styles.projectScroll}>
-                    {this.state.projects.map(project=>{
-                           return <ProjectMini navigation={this.props.navigation} data={project}></ProjectMini>
+                    {this.state.projects.map((project,index)=>{
+                           return <ProjectMini navigation={this.props.navigation} project={project} key={index}></ProjectMini>
                         })}
                     
                     </ScrollView>

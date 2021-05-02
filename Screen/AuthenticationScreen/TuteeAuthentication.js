@@ -12,24 +12,30 @@ import {
   } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import {PickMultipleFile,PickSingleFile} from '../../src/DocumentPicker';
-
-function makeItem(project){
-    const temp = project.map((pr)=>({
+import {getproject} from '../../src/Api'
+function makeItem(projectlist){
+    const temp = projectlist.map((pr)=>({
         label: pr.title,
         value: pr.title,
     }));
     return temp;
 }
-const TuteeAuthentication = () => {
-    const [project,setProject] = useState([
-        {id: 1,title: "수학2 마스터하기", info:"반복학습을 통한 수학2 마스터하기"},
-        {id:2,title: "비문학 마스터하기", info:"회독을 통한 비문학 마스터하기"},
-        {id:3,title: "국사 마스터하기", info:"중요파트 집중을 통한 국사 마스터하기"}
+const getProject=(title,projectlist)=>{
+    const project =  projectlist.filter(project=>project.title==title)
+    return project
+}
+const TuteeAuthentication = ({navigation, route}) => {
+    const [projectlist,setProjectlist] = useState([
+        {id:0,title: "수학2 마스터하기", info:"반복학습을 통한 수학2 마스터하기",fin:true,experience:true},
+        {id:1,title: "비문학 마스터하기", info:"회독을 통한 비문학 마스터하기",fin:false,experience:false},
+        {id:2,title: "국사 마스터하기", info:"중요파트 집중을 통한 국사 마스터하기",fin:true,experience:false}
       ]);
-    const listitem = makeItem(project)
+    const listitem = makeItem(projectlist)
     const [selectedpr,setSelectedpr] = useState('')
     const [files,setFiles] = useState([]);
     const [text,setText] = useState('');
+    const [fin,setFin]=useState(false);
+    const [project,setProject]=useState();
     const savePickedFiles = async() => {
         console.log("pick file")
         const pickedfiles = await PickMultipleFile();
@@ -44,8 +50,10 @@ const TuteeAuthentication = () => {
         setFiles(files.filter((f,idx) => idx !== key))
         console.log("----------------------------" +JSON.stringify(files))
     }
+    
     const handleSubmitAuthenticatoin = () => {
         Keyboard.dismiss();
+        
     }
     function RenderPickedFiles({pickedfiles}){
         console.log("selected files : " + JSON.stringify(files))
@@ -82,21 +90,7 @@ const TuteeAuthentication = () => {
 }
     return (
         <View style={styles.container}>
-            <View style={styles.pickerstyle}>
-                <RNPickerSelect
-                    useNativeAndroidPickerStyle={false}
-                    onValueChange={(value,index) => {
-                      setSelectedpr(value)
-                      console.log(value,index)
-                    }}
-                    items={listitem}
-                    placeholder={{  // 값이 없을때 보일 값, 없어도 된다면 이 안의 내용을 지운다. placeholder={{}} 이건 남겨둠.. 이부분까지 지우면 기본값으로 설정됨.
-                     label: '인증할 프로젝트를 선택하세요',
-                      value: '인증할 프로젝트를 선택하세요',
-                    }}>
-                    <Text>{selectedpr}</Text>
-                </RNPickerSelect>
-            </View>
+            
             <View style={styles.InputStyle}>
                 <TextInput 
                     placeholder="인증할 내용을 입력해주세요." 
@@ -118,7 +112,28 @@ const TuteeAuthentication = () => {
             </View>
             <RenderPickedFiles pickedfiles={files}/>
             <View style={{margin: 10}}>
+                {fin?
+                <View>
+                    {
+                        project[0].experience ?
+                        <View>
+                        <Text style={{marginBottom:30,fontWeight:'bold',fontSize:17}}>이 프로젝트는 체험 기간이 완료된 프로젝트 입니다.</Text>
+                        <Button onPress={()=>{
+                            navigation.push('ProjectDetail',{project})
+                        }}><Text>프로젝트 신청하기</Text></Button></View>
+                        :
+                        <View>
+                        <Text style={{marginBottom:30,fontWeight:'bold',fontSize:17}}>이 프로젝트는 인증 기간이 완료된 프로젝트 입니다.</Text>
+                        <Button onPress={()=>{
+                            navigation.push('AuthPayBack',{project})
+                        }}><Text>보증금 환급 받기!</Text></Button></View>
+                    }
+                </View>
+                :
                 <Button onPress={handleSubmitAuthenticatoin}><Text>인증 완료</Text></Button>
+                
+                }
+                
             </View>
       </View>
     );
@@ -159,7 +174,7 @@ const styles = StyleSheet.create({
     },
     InputStyle: {
       width: "90%",
-      height:"10%",
+      height:"30%",
       margin: 10,
       color: "black",
       paddingLeft: 15,
