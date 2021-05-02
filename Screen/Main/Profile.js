@@ -122,6 +122,7 @@ const Profile = (props) => {
   };
   
   const handleLogoutPress = async()=> {  //로그아웃 function
+    
      await AsyncStorage.removeItem('token');
      props.navigation.popToTop()
   }
@@ -167,7 +168,7 @@ const Profile = (props) => {
           <Icon name="school" color="#777777" size={20} style={{textAlignVertical:'center'}}/>
           <Text style={{color:"#777777", marginLeft: 20,textAlignVertical:'center'}}>{school}</Text>
         </View>
-        { userinfo.type === "Tutor" && userinfo.status === "approved"
+        { true
             ? (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToCreateProject}>
                 <Text style={styles.buttonstyle}>프로젝트 생성</Text>
                </TouchableOpacity>)
