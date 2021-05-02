@@ -1,23 +1,18 @@
 import React, { Component, useState, useEffect } from 'react';
 import { View,Text,TouchableOpacity,ImageBackground } from 'react-native';
-import { getproject } from '../../src/Api';
+import { getattendances } from '../../src/Api';
+import AsyncStorage from '@react-native-community/async-storage';
 import colors from '../../src/colors'
-const callApi = async() =>{
-    getproject(userID)
-    .then(res=>res.json())
-    .then(json=>json.data)
-    .catch(err=>console.log(err))
-}
+
 
 const ProjectAuthCard = ({navigation,project}) => {
-    
     return(
         <View style={{width:350,margin:10,backgroundColor:colors.subcolor, borderRadius:10}}>
         <TouchableOpacity onPress={()=>{navigation('TuteeAuthentication',{project})}}>
                 <View style={{margin:10}}>
                 <Text style={styles.titleStyle}>{project.title}</Text>
                 <Text style={styles.subStyle}>고등 수학 / 수학</Text>
-                <Text style={styles.dayStyle}>60 DAYS</Text>
+                <Text style={styles.dayStyle}>{project.experience_period} DAYS</Text>
                 </View>
         </TouchableOpacity>
     </View>
@@ -25,25 +20,32 @@ const ProjectAuthCard = ({navigation,project}) => {
 }
 
 const TuteeAuthList = ({navigation}) => {
-    const [projects, setProjects] = useState([
-        {id:0,title: "수학2 마스터하기", info:"반복학습을 통한 수학2 마스터하기",fin:true,experience:true},
-        {id:1,title: "비문학 마스터하기", info:"회독을 통한 비문학 마스터하기",fin:false,experience:false},
-        {id:2,title: "국사 마스터하기", info:"중요파트 집중을 통한 국사 마스터하기",fin:true,experience:false}
-          
-    ]);
+    const [projects, setProjects] = useState();
+    const [user,setUser]=useState()
 
     useEffect(() => {
-        //const project_list=await callApi()
-        //setProjects(project_list)
-    }, []);
+        const getData = async() =>{
+            await AsyncStorage.getItem('userInfo')
+            .then(res=>setUser(JSON.parse(res)))
+            .catch(err=>console.log(err))
+        }
 
+        getData()
+        const callApi = async() =>{
+            await getattendances()
+            .then(res=>setProjects(res.data))
+            .catch(err=>console.log(err))
+        }
+        callApi()
+    }, []);
+    console.log(projects)
     return (
         <View style={styles.container}>
             {
                 projects?
                 <View style={{}}>
                     {projects.map((project,index)=>{
-                            return  <ProjectAuthCard navigation={navigation.navigate} project={project} key={index} ></ProjectAuthCard>
+                            return  <ProjectAuthCard navigation={navigation.navigate} project={project.project} key={index} ></ProjectAuthCard>
                         })
                     }
                 </View>

@@ -21,11 +21,7 @@ class Home extends Component {
     state={
         subject:'',
         projects:[],
-        user:[
-            {
-                "name":"hee"
-            }
-        ]
+        user:[]
     };
     constructor(props) {
         super(props);
@@ -40,12 +36,15 @@ class Home extends Component {
             console.log(err)
         )
 
-        async function getData(){
-            const type = await AsyncStorage.getItem('type');
-            const status = await AsyncStorage.getItem('status');
-            console.log(type)
-          }
+        const getData = async()=>{
+            await AsyncStorage.getItem('userinfo')
+            .then(res=>{
+                this.setState({user:JSON.parse(res)})
+            })
+            .catch(err=>console.log(err))
+        }
         getData()
+    
     }
 
     render() {
@@ -56,7 +55,7 @@ class Home extends Component {
                <ScrollView >
 
                 <View style={styles.today}>
-                    <Text style={styles.todaytext}>{this.state.user.name}HEE 님의 오늘의 인증!</Text>
+                    <Text style={styles.todaytext}>{this.state.user.name} 님의 오늘의 인증!</Text>
                     <ScrollView horizontal={true} style={{width:"100%",height:"100%"}}>
                     {this.state.projects.map((project,index)=>{
                            return <TodayProject 
