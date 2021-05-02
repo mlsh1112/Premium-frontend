@@ -1,8 +1,10 @@
 import React, { Component, useState } from 'react';
-import colors from '../../src/colors';
+import { CircularCard } from "react-native-circular-card-view";
+import { useEffect } from 'react';
 import {
     Text,
     View,
+    Body,
     Button,
     StyleSheet,
     TextInput,
@@ -10,147 +12,80 @@ import {
     ScrollView,
     StatusBar,
     Alert,
-    Animated as RNAnimated,
-    Easing as RNAnimatedEasing,
+    FlatList,
+    Keyboard,
+    TouchableOpacity
   } from 'react-native';
-  import ReAnimated, {
-    Easing as ReAnimatedEasing,
-  } from 'react-native-reanimated';
+import {Searchbar } from 'react-native-paper'
+import { getprojects } from '../../src/Api';
+import ProjectMini from '../../src/components/ProjectMini'
+
+function Search({navigation}) {
+  const [Searchblur,SetSearchblur]=useState(false);
+  const [SearchData,SetSearchData]=useState("");
+
+  const [isLoading,SetIsLoading]=useState(false);
+  const [reqData,SetreqData]=useState([])
   
-  const width=Dimensions.get('window').width;
-  const height=Dimensions.get('window').height;
+   const ChangeSearchData=((text)=>{
+      if(text){
+        SetSearchblur(true);
+      }
+      else{
+        SetSearchblur(false);
+      }
+      SetSearchData(text);
+      console.log(SearchData);
+    })
+  
+    async function SearchVal (){
+      if(SearchData.length<=0){
+        alert("2글자 이상의 검색어를 입력해주세요")
+      }
+      const query = {title_or_description_i_cont: SearchData}
+      const data = (await getprojects({ q: query})).data
 
-  const searchBarHeight=50;
-  const topPosition= 0;
-  const centerPosition =(height-searchBarHeight)/2;
-
-  const useReanmiated=false;
-  const Animated=useReanmiated?ReAnimated:RNAnimated;
-  const Easing=useReanmiated?ReAnimatedEasing:RNAnimatedEasing;
-
-function Search() {
-    const [isOpened,setIsOpened]=useState(false);
-    const animPosition=React.useRef(new Animated.Value(centerPosition));
-    const animWidth=React.useRef();
-    const animOpacity=React.useRef();
-    const textRef=React.useRef();
-
-    const [text,setText]=useState();
-    const [newtext,setNewtext]=useState();
-
-    const TextChangeHendler=(text)=>{        
-        setNewtext(text);
+      console.log(data)
+      SetreqData(data)
     }
     
-    const addText=()=>{
-        setText([text,newtext]);
-        console.log(text);
-    }
-    
-    
-    const onFocus=()=>{
-        setIsOpened(true);
-        Animated.timing(animPosition.current,{
-            toValue:topPosition,
-            duration:300,
-            easing:Easing.out(Easing.ease),
-        }).start();
-    };
-
-    const onBlur=()=>{
-        Animated.timing(animPosition.current,{
-            toValue:centerPosition,
-            duration:300,
-            easing:Easing.in(Easing.ease),
-        }).start(()=>setIsOpened(false));
-    };
-
-    
-    animWidth.current = animPosition.current.interpolate({
-        inputRange: [topPosition, centerPosition],
-        outputRange: [width, width * 0.8],
-      });
-    
-      animOpacity.current = animPosition.current.interpolate({
-        inputRange: [0, centerPosition],
-        outputRange: [1, 0],
-      });
-
-    return(
-        <View style={styles.container}>
-            <Animated.View
-                style={{
-                    opacity:animOpacity.current,
-                    backgroundColor:'grenn',
-                    paddingTop:searchBarHeight,
-                    width:'100%',
-                    height:'100%',
+    useEffect(()=>{
+      if(Searchblur){
+        SetSearchblur(false)
+      }
+      console.log(navigation
+)
+    },[reqData])
+  
+  return(
+    <View style={{flex:1}} >
+        <View
+                    style={{height:80,
+                    backgroundColor:'#1FCC79',
+                    justifyContent:'center',
+                    paddingHorizontal:5
+                    
                 }}>
-                    {isOpened && (
-          <ScrollView keyboardShouldPersistTaps={'always'}>
-              {new Array(250).fill(Math.random()).map((val, index) => {
-              return (
-                <Text
-                  style={{
-                    padding: 10,
-                    backgroundColor: 'white',
-                    marginBottom: 2,
-                  }}
-                  key={index}
-                  onPress={() => alert('press:' + index)}>
-                  검색내역: {index}
-                </Text>
-              );
-                })}
-          </ScrollView>
-                  )}
-            </Animated.View>
-            <Animated.View
-            style={{
-                borderWidth: 1,
-                position: 'absolute',
-                alignSelf: 'center',
-                justifyContent: 'center',
-                height: searchBarHeight,
-                width: animWidth.current,
-                top: animPosition.current,
-              }}>
-                  <TextInput
-                     ref={textRef}
-                     onFocus={onFocus}
-                     onBlur={onBlur}
-                    style={{
-                    backgroundColor: '#c8c8c8',
-                    width: '100%',
-                    height: '100%',
-                    paddingHorizontal: 10,
-                    fontSize: 14,
-                    }}
-                    onChangeText={(text)=>TextChangeHendler(text)}
-        />
-        {isOpened && (
-          <Animated.Text
-            onPress={addText}
-            style={{ position: 'absolute', right: 10, padding: 10, opacity:animOpacity.current }}>
-            검색
-          </Animated.Text>
-        )}
-        </Animated.View>
+           <Searchbar
+                placeholder="Search"
+                onChangeText={ChangeSearchData}
+                onIconPress={SearchVal}
+            />
+            
         </View>
-        
+        <FlatList
+          style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':'white'}}
+          data={reqData}
+          renderItem={({item})=>
+         <TouchableOpacity onPress={()=>{navigation.navigate('ProjectDetail')}}>
 
-    )
- 
+            <Text style={{padding:20,fontSize:15}}>{item.title}</Text>
+          </TouchableOpacity>
+          } 
+        />
+    </View>
+  )
+
 }
-
-
-   
-const styles = StyleSheet.create({
-    container : {
-        flex : 1,
-        justifyContent:'center',
-        alignItems:'center',
-    }
-})
 
 export default Search;

@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Home from '../Screen/Main/Home';
-import Search from '../Screen/Main/Search';
+import Search from '../Navigation/SearchNavigation';
 import Authentication from '../Screen/Main/Authentication';
 import Profile from '../Screen/Main/Profile';
 import createProjectStackNav from './CreateProjectStackNav';
