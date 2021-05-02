@@ -14,7 +14,7 @@ const kakaoBook = axios.create({
 })
 //const PORT = baseurl.port
 const PORT = baseurl.port
-const PORT = "http://52.79.97.255:80"
+//const PORT = "http://52.79.97.255:80"
 //const PORT = "http://200.200.13.129:3000"
 
 console.log(PORT)
@@ -39,11 +39,12 @@ API.interceptors.request.use(
 //const token = await AsyncStorage.getItem('token')
 export const login = (user) => API.post(PORT+"/login", { user })
 export const signup = (user) => API.post(PORT+"/signup",{ user })
+export const logout = () => API.delete(PORT+'/logout')
 export const authrequest = (image) => API.post(PORT+"/auths/", image )
 export const getauth = () => API.get(PORT+"/auths")
 export const getproject = (projectid) => API.get(PORT+`/projects/${projectid}`)
-export const getprojects = () => API.get(PORT+`/projects/`)
-export const getchapter = (book) => API.get(PORT+"/books/get_list/",book)
+//export const getprojects = () => API.get(PORT+`/projects/`)
+export const getchapter = ( params ) => API.get(PORT+"/books/get_list/",{ params })
 export const getBook = (params) => kakaoBook.get("https://dapi.kakao.com/v3/search/book",{params})
 export const createBook = (info) => API.post(PORT+'/books',info)
 export const getprojects = ( params ) => API.get(`${PORT}/projects`, { params })
