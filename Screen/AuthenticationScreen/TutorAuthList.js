@@ -5,27 +5,12 @@ import colors from '../../src/colors'
 import AsyncStorage from '@react-native-community/async-storage';
 const callApi = async(userID) =>{
     getproject(userID)
-    .then(res=>res.json())
-    .then(json=>json.data)
+    .then(res=>console.log(JSON.parse(res)))
+    //.then(json=>json.data)
     .catch(err=>console.log(err))
 }
 
 const ProjectAuthCard = ({navigation,project}) => {
-    const [user,setUser]=useState()
-    
-    useEffect(()=>{
-        const getData = async()=>{
-            await AsyncStorage.getItem('userinfo')
-            .then(res=>{
-                setUser(JSON.parse(res))
-            })
-            .catch(err=>console.log(err))
-        }
-
-        getData()
-    },[])
-    console.log(user)
-
     return(
         <View style={{width:350,margin:10,backgroundColor:colors.subcolor, borderRadius:10}}>
         <TouchableOpacity onPress={()=>{navigation('TutorAuthentication',{project})}}>
@@ -40,17 +25,20 @@ const ProjectAuthCard = ({navigation,project}) => {
 }
 
 const TutorAuthList = ({navigation}) => {
-    const [projects, setProjects] = useState([
-        {id:0,title: "수학2 마스터하기", info:"반복학습을 통한 수학2 마스터하기",fin:true,experience:true},
-        {id:1,title: "비문학 마스터하기", info:"회독을 통한 비문학 마스터하기",fin:false,experience:false},
-        {id:2,title: "국사 마스터하기", info:"중요파트 집중을 통한 국사 마스터하기",fin:true,experience:false}
-          
-    ]);
+    const [projects, setProjects] = useState()
+    const [user,setUser]=useState()
+    
+    useEffect(()=>{
+        const getData = async()=>{
+            await AsyncStorage.getItem('userinfo')
+            .then(res=>{
+                setUser(JSON.parse(res))
+            })
+            .catch(err=>console.log(err))
+        }
 
-    useEffect(() => {
-        //const project_list=await callApi()
-        //setProjects(project_list)
-    }, []);
+        getData()
+    },[])
 
     return (
         <View style={styles.container}>

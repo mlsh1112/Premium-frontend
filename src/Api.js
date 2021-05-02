@@ -33,10 +33,12 @@ API.interceptors.request.use(
 )
 //const token = await AsyncStorage.getItem('token')
 export const login = (user) => API.post(PORT+"/login", { user })
+export const logout = () => API.delete(PORT+"/logout")
 export const signup = (user) => API.post(PORT+"/signup",{ user })
 export const authrequest = (image) => API.post(PORT+"/auths/", image )
 export const getauth = () => API.get(PORT+"/auths")
 export const getproject = (projectid) => API.get(PORT+`/projects/${projectid}`)
 export const getprojects = ( params ) => API.get(`${PORT}/projects`, { params })
+export const getattendances = () => API.get(PORT+"/attendances")
 
 
