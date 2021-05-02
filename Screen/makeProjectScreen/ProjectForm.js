@@ -16,7 +16,7 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Keyboard } from 'react-native';
 import {Schema, InitValue} from './ValueSchema';
-import {getchapter} from '../../src/Api';
+import {getchapter, postoptions} from '../../src/Api';
 
 import RNPickerSelect from 'react-native-picker-select';
 
@@ -28,11 +28,11 @@ const ProjectForm =(props)=> {
     const [bookvisible,setBookvisible] = useState(false)
     //const [chapter,setChapter] = useState(new Object())
     const [chapters,setChapters] = useState([
-      {"title": "I. 유리수와 순환소수"},
-      {"title": "1. 유리수와 순환소수"},
-      {"title": "II. 식의 계산"},
-      {"title": "1. 단항식의 계산"},
-      {"title": "2. 다항식의 계산"},
+      //{"title": "I. 유리수와 순환소수"},
+      //{"title": "1. 유리수와 순환소수"},
+      //{"title": "II. 식의 계산"},
+      //{"title": "1. 단항식의 계산"},
+      //{"title": "2. 다항식의 계산"},
       ])
     const [category,setCategory] = useState([
       {label:"국어",value: "국어", },
@@ -98,29 +98,35 @@ const ProjectForm =(props)=> {
       console.log("책 검색하러가기")
       props.navigation.navigate("Book")
     }
-    const goToChapterSearch = () => {
+    const goToChapterSearch = async() => {
       console.log('챕터 가져오기')
       if (book === undefined){
       //if (false){
         alert('책을 먼저 선택해주세요.')
       }
       else {
-        //console.log('챕터가져오기 수행!!! : '+ book.title)
+        console.log('챕터가져오기 수행!!! : '+ book.title)
+        const query = {title: book.title}
+        const data = (await getchapter({ book: query})).data
+        console.log(data)
+        setChapters(data.chapters)
         chapters.map((chapter)=>{
           chapter.weight = 1,
           console.log(chapter)
         })
-        getchapter(
-            {
-              book: {
-                 title: book.title,
-                 }
-            }
-          ).then(res => {
-             console.log(res)
-          }).catch(e => {
-             console.log(e)
-          })
+        console.log(chapters)
+        Alert.alert("챕터를 정리해주세요!","올바른 일정 생성을 위하여 책의 소단원만 남기고 대단원은 삭제해주세요.",)
+        // getchapter(
+            // {
+              // book: {
+                //  title: book.title,
+                //  }
+            // }
+          // ).then(res => {
+            //  console.log(res)
+          // }).catch(e => {
+            //  console.log(e)
+          // })
       }
     }
     const handleSubmitPress = (values) =>{
@@ -130,9 +136,16 @@ const ProjectForm =(props)=> {
       //else {
       //  console.log(book)
       //}
-      
+      const formData = new FormData();
+      postoptions({
+        option: {
+          options: chapters,
+        }
+      }).then(res => console.log(res)).catch(e => console.log(e))
+      //formData.append('auth[images_attributes][0][image]', {uri: imageinfo.uri, name: imageinfo.fileName, type: imageinfo.type});
       console.log("프로젝트 제출 : " + JSON.stringify(values))
       console.log("교재 : " + JSON.stringify(book))
+
     }
     const [date,setDate ] = useState(new Date())
     const now = new Date()
