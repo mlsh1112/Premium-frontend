@@ -15,20 +15,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const Book = (props) => {
     const [title,setTitle] = useState('');
     const [booklist,setBooklist] = useState([]);
-    const [book,setBook] = useState();
-    const [chapters,setChapters] = useState([
-        {"title": "I. 유리수와 순환소수"},
-        {"title": "1. 유리수와 순환소수"},
-        {"title": "II. 식의 계산"},
-        {"title": "1. 단항식의 계산"},
-        {"title": "2. 다항식의 계산"},
-        {"title": "III. 일차부등식과 연립일차방정식"},
-        {"title": "1. 일차부등식"},
-        {"title": "2. 연립일차방정식"},
-        {"title": "IV. 일차함수"},
-        {"title": "1. 일차함수와 그 그래프"},
-        {"title": "2. 일차함수와 일차방정식의 관계"},
-        {"title": "I. 유리수와 순환소수"}])
     const requestBookSearch = () => {
         console.log("request book search")
         console.log(title)
@@ -62,38 +48,25 @@ const Book = (props) => {
         }
 
     }
-    const deletechapter = (key) => {
-        //console.log("----------------------------" +key)
-        setChapters(chapters.filter((f,idx) => idx !== key))
-        //console.log("----------------------------" +JSON.stringify(chapters))
-    }
     const registerBook = (book) => {
         console.log(book.title)
-        //createBook({
-        //    "title": book.title,
-        //    "author": book.authors,
-        //    "content": book.contents,
-        //    "isbn": book.isbn,
-        //    "publisher": book.publisher,
-        //    "image": book.thumbnail,
-        //    "url": book.url,
-        //}).then(res => {
-        //    console.log("+++++++++++++++++++++++++++++")
-        //    console.log(res)
-        //    props.navigation.goBack({params: {selectedBook: book}})
-        //}).catch(e => {
-        //    console.log(e)
-        //})
-        console.log('go back to make project')
-        props.navigation.navigate({name: 'ProjectForm',params: {selectedBook: book}})
-        //getchapter({book: {
-        //    "title": book.title,
-        //    }
-        //}).then(res => {
-        //    console.log(res)
-        //}).catch(e => {
-        //    console.log(e)
-        //})
+        createBook({
+            "title": book.title,
+            "author": book.authors,
+            "content": book.contents,
+            "isbn": book.isbn,
+            "publisher": book.publisher,
+            "image": book.thumbnail,
+            "url": book.url,
+        }).then(res => {
+            console.log("+++++++++++++++++++++++++++++")
+            console.log(res)
+            console.log("+++++++++++++++++++++++++++++")
+            console.log('go back to make project')
+            props.navigation.navigate({name: 'ProjectForm',params: {selectedBook: book}})
+        }).catch(e => {
+            console.log(e)
+        })
     }
     function RenderBook({booklist}){
         return(
@@ -110,29 +83,6 @@ const Book = (props) => {
                         )
                       })} 
             </View>
-        )
-    }
-    function RenderChapter({chapters}){
-        //console.log(chapters)
-        return(
-                    <View style={styles.chapterlist}>
-                      {chapters.map((chapter,key) => {
-                        return(
-                          <View key={key}>
-                              <Text style={styles.textStyle}>
-                                {chapter.title}
-                                  <TouchableOpacity
-                                  style={styles.cancelButton} 
-                                  onPress={(e)=>{
-                                      deletechapter(key);
-                                  }}>
-                                      <Text stlye={styles.cancelText}>Cancel</Text>
-                                  </TouchableOpacity>
-                              </Text>
-                          </View>
-                        )
-                      })}  
-                    </View>
         )
     }
 
@@ -153,9 +103,6 @@ const Book = (props) => {
                 <View>
                     <RenderBook booklist={booklist} />
                 </View>
-                
-                <RenderChapter chapters={chapters}/>
-                
             </View>
         </ScrollView>
         
