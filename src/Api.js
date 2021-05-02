@@ -48,5 +48,5 @@ export const getchapter = ( params ) => API.get(PORT+"/books/get_list/",{ params
 export const getBook = (params) => kakaoBook.get("https://dapi.kakao.com/v3/search/book",{params})
 export const createBook = (info) => API.post(PORT+'/books',info)
 export const getprojects = ( params ) => API.get(`${PORT}/projects`, { params })
-
+export const postoptions = ( params ) => API.post(`${PORT}/options`,{ params })
 
