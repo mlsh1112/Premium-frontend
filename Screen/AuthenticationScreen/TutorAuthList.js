@@ -2,7 +2,8 @@ import React, { Component, useState, useEffect } from 'react';
 import { View,Text,TouchableOpacity,ImageBackground } from 'react-native';
 import { getproject } from '../../src/Api';
 import colors from '../../src/colors'
-const callApi = async() =>{
+import AsyncStorage from '@react-native-community/async-storage';
+const callApi = async(userID) =>{
     getproject(userID)
     .then(res=>res.json())
     .then(json=>json.data)
@@ -10,7 +11,21 @@ const callApi = async() =>{
 }
 
 const ProjectAuthCard = ({navigation,project}) => {
+    const [user,setUser]=useState()
     
+    useEffect(()=>{
+        const getData = async()=>{
+            await AsyncStorage.getItem('userinfo')
+            .then(res=>{
+                setUser(JSON.parse(res))
+            })
+            .catch(err=>console.log(err))
+        }
+
+        getData()
+    },[])
+    console.log(user)
+
     return(
         <View style={{width:350,margin:10,backgroundColor:colors.subcolor, borderRadius:10}}>
         <TouchableOpacity onPress={()=>{navigation('TutorAuthentication',{project})}}>
@@ -43,7 +58,7 @@ const TutorAuthList = ({navigation}) => {
                 projects?
                 <View style={{}}>
                     {projects.map((project,index)=>{
-                            return  <ProjectAuthCard navigation={navigation.navigate} project={project} ></ProjectAuthCard>
+                            return  <ProjectAuthCard navigation={navigation.navigate} project={project} key={index} ></ProjectAuthCard>
                         })
                     }
                 </View>

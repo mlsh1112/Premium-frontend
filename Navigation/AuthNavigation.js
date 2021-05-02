@@ -13,7 +13,7 @@ const StackForAuth = createStackNavigator();
 export default function createProjectStackNav(){
     return (
         <StackForAuth.Navigator initialRouteName='Authentication'>
-            <StackForAuth.Screen name="Authentication" component={Authentication} options={{headerShown: false}} />
+            <StackForAuth.Screen name="Authentication" component={Authentication} options={{headerShown: false}}/>
             <StackForAuth.Screen name="TutorAuthentication" component={TutorAuthentication} options={{headerTitle: "프로젝트 인증"}}/>
             <StackForAuth.Screen name="TutorAuthCheck" component={TutorAuthCheck} options={{headerTitle: 'Tutee 인증 내용'}}/>
             <StackForAuth.Screen name="TuteeAuthentication" component={TuteeAuthentication} options={{headerTitle: "프로젝트 인증"}}/>

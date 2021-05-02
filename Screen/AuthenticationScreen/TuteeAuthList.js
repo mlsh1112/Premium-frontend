@@ -43,7 +43,7 @@ const TuteeAuthList = ({navigation}) => {
                 projects?
                 <View style={{}}>
                     {projects.map((project,index)=>{
-                            return  <ProjectAuthCard navigation={navigation.navigate} project={project} ></ProjectAuthCard>
+                            return  <ProjectAuthCard navigation={navigation.navigate} project={project} key={index} ></ProjectAuthCard>
                         })
                     }
                 </View>

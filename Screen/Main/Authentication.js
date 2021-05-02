@@ -30,7 +30,7 @@ const Authentication = ({navigation}) => {
         <Text style={styles.projecttextStyle}>프로젝트 인증하기</Text>
         </View>
             {
-                userType==='Tutor' ? (
+                userType==='Tutee' ? (
                     <TutorAuthList navigation={navigation}></TutorAuthList>
                 ):(
                     <TuteeAuthList navigation={navigation}></TuteeAuthList>
