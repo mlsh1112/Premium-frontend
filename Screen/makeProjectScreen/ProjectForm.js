@@ -1,5 +1,6 @@
 import React, { Component,useEffect,useState } from 'react';
 import {Button} from '../../src/components'
+import colors from '../../src/colors';
 import {
     StyleSheet,
     TouchableOpacity,
@@ -15,6 +16,9 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Keyboard } from 'react-native';
 import {Schema, InitValue} from './ValueSchema';
+import {getchapter} from '../../src/Api';
+
+import RNPickerSelect from 'react-native-picker-select';
 
 const validationSchema = Schema
 
@@ -22,9 +26,61 @@ const ProjectForm =(props)=> {
     const [isDateTimePickerVisible,setIsDateTimePickerVisible] = useState(false)
     const [book,setBook] = useState()
     const [bookvisible,setBookvisible] = useState(false)
-    const [chapter,setChapter] = useState(new Object())
-    
+    //const [chapter,setChapter] = useState(new Object())
+    const [chapters,setChapters] = useState([
+      {"title": "I. 유리수와 순환소수"},
+      {"title": "1. 유리수와 순환소수"},
+      {"title": "II. 식의 계산"},
+      {"title": "1. 단항식의 계산"},
+      {"title": "2. 다항식의 계산"},
+      ])
+    const [category,setCategory] = useState([
+      {label:"국어",value: "국어", },
+      {label:"수학",value: "수학", },
+      {label:"영어",value: "영어", }
+    ])
+    const [categoryid,setCategoryid] = useState('')
+    function RenderChapter({chapters}){
+      console.log(chapters)
+      return(
+                  <View style={styles.chapterlist}>
+                    {chapters.map((chapter,key) => {
+                      return(
+                        <View key={key} style={{flex:1,flexDirection:'row',alignItems: 'center',justifyContent: 'space-between'}}>
+
+                            <Text style={styles.textStyle}>
+                              {chapter.title}
+                            </Text>
+                            <TextInput 
+                              placeholder='가중치'
+                              style={{backgroundColor: 'white',width:'20%',borderWidth: 1,borderRadius: 10,marginTop: 7,}}
+                              onChangeText={(value)=> {
+                                const idx = key
+                                chapters[idx].weight = value
+                                console.log(chapters[idx])
+                              }}
+                            >{chapters[key].weight}</TextInput>
+                            <TouchableOpacity
+                              style={styles.cancelButton} 
+                              onPress={(e)=>{
+                                  deletechapter(key);
+                              }}
+                            >
+                                <Text style={{color:'white',fontWeight: 'bold'}}>챕터 삭제</Text>
+                            </TouchableOpacity>
+                        </View>
+                      )
+                    })}  
+                  </View>
+      )
+    }
+    const deletechapter = (key) => {
+      //console.log("----------------------------" +key)
+      setChapters(chapters.filter((f,idx) => idx !== key))
+      //console.log("----------------------------" +JSON.stringify(chapters))
+    }
     useEffect(() => {
+      //console.log(chapters)
       console.log('lets update by useEffect')
       if (props.route.params?.selectedBook){
         console.log("/////////////////////////////")
@@ -37,9 +93,35 @@ const ProjectForm =(props)=> {
       console.log(book)
       console.log("====================================")
     },[props.route.params?.selectedBook])
+
     const goToBookSearch = () => {
       console.log("책 검색하러가기")
       props.navigation.navigate("Book")
+    }
+    const goToChapterSearch = () => {
+      console.log('챕터 가져오기')
+      if (book === undefined){
+      //if (false){
+        alert('책을 먼저 선택해주세요.')
+      }
+      else {
+        //console.log('챕터가져오기 수행!!! : '+ book.title)
+        chapters.map((chapter)=>{
+          chapter.weight = 1,
+          console.log(chapter)
+        })
+        getchapter(
+            {
+              book: {
+                 title: book.title,
+                 }
+            }
+          ).then(res => {
+             console.log(res)
+          }).catch(e => {
+             console.log(e)
+          })
+      }
     }
     const handleSubmitPress = (values) =>{
       //if (book === undefined){
@@ -71,6 +153,26 @@ const ProjectForm =(props)=> {
               {({ handleChange, handleBlur, handleSubmit,setFieldValue, values, errors,touched,}) => (
               
                 <>
+                <Text style={styles.subtitle}>0. 프로젝트 카테고리 </Text>
+                <View style={styles.pickerstyle}>
+                  <RNPickerSelect
+                      style={{width: 50,height: 50,}}
+                      useNativeAndroidPickerStyle={false}
+                      onValueChange={(value,index) => {
+                        setCategoryid(value)
+                        setFieldValue('categoryid',value)
+                      }}
+                      items={category}
+                      placeholder={{  // 값이 없을때 보일 값, 없어도 된다면 이 안의 내용을 지운다. placeholder={{}} 이건 남겨둠.. 이부분까지 지우면 기본값으로 설정됨.
+                        label: '인증할 프로젝트를 선택하세요',
+                        value: '',
+                      }}>
+                      <Text>{categoryid}</Text>
+                  </RNPickerSelect>
+                </View>  
+                {(errors.categoryid && touched.categoryid) &&
+                <Text style={styles.errorText}>{errors.categoryid}</Text>
+                }
                 <Text style={styles.subtitle}>1. 프로젝트 이름 </Text>
                   <TextInput
                     name="title"
@@ -124,7 +226,7 @@ const ProjectForm =(props)=> {
                         )
                     }}>
                       <View style={{marginHorizontal: 5}}>
-                        <Icon name="head-question-outline" color="red" size={20}/>
+                        <Icon name="comment-question-outline" color="red" size={20}/>
                       </View>
                     </TouchableOpacity>
                   </Text>
@@ -155,7 +257,7 @@ const ProjectForm =(props)=> {
                         )
                     }}>
                       <View style={{marginHorizontal: 5}}>
-                        <Icon name="head-question-outline" color="red" size={20}/>
+                        <Icon name="comment-question-outline" color="red" size={20}/>
                       </View>
                     </TouchableOpacity>  
                   </Text>
@@ -186,7 +288,7 @@ const ProjectForm =(props)=> {
                         )
                     }}>
                       <View style={{marginHorizontal: 5}}>
-                        <Icon name="head-question-outline" color="red" size={20}/>
+                        <Icon name="comment-question-outline" color="red" size={20}/>
                       </View>
                     </TouchableOpacity>  
                   </Text>
@@ -217,7 +319,7 @@ const ProjectForm =(props)=> {
                         )
                     }}>
                       <View style={{marginHorizontal: 5}}>
-                        <Icon name="head-question-outline" color="red" size={20}/>
+                        <Icon name="comment-question-outline" color="red" size={20}/>
                       </View>
                     </TouchableOpacity>  
                   </Text>
@@ -248,7 +350,7 @@ const ProjectForm =(props)=> {
                         )
                     }}>
                       <View style={{marginHorizontal: 5}}>
-                        <Icon name="head-question-outline" color="red" size={20}/>
+                        <Icon name="comment-question-outline" color="red" size={20}/>
                       </View>
                     </TouchableOpacity>  
                   </Text>
@@ -278,7 +380,6 @@ const ProjectForm =(props)=> {
                   <Text style={styles.errorText}>{errors.projectIntroduce}</Text>
                   }
                   <Text style={styles.subtitle}>9. 프로젝트 교재 선택</Text>
-                  <View style={styles.button}>
                     {bookvisible && (
                       <View>
                         <Image style={styles.bookImage} source={{uri: book.thumbnail}} />
@@ -288,16 +389,32 @@ const ProjectForm =(props)=> {
                         </View>
                       </View>
                     )}
+                  <View style={styles.button}>
                     <Button onPress={goToBookSearch}>책 검색하러가기</Button>
                   </View>
                   <Text style={styles.subtitle}>
-                    10. 보증금
+                    10. 챕터별 가중치 설정 (최소 1 이상)
+                    <TouchableOpacity onPress={() => {
+                      Alert.alert("챕터별 가중치란?","프로젝트 일정을 생성함에 있어 각 챕터별 학습기간을 정하는 데 필요한 값입니다. \n\n※프로젝트에 불필요하다 생각되는 챕터는 '챕터 삭제' 버튼을 눌러 제거해주세요.\n※가중치 값이 높을 수록 더 많은 일수가 챕터에 할당됩니다.\n※균형있는 일정 생성을 위한 권장 가중치 범위는 1 ~ 10 입니다. \n※필요에 따라 1이상의 이 범위를 벗어난 값 혹은 소수점이 포함된 값으로 가중치 설정이 가능합니다.\n\n예시)\n프로젝트 기간 : 30일 \n챕터1 가중치 : 3 \n챕터2 가중치 : 7 \n해당 경우 챕터1은 9일, 챕터2는 21일간의 일정이 분배됩니다. ",
+                        )
+                    }}>
+                      <View style={{marginHorizontal: 5}}>
+                        <Icon name="comment-question-outline" color="red" size={20}/>
+                      </View>
+                    </TouchableOpacity>
+                  </Text>
+                  <RenderChapter chapters={chapters}/>
+                  <View style={styles.button}>
+                    <Button onPress={goToChapterSearch}>챕터 가져오기</Button>
+                  </View>
+                  <Text style={styles.subtitle}>
+                    11. 보증금
                     <TouchableOpacity onPress={() => {
                       Alert.alert("보증금 이란?","프로젝트에 튜티가 참여하기 위하여 처음 지불하는 금액입니다. 해당 보증금은 프로젝트 종료 후 환급됩니다.\n※보증금은 일일 학습 인증 횟수를 기준으로 환급됩니다.\n\n예시)\n30일간 진행되는 프로젝트에서 \n튜티1은 30번의 일일인증을 수행 -> 100% 환급\n튜티2는 15번의 일일 인증을 수행 -> 보증금의 50% 환급",
                         )
                     }}>
                       <View style={{marginHorizontal: 5}}>
-                        <Icon name="head-question-outline" color="red" size={20}/>
+                        <Icon name="comment-question-outline" color="red" size={20}/>
                       </View>
                     </TouchableOpacity>
                   </Text>
@@ -410,6 +527,39 @@ const styles = StyleSheet.create({
     author: {
         paddingHorizontal: 15,
         paddingVertical: 4,
+    },
+    textStyle: {
+      width: '55%',
+      padding: 10,
+      backgroundColor: 'white',
+      fontSize: 15,
+      marginTop: 7,
+      color: 'black',
+    },
+    cancelButton: {
+      backgroundColor:colors.maincolor,
+      padding:3,
+      margin:3,
+      borderRadius:15,
+      width: "20%",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    chapterlist: {
+      width: '100%',
+      padding: 10,
+      justifyContent: 'space-between',
+    },
+    pickerstyle:{
+      width: "90%",
+      marginTop:'1%',
+      paddingVertical: 10,
+      paddingHorizontal: 12,
+      borderWidth: 1,
+      borderRadius: 10,
+      paddingRight: 30,
+      color:"black",
+      backgroundColor: 'white',
     },
   });
 
