@@ -9,7 +9,7 @@ import {
 import colors from '../../src/colors'
 import {Button} from '../../src/components'
 import cat from '../../assets/cat2.png'
-const AuthPay=({project,route})=>{
+const AuthPay=({navigation,route})=>{
     const [rate,setRate]=useState([
             {id:0,title:'Auhrate',rate:30},
             {id:1,title:'Progressrate',rate:100}
@@ -21,6 +21,7 @@ const AuthPay=({project,route})=>{
     function handleSubmit(){
         console.log('press')
         Alert.alert('보증금 환급 신청이 완료되었습니다.')
+        navigation.navigate('Authentication')
     }
     
     return(
@@ -35,8 +36,8 @@ const AuthPay=({project,route})=>{
 
             <ImageBackground source={cat} style={styles.imgStyle} opacity={0.3} blurRadius={5}>
                 <View style={{margin:10}}>
-                    <Text style={styles.titleStyle}>{route.params.project[0].title}</Text>
-                    <Text style={styles.subStyle}>{route.params.project[0].info}</Text>
+                    <Text style={styles.titleStyle}>{route.params.project.title}</Text>
+                    <Text style={styles.subStyle}>{route.params.project.info}</Text>
                     <Text style={styles.dayStyle}>60 DAYS</Text>
                 </View>
             </ImageBackground>

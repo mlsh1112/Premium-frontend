@@ -93,7 +93,7 @@ class Home extends Component {
                         showsHorizontalScrollIndicator = {true}
                         style={styles.projectScroll}>
                     {this.state.projects.map((project,index)=>{
-                           return <ProjectMini navigation={this.props.navigation} data={project} key={index}></ProjectMini>
+                           return <ProjectMini navigation={this.props.navigation} project={project} key={index}></ProjectMini>
                         })}
                     
                     </ScrollView>
@@ -106,7 +106,7 @@ class Home extends Component {
                         showsHorizontalScrollIndicator = {true}
                         style={styles.projectScroll}>
                     {this.state.projects.map((project,index)=>{
-                           return <ProjectMini navigation={this.props.navigation} data={project} key={index}></ProjectMini>
+                           return <ProjectMini navigation={this.props.navigation} project={project} key={index}></ProjectMini>
                         })}
                     
                     </ScrollView>

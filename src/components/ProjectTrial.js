@@ -6,8 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import colors from '../colors';
 import {Button} from '../components';
 
-class ProjectTrial extends Component {
-    render() {
+const ProjectTrial =({navigation,route})=> {
         return (
             <View style={styles.position}>
                 <Card style={styles.cardStyle}>
@@ -18,7 +17,7 @@ class ProjectTrial extends Component {
                     <Text style={{marginBottom:30, color:'red', fontWeight:'bold', fontSize:20}}>
                         7일 체험 중 입니다. 
                     </Text>
-                    <Text style={styles.titleStyle}>개념위주의 집중공략으로 수2 마스터하기!</Text>
+                    <Text style={styles.titleStyle}>{route.params.project.title}</Text>
                     <View style={{flexDirection:'row'}}>
                         <Text style={styles.subjectStyle}>고등 수학 / 수학</Text>
                     </View>
@@ -44,7 +43,7 @@ class ProjectTrial extends Component {
 
                 <View style={styles.eee}>
                     <Text style={styles.headStyle} >보증금</Text>
-                    <Text style={styles.describeStyle}>실천보증금 10,000원</Text>
+                    <Text style={styles.describeStyle}>실천보증금 {route.params.project.deposit}원</Text>
                 </View>
 
 
@@ -52,11 +51,11 @@ class ProjectTrial extends Component {
                 </View>
                 </Card>
                 <View style={styles.buttonStyle}>
-                    <Button onPress={()=>this.props.navigation.navigate('Authentication')}>Today 인증하기</Button>
+                    <Button onPress={()=>navigation.navigate('Authentication')}>Today 인증하기</Button>
                 </View>
             </View>
         );
-    }
+    
 }
 
 const styles={

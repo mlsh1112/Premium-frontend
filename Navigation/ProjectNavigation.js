@@ -14,7 +14,7 @@ export default function ProjectNavigation(){
         <Stack.Navigator initialRouteName='Home'>
             <Stack.Screen name="Home" component={Home} options={{headerShown: false}} />
             <Stack.Screen name="Projectcard" component={Projectcard} options={{headerShown: false}}/>
-            <Stack.Screen name="ProjectDetail" component={ProjectDetail} />
+            <Stack.Screen name="ProjectDetail" component={ProjectDetail} options={{headerTitle: '프로젝트 상세보기'}}/>
             <Stack.Screen name="ProfileView" component={ProfileView} />
             <Stack.Screen name="ProjectMini" component={ProjectMini} options={{headerShown: false}}/>
             <Stack.Screen name="ProjectTrial" component={ProjectTrial} options={{headerShown: false}}/>

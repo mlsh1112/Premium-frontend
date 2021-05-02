@@ -1,36 +1,33 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Modal, View, Image,Text,TouchableOpacity,ScrollView,Alert } from 'react-native';
 import {  Card,IconButton,Colors } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../colors';
 import {Button} from '../components';
 
-class ProjectDetail extends Component {
-  state = { 
-    liked: false,
-    visual:false,
-    isJoin:false,
-    isExperienced:false
-   };
+const ProjectDetail =({navigation,route})=> {
+   var [liked,setLiked]=useState(false)
+   var [isJoin,setisJoin]=useState(false)
+   var [isExperienced,setisExperienced]=useState(true)
+   const project=route.params.project
 
-  _toggle = () => {
-    let localLiked = this.state.liked;
+  const _toggle = () => {
+    let localLiked = liked;
     // Toggle the state variable liked
     localLiked = !localLiked;
-    this.setState({ liked: localLiked });
+    setLiked( liked = localLiked);
   };
-
-  render(){  
+  console.log(route)
   return (
       <View style={styles.position}>
         <Card style={styles.cardStyle}>
           <ScrollView>
           <View style={{margin:20}}>
-          <Text style={styles.titleStyle}>개념위주의 집중공략으로 수2 마스터하기!</Text>
+          <Text style={styles.titleStyle}>{route.params.project.title}</Text>
           <View style={{flexDirection:'row'}}>
             <Text style={styles.subjectStyle}>고등 수학 / 수학</Text>
-            <TouchableOpacity style={styles.likeStyle} onPress={()=>this._toggle()}>
-            {this.state.liked === false ? (
+            <TouchableOpacity style={styles.likeStyle} onPress={()=>_toggle()}>
+            {liked === false ? (
               <MaterialCommunityIcons name='heart-outline' size={20} color={colors.maincolor}/>
             ) : (
               <MaterialCommunityIcons name='heart' size={20} color={colors.maincolor}/>
@@ -47,7 +44,7 @@ class ProjectDetail extends Component {
           </View>
           <View style={styles.eee}>
               <Text style={styles.headStyle} >프로젝트 소개</Text>
-              <Text style={styles.describeStyle}>개념 위주로 수능특강 수2 공부하기</Text>
+              <Text style={styles.describeStyle}>{route.params.project.description}</Text>
           </View>
 
           <View style={styles.eee}>
@@ -60,24 +57,24 @@ class ProjectDetail extends Component {
 
           <View style={styles.eee}>
             <Text style={styles.headStyle} >보증금</Text>
-            <Text style={styles.describeStyle}>실천보증금 10,000원</Text>
+            <Text style={styles.describeStyle}>실천보증금 {route.params.project.deposit}원</Text>
           </View>
 
           <View style={styles.eee}>
             <Text style={styles.headStyle} >프로젝트 기간</Text>
-            <Text style={styles.describeStyle}>60 DAYS</Text>
+            <Text style={styles.describeStyle}>{route.params.project.experience_period} DAYS</Text>
           </View>
           </View>
         </ScrollView>
         </Card>
         <View style={styles.buttonStyle}>
           {
-            this.state.isExperienced ?
+            isExperienced ?
                 <View>
-              { this.state.isJoin === false ? (
+              { isJoin === false ? (
               <Button onPress={()=>{
                 Alert.alert('7일 체험이 신청되었습니다.')
-                this.props.navigation.navigate('ProjectTrial')
+                navigation.navigate('ProjectTrial',{project})
               }}>7 DAYS  체험하기</Button> 
               ):(
                 <Button onPress={()=>{
@@ -86,10 +83,10 @@ class ProjectDetail extends Component {
               }</View>
               :
               <View>
-              { this.state.isJoin === false ? (
+              { isJoin === false ? (
               <Button onPress={()=>{
                 Alert.alert('프로젝트가 신청되었습니다.')
-                this.props.navigation.navigate('Authentication')
+                navigation.navigate('Authentication')
               }}>프로젝트 신청하기</Button> 
               ):(
                 <Button onPress={()=>{
@@ -101,7 +98,7 @@ class ProjectDetail extends Component {
         </View>
       </View>
     );
-  }
+  
 }
 
 

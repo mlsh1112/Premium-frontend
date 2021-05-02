@@ -46,7 +46,7 @@ const TutorAuthentication = ({navigation,route }) => {
         {id: 1,name: "KIM", auth:"5*5=25"},
       ]);
     const [fin,setFin]=useState(false)
-    const [project, setProject]=useState()
+    const [project, setProject]=useState(route.params.project)
     const handleSubmitAuthenticatoin = () => {
         Keyboard.dismiss();
     }
