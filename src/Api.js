@@ -1,6 +1,6 @@
 import axios from 'axios';
-import AsyncStorage from '@react-native-community/async-storage';
 import Qs from 'qs';
+import AsyncStorage from '@react-native-community/async-storage';
 import baseurl from '../config'
 let headers = {
     headers: {
@@ -9,10 +9,10 @@ let headers = {
         'Authorization': ''
     }
 }
-const PORT = "http://52.79.97.255:80"
-//const PORT = "http://200.200.13.129:3000"
+const PORT = baseurl.port
 
 console.log(PORT)
+
 const API = axios.create(headers);
 API.interceptors.request.use(
     async function (config){
@@ -30,7 +30,7 @@ API.interceptors.request.use(
     function(error){
         return Promise.reject(error)
     }
-);
+)
 //const token = await AsyncStorage.getItem('token')
 export const login = (user) => API.post(PORT+"/login", { user })
 export const signup = (user) => API.post(PORT+"/signup",{ user })

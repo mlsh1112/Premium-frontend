@@ -39,7 +39,7 @@ const EachTabViewsProjects = (props) => {
                 //return <PrintProject project={pr} key={index}/>
                 return(
                   <View key={index} style={{marginVertical:8}}>
-                    <ProjectMini navigation={props.navigation} data={pr} key={index}></ProjectMini>
+                    <ProjectMini navigation={props.navigation} project={pr} key={index}></ProjectMini>
                   </View>
                 )
                 //return <ProjectMini navigation={props.navigation} data={pr} key={index}></ProjectMini>
@@ -115,9 +115,9 @@ const Profile = (props) => {
       case 'first':
         return <EachTabViewsProjects project={project} navigation={props.navigation}/>;
       case 'second':
-        return <EachTabViewsProjects project={finishedproject}/>
+        return <EachTabViewsProjects project={finishedproject} navigation={props.navigation}/>
       case 'third':
-        return <EachTabViewsProjects project={likeproject}/>
+        return <EachTabViewsProjects project={likeproject} navigation={props.navigation}/>
     }
   };
   
