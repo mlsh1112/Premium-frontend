@@ -28,7 +28,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {TabView, TabBar} from 'react-native-tab-view';
 
 import colors from '../../src/colors'
-import {getproject} from '../../src/Api';
+import {getproject,logout} from '../../src/Api';
 import ProjectMini from '../../src/components/ProjectMini';
 
 const EachTabViewsProjects = (props) => {
@@ -122,9 +122,9 @@ const Profile = (props) => {
   };
   
   const handleLogoutPress = async()=> {  //로그아웃 function
-    
-     await AsyncStorage.removeItem('token');
-     props.navigation.popToTop()
+    await logout()
+    await AsyncStorage.removeItem('token');
+    props.navigation.popToTop()
   }
   const goToCreateProject = () => {
     console.log("프로젝트 생성하러가기");
