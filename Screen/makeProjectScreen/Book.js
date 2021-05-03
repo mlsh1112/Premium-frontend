@@ -14,6 +14,9 @@ import {getBook,createBook} from '../../src/Api';
 const Book = (props) => {
     const [title,setTitle] = useState('');
     const [booklist,setBooklist] = useState([]);
+    console.log("=================== project id =================")
+    console.log(props.route.params.projectId)
+    console.log("================================================")
     const requestBookSearch = () => {
         console.log("request book search")
         console.log(title)
@@ -49,9 +52,15 @@ const Book = (props) => {
             console.log("+++++++++++++++++++++++++++++")
             console.log('go back to chapter screen')
             props.navigation.navigate({name: 'Chapter',params: {selectedBook: book}})
-        }).catch((res,e) => {
-            console.log(res)
-            console.error(e)
+        }).catch((e) => {
+            if (e.response.data.result ==='이미 책이 존재합니다'){
+                console.log('exist book')
+            }
+            // if(e.response.status === 401){
+            //     console.error(e.response.status)
+            // }else {
+            //     console.error(e.response.status)
+            // }
         })
     }
     function RenderBook({booklist}){
