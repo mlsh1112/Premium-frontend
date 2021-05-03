@@ -31,7 +31,6 @@ class Home extends Component {
     componentDidMount() {
         getprojects()
         .then(res=>{
-            console.log(res)
             this.setState({
                 projects: res.data
             })
@@ -66,7 +65,6 @@ class Home extends Component {
     }
 
     render() {
-        console.log(this.state.myprojects)
         return (
             <View style={styles.container}>
                 <View style={styles.logoposition} >
@@ -79,6 +77,7 @@ class Home extends Component {
                     {this.state.myprojects.map((project,index)=>{
                            return <TodayProject 
                            navigation={this.props.navigation}
+                           startDay={project.created_at}
                            data={project.project}
                            key={index}
                            />

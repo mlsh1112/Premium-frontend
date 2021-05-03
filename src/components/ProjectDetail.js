@@ -50,6 +50,7 @@ const ProjectDetail =({navigation,route})=> {
         }
       }
     myprojects()
+    
   })
   return (
       <View style={styles.position}>
