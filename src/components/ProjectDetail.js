@@ -110,7 +110,6 @@ const ProjectDetail =({navigation,route})=> {
                   }}>7 DAYS  체험하기</Button> 
                   ):(
                     <Button onPress={()=>{
-                      handleAttendence()
                     }}>진행 중인 프로젝트 입니다.</Button> 
                   )
               }</View>
