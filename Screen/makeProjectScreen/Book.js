@@ -9,8 +9,7 @@ import {
     Image,
   } from 'react-native';
 import {Button} from '../../src/components/Button';
-import {getBook,getchapter,createBook} from '../../src/Api';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {getBook,createBook} from '../../src/Api';
 
 const Book = (props) => {
     const [title,setTitle] = useState('');
@@ -24,24 +23,10 @@ const Book = (props) => {
         else{
             getBook({
                 "target": "title",
-                "query": "수학의 정석",
-                //"query": book.title,
+                "query": title,
                 "size": 20,
             }).then(res => {
                 setBooklist(res.data.documents)
-            }).then(res => {
-                //console.log(booklist)
-                //console.log(booklist)
-                //booklist.map((book) => {
-                //    console.log("+++++++++++++++++++++++++++++++++++++")
-                //    console.log(book.authors)
-                //    console.log(book.title)
-                //    console.log(book.contents)
-                //    console.log(book.isbn)
-                //    console.log(book.publisher)
-                //    console.log(book.thumbnail)
-                //    console.log(book.url)
-                //})
             }).catch(e => {
                 console.log(e)
             })
@@ -62,10 +47,11 @@ const Book = (props) => {
             console.log("+++++++++++++++++++++++++++++")
             console.log(res)
             console.log("+++++++++++++++++++++++++++++")
-            console.log('go back to make project')
-            props.navigation.navigate({name: 'ProjectForm',params: {selectedBook: book}})
-        }).catch(e => {
-            console.log(e)
+            console.log('go back to chapter screen')
+            props.navigation.navigate({name: 'Chapter',params: {selectedBook: book}})
+        }).catch((res,e) => {
+            console.log(res)
+            console.error(e)
         })
     }
     function RenderBook({booklist}){
@@ -128,16 +114,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         fontSize:15,
         fontWeight:'bold'
-    },
-    chapterlist: {
-        padding: 10,
-    },
-    cancelButton: {
-        //backgroundColor:colors.maincolor,
-        padding:3,
-        margin:3,
-        borderRadius:5,
-        alignItems: 'flex-end'
     },
     booklist: {
         flex:1,
