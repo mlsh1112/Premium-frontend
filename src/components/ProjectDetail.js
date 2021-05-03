@@ -20,7 +20,10 @@ const ProjectDetail =({navigation,route})=> {
     setLiked( liked = localLiked);
   };
   const handleAttendence=()=>{
-    createattendances(project.id)
+    console.log(project.id)
+    createattendances({
+      "project_id" : project.id
+    })
     .then(res=>{
       console.log(res)
       Alert.alert('7일 체험이 신청되었습니다.')
@@ -103,10 +106,11 @@ const ProjectDetail =({navigation,route})=> {
                 <View>
               { isJoin === false ? (
                   <Button onPress={()=>{
-                    //handleAttendence()
+                    handleAttendence()
                   }}>7 DAYS  체험하기</Button> 
                   ):(
                     <Button onPress={()=>{
+                      handleAttendence()
                     }}>진행 중인 프로젝트 입니다.</Button> 
                   )
               }</View>

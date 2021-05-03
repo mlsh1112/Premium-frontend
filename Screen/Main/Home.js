@@ -31,6 +31,7 @@ class Home extends Component {
     componentDidMount() {
         getprojects()
         .then(res=>{
+            console.log(res)
             this.setState({
                 projects: res.data
             })
@@ -65,6 +66,7 @@ class Home extends Component {
     }
 
     render() {
+        console.log(this.state.myprojects)
         return (
             <View style={styles.container}>
                 <View style={styles.logoposition} >
