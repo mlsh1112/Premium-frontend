@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Button} from '../../src/components'
 import {
     StyleSheet,
@@ -15,24 +15,57 @@ import RNPickerSelect from 'react-native-picker-select';
 import {Schema, InitValue,tommorow} from './ValueSchema';
 import {HelpMessage,RenderHelp} from './Help';
 import {RenderError} from './ValidMessage';
+import {createproject,getcategories} from '../../src/Api';
 
+function makeItem(projectlist){
+  const temp = projectlist.map((pr)=>({
+      label: pr.title,
+      value: pr.id,
+  }));
+  return temp;
+}
 
 const ProjectForm =(props)=> {
     const validationSchema = Schema
     const [isDateTimePickerVisible,setIsDateTimePickerVisible] = useState(false)
     const [category,setCategory] = useState([
-      {label:"국어",value: "국어", },
-      {label:"수학",value: "수학", },
-      {label:"영어",value: "영어", }
+      {
+        label: '',
+        value: -1,
+      }
     ])
-    const [categoryid,setCategoryid] = useState('')
+    const [idx,setIdx] = useState(0)
+    const [categoryid,setCategoryid] = useState()
     const [date,setDate ] = useState(new Date())
     
     const handleSubmitPress = (values) =>{
       console.log("프로젝트 제출 : " + JSON.stringify(values))
-      props.navigation.navigate("Book")
+      createproject({
+        "experience_period": values.experienceduration, 
+        "description": values.projectIntroduce, 
+        "deposit": values.deposit,
+        "image": '',
+        "title": values.title,
+        "duration": values.duration,
+        "started_at": values.startDate,
+        "category_id": categoryid,
+        "required_time": values.dailyStudyTime,
+        "review_weight": values.repeatstrength,
+      }).then(res => {
+        console.log(res.data)
+        props.navigation.navigate({name: 'Book',params: {projectId: res.data.id}})
+      }).catch(e => {
+        console.log(e.response)
+      })
     }
-    
+    useEffect(() => {
+      getcategories().then(res => {
+        console.log(res.data)
+        setCategory(makeItem(res.data))
+      }).catch(e => {
+        console.log(e.response.data)
+      })
+    },[])
     return (
         <ScrollView>
         <View style={styles.container}>
@@ -41,7 +74,7 @@ const ProjectForm =(props)=> {
               validationSchema={validationSchema}
               initialValues={InitValue}
               onSubmit={values => {   
-                //console.log(values)
+                console.log(values)
                 handleSubmitPress(values)
               }}
             >
@@ -52,16 +85,14 @@ const ProjectForm =(props)=> {
                   <View style={styles.pickerstyle}>
                     <RNPickerSelect
                         useNativeAndroidPickerStyle={false}
-                        onValueChange={(value) => {
+                        onValueChange={(value,idx) => {
                           setCategoryid(value)
+                          setIdx(idx-1)
                           setFieldValue('categoryid',value)
                         }}
                         items={category}
-                        placeholder={{
-                          label: '인증할 프로젝트를 선택하세요',
-                          value: '',
-                        }}>
-                        <Text>{categoryid}</Text>
+                        >
+                        {idx < 0 ? <Text></Text> : <Text>{category[idx].label}</Text>}
                     </RNPickerSelect>
                   </View>  
                 <RenderError errors={errors.categoryid} touched={touched.categoryid} />
