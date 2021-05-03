@@ -1,4 +1,5 @@
-import React, { Component, useState } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
+import React, { Component, useEffect, useState } from 'react';
 import { Modal, View, Image,Text,TouchableOpacity,ScrollView,Alert } from 'react-native';
 import {  Card,IconButton,Colors } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -9,6 +10,7 @@ const ProjectDetail =({navigation,route})=> {
    var [liked,setLiked]=useState(false)
    var [isJoin,setisJoin]=useState(false)
    var [isExperienced,setisExperienced]=useState(true)
+   var [myprj,setMyprj]=useState() // 참가하고 있는 프로잭트
    const project=route.params.project
 
   const _toggle = () => {
@@ -17,7 +19,25 @@ const ProjectDetail =({navigation,route})=> {
     localLiked = !localLiked;
     setLiked( liked = localLiked);
   };
-  console.log(route)
+  useEffect(()=>{
+    const getData= async()=>{
+      await AsyncStorage.getItem('projects')
+      .then(res=>setMyprj(JSON.parse(res)))
+      .catch(err=>console.log(err))
+    }
+    getData()
+
+    const myprojects=()=>{
+      if(myprj){
+         myprj.map((proj)=>{
+            if (proj.project.id===project.id){
+              if (proj.status === 'trial'){
+                setisJoin(true)
+      }}})
+        }
+      }
+    myprojects()
+  })
   return (
       <View style={styles.position}>
         <Card style={styles.cardStyle}>
@@ -72,26 +92,26 @@ const ProjectDetail =({navigation,route})=> {
             isExperienced ?
                 <View>
               { isJoin === false ? (
-              <Button onPress={()=>{
-                Alert.alert('7일 체험이 신청되었습니다.')
-                navigation.navigate('ProjectTrial',{project})
-              }}>7 DAYS  체험하기</Button> 
-              ):(
-                <Button onPress={()=>{
-                }}>진행 중인 프로젝트 입니다.</Button> 
-              )
+                  <Button onPress={()=>{
+                    Alert.alert('7일 체험이 신청되었습니다.')
+                    navigation.navigate('ProjectTrial',{project})
+                  }}>7 DAYS  체험하기</Button> 
+                  ):(
+                    <Button onPress={()=>{
+                    }}>진행 중인 프로젝트 입니다.</Button> 
+                  )
               }</View>
-              :
+            :
               <View>
               { isJoin === false ? (
-              <Button onPress={()=>{
-                Alert.alert('프로젝트가 신청되었습니다.')
-                navigation.navigate('Authentication')
-              }}>프로젝트 신청하기</Button> 
-              ):(
-                <Button onPress={()=>{
-                }}>진행 중인 프로젝트 입니다.</Button> 
-              )
+                  <Button onPress={()=>{
+                    Alert.alert('프로젝트가 신청되었습니다.')
+                    navigation.navigate('Authentication')
+                  }}>프로젝트 신청하기</Button> 
+                  ):(
+                    <Button onPress={()=>{
+                    }}>진행 중인 프로젝트 입니다.</Button> 
+                  )
               }</View>
           }
           

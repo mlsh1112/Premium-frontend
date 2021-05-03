@@ -21,12 +21,16 @@ const ProjectAuthCard = ({navigation,project}) => {
 
 const TuteeAuthList = ({navigation}) => {
     const [projects, setProjects] = useState();
-    const [user,setUser]=useState()
+    const [user,setUser]=useState();
 
     useEffect(() => {
         const getData = async() =>{
             await AsyncStorage.getItem('userInfo')
             .then(res=>setUser(JSON.parse(res)))
+            .catch(err=>console.log(err))
+
+            await AsyncStorage.getItem('projects')
+            .then(res=>setProjects(JSON.parse(res)))
             .catch(err=>console.log(err))
         }
 
@@ -38,7 +42,6 @@ const TuteeAuthList = ({navigation}) => {
         }
         callApi()
     }, []);
-    console.log(projects)
     return (
         <View style={styles.container}>
             {
