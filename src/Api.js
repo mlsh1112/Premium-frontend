@@ -48,5 +48,5 @@ export const createBook = (info) => API.post(PORT+'/books',info)
 export const getprojects = ( params ) => API.get(`${PORT}/projects`, { params })
 export const postoptions = ( params ) => API.post(`${PORT}/options`,{ params })
 export const getattendances = () => API.get(PORT+"/attendances")
-
-
+export const createproject = (info) => API.post(PORT+"/projects",info)
+export const getcategories = () => API.get(PORT+"/categories")
