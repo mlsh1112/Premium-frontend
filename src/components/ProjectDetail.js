@@ -5,7 +5,7 @@ import {  Card,IconButton,Colors } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../colors';
 import {Button} from '../components';
-
+import {createattendances} from '../Api'
 const ProjectDetail =({navigation,route})=> {
    var [liked,setLiked]=useState(false)
    var [isJoin,setisJoin]=useState(false)
@@ -19,6 +19,16 @@ const ProjectDetail =({navigation,route})=> {
     localLiked = !localLiked;
     setLiked( liked = localLiked);
   };
+  const handleAttendence=()=>{
+    createattendances(project.id)
+    .then(res=>{
+      console.log(res)
+      Alert.alert('7일 체험이 신청되었습니다.')
+      navigation.navigate('ProjectTrial',{project})
+    })
+    .catch(err=>console.log(err))
+  }
+
   useEffect(()=>{
     const getData= async()=>{
       await AsyncStorage.getItem('projects')
@@ -93,8 +103,7 @@ const ProjectDetail =({navigation,route})=> {
                 <View>
               { isJoin === false ? (
                   <Button onPress={()=>{
-                    Alert.alert('7일 체험이 신청되었습니다.')
-                    navigation.navigate('ProjectTrial',{project})
+                    //handleAttendence()
                   }}>7 DAYS  체험하기</Button> 
                   ):(
                     <Button onPress={()=>{
@@ -105,8 +114,7 @@ const ProjectDetail =({navigation,route})=> {
               <View>
               { isJoin === false ? (
                   <Button onPress={()=>{
-                    Alert.alert('프로젝트가 신청되었습니다.')
-                    navigation.navigate('Authentication')
+                    //handleAttendence()
                   }}>프로젝트 신청하기</Button> 
                   ):(
                     <Button onPress={()=>{

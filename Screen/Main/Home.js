@@ -41,7 +41,7 @@ class Home extends Component {
 
         const getApi = async()=>{
             await getattendances()
-            .then(res=>console.log(res.data))
+            .then(res=>setProjects(res.data))
             .catch(err => console.log(err))
         }
 
