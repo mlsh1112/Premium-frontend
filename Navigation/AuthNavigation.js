@@ -9,6 +9,7 @@ import ProjectDetail from '../src/components/ProjectDetail';
 import TuteeAuthList from '../Screen/AuthenticationScreen/TuteeAuthList';
 import TutorAuthList from '../Screen/AuthenticationScreen/TutorAuthList'
 import TuteeAuthdetail from '../Screen/AuthenticationScreen/TuteeAuthdetail'
+import ExperienceAuth from '../Screen/AuthenticationScreen/ExperiencedAuth'
 
 const StackForAuth = createStackNavigator();
 
@@ -24,6 +25,7 @@ export default function createProjectStackNav(){
             <StackForAuth.Screen name="TuteeAuthList" component={TuteeAuthList}/>
             <StackForAuth.Screen name="TutorAuthList" component={TutorAuthList}/>
             <StackForAuth.Screen name="TuteeAuthdetail" component={TuteeAuthdetail}/>
+            <StackForAuth.Screen name="ExperienceAuth" component={ExperienceAuth} options={{headerShown: false}} />
         </StackForAuth.Navigator>
     );
 }

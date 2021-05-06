@@ -43,3 +43,11 @@ export const setUser = async(info) => { //asyncstorage token 생성
         console.log("AsyncStorage setting Error: " + error.message);
     };
 };
+export const setProjects = async(projects)=>{
+    try{
+        await AsyncStorage.setItem('projects',JSON.stringify(projects))
+    }
+    catch (error){
+        console.log("AsyncStorage setting Error: " + error.message);
+    }
+}
