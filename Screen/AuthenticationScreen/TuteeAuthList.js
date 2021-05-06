@@ -51,7 +51,7 @@ const TuteeAuthList = ({navigation}) => {
                 <View>
                     {projects.map((project,index)=>{
                         
-                            return  <View style={{margin:10, backgroundColor:colors.maincolor,borderRadius:20}}>
+                            return  <View style={{margin:17, backgroundColor:colors.maincolor,borderRadius:20}}>
                                             <TodayProject
                                         navigation={navigation}
                                         data={project.project}
