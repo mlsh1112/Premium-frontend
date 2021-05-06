@@ -80,6 +80,7 @@ function Search({navigation}) {
          <TouchableOpacity onPress={()=>{navigation.navigate('ProjectDetail',{project:item})}}>
 
             <Text style={{padding:20,fontSize:15}}>{item.title}</Text>
+          
           </TouchableOpacity>
           } 
         />

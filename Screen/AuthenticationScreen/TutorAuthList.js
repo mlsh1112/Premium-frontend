@@ -13,7 +13,7 @@ const callApi = async(userID) =>{
 const ProjectAuthCard = ({navigation,project}) => {
     return(
         <View style={{width:350,margin:10,backgroundColor:colors.subcolor, borderRadius:10}}>
-        <TouchableOpacity onPress={()=>{navigation('TutorAuthentication',{project})}}>
+        <TouchableOpacity onPress={()=>{navigation('TuteeAuthdetail',{project})}}>
                 <View style={{margin:10}}>
                 <Text style={styles.titleStyle}>{project.title}</Text>
                 <Text style={styles.subStyle}>고등 수학 / 수학</Text>
@@ -30,6 +30,7 @@ const TutorAuthList = ({navigation}) => {
     
     useEffect(()=>{
         const getData = async()=>{
+
             await AsyncStorage.getItem('userinfo')
             .then(res=>{
                 setUser(JSON.parse(res))
