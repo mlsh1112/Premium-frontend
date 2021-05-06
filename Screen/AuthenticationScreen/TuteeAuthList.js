@@ -8,10 +8,9 @@ import colors from '../../src/colors'
 const ProjectAuthCard = ({navigation,project}) => {
     return(
         <View style={{width:350,margin:10,backgroundColor:colors.subcolor, borderRadius:10}}>
-
-                <TouchableOpacity onPress={()=>{navigation('TuteeAuthentication',{project})}}>
+        <TouchableOpacity onPress={()=>{navigation('TuteeAuthdetail',{project})}}>
                 <View style={{margin:10}}>
-                <Text style={styles.titleStyle}>{project.title}</Text>
+                <Text style={styles.titleStyle}>{project.project.title}</Text>
                 <Text style={styles.subStyle}>고등 수학 / 수학</Text>
                 <Text style={styles.dayStyle}>{project.experience_period} DAYS</Text>
                 </View>
@@ -44,13 +43,14 @@ const TuteeAuthList = ({navigation}) => {
         }
         callApi()
     }, []);
+    console.log(projects)
     return (
         <View style={styles.container}>
             {
                 projects?
                 <View>
                     {projects.map((project,index)=>{
-                            return  <ProjectAuthCard navigation={navigation.navigate} project={project.project} key={index} ></ProjectAuthCard>
+                            return  <ProjectAuthCard navigation={navigation.navigate} project={project} key={index} ></ProjectAuthCard>
                         })
                     }
                 </View>
