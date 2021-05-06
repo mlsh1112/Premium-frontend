@@ -63,28 +63,27 @@ class Home extends Component {
         getData()
     
     }
-
     render() {
+        console.log(this.state.projects)
         return (
             <View style={styles.container}>
                 <View style={styles.logoposition} >
                 <Image source={homelogo} style={styles.logostyle}></Image></View>
                <ScrollView >
 
-                <View style={styles.today}>
+               <View style={styles.today}>
                     <Text style={styles.todaytext}>{this.state.user.name} 님의 오늘의 인증!</Text>
                     <ScrollView horizontal={true} style={{width:"100%",height:"100%"}}>
                     {this.state.myprojects.map((project,index)=>{
                            return <TodayProject 
                            navigation={this.props.navigation}
-                           startDay={project.created_at}
                            data={project.project}
+                           startDay={project.created_at}
                            key={index}
                            />
                         })}
                     </ScrollView>
                 </View>
-                
                 <View style={{marginTop:30,margin:20}}>
                     <Text style={styles.todayProjectTxt}>따숲이 추천하는 오늘의 카드 뉴스 </Text>
                     <Text style={{marginBottom:10}}>이거만 보고 다시 열공하기 •'-'•)و✧ </Text>
