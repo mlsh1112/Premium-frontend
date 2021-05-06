@@ -59,7 +59,7 @@ const TuteeAutdetail=({navigation,route})=>{
       </View>
       <View alignItems='center' style={{paddingTop:30}}>
         {
-          pastDay!==0?
+          pastDay===0?
           <View>
             {
               project.status==='trial'?

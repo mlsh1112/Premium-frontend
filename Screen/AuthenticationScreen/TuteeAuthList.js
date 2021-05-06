@@ -3,7 +3,7 @@ import { View,Text,TouchableOpacity,ImageBackground } from 'react-native';
 import { getattendances } from '../../src/Api';
 import AsyncStorage from '@react-native-community/async-storage';
 import colors from '../../src/colors'
-
+import TodayProject from '../../src/components/TodayProjectHome'
 
 const ProjectAuthCard = ({navigation,project}) => {
     return(
@@ -12,7 +12,7 @@ const ProjectAuthCard = ({navigation,project}) => {
                 <View style={{margin:10}}>
                 <Text style={styles.titleStyle}>{project.project.title}</Text>
                 <Text style={styles.subStyle}>고등 수학 / 수학</Text>
-                <Text style={styles.dayStyle}>{project.experience_period} DAYS</Text>
+                <Text style={styles.dayStyle}>{project.project.experience_period} DAYS</Text>
                 </View>
         </TouchableOpacity>
 
@@ -50,7 +50,15 @@ const TuteeAuthList = ({navigation}) => {
                 projects?
                 <View>
                     {projects.map((project,index)=>{
-                            return  <ProjectAuthCard navigation={navigation.navigate} project={project} key={index} ></ProjectAuthCard>
+                        
+                            return  <View style={{margin:10, backgroundColor:colors.maincolor,borderRadius:20}}>
+                                            <TodayProject
+                                        navigation={navigation}
+                                        data={project.project}
+                                        startDay={project.created_at}
+                                        key={index}
+                                        /></View>
+                            //<ProjectAuthCard navigation={navigation.navigate} project={project} key={index} ></ProjectAuthCard>
                         })
                     }
                 </View>
