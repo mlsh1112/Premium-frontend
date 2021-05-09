@@ -33,9 +33,6 @@ const validationSchema = Yup.object().shape({
 
 const Signin = (props) => {
  
- 
-  
-  
   const handleSubmitPress = (values) =>{
      login({
        "email":values.email,
@@ -45,43 +42,54 @@ const Signin = (props) => {
      }).then(() => {
        props.navigation.replace('AuthLoading');
        console.log("Go to Home from sign in ");
+       
      }).catch(error => {
        alert("이메일 혹은 패스워드를 확인해주세요.")
        console.log(error);
      });
      const onLoinSuccess=(res)=>{
-      var decode_token=jwt_decode(res.data.token)
+      let decode_token=jwt_decode(res.data.token)
+      let decode_token1= Number(decode_token.exp)
       console.log(jwt_decode(res.data.token))
-      var new_time=new Date().getTime()/1000;
-       new_time=Math.ceil(new_time)
+      let new_time=new Date().getTime()/1000;
+      new_time=Math.ceil(new_time)
       setToken(res.data.token);
       setType(res.data.type);
       setStatus(res.data.status);
       setName(res.data.name)
       setUser(res.data)
-      
-      setTimeout(onSilentRefresh,((decode_token-new_time)-120)*1000)
+      setTIMEout(decode_token1,new_time)
      }
-
+     const setTIMEout =(decode_token1,new_time)=>{
+      setTimeout(onSilentRefresh,((decode_token1-new_time)-20)*1000)
+     }
      const onSilentRefresh =()=>{
        refresh().then(
          res=>{
             deletokenfortest()
             setToken(res.data.token);
-         }
+            let decode_token=jwt_decode(res.data.token)
+            let decode_token1= Number(decode_token.exp)
+            let new_time=new Date().getTime()/1000;
+            new_time=Math.ceil(new_time)
+            setTIMEout(decode_token1,new_time)
+          }
        )
        .catch(error=>{
          alert("로그인 만료시간이 다되었습니다. 다시 로그인해주세요");
+         console.log(error)
          props.navigation.replace('Signin');
         })
      }
      const deletokenfortest = async() => {
        try{
           await AsyncStorage.removeItem('token');
+          return true;
       }
       catch (error){
           console.log("AsyncStorage remove Error: " + error.message);
-      };
+          return false;
+        };
   }
   }
    

@@ -10,7 +10,6 @@ import {
 import icon from '../assets/icon2.png'
 
 class Onboarding extends Component {
-    
     render() {
         return (
             <View style={styles.container}>
