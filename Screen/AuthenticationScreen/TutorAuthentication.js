@@ -12,6 +12,7 @@ import {
   } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import {Button} from '../../src/components'
+import { gettutees } from '../../src/Api';
 function makeItem(projectlist){
     const temp = projectlist.map((pr)=>({
         label: pr.title,
@@ -50,7 +51,13 @@ const TutorAuthentication = ({navigation,route }) => {
     const handleSubmitAuthenticatoin = () => {
         Keyboard.dismiss();
     }
-    
+    const callApi= async()=>{
+        await gettutees({
+            "project_id" : project.id
+          })
+        .then(res=>res.data)
+        .catch(err=>console.log(err))
+    }
     return (
         <View style={styles.container}>
             <View style={{flexDirection:'row',}}>

@@ -41,9 +41,8 @@ const TuteeAuthList = ({navigation}) => {
             .then(res=>setProjects(res.data))
             .catch(err=>console.log(err))
         }
-        callApi()
-    }, []);
-    console.log(projects)
+        //callApi()
+    });
     return (
         <View style={styles.container}>
             {
@@ -51,14 +50,15 @@ const TuteeAuthList = ({navigation}) => {
                 <View>
                     {projects.map((project,index)=>{
                         
-                            return  <View style={{margin:17, backgroundColor:colors.maincolor,borderRadius:20}}>
+                            return  <ProjectAuthCard navigation={navigation.navigate} project={project} key={index} ></ProjectAuthCard>
+                            /*<View style={{margin:10, backgroundColor:colors.maincolor,borderRadius:20}}>
                                             <TodayProject
                                         navigation={navigation}
                                         data={project.project}
                                         startDay={project.created_at}
                                         key={index}
-                                        /></View>
-                            //<ProjectAuthCard navigation={navigation.navigate} project={project} key={index} ></ProjectAuthCard>
+                                        /></View>*/
+                            
                         })
                     }
                 </View>

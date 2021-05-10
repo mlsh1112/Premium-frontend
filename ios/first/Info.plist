@@ -2,6 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>firstapp</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string></string>
+		</dict>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -26,6 +37,8 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 		<key>NSExceptionDomains</key>
@@ -53,26 +66,56 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	  <key>UIViewControllerBasedStatusBarAppearance</key>
-  	<false/>
-  	<key>UIAppFonts</key>
-  	<array>
-    	<string>AntDesign.ttf</string>
-    	<string>Entypo.ttf</string>
-    	<string>EvilIcons.ttf</string>
-    	<string>Feather.ttf</string>
-    	<string>FontAwesome.ttf</string>
-    	<string>FontAwesome5_Brands.ttf</string>
-    	<string>FontAwesome5_Regular.ttf</string>
-    	<string>FontAwesome5_Solid.ttf</string>
-    	<string>Foundation.ttf</string>
-    	<string>Ionicons.ttf</string>
-    	<string>MaterialCommunityIcons.ttf</string>
-    	<string>MaterialIcons.ttf</string>
-    	<string>Octicons.ttf</string>
-    	<string>SimpleLineIcons.ttf</string>
-    	<string>Zocial.ttf</string>
-    	<string>Fontisto.ttf</string>
-  	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>AntDesign.ttf</string>
+		<string>Entypo.ttf</string>
+		<string>EvilIcons.ttf</string>
+		<string>Feather.ttf</string>
+		<string>FontAwesome.ttf</string>
+		<string>FontAwesome5_Brands.ttf</string>
+		<string>FontAwesome5_Regular.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
+		<string>Foundation.ttf</string>
+		<string>Ionicons.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+		<string>Octicons.ttf</string>
+		<string>SimpleLineIcons.ttf</string>
+		<string>Zocial.ttf</string>
+		<string>Fontisto.ttf</string>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>kftc-bankpay</string>
+		<string>ispmobile</string>
+		<string>itms-apps</string>
+		<string>hdcardappcardansimclick</string>
+		<string>smhyundaiansimclick</string>
+		<string>shinhan-sr-ansimclick</string>
+		<string>smshinhanansimclick</string>
+		<string>kb-acp</string>
+		<string>mpocket.online.ansimclick</string>
+		<string>ansimclickscard</string>
+		<string>ansimclickipcollect</string>
+		<string>vguardstart</string>
+		<string>samsungpay</string>
+		<string>scardcertiapp</string>
+		<string>lottesmartpay</string>
+		<string>lotteappcard</string>
+		<string>cloudpay</string>
+		<string>nhappcardansimclick</string>
+		<string>nonghyupcardansimclick</string>
+		<string>citispay</string>
+		<string>citicardappkr</string>
+		<string>citimobileapp</string>
+		<string>kakaotalk</string>
+		<string>payco</string>
+		<string>lpayapp</string>
+		<string>hanamopmoasign</string>
+		<string>wooripay</string>
+		<string>nhallonepayansimclick</string>
+		<string>hanawalletmembers</string>
+	</array>
 </dict>
 </plist>

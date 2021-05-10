@@ -22,7 +22,7 @@ class Projectcard extends Component {
                     <Text style={styles.dayStyle3}>남은 인증 {pastDay-1}일</Text>
                     </View>
                     <TouchableOpacity style={{marginLeft:"20%"}} onPress={() => {
-                        this.props.navigation.navigate('TuteeAuthdetail',{project})
+                        this.props.navigation.navigate('Authentication',{project})
                     }}>
                     <Image source={authBtn} style={{width:130,height:100}}></Image>
                     </TouchableOpacity>
