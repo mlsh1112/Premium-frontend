@@ -1,4 +1,4 @@
-import React, { Component,useState } from 'react';
+import React, { Component,useEffect,useState } from 'react';
 import colors from '../../src/colors';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -13,13 +13,7 @@ import {
 import RNPickerSelect from 'react-native-picker-select';
 import {Button} from '../../src/components'
 import { gettutees } from '../../src/Api';
-function makeItem(projectlist){
-    const temp = projectlist.map((pr)=>({
-        label: pr.title,
-        value: pr.title,
-    }));
-    return temp;
-}
+
 function TuteeListComponent({tutee,navigation}){
     return(
         <View style={styles.tuteeBarStyle}>
@@ -35,29 +29,29 @@ function TuteeListComponent({tutee,navigation}){
 }
 
 const TutorAuthentication = ({navigation,route }) => {
-    const [projectlist,setProjectlist] = useState([
-        {id:1,title: "수학2 마스터하기", info:"반복학습을 통한 수학2 마스터하기", fin:true},
-        {id:2,title: "비문학 마스터하기", info:"회독을 통한 비문학 마스터하기", fin:false},
-        {id:3,title: "국사 마스터하기", info:"중요파트 집중을 통한 국사 마스터하기", fin:true}
-      ]);
-    const listitem = makeItem(projectlist)
-    const [selectedpr,setSelectedpr] = useState('')
+    const [projectlist,setProjectlist] = useState();
     const [tutees,setTutees] = useState([
         {id: 0,name: "LEE", auth:"1+1=2"},
         {id: 1,name: "KIM", auth:"5*5=25"},
       ]);
-    const [fin,setFin]=useState(false)
+    const [fin,setFin]=useState(true)
     const [project, setProject]=useState(route.params.project)
     const handleSubmitAuthenticatoin = () => {
         Keyboard.dismiss();
     }
-    const callApi= async()=>{
-        await gettutees({
-            "project_id" : project.id
-          })
-        .then(res=>res.data)
-        .catch(err=>console.log(err))
-    }
+    console.log(project.id)
+
+    useEffect(()=>{
+        const callApi= async()=>{
+            await gettutees({
+                "project_id":project.id
+            })
+            .then(res=>console.log(res.data))
+            .catch(err=>console.log(err))
+        }
+        
+        callApi()
+    },[])
     return (
         <View style={styles.container}>
             <View style={{flexDirection:'row',}}>
@@ -65,10 +59,10 @@ const TutorAuthentication = ({navigation,route }) => {
             </View>
 
             <View style={{flexDirection:'row',borderColor:'#D0DBEA',
-        borderBottomWidth:2,width:'80%',marginBottom:'5%',
-        justifyContent:'center',
-        alignItems: 'center',}}>
-            
+                            borderBottomWidth:2,width:'80%',marginBottom:'5%',
+                            justifyContent:'center',
+                            alignItems: 'center',}}>
+                                
                 <View style={styles.precentPosition}>
                     <Text style={styles.presentTextStyle}>현재 진행률</Text>
                     <Text style={styles.percentStyle}>30%</Text>

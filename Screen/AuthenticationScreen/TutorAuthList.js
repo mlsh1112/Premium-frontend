@@ -1,19 +1,13 @@
 import React, { Component, useState, useEffect } from 'react';
 import { View,Text,TouchableOpacity,ImageBackground } from 'react-native';
-import { getproject } from '../../src/Api';
+import { getproject,gettutorprojs } from '../../src/Api';
 import colors from '../../src/colors'
 import AsyncStorage from '@react-native-community/async-storage';
-const callApi = async(userID) =>{
-    getproject(userID)
-    .then(res=>console.log(JSON.parse(res)))
-    //.then(json=>json.data)
-    .catch(err=>console.log(err))
-}
 
 const ProjectAuthCard = ({navigation,project}) => {
     return(
         <View style={{width:350,margin:10,backgroundColor:colors.subcolor, borderRadius:10}}>
-        <TouchableOpacity onPress={()=>{navigation('TuteeAuthdetail',{project})}}>
+        <TouchableOpacity onPress={()=>{navigation('TutorAuthentication',{project})}}>
                 <View style={{margin:10}}>
                 <Text style={styles.titleStyle}>{project.title}</Text>
                 <Text style={styles.subStyle}>고등 수학 / 수학</Text>
@@ -39,6 +33,13 @@ const TutorAuthList = ({navigation}) => {
         }
 
         getData()
+
+        const callApi= async()=>{
+            await gettutorprojs()
+            .then(res=>setProjects(res.data))
+            .catch(err=>console.log(err))
+        }
+        callApi()
     },[])
 
     return (
