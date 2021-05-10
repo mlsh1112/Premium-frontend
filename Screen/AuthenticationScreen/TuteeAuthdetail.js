@@ -15,13 +15,15 @@ const TuteeAutdetail=({navigation,route})=>{
   const project=route.params.project
   var startDate=new Date().getTime() - new Date(project.created_at).getTime();
   var remainDay=Math.floor(startDate / (1000 * 60 * 60 * 24))
-  var pastDay=project.experience_period-remainDay
+  //var pastDay=project.project.experience_period-remainDay
+  var pastDay=0
   function isTrial(){
 
     if (project.status==='trial') 
     return false
   }
-
+  console.log(remainDay,pastDay)
+  console.log(project)
   return(
     <ScrollView>
         

@@ -1,19 +1,22 @@
 import React, { Component, useState, useEffect } from 'react';
-import { View,Text,TouchableOpacity,ImageBackground } from 'react-native';
+import { View,Text,TouchableOpacity,ImageBackground,ScrollView } from 'react-native';
 import { getproject,gettutorprojs } from '../../src/Api';
 import colors from '../../src/colors'
+import {  Card} from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const ProjectAuthCard = ({navigation,project}) => {
     return(
-        <View style={{width:350,margin:10,backgroundColor:colors.subcolor, borderRadius:10}}>
+        <View style={{marginBottom:4,borderRadius:10}}>
+        <Card style={{width:350,margin:10, borderRadius:10,backgroundColor:colors.subcolor}}>
         <TouchableOpacity onPress={()=>{navigation('TutorAuthentication',{project})}}>
                 <View style={{margin:10}}>
                 <Text style={styles.titleStyle}>{project.title}</Text>
                 <Text style={styles.subStyle}>고등 수학 / 수학</Text>
-                <Text style={styles.dayStyle}>60 DAYS</Text>
+                <Text style={styles.dayStyle}>{project.experience_period} DAYS</Text>
                 </View>
         </TouchableOpacity>
+    </Card>
     </View>
     )
 }
@@ -45,12 +48,12 @@ const TutorAuthList = ({navigation}) => {
         <View style={styles.container}>
             {
                 projects?
-                <View>
+                <ScrollView>
                     {projects.map((project,index)=>{
                             return  <ProjectAuthCard navigation={navigation.navigate} project={project} key={index} ></ProjectAuthCard>
                         })
                     }
-                </View>
+                </ScrollView>
                 :
                 <Text>진행 중인 프로젝트가 없습니다</Text>
             }

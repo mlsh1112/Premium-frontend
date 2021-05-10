@@ -9,8 +9,7 @@ import {
     ScrollView,
     Keyboard,
   } from 'react-native';
-  import {  Card} from 'react-native-paper';
-import RNPickerSelect from 'react-native-picker-select';
+import {Card} from 'react-native-paper';
 import {Button} from '../../src/components'
 import { gettutees } from '../../src/Api';
 
@@ -36,7 +35,7 @@ const TutorAuthentication = ({navigation,route }) => {
     const handleSubmitAuthenticatoin = () => {
         Keyboard.dismiss();
     }
-    console.log(project)
+    console.log(tutees)
 
     useEffect(()=>{
         const callApi= async()=>{
@@ -121,17 +120,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         margin:'3%',
     },
-    pickerstyle:{
-        width: "90%",
-        marginTop:'1%',
-        paddingVertical: 10,
-        paddingHorizontal: 12,
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 8,
-        paddingRight: 30,
-        color:"black"
-    },
     precentPosition:{
         flex:1,
         margin: '10%',
@@ -193,11 +181,10 @@ const styles = StyleSheet.create({
     paytxtStyle:{
             fontSize:20,
             fontWeight:'bold',
-            
-        
     },
     prjtitlestlye:{
-        fontSize:27,
+        marginTop:10,
+        fontSize:24,
         fontWeight:'bold',
     }
   });
