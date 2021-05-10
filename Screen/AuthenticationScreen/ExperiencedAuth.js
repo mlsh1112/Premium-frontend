@@ -9,6 +9,7 @@ import {
 import colors from '../../src/colors'
 import {Button} from '../../src/components'
 import cat from '../../assets/cat2.png'
+import App from '../PaymentScreens/index'
 const ExperienceAuth=({navigation,route})=>{
     const [rate,setRate]=useState([
             {id:0,title:'Auhrate',rate:30},
@@ -20,6 +21,7 @@ const ExperienceAuth=({navigation,route})=>{
     ]);
     function handleSubmit(){
         console.log('프로젝트 신청')
+        navigation.navigate('PaymentPage')
     }
     
     return(
