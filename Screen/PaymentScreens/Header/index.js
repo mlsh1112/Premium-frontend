@@ -23,7 +23,7 @@ export default function Header({ title }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Platform.OS === 'ios' ? 20 : 0,
+    marginTop: Platform.OS === 'ios' ? 40 : 0,
     maxHeight: 80,
     backgroundColor: '#344e81',
     flex: 1,
