@@ -17,6 +17,8 @@
 		2DCD954D1E0B4F2C00145EB5 /* firstTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* firstTests.m */; };
 		5AE73CF7CF29F676D20C7938 /* libPods-first-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F3F6CA4B80148E2E499DF7F4 /* libPods-first-tvOSTests.a */; };
 		5D0A6FAA21B2B5A2FECF513D /* libPods-first-firstTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A05F4AC7C9E0A2BF6A848BA /* libPods-first-firstTests.a */; };
+		7A0698872648ED2100992E0C /* libIamportReactNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0698762648EC9100992E0C /* libIamportReactNative.a */; };
+		7A0698882648ED2600992E0C /* libRNCWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0698812648ED0500992E0C /* libRNCWebView.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A1D3828556410D27118E982F /* libPods-first.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C377833F392CA4DC526F60E /* libPods-first.a */; };
 		CE8A61C99CC5535C06BF10E1 /* libPods-first-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 39FE75490F9F419F33D292D0 /* libPods-first-tvOS.a */; };
@@ -36,6 +38,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "first-tvOS";
+		};
+		7A0698752648EC9100992E0C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7A0698712648EC9100992E0C /* IamportReactNative.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = IamportReactNative;
+		};
+		7A0698802648ED0500992E0C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7A06987C2648ED0500992E0C /* RNCWebView.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNCWebView;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -58,6 +74,8 @@
 		3A05F4AC7C9E0A2BF6A848BA /* libPods-first-firstTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-first-firstTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48BED1B195DAA4C606F66A77 /* Pods-first-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-first-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-first-tvOS/Pods-first-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		6817856296F41A01621A5589 /* Pods-first-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-first-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-first-tvOSTests/Pods-first-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		7A0698712648EC9100992E0C /* IamportReactNative.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = IamportReactNative.xcodeproj; path = "../node_modules/iamport-react-native/ios/IamportReactNative.xcodeproj"; sourceTree = "<group>"; };
+		7A06987C2648ED0500992E0C /* RNCWebView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCWebView.xcodeproj; path = "../node_modules/react-native-webview/ios/RNCWebView.xcodeproj"; sourceTree = "<group>"; };
 		7AF8C9D02608E1AB008B6FA0 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Solid.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		7AF8C9D12608E1AB008B6FA0 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		7AF8C9D22608E1AB008B6FA0 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = AntDesign.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
@@ -98,6 +116,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A0698882648ED2600992E0C /* libRNCWebView.a in Frameworks */,
+				7A0698872648ED2100992E0C /* libIamportReactNative.a in Frameworks */,
 				A1D3828556410D27118E982F /* libPods-first.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -180,6 +200,22 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		7A0698722648EC9100992E0C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7A0698762648EC9100992E0C /* libIamportReactNative.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7A06987D2648ED0500992E0C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7A0698812648ED0500992E0C /* libRNCWebView.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		7AF8C9CF2608E094008B6FA0 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -206,6 +242,8 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				7A06987C2648ED0500992E0C /* RNCWebView.xcodeproj */,
+				7A0698712648EC9100992E0C /* IamportReactNative.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -357,6 +395,16 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 7A0698722648EC9100992E0C /* Products */;
+					ProjectRef = 7A0698712648EC9100992E0C /* IamportReactNative.xcodeproj */;
+				},
+				{
+					ProductGroup = 7A06987D2648ED0500992E0C /* Products */;
+					ProjectRef = 7A06987C2648ED0500992E0C /* RNCWebView.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* first */,
@@ -366,6 +414,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		7A0698762648EC9100992E0C /* libIamportReactNative.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libIamportReactNative.a;
+			remoteRef = 7A0698752648EC9100992E0C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7A0698812648ED0500992E0C /* libRNCWebView.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNCWebView.a;
+			remoteRef = 7A0698802648ED0500992E0C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {
