@@ -7,9 +7,9 @@ import {
     View,
     Text,
     ScrollView,
-    TextInput,
     Keyboard,
   } from 'react-native';
+  import {  Card} from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 import {Button} from '../../src/components'
 import { gettutees } from '../../src/Api';
@@ -30,28 +30,26 @@ function TuteeListComponent({tutee,navigation}){
 
 const TutorAuthentication = ({navigation,route }) => {
     const [projectlist,setProjectlist] = useState();
-    const [tutees,setTutees] = useState([
-        {id: 0,name: "LEE", auth:"1+1=2"},
-        {id: 1,name: "KIM", auth:"5*5=25"},
-      ]);
+    const [tutees,setTutees] = useState();
     const [fin,setFin]=useState(true)
     const [project, setProject]=useState(route.params.project)
     const handleSubmitAuthenticatoin = () => {
         Keyboard.dismiss();
     }
-    console.log(project.id)
+    console.log(project)
 
     useEffect(()=>{
         const callApi= async()=>{
             await gettutees({
                 "project_id":project.id
             })
-            .then(res=>console.log(res.data))
+            .then(res=>setTutees(res.data))
             .catch(err=>console.log(err))
         }
         
         callApi()
     },[])
+
     return (
         <View style={styles.container}>
             <View style={{flexDirection:'row',}}>
@@ -80,13 +78,23 @@ const TutorAuthentication = ({navigation,route }) => {
             </View>
                 {fin ? 
                         <ScrollView style={{marginLeft:'20%', width:'100%'}}>
-                            {tutees.map((tutee,index)=>{
+                            {
+                                tutees?
+                                <View>
+                                {tutees.map((tutee,index)=>{
                                     return <TuteeListComponent 
                                     tutee={tutee}
                                     navigation={navigation}
                                     key={index}
                                     />
                                     })}
+                                </View>
+                                    :
+                                <Text>
+                                        해당 프로젝트에 참여한 튜티가 없습니다.
+                                </Text>
+                            }
+                            
                         </ScrollView>
                         :
                         <View >
@@ -108,7 +116,7 @@ const TutorAuthentication = ({navigation,route }) => {
 const styles = StyleSheet.create({
     container: {
         flex : 1,
-        width: "100%",
+        width: "95%",
         justifyContent:'center',
         alignItems: 'center',
         margin:'3%',

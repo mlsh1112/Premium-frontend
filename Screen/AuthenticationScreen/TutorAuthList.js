@@ -41,12 +41,11 @@ const TutorAuthList = ({navigation}) => {
         }
         callApi()
     },[])
-
     return (
         <View style={styles.container}>
             {
                 projects?
-                <View style={{}}>
+                <View>
                     {projects.map((project,index)=>{
                             return  <ProjectAuthCard navigation={navigation.navigate} project={project} key={index} ></ProjectAuthCard>
                         })

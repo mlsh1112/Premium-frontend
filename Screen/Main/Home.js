@@ -64,7 +64,7 @@ class Home extends Component {
     
     }
     render() {
-        console.log(this.state.myprojects)
+        console.log(this.state.user)
         return (
             <View style={styles.container}>
                 <View style={styles.logoposition} >
