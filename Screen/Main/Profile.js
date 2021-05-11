@@ -78,7 +78,7 @@ const Profile = (props) => {
           console.log("get user info error")
         } 
     }
-    //getData()
+    getData()
 
     const getApiData = () => {
       getproject(userid).then(res=>{
@@ -121,14 +121,20 @@ const Profile = (props) => {
     }
   };
   
-  const handleLogoutPress = async()=> {  //로그아웃 function
-    await logout()
-    await AsyncStorage.removeItem('token');
-    props.navigation.popToTop()
+  const handleLogoutPress = ()=> {  //로그아웃 function
+    console.log('로그아웃 버튼 눌림!')
+    logout().then(res => {
+      console.log(res)
+      AsyncStorage.removeItem('token');
+      props.navigation.popToTop()
+    }).catch(e => console.log(e.response))
   }
   const goToCreateProject = () => {
     console.log("프로젝트 생성하러가기");
     props.navigation.navigate('ProjectForm');
+    // props.navigation.navigate('Chapter');
+    //props.navigation.navigate('Book');
+    //props.navigation.navigate('MakeSchedule');
   }
   const goToAuth = () => {
     console.log("인증하러 하러가기");
@@ -153,17 +159,12 @@ const Profile = (props) => {
             <View>
               <Icon name="teach" color="red" size={20}/>
               <Text style={styles.caption,{color:"red"}}>{userinfo.type}</Text>
+              { userinfo.type === "Tutor"  
+                ? <Text style={styles.caption,{color:"red"}}>[ {userinfo.status} ]</Text>
+                : <Text style={styles.caption,{color:"red"}}></Text>
+              }
             </View>
           </View>
-          <TouchableOpacity style={styles.buttonposition} onPress={handleLogoutPress}>
-              <Text style={styles.buttonstyle}>로그 아웃</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    )}
-    {showscreen && (
-      <View style={styles.userInfoSection}>
-        <View style={{flexDirection: 'row', marginTop: 15}}>
           <TouchableOpacity style={styles.buttonposition} onPress={handleLogoutPress}>
               <Text style={styles.buttonstyle}>로그 아웃</Text>
           </TouchableOpacity>
@@ -177,7 +178,7 @@ const Profile = (props) => {
           <Icon name="school" color="#777777" size={20} style={{textAlignVertical:'center'}}/>
           <Text style={{color:"#777777", marginLeft: 20,textAlignVertical:'center'}}>{school}</Text>
         </View>
-        { true
+        { userinfo.type === "Tutor" && userinfo.status === "approved"
             ? (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToCreateProject}>
                 <Text style={styles.buttonstyle}>프로젝트 생성</Text>
                </TouchableOpacity>)
