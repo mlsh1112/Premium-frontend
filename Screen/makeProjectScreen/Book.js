@@ -9,14 +9,16 @@ import {
     Image,
   } from 'react-native';
 import {Button} from '../../src/components/Button';
-import {getBook,createBook} from '../../src/Api';
+import {getBook,createBook,updateproject} from '../../src/Api';
 
 const Book = (props) => {
     const [title,setTitle] = useState('');
     const [booklist,setBooklist] = useState([]);
-    console.log("=================== project id =================")
-    console.log(props.route.params.projectId)
-    console.log("================================================")
+    const [bookid,setBookid] = useState();
+   // var bookid
+    // console.log("=================== project id =================")
+    // console.log(props.route.params.projectId)
+    // console.log("================================================")
     const requestBookSearch = () => {
         console.log("request book search")
         console.log(title)
@@ -46,22 +48,39 @@ const Book = (props) => {
             "publisher": book.publisher,
             "image": book.thumbnail,
             "url": book.url,
-        }).then(res => {
+        }).then(async(res) => {
             console.log("+++++++++++++++++++++++++++++")
-            console.log(res)
+            console.log(res.data)
+            await setBookid(res.data.id)
+            updateproject(props.route.params.projectId,
+                {
+                    "project":{
+                        "book_id": res.data.id,
+                    }
+                }
+            ).then(res => {
+                console.log("◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆")
+                console.log(res)
+                console.log("◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆")
+                props.navigation.navigate({name: 'Chapter',params: {selectedBook: book,projectId:props.route.params.projectId}})
+            }).catch(e => {
+                console.log(e)
+            })
+            console.log(res.data.id)
             console.log("+++++++++++++++++++++++++++++")
             console.log('go back to chapter screen')
-            props.navigation.navigate({name: 'Chapter',params: {selectedBook: book}})
+            // props.navigation.navigate({name: 'Chapter',params: {selectedBook: book}})
         }).catch((e) => {
-            if (e.response.data.result ==='이미 책이 존재합니다'){
-                console.log('exist book')
-            }
+            console.log(e)
             // if(e.response.status === 401){
-            //     console.error(e.response.status)
+                // console.error(e.response.status)
             // }else {
-            //     console.error(e.response.status)
+                // console.error(e.response.status)
             // }
         })
+
+        console.log(props.route.params.projectId)
+       
     }
     function RenderBook({booklist}){
         return(
