@@ -10,14 +10,60 @@ import {
     Alert,
   } from 'react-native';
 import {Button} from '../../src/components/Button';
-import {getchapter} from '../../src/Api';
+import {getchapter, postoptions, createschedule} from '../../src/Api';
 import colors from '../../src/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import PreviewCalendar from './PreviewCalendar'
+import CheckBox from '@react-native-community/checkbox';
+import SchedulePopup from './SchedulePopup'
 
 const Chapter = (props) => {
+    const [visibleconfim,setVisibleconfirm] = useState(false)
+    const [schedule,setSchedule] = useState({})
     const [book,setBook] = useState()
     const [bookvisible,setBookvisible] = useState(false)
-    const [chapters,setChapters] = useState([])
+    const [chapters,setChapters] = useState([
+      {
+        "id": 1035,
+        "title": "1. 집합",
+        },
+        {
+        "id": 1036,
+        "title": "2. 집합의 연산법칙",
+        },
+        {
+        "id": 1037,
+        "title": "3. 명제와 조건",
+        },
+        {
+        "id": 1038,
+        "title": "4. 부등식의 증명",
+        },
+        {
+        "id": 1039,
+        "title": "5. 유리식과 무리식",
+        },
+        {
+        "id": 1040,
+        "title": "6. 함수",
+        },
+    ])
+    const [toggleCheckBox, setToggleCheckBox] = useState(false) //false 휴식 허용 true 휴식 없음
+    const [modalVisible,setModalVisible] = useState(false)
+    useEffect(() => {
+      //console.log(chapters)
+      console.log('lets update by useEffect')
+      if (props.route.params?.selectedBook){
+        console.log("/////////////////////////////")
+        setBook(props.route.params.selectedBook)
+        setBookvisible(true)
+        console.log("/////////////////////////////")
+      }
+      // console.log("====================================")
+      // console.log(book)
+      // console.log("====================================")
+    },[props.route.params?.selectedBook])
+
     function RenderChapter({chapters}){
         console.log("============= chatper for render =============")
         console.log(chapters)
@@ -26,7 +72,7 @@ const Chapter = (props) => {
                     <View style={styles.chapterlist}>
                       {chapters.map((chapter,key) => {
                         return(
-                          <View key={key} style={{flex:1,flexDirection:'row',alignItems: 'center',justifyContent: 'space-between'}}>
+                          <View key={key} style={{flex:1,flexDirection:'row',alignItems: 'center',justifyContent: 'space-between',}}>
     
                               <Text style={styles.textStyle}>
                                 {chapter.title}
@@ -60,19 +106,6 @@ const Chapter = (props) => {
         //console.log(JSON.stringify(chapters))
         //console.log("------------------------------------------------")
     }
-    useEffect(() => {
-        //console.log(chapters)
-        console.log('lets update by useEffect')
-        if (props.route.params?.selectedBook){
-          console.log("/////////////////////////////")
-          setBook(props.route.params.selectedBook)
-          setBookvisible(true)
-          console.log("/////////////////////////////")
-        }
-        // console.log("====================================")
-        // console.log(book)
-        // console.log("====================================")
-    },[props.route.params?.selectedBook])
     
     const goToChapterSearch = async() => {
       console.log('챕터 가져오기')
@@ -93,7 +126,6 @@ const Chapter = (props) => {
             console.log('============ chapters ============')
             console.log(chapters)
             console.log('==================================')
-        }).then(()=> {
         }).catch((e) => {
             console.log(e)
         }
@@ -105,14 +137,49 @@ const Chapter = (props) => {
     const sendChapterWeight = () => {
       console.log(chapters)
       //const formData = new FormData();
-      // postoptions({
-        // option: {
-          // options: chapters,
-        // }
-      // }).then(res => console.log(res)).catch(e => console.log(e))
+      postoptions(
+        {
+          "option": {
+            "options": chapters,
+          }
+        }
+      ).then(res => {
+        console.log(res)
+        props.navigation.navigate({name: 'MakeSchedule',params: {projectId:props.route.params.projectId}})
+      }).catch(e => console.log(e))
       //formData.append('auth[images_attributes][0][image]', {uri: imageinfo.uri, name: imageinfo.fileName, type: imageinfo.type});
     }
-
+    const getPreview = () => {
+       console.log("미리보기")
+       setModalVisible(true)
+      //  if (chapters[0] ===undefined){
+        //  alert("[2. 챕터별 가중치 설정(최소 1 이상)] 을 먼저 해주세요!")
+      //  }else {
+        //  setVisibleconfirm(true)
+      //  }
+      //  setSchedule()
+    }
+    const requestMakeSchedule = () => {
+      console.log("◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆")
+      console.log("request make schedule")
+      console.log(chapters)
+      console.log("◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆")
+      postoptions(
+        {
+          "option": {
+            "options": chapters,
+          }
+        }
+      ).then(res => {
+        console.log(res)
+        createschedule(props.route.params.projectId).then(res => {
+            console.log(res.data)
+        }).catch(e => {
+            console.log(e.response)
+        })
+        //props.navigation.navigate({name: 'MakeSchedule',params: {projectId:props.route.params.projectId}})
+      }).catch(e => console.log(e))
+    }
     return (
         <ScrollView >
             <View>
@@ -142,8 +209,44 @@ const Chapter = (props) => {
                     </Text>
                     <Button onPress={goToChapterSearch}>챕터 불러오기</Button>
                     <RenderChapter chapters={chapters}/>
-                    <Button onPress={sendChapterWeight}>챕터 가중치 설정하기</Button>
+                    {/* <Button onPress={sendChapterWeight}>챕터 가중치 설정하기</Button> */}
                 </View>
+                <View style={styles.FormStyle}>
+                    <Text style={styles.subtitle}>3. 일정 미리보기
+                        <TouchableOpacity onPress={() => {
+                          Alert.alert("일정 미리보기란?","설정된 옵션을 기반으로 생성된 일정을 미리 보여줍니다. 일정을 확인하신 후 4. '일정확정하기' 버튼을 통해 일정을 확정해주세요. \n\n※프로젝트간 휴식을 부여하시려면 '일정 미리보기' 버튼 상단의 체크박스를 체크해주세요.\n\n예시)\n프로젝트 기간 : 50일 \n프로젝트간 휴식 적용시 최대 휴식일 : 10일 \n챕터의 숫자가 최대 휴식일보다 작을 경우 챕터 종료 후 휴식1일이 부여됩니다.",
+                            )
+                        }}>
+                          <View style={{marginHorizontal: 5}}>
+                            <Icon name="comment-question-outline" color="red" size={20}/>
+                          </View>
+                        </TouchableOpacity>
+                    </Text>
+                    <View style={{flex:1,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                      <Text style={{fontSize:16,fontWeight:'bold'}}>프로젝트간 휴식 부여</Text>
+                      
+                      {toggleCheckBox
+                      ?<Text style={{margin:3,}}>[true]</Text>
+                      :<Text style={{margin:3,}}>[false]</Text>}
+
+                      <CheckBox
+                          disabled={false}
+                          value={toggleCheckBox}
+                          onValueChange={(newValue) => {
+                            setToggleCheckBox(newValue)
+                          }}
+                      />
+                    </View>  
+                    <Button onPress={getPreview}>일정 미리보기</Button>
+                    <SchedulePopup visible={modalVisible} setModalVisible={setModalVisible} schedule={schedule} chapters={chapters}/>
+                    {/* <View style={{marginTop:10,width:'100%'}}> */}
+                      {/* <PreviewCalendar schedule={schedule}/> */}
+                    {/* </View> */}
+                </View>
+                {visibleconfim && (<View style={styles.LastFormStyle}>
+                  <Text style={styles.subtitle}>4. 일정 확정</Text>
+                  <Button onPress={requestMakeSchedule}>일정 확정하기</Button>
+                </View>)}
             </View>
         </ScrollView>
         
@@ -159,6 +262,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 10,
+        marginVertical: 10,
+    },
+    LastFormStyle: {
+      width: '100%',
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 10,
+      marginTop: -70,
     },
     textinput: {
         height: 40,
@@ -181,6 +293,7 @@ const styles = StyleSheet.create({
     chapterlist: {
         width: '100%',
         padding: 10,
+        marginBottom: 10,
         justifyContent: 'space-between',
     },
     cancelButton: {
@@ -211,7 +324,7 @@ const styles = StyleSheet.create({
         width: "90%",
         fontWeight:"bold",
         fontSize: 20,
-        marginBottom: 3,
+        margin: 5,
     },
     bookImage: {
         width: 200,
