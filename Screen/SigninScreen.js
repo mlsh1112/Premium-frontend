@@ -20,7 +20,7 @@ import {login} from '../src/Api';
 import {setToken,setType,setStatus,setName,setUser} from '../src/Asyncstorage';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import {refresh} from '../src/Api';
+import {refresh,logout} from '../src/Api';
 import jwtDecode from "jwt-decode";
 
 const validationSchema = Yup.object().shape({
@@ -50,7 +50,6 @@ const Signin = (props) => {
      const onLoinSuccess=(res)=>{
       let decode_token=jwt_decode(res.data.token)
       let decode_token1= Number(decode_token.exp)
-      console.log(jwt_decode(res.data.token))
       let new_time=new Date().getTime()/1000;
       new_time=Math.ceil(new_time)
       setToken(res.data.token);
@@ -61,12 +60,12 @@ const Signin = (props) => {
       setTIMEout(decode_token1,new_time)
      }
      const setTIMEout =(decode_token1,new_time)=>{
-      setTimeout(onSilentRefresh,((decode_token1-new_time)-20)*1000)
+      setTimeout(onSilentRefresh,((decode_token1-new_time)-30)*1000)
      }
      const onSilentRefresh =()=>{
        refresh().then(
-         res=>{
-            deletokenfortest()
+        async (res)=>{
+          await AsyncStorage.removeItem('token');
             setToken(res.data.token);
             let decode_token=jwt_decode(res.data.token)
             let decode_token1= Number(decode_token.exp)
@@ -75,11 +74,13 @@ const Signin = (props) => {
             setTIMEout(decode_token1,new_time)
           }
        )
-       .catch(error=>{
-         alert("로그인 만료시간이 다되었습니다. 다시 로그인해주세요");
-         console.log(error)
-         props.navigation.replace('Signin');
-        })
+       .catch(async(error)=>{
+          alert("로그인 만료시간이 다되었습니다. 다시 로그인해주세요");
+          console.log(error)  
+          await AsyncStorage.removeItem('token');
+          props.navigation.replace('Onboarding');
+        
+       })
      }
      const deletokenfortest = async() => {
        try{
