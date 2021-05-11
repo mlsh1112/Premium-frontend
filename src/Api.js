@@ -14,6 +14,7 @@ const kakaoBook = axios.create({
 })
 
 const PORT = baseurl.port
+// const PORT = baseurl.sungmin
 
 console.log(PORT)
 
@@ -44,9 +45,11 @@ export const getauth = () => API.get(PORT+"/auths")
 export const getproject = (projectid) => API.get(PORT+`/projects/${projectid}`)
 export const getchapter = ( params ) => API.get(PORT+"/books/get_list/",{ params })
 export const getBook = (params) => kakaoBook.get("https://dapi.kakao.com/v3/search/book",{params})
-export const createBook = (info) => API.post(PORT+'/books',info)
+export const createBook = (book) => API.post(PORT+'/books',{book})
 export const getprojects = ( params ) => API.get(`${PORT}/projects`, { params })
-export const postoptions = ( params ) => API.post(`${PORT}/options`,{ params })
+export const postoptions = ( params ) => API.post(`${PORT}/options`, params )
 export const getattendances = () => API.get(PORT+"/attendances")
-export const createproject = (info) => API.post(PORT+"/projects",info)
+export const createproject = (project) => API.post(PORT+"/projects",{ project })
 export const getcategories = () => API.get(PORT+"/categories")
+export const updateproject = (projectid,{project}) => API.put(PORT+`/projects/${projectid}`,{project})
+export const createschedule = (id) => API.get(PORT+`/projects/${id}/create_schedule`)
