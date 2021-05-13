@@ -35,7 +35,7 @@ function PreviewCalendar(props){
   useEffect(()=>{
     var tempschedule={}
     var tempagenda={}
-    dummyschedule.map((item,index)=>{
+    props.schedule.map((item,index)=>{
         const colorIndex = index % 4 
         const startDate = moment(item.start_at)
         var endDate = moment(item.end_at)
