@@ -23,32 +23,33 @@ const Chapter = (props) => {
     const [book,setBook] = useState()
     const [bookvisible,setBookvisible] = useState(false)
     const [chapters,setChapters] = useState([
-      {
-        "id": 1035,
-        "title": "1. 집합",
-        },
-        {
-        "id": 1036,
-        "title": "2. 집합의 연산법칙",
-        },
-        {
-        "id": 1037,
-        "title": "3. 명제와 조건",
-        },
-        {
-        "id": 1038,
-        "title": "4. 부등식의 증명",
-        },
-        {
-        "id": 1039,
-        "title": "5. 유리식과 무리식",
-        },
-        {
-        "id": 1040,
-        "title": "6. 함수",
-        },
+      // {
+        // "id": 1035,
+        // "title": "1. 집합",
+        // },
+        // {
+        // "id": 1036,
+        // "title": "2. 집합의 연산법칙",
+        // },
+        // {
+        // "id": 1037,
+        // "title": "3. 명제와 조건",
+        // },
+        // {
+        // "id": 1038,
+        // "title": "4. 부등식의 증명",
+        // },
+        // {
+        // "id": 1039,
+        // "title": "5. 유리식과 무리식",
+        // },
+        // {
+        // "id": 1040,
+        // "title": "6. 함수",
+        // },
     ])
     const [toggleCheckBox, setToggleCheckBox] = useState(false) //false 휴식 허용 true 휴식 없음
+    const [rest, setRest] = useState(0) //false 휴식 허용 true 휴식 없음
     const [modalVisible,setModalVisible] = useState(false)
     useEffect(() => {
       //console.log(chapters)
@@ -149,36 +150,36 @@ const Chapter = (props) => {
       }).catch(e => console.log(e))
       //formData.append('auth[images_attributes][0][image]', {uri: imageinfo.uri, name: imageinfo.fileName, type: imageinfo.type});
     }
+    const completeCreateProject = () => {
+      
+      props.navigation.popToTop()
+      
+    }
     const getPreview = () => {
        console.log("미리보기")
-       setModalVisible(true)
-      //  if (chapters[0] ===undefined){
-        //  alert("[2. 챕터별 가중치 설정(최소 1 이상)] 을 먼저 해주세요!")
-      //  }else {
-        //  setVisibleconfirm(true)
-      //  }
-      //  setSchedule()
-    }
-    const requestMakeSchedule = () => {
-      console.log("◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆")
-      console.log("request make schedule")
-      console.log(chapters)
-      console.log("◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆")
-      postoptions(
-        {
-          "option": {
-            "options": chapters,
-          }
+       if (chapters[0] ===undefined){
+         alert("[2. 챕터별 가중치 설정(최소 1 이상)] 을 먼저 해주세요!")
+        }else {
+          setVisibleconfirm(true)
+          postoptions(
+            {
+              "option": {
+                "options": chapters,
+              }
+            }
+          ).then(res => {
+            console.log(res)
+            createschedule(props.route.params.projectId,{rest: rest}).then(res => {
+              setSchedule(()=> res.data.options)
+              setModalVisible(true)
+            }).catch(e => {
+                console.log(e.response)
+            })
+            //props.navigation.navigate({name: 'MakeSchedule',params: {projectId:props.route.params.projectId}})
+          }).catch(e => console.log(e))
+          // completeCreateProject()
         }
-      ).then(res => {
-        console.log(res)
-        createschedule(props.route.params.projectId).then(res => {
-            console.log(res.data)
-        }).catch(e => {
-            console.log(e.response)
-        })
-        //props.navigation.navigate({name: 'MakeSchedule',params: {projectId:props.route.params.projectId}})
-      }).catch(e => console.log(e))
+        
     }
     return (
         <ScrollView >
@@ -234,19 +235,24 @@ const Chapter = (props) => {
                           value={toggleCheckBox}
                           onValueChange={(newValue) => {
                             setToggleCheckBox(newValue)
+                            if (newValue){
+                              setRest(1)
+                            }
+                            else {
+                              setRest(0)
+                            }
                           }}
                       />
                     </View>  
                     <Button onPress={getPreview}>일정 미리보기</Button>
                     <SchedulePopup visible={modalVisible} setModalVisible={setModalVisible} schedule={schedule} chapters={chapters}/>
-                    {/* <View style={{marginTop:10,width:'100%'}}> */}
-                      {/* <PreviewCalendar schedule={schedule}/> */}
-                    {/* </View> */}
                 </View>
-                {visibleconfim && (<View style={styles.LastFormStyle}>
-                  <Text style={styles.subtitle}>4. 일정 확정</Text>
-                  <Button onPress={requestMakeSchedule}>일정 확정하기</Button>
-                </View>)}
+                {visibleconfim && (
+                  <View style={styles.LastFormStyle}>
+                    <Text style={styles.subtitle}>4. 일정 확정</Text>
+                    <Button onPress={completeCreateProject}>일정 확정하기</Button>
+                  </View>)
+                }
             </View>
         </ScrollView>
         
@@ -270,7 +276,6 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       padding: 10,
-      marginTop: -70,
     },
     textinput: {
         height: 40,
