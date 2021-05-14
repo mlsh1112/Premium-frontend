@@ -16,14 +16,14 @@ export const Schema = Yup.object().shape({
 const now = new Date()
 export const tommorow = now.setDate(now.getDate() + 1)
 export const InitValue = {
-    categoryid : '', 
-    title: '',
-    startDate: tommorow, 
-    duration: '',
-    experienceduration: '',
-    repeatstrength: '',
-    dailyStudyTime: '',
-    howToAuth:'',
-    projectIntroduce:'',
-    deposit: '',
-  }
+  categoryid : '', 
+  title: '',
+  startDate: tommorow, 
+  duration: '',
+  experienceduration: '',
+  repeatstrength: '',
+  dailyStudyTime: '',
+  howToAuth:'',
+  projectIntroduce:'',
+  deposit: '',
+}

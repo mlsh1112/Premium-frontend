@@ -1,4 +1,4 @@
-import React, { Component,useState,useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import { ScrollView } from 'react-native';
 import { TextInput } from 'react-native';
 import {
@@ -13,68 +13,32 @@ import {Button} from '../../src/components/Button';
 import {getchapter, postoptions, createschedule} from '../../src/Api';
 import colors from '../../src/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import PreviewCalendar from './PreviewCalendar'
 import CheckBox from '@react-native-community/checkbox';
 import SchedulePopup from './SchedulePopup'
+import {HelpMessage,RenderHelp} from './Help';
 
 const Chapter = (props) => {
     const [visibleconfim,setVisibleconfirm] = useState(false)
     const [schedule,setSchedule] = useState({})
     const [book,setBook] = useState()
     const [bookvisible,setBookvisible] = useState(false)
-    const [chapters,setChapters] = useState([
-      // {
-        // "id": 1035,
-        // "title": "1. 집합",
-        // },
-        // {
-        // "id": 1036,
-        // "title": "2. 집합의 연산법칙",
-        // },
-        // {
-        // "id": 1037,
-        // "title": "3. 명제와 조건",
-        // },
-        // {
-        // "id": 1038,
-        // "title": "4. 부등식의 증명",
-        // },
-        // {
-        // "id": 1039,
-        // "title": "5. 유리식과 무리식",
-        // },
-        // {
-        // "id": 1040,
-        // "title": "6. 함수",
-        // },
-    ])
+    const [chapters,setChapters] = useState([])
     const [toggleCheckBox, setToggleCheckBox] = useState(false) //false 휴식 허용 true 휴식 없음
     const [rest, setRest] = useState(0) //false 휴식 허용 true 휴식 없음
     const [modalVisible,setModalVisible] = useState(false)
     useEffect(() => {
-      //console.log(chapters)
-      console.log('lets update by useEffect')
       if (props.route.params?.selectedBook){
-        console.log("/////////////////////////////")
         setBook(props.route.params.selectedBook)
         setBookvisible(true)
-        console.log("/////////////////////////////")
       }
-      // console.log("====================================")
-      // console.log(book)
-      // console.log("====================================")
     },[props.route.params?.selectedBook])
 
     function RenderChapter({chapters}){
-        console.log("============= chatper for render =============")
-        console.log(chapters)
-        console.log("==============================================")
         return(
                     <View style={styles.chapterlist}>
                       {chapters.map((chapter,key) => {
                         return(
                           <View key={key} style={{flex:1,flexDirection:'row',alignItems: 'center',justifyContent: 'space-between',}}>
-    
                               <Text style={styles.textStyle}>
                                 {chapter.title}
                               </Text>
@@ -103,9 +67,6 @@ const Chapter = (props) => {
       }
     const deletechapter = (key) => {
         setChapters(chapters.filter((f,idx) => idx !== key))
-        //console.log("-------------- 삭제되고 남은 챕터들 --------------")
-        //console.log(JSON.stringify(chapters))
-        //console.log("------------------------------------------------")
     }
     
     const goToChapterSearch = async() => {
@@ -116,17 +77,11 @@ const Chapter = (props) => {
       else {
         console.log('챕터가져오기 수행!!! : '+ book.title)
         const query = {title: book.title}
-        getchapter({ book: query}).then(res => {
-            console.log("============ response ===========")
-            console.log(res.data.chapters)
-            console.log("=================================")
+        getchapter({ book: query }).then(res => {
             res.data.chapters.map((chapter)=> {
                 chapter.weight = 1
             })
             setChapters(res.data.chapters)
-            console.log('============ chapters ============')
-            console.log(chapters)
-            console.log('==================================')
         }).catch((e) => {
             console.log(e)
         }
@@ -135,52 +90,33 @@ const Chapter = (props) => {
       }
     }
 
-    const sendChapterWeight = () => {
-      console.log(chapters)
-      //const formData = new FormData();
-      postoptions(
-        {
-          "option": {
-            "options": chapters,
-          }
-        }
-      ).then(res => {
-        console.log(res)
-        props.navigation.navigate({name: 'MakeSchedule',params: {projectId:props.route.params.projectId}})
-      }).catch(e => console.log(e))
-      //formData.append('auth[images_attributes][0][image]', {uri: imageinfo.uri, name: imageinfo.fileName, type: imageinfo.type});
-    }
     const completeCreateProject = () => {
-      
       props.navigation.popToTop()
-      
     }
+
     const getPreview = () => {
-       console.log("미리보기")
-       if (chapters[0] ===undefined){
-         alert("[2. 챕터별 가중치 설정(최소 1 이상)] 을 먼저 해주세요!")
-        }else {
-          setVisibleconfirm(true)
-          postoptions(
-            {
-              "option": {
-                "options": chapters,
-              }
+      console.log("미리보기")
+      if (chapters[0] ===undefined){
+        alert("[2. 챕터별 가중치 설정(최소 1 이상)] 을 먼저 해주세요!")
+      }else {
+        setVisibleconfirm(true)
+        postoptions(
+          {
+            "option": {
+              "options": chapters,
             }
-          ).then(res => {
-            console.log(res)
-            createschedule(props.route.params.projectId,{rest: rest}).then(res => {
-              setSchedule(()=> res.data.options)
-              setModalVisible(true)
-            }).catch(e => {
-                console.log(e.response)
-            })
-            //props.navigation.navigate({name: 'MakeSchedule',params: {projectId:props.route.params.projectId}})
-          }).catch(e => console.log(e))
-          // completeCreateProject()
-        }
-        
+          }
+        ).then(() => {
+          createschedule(props.route.params.projectId,{rest: rest}).then(res => {
+            setSchedule(()=> res.data.options)
+            setModalVisible(true)
+          }).catch(e => {
+              console.log(e.response)
+          })
+        }).catch(e => console.log(e))
+      }
     }
+
     return (
         <ScrollView >
             <View>
@@ -198,38 +134,22 @@ const Chapter = (props) => {
                 </View>
                 <View style={styles.FormStyle}>
                     <Text style={styles.subtitle}>
-                    2. 챕터별 가중치 설정 (최소 1 이상)
-                        <TouchableOpacity onPress={() => {
-                          Alert.alert("챕터별 가중치란?","프로젝트 일정을 생성함에 있어 각 챕터별 학습기간을 정하는 데 필요한 값입니다. \n\n※프로젝트에 불필요하다 생각되는 챕터는 '챕터 삭제' 버튼을 눌러 제거해주세요.\n※가중치 값이 높을 수록 더 많은 일수가 챕터에 할당됩니다.\n※균형있는 일정 생성을 위한 권장 가중치 범위는 1 ~ 10 입니다. \n※필요에 따라 1이상의 이 범위를 벗어난 값 혹은 소수점이 포함된 값으로 가중치 설정이 가능합니다.\n\n예시)\n프로젝트 기간 : 30일 \n챕터1 가중치 : 3 \n챕터2 가중치 : 7 \n해당 경우 챕터1은 9일, 챕터2는 21일간의 일정이 분배됩니다. ",
-                            )
-                        }}>
-                          <View style={{marginHorizontal: 5}}>
-                            <Icon name="comment-question-outline" color="red" size={20}/>
-                          </View>
-                        </TouchableOpacity>
+                      2. 챕터별 가중치 설정 (최소 1 이상)
+                      <RenderHelp messagetype={HelpMessage.weight}/>
                     </Text>
                     <Button onPress={goToChapterSearch}>챕터 불러오기</Button>
                     <RenderChapter chapters={chapters}/>
-                    {/* <Button onPress={sendChapterWeight}>챕터 가중치 설정하기</Button> */}
                 </View>
                 <View style={styles.FormStyle}>
-                    <Text style={styles.subtitle}>3. 일정 미리보기
-                        <TouchableOpacity onPress={() => {
-                          Alert.alert("일정 미리보기란?","설정된 옵션을 기반으로 생성된 일정을 미리 보여줍니다. 일정을 확인하신 후 4. '일정확정하기' 버튼을 통해 일정을 확정해주세요. \n\n※프로젝트간 휴식을 부여하시려면 '일정 미리보기' 버튼 상단의 체크박스를 체크해주세요.\n\n예시)\n프로젝트 기간 : 50일 \n프로젝트간 휴식 적용시 최대 휴식일 : 10일 \n챕터의 숫자가 최대 휴식일보다 작을 경우 챕터 종료 후 휴식1일이 부여됩니다.",
-                            )
-                        }}>
-                          <View style={{marginHorizontal: 5}}>
-                            <Icon name="comment-question-outline" color="red" size={20}/>
-                          </View>
-                        </TouchableOpacity>
+                    <Text style={styles.subtitle}>
+                      3. 일정 미리보기
+                      <RenderHelp messagetype={HelpMessage.preview}/>
                     </Text>
                     <View style={{flex:1,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
                       <Text style={{fontSize:16,fontWeight:'bold'}}>프로젝트간 휴식 부여</Text>
-                      
-                      {toggleCheckBox
-                      ?<Text style={{margin:3,}}>[true]</Text>
-                      :<Text style={{margin:3,}}>[false]</Text>}
-
+                        {toggleCheckBox
+                        ?<Text style={{margin:3,}}>[true]</Text>
+                        :<Text style={{margin:3,}}>[false]</Text>}
                       <CheckBox
                           disabled={false}
                           value={toggleCheckBox}

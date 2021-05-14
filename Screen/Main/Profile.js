@@ -132,9 +132,6 @@ const Profile = (props) => {
   const goToCreateProject = () => {
     console.log("프로젝트 생성하러가기");
     props.navigation.navigate('ProjectForm');
-    // props.navigation.navigate('Chapter');
-    //props.navigation.navigate('Book');
-    //props.navigation.navigate('MakeSchedule');
   }
   const goToAuth = () => {
     console.log("인증하러 하러가기");

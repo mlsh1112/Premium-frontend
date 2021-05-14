@@ -15,10 +15,6 @@ const Book = (props) => {
     const [title,setTitle] = useState('');
     const [booklist,setBooklist] = useState([]);
     const [bookid,setBookid] = useState();
-   // var bookid
-    // console.log("=================== project id =================")
-    // console.log(props.route.params.projectId)
-    // console.log("================================================")
     const requestBookSearch = () => {
         console.log("request book search")
         console.log(title)
@@ -49,8 +45,6 @@ const Book = (props) => {
             "image": book.thumbnail,
             "url": book.url,
         }).then(async(res) => {
-            console.log("+++++++++++++++++++++++++++++")
-            console.log(res.data)
             await setBookid(res.data.id)
             updateproject(props.route.params.projectId,
                 {
@@ -58,29 +52,14 @@ const Book = (props) => {
                         "book_id": res.data.id,
                     }
                 }
-            ).then(res => {
-                console.log("◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆")
-                console.log(res)
-                console.log("◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆")
+            ).then(() => {
                 props.navigation.navigate({name: 'Chapter',params: {selectedBook: book,projectId:props.route.params.projectId}})
             }).catch(e => {
                 console.log(e)
             })
-            console.log(res.data.id)
-            console.log("+++++++++++++++++++++++++++++")
-            console.log('go back to chapter screen')
-            // props.navigation.navigate({name: 'Chapter',params: {selectedBook: book}})
         }).catch((e) => {
             console.log(e)
-            // if(e.response.status === 401){
-                // console.error(e.response.status)
-            // }else {
-                // console.error(e.response.status)
-            // }
         })
-
-        console.log(props.route.params.projectId)
-       
     }
     function RenderBook({booklist}){
         return(
