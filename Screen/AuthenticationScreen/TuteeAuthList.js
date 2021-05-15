@@ -6,7 +6,10 @@ import colors from '../../src/colors'
 
 
 const ProjectAuthCard = ({navigation,project}) => {
-     
+     useEffect(()=>{
+         console.log("여긴 카드")
+         console.log({project})
+     })
     return(
         <View style={{width:350,margin:10,backgroundColor:colors.subcolor, borderRadius:10}}>
         <TouchableOpacity onPress={()=>{navigation('TuteeAuthdetail',{project})}}>

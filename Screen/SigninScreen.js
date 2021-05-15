@@ -49,18 +49,18 @@ const Signin = (props) => {
      });
      const onLoinSuccess=(res)=>{
       let decode_token=jwt_decode(res.data.token)
-      let decode_token1= Number(decode_token.exp)
-      let new_time=new Date().getTime()/1000;
-      new_time=Math.ceil(new_time)
+      let decode_token_ToNumber= Number(decode_token.exp)
+      let now_time=new Date().getTime()/1000;
+      now_time=Math.ceil(now_time)
       setToken(res.data.token);
       setType(res.data.type);
       setStatus(res.data.status);
       setName(res.data.name)
       setUser(res.data)
-      setTIMEout(decode_token1,new_time)
+      setTIMEout(decode_token_ToNumber,now_time)
      }
-     const setTIMEout =(decode_token1,new_time)=>{
-      setTimeout(onSilentRefresh,((decode_token1-new_time)-30)*1000)
+     const setTIMEout =(decode_token_ToNumber,now_time)=>{
+      setTimeout(onSilentRefresh,((decode_token_ToNumber-now_time)-120)*1000)
      }
      const onSilentRefresh =()=>{
        refresh().then(
@@ -68,10 +68,10 @@ const Signin = (props) => {
           await AsyncStorage.removeItem('token');
             setToken(res.data.token);
             let decode_token=jwt_decode(res.data.token)
-            let decode_token1= Number(decode_token.exp)
-            let new_time=new Date().getTime()/1000;
-            new_time=Math.ceil(new_time)
-            setTIMEout(decode_token1,new_time)
+            let decode_token_ToNumber= Number(decode_token.exp)
+            let now_time=new Date().getTime()/1000;
+            now_time=Math.ceil(now_time)
+            setTIMEout(decode_token_ToNumber,now_time)
           }
        )
        .catch(async(error)=>{

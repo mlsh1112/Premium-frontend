@@ -5,9 +5,12 @@ import colors from '../../src/colors'
 
 const ProjectAuthCard = ({navigation,project}) => {
     
+    useEffect(()=>{
+        console.log(navigation)
+    })
     return(
         <View style={{width:350,margin:10,backgroundColor:colors.subcolor, borderRadius:10}}>
-        <TouchableOpacity onPress={()=>{navigation('TuteeAuthdetail',{project})}}>
+        <TouchableOpacity onPress={()=>{navigation('TuteeAuthdetail',project)}}>
                 <View style={{margin:10}}>
                 <Text style={styles.titleStyle}>{project.title}</Text>
                 <Text style={styles.subStyle}>고등 수학 / 수학</Text>

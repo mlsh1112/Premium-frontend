@@ -16,9 +16,10 @@ import icon from '../assets/icon2.png'
 
 const Onboarding = (props)=>  {
 
-        const setTIMEout =(decode_token1,new_time)=>{
-        setTimeout(onSilentRefresh,((decode_token1-new_time)-30)*1000)
+        const Timer_set =(decode_token_ToNumber,now_time)=>{
+        setTimeout(onSilentRefresh,((decode_token_ToNumber-now_time)-120)*1000)
        }
+
        const deletokenfortest = async() => {
         try{
            await AsyncStorage.removeItem('token');
@@ -35,10 +36,10 @@ const Onboarding = (props)=>  {
              deletokenfortest()
              setToken(res.data.token);
              let decode_token=jwt_decode(res.data.token)
-             let decode_token1= Number(decode_token.exp)
-             let new_time=new Date().getTime()/1000;
-             new_time=Math.ceil(new_time)
-             setTIMEout(decode_token1,new_time)
+             let decode_token_ToNumber= Number(decode_token.exp)
+             let now_time=new Date().getTime()/1000;
+             now_time=Math.ceil(now_time)
+             Timer_set(decode_token_ToNumber,now_time)
            }
         )
         .catch(async(error)=>{
@@ -49,31 +50,33 @@ const Onboarding = (props)=>  {
           
          })
       }
+
     const CheckUserToken = async(props) => {
         try{
             const item = await AsyncStorage.getItem('token');
             if (item){
                 console.log("token in authloading (in item true) : " + item)
                 let decode_token=jwt_decode(item)
-                let decode_token1= Number(decode_token.exp)
+                let decode_token_ToNumber= Number(decode_token.exp)
                 console.log("decode_token: "+JSON.stringify(decode_token))
-                console.log("decode_token1: "+decode_token1)
+                console.log("decode_token1: "+decode_token_ToNumber)
                 
-                let new_time=new Date().getTime()/1000;
-                console.log('new_time: ',new_time)
+                let now_time=new Date().getTime()/1000;
+                console.log('now_time: ',now_time)
 
-                if(decode_token1-new_time<0){
+                if(decode_token_ToNumber-now_time<0){
                     console.log("여기는 엑세스토큰이 시간이 초과되었을때")
                     onSilentRefresh()
                 }
 
                 else{
                     console.log("여기는 엑세스토큰이 초과안됐을때")
-                    setTIMEout(decode_token1,new_time)
+                    Timer_set(decode_token_ToNumber,now_time)
                 }
                 
             }
         }
+        
         catch (error){
             console.log("토큰체크 실패: " + error.message);
         };
