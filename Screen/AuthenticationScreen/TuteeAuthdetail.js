@@ -11,12 +11,17 @@ import {
   } from 'react-native';
 import Calender from '../../src/components/Calender'
 import colors from '../../src/colors'
-const TuteeAutdetail=({navigation,project})=>{
+const TuteeAutdetail=({navigation,route})=>{
+  const project=route.params.project
+  var startDate=new Date().getTime() - new Date(project.created_at).getTime();
+  var remainDay=Math.floor(startDate / (1000 * 60 * 60 * 24))
+  var pastDay=project.experience_period-remainDay
+  function isTrial(){
 
-  useEffect(()=>{
-    console.log("여긴 TuteeAutdetail")
-  },[])
-  
+    if (project.status==='trial') 
+    return false
+  }
+
   return(
     <ScrollView>
         
@@ -48,7 +53,21 @@ const TuteeAutdetail=({navigation,project})=>{
       </View>
          <Text backgroundColor='' style={styles.item}>dddddddddddddddddddddddddddddddddddddddddddddddddddd</Text>
       <View alignItems='center' style={{paddingTop:30}}>
-      <Button onPress={()=>{navigation.navigate('TuteeAuthentication')}}>인증하기 </Button>
+        {
+          pastDay===0?
+          <View>
+            {
+              project.status==='trial'?
+              <Button onPress={()=>{navigation.navigate('ExperienceAuth',project)}}>프로젝트 신청하기</Button>
+              :
+              <Button onPress={()=>{navigation.navigate('AuthPayBack',project)}}>보증금 환급받기 </Button>
+            }
+          </View>
+          
+          :
+          <Button onPress={()=>{navigation.navigate('TuteeAuthentication')}}>인증하기 </Button>
+
+        }
       </View>
     </View>
     </ScrollView>

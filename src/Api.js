@@ -45,5 +45,4 @@ export const getauth = () => API.get(PORT+"/auths")
 export const getproject = (projectid) => API.get(PORT+`/projects/${projectid}`)
 export const getprojects = ( params ) => API.get(`${PORT}/projects`, { params })
 export const getattendances = () => API.get(PORT+"/attendances")
-
-
+export const createattendances = (projectid) => API.post(PORT+'/attendances',projectid)
