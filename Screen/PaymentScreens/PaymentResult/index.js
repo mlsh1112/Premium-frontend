@@ -6,14 +6,14 @@ import { resultStyles, resultSuccessStyles, resultFailureStyles } from '../style
 
 export default function PaymentResult({ navigation }) {
   const response = navigation.getParam('response');
-  const { imp_success, success, imp_uid, merchant_uid, error_msg } = response;
+  const { imp_success, success, imp_uid, merchant_uid, error_msg, pay_method , pg_type} = response;
   const { wrapper, title, listContainer, list, label, value } = resultStyles;
 
   // [WARNING: 이해를 돕기 위한 것일 뿐, imp_success 또는 success 파라미터로 결제 성공 여부를 장담할 수 없습니다.]
   // 아임포트 서버로 결제내역 조회(GET /payments/${imp_uid})를 통해 그 응답(status)에 따라 결제 성공 여부를 판단하세요.
   const isSuccess = !(imp_success === 'false' || imp_success === false || success === 'false' || success === false);
   const { icon, btn, btnText, btnIcon } = isSuccess ? resultSuccessStyles : resultFailureStyles;
-
+  console.log(navigation.state.params.response)
   return (
     <View style={wrapper}>
       <Icon
@@ -26,6 +26,7 @@ export default function PaymentResult({ navigation }) {
         <ListItem style={list}>
           <Text style={label}>아임포트 번호</Text>
           <Text style={value}>{imp_uid}</Text>
+          <Text style={value}>{pay_method}</Text>
         </ListItem>
         {isSuccess ? (
           <ListItem style={list}>

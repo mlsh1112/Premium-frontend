@@ -86,7 +86,7 @@ export function getUserCode(pg, tierCode, type = 'payment') {
     return 'imp91623210';
   }
   if (type === 'certification') {
-    return 'imp10391932';
+    return 'imp34878366';
   }
 
   switch (pg) {

@@ -11,12 +11,12 @@ export default function Payment({ navigation }) {
   const { pg } = params;
   const data = {
     ...params,
-    app_scheme: 'example',
+    app_scheme: 'firstapp',
   };
 
   return (
     <IMP.Payment
-      userCode={getUserCode(pg, tierCode)}
+      userCode={getUserCode(pg, tierCode, 'certification')}
       //tierCode={tierCode}
       loading={<Loading />}
       data={data}
