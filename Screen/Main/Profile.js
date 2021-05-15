@@ -51,7 +51,9 @@ const EachTabViewsProjects = (props) => {
 }
 
 const Profile = (props) => {
-   
+  
+
+
   const [userinfo,setUserinfo] = useState(new Object())
   const [showscreen,setShowscreen]=useState(false)
   
@@ -155,15 +157,6 @@ const Profile = (props) => {
               <Text style={styles.caption,{color:"red"}}>{userinfo.type}</Text>
             </View>
           </View>
-          <TouchableOpacity style={styles.buttonposition} onPress={handleLogoutPress}>
-              <Text style={styles.buttonstyle}>로그 아웃</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    )}
-    {showscreen && (
-      <View style={styles.userInfoSection}>
-        <View style={{flexDirection: 'row', marginTop: 15}}>
           <TouchableOpacity style={styles.buttonposition} onPress={handleLogoutPress}>
               <Text style={styles.buttonstyle}>로그 아웃</Text>
           </TouchableOpacity>

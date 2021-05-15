@@ -6,6 +6,7 @@ import {  Card} from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const ProjectAuthCard = ({navigation,project}) => {
+    console.log(project)
     return(
         <View style={{marginBottom:4,borderRadius:10}}>
         <Card style={{width:350,margin:10, borderRadius:10,backgroundColor:colors.subcolor}}>

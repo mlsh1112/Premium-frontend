@@ -2,6 +2,8 @@ import axios from 'axios';
 import Qs from 'qs';
 import AsyncStorage from '@react-native-community/async-storage';
 import baseurl from '../config'
+
+
 let headers = {
     headers: {
         'Accept': 'application/json',
@@ -16,9 +18,11 @@ console.log(PORT)
 const API = axios.create(headers);
 API.interceptors.request.use(
     async function (config){
-        const token = await AsyncStorage.getItem('token')
+        const token = await AsyncStorage.getItem('token')      
         config.headers['Authorization'] = token
         console.log(config)
+
+
         config.paramsSerializer = params => {
             return Qs.stringify(params, {
                 arrayFormat: "brackets",
@@ -33,6 +37,7 @@ API.interceptors.request.use(
 )
 //const token = await AsyncStorage.getItem('token')
 export const login = (user) => API.post(PORT+"/login", { user })
+export const refresh =()=>API.post(PORT+"/refresh")
 export const logout = () => API.delete(PORT+"/logout")
 export const signup = (user) => API.post(PORT+"/signup",{ user })
 export const authrequest = (image) => API.post(PORT+"/auths/", image )
