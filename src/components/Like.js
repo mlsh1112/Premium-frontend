@@ -8,26 +8,52 @@ import {
   } from 'react-native';
 import colors from '../colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {createlike, deletelike,islike} from '../Api';
 
 const Like = (props) => {
     const [like,setLike] = useState(false);
-    const [numOfLike,setNumOfLike] = useState(0) //api 요청보내서 받아옴
-
-    useEffect(()=> {
-        //get numoflike
-        //setNumOfLike(res.data.numoflike)
+    const [numOfLike,setNumOfLike] = useState(props.project.tutor.likes_count) //api 요청보내서 받아옴
+    const [likeid,setLikeid] = useState(-1)
+    useEffect(() => {
+        islike(
+            {
+                "like":{
+                    likable_type: 'User',
+                    likable_id: props.project.tutor.id,
+                }
+            }
+        ).then(res => {
+            console.log('좋아요 체크중')
+            if (res.status === 200 ){
+                setLike(true)
+                setLikeid(res.data.id)
+            }
+        }
+        ).catch(e => {
+            if(e.response.status ===404){
+                console.log('좋아요 객체 에러')
+            }
+        })
     },[])
+
     const _toggle = () => {
         if (!like){
             console.log("좋아요 눌림")
             setNumOfLike((prev) => prev + 1)
-            //api 요청 전송
-            //setnumOfLike
+            createlike(
+                {"like":{
+                        likable_type: 'User',
+                        likable_id: props.project.tutor.id,
+                    }
+                }
+            ).then(res => {
+                console.log(res.data)
+                setLikeid(res.data.id)
+            }).catch(e => console.log(e))
         }else {
             setNumOfLike((prev) => prev - 1)
             console.log('좋아요 취소')
-            //api 요청
-            //setnumOfLike
+            deletelike(likeid).then(res => console.log(res)).catch(e => console.log(e))
         }
         setLike((prev) => !prev);
     };
