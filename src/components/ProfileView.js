@@ -1,12 +1,23 @@
-import React, { Component } from 'react';
+import React, { useState,useEffect } from 'react';
 import {  View, Image,Text,TouchableOpacity,ScrollView,Alert } from 'react-native';
 import {  Card,IconButton,Colors } from 'react-native-paper';
 import cat from '../../assets/cat2.png'
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from '../components'
 import ProjectMini from './ProjectMini'
+import Like from './Like';
+import {getproject} from '../Api'
 
-function ProfileView({ navigation }){
+function ProfileView({ navigation,route }){
+    const project = route.params.latestpr
+    const [latestpr,setLatestpr]=useState()
+    useEffect(()=>{
+        getproject(project.id).then(res => {
+            setLatestpr(res.data)
+        }).catch(e => {
+            console.log(e)
+        });    
+    },[])
     return(
         <View>
             <Card style={styles.cardStyle}>
@@ -14,8 +25,8 @@ function ProfileView({ navigation }){
                     <View style={styles.profilePosition}> 
                         <Image source={cat} style={styles.imgStyle}></Image>
                         <View style={{flexDirection:'row',marginBottom:10}}>
-                            <Text style={styles.nameStyle1}>튜터  </Text>
-                            <Text style={styles.nameStyle2}> 이모씨</Text>
+                            <Text style={styles.nameStyle1}>{project.tutor.type}  </Text>
+                            <Text style={styles.nameStyle2}> {project.tutor.name}</Text>
                         </View>
 
                         <View style={{flexDirection:'row',marginBottom:10}}>
@@ -41,7 +52,7 @@ function ProfileView({ navigation }){
                             <Text style={styles.detailtext2}>Followers</Text>
                         </View>
                     </View>
-                    <Button style={styles.buttonStyle}>Following</Button>
+                    {latestpr !== undefined ? <Like project={latestpr}/> : <></>}
                 </View>
 
             <View style={styles.bottomPosition}></View>    
@@ -52,7 +63,7 @@ function ProfileView({ navigation }){
                 horizontal={true}
                 showsHorizontalScrollIndicator = {true}
                 style={styles.projectScroll}>
-                    <ProjectMini navigation={navigation}></ProjectMini>
+                    {latestpr !==undefined ? <ProjectMini navigation={navigation} project={latestpr}></ProjectMini> : <></>}
             </ScrollView>
             </View>
         </Card>
