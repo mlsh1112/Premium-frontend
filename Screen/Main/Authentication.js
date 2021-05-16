@@ -18,6 +18,7 @@ const Authentication = ({navigation}) => {
     [userType, setuserType] = useState('');
 
     useEffect(() => {
+     
     async function getData(){
         const type = await AsyncStorage.getItem('type');
         console.log(type)

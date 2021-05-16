@@ -3,6 +3,7 @@ import { View,Text,TouchableOpacity,ImageBackground } from 'react-native';
 import { getproject } from '../../src/Api';
 import colors from '../../src/colors'
 import AsyncStorage from '@react-native-community/async-storage';
+
 const callApi = async(userID) =>{
     getproject(userID)
     .then(res=>console.log(JSON.parse(res)))
@@ -11,6 +12,7 @@ const callApi = async(userID) =>{
 }
 
 const ProjectAuthCard = ({navigation,project}) => {
+    console.log(project)
     return(
         <View style={{width:350,margin:10,backgroundColor:colors.subcolor, borderRadius:10}}>
         <TouchableOpacity onPress={()=>{navigation('TuteeAuthdetail',{project})}}>

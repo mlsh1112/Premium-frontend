@@ -6,6 +6,8 @@
  * @flow strict-local
  */
 
+import AsyncStorage from '@react-native-community/async-storage';
+import jwt_decode from "jwt-decode"
 import React from 'react';
 import {Button} from '../src/components'
 import {
@@ -18,6 +20,8 @@ import {login} from '../src/Api';
 import {setToken,setType,setStatus,setName,setUser} from '../src/Asyncstorage';
 import { Formik } from "formik";
 import * as Yup from "yup";
+import {refresh,logout} from '../src/Api';
+import jwtDecode from "jwt-decode";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -26,24 +30,68 @@ const validationSchema = Yup.object().shape({
   password: Yup.string()
     .required("비밀번호를 입력해주세요")
 });
+
 const Signin = (props) => {
+ 
   const handleSubmitPress = (values) =>{
      login({
        "email":values.email,
        "password":values.password
-     }).then(res => {
-       setToken(res.data.token);
-       setType(res.data.type);
-       setStatus(res.data.status);
-       setName(res.data.name)
-       setUser(res.data)
+     }).then(res => {  
+        onLoinSuccess(res)                         
      }).then(() => {
        props.navigation.replace('AuthLoading');
        console.log("Go to Home from sign in ");
+       
      }).catch(error => {
        alert("이메일 혹은 패스워드를 확인해주세요.")
        console.log(error);
      });
+     const onLoinSuccess=(res)=>{
+      let decode_token=jwt_decode(res.data.token)
+      let decode_token_ToNumber= Number(decode_token.exp)
+      let now_time=new Date().getTime()/1000;
+      now_time=Math.ceil(now_time)
+      setToken(res.data.token);
+      setType(res.data.type);
+      setStatus(res.data.status);
+      setName(res.data.name)
+      setUser(res.data)
+      setTIMEout(decode_token_ToNumber,now_time)
+     }
+     const setTIMEout =(decode_token_ToNumber,now_time)=>{
+      setTimeout(onSilentRefresh,((decode_token_ToNumber-now_time)-120)*1000)
+     }
+     const onSilentRefresh =()=>{
+       refresh().then(
+        async (res)=>{
+          await AsyncStorage.removeItem('token');
+            setToken(res.data.token);
+            let decode_token=jwt_decode(res.data.token)
+            let decode_token_ToNumber= Number(decode_token.exp)
+            let now_time=new Date().getTime()/1000;
+            now_time=Math.ceil(now_time)
+            setTIMEout(decode_token_ToNumber,now_time)
+          }
+       )
+       .catch(async(error)=>{
+          alert("로그인 만료시간이 다되었습니다. 다시 로그인해주세요");
+          console.log(error)  
+          await AsyncStorage.removeItem('token');
+          props.navigation.replace('Onboarding');
+        
+       })
+     }
+     const deletokenfortest = async() => {
+       try{
+          await AsyncStorage.removeItem('token');
+          return true;
+      }
+      catch (error){
+          console.log("AsyncStorage remove Error: " + error.message);
+          return false;
+        };
+  }
   }
    
   return (

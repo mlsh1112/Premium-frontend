@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import {Button} from '../../src/components/Button'
 import {
     StyleSheet,
@@ -11,9 +11,17 @@ import {
   } from 'react-native';
 import Calender from '../../src/components/Calender'
 import colors from '../../src/colors'
-const TuteeAutdetail=({navigation,project})=>{
+const TuteeAutdetail=({navigation,route})=>{
+  const project=route.params.project
+  var startDate=new Date().getTime() - new Date(project.created_at).getTime();
+  var remainDay=Math.floor(startDate / (1000 * 60 * 60 * 24))
+  var pastDay=project.experience_period-remainDay
+  function isTrial(){
 
-  
+    if (project.status==='trial') 
+    return false
+  }
+
   return(
     <ScrollView>
         
@@ -43,14 +51,23 @@ const TuteeAutdetail=({navigation,project})=>{
       <View style={{borderColor:'#9FA5C0',
          borderBottomWidth:1,width:'100%',paddingTop:10}}/>
       </View>
-      <View style={styles.box}>
-
-        <View style={styles.box1}>
-          <Text style={styles.plantext}>dddddddddddddddddddddddddddddddddddddddddddddddddddd</Text>
-        </View>
-      </View>
+         <Text backgroundColor='' style={styles.item}>dddddddddddddddddddddddddddddddddddddddddddddddddddd</Text>
       <View alignItems='center' style={{paddingTop:30}}>
-      <Button onPress={()=>{navigation.navigate('TuteeAuthentication')}}>인증하기 </Button>
+        {
+          pastDay===0?
+          <View>
+            {
+              project.status==='trial'?
+              <Button onPress={()=>{navigation.navigate('ExperienceAuth',project)}}>프로젝트 신청하기</Button>
+              :
+              <Button onPress={()=>{navigation.navigate('AuthPayBack',project)}}>보증금 환급받기 </Button>
+            }
+          </View>
+          
+          :
+          <Button onPress={()=>{navigation.navigate('TuteeAuthentication')}}>인증하기 </Button>
+
+        }
       </View>
     </View>
     </ScrollView>
@@ -64,7 +81,19 @@ const styles= {
     color:'black',
     textAlign:'center',
   },
-
+  item:{
+    padding:16,
+    marginTop:16,
+    borderColor:'#bbb',
+    borderWidth:3,
+    backgroundColor:'#e2f7e8',
+    borderStyle:'dashed',
+    borderRadius:20,
+    fontSize:15,
+    fontWeight:'bold',
+    color:'black',
+    
+  },
   box:{
     alignItems: 'center',
     justifycontent:'center',

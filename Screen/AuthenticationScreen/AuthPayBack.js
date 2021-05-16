@@ -37,8 +37,8 @@ const AuthPay=({navigation,route})=>{
             <ImageBackground source={cat} style={styles.imgStyle} opacity={0.3} blurRadius={5}>
                 <View style={{margin:10}}>
                     <Text style={styles.titleStyle}>{route.params.project.title}</Text>
-                    <Text style={styles.subStyle}>{route.params.project.info}</Text>
-                    <Text style={styles.dayStyle}>60 DAYS</Text>
+                    <Text style={styles.subStyle}>{route.params.project.description}</Text>
+                    <Text style={styles.dayStyle}>{route.params.project.experience_period} DAYS</Text>
                 </View>
             </ImageBackground>
             <View style={styles.textPosition}>

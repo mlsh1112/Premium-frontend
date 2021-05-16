@@ -2,6 +2,8 @@ import axios from 'axios';
 import Qs from 'qs';
 import AsyncStorage from '@react-native-community/async-storage';
 import baseurl from '../config'
+
+
 let headers = {
     headers: {
         'Accept': 'application/json',
@@ -21,9 +23,11 @@ console.log(PORT)
 const API = axios.create(headers);
 API.interceptors.request.use(
     async function (config){
-        const token = await AsyncStorage.getItem('token')
+        const token = await AsyncStorage.getItem('token')      
         config.headers['Authorization'] = token
         console.log(config)
+
+
         config.paramsSerializer = params => {
             return Qs.stringify(params, {
                 arrayFormat: "brackets",
@@ -38,6 +42,7 @@ API.interceptors.request.use(
 )
 
 export const login = (user) => API.post(PORT+"/login", { user })
+export const refresh =()=>API.post(PORT+"/refresh")
 export const logout = () => API.delete(PORT+"/logout")
 export const signup = (user) => API.post(PORT+"/signup",{ user })
 export const authrequest = (image) => API.post(PORT+"/auths/", image )
@@ -53,3 +58,4 @@ export const createproject = (project) => API.post(PORT+"/projects",{ project })
 export const getcategories = () => API.get(PORT+"/categories")
 export const updateproject = (projectid,{project}) => API.put(PORT+`/projects/${projectid}`,{project})
 export const createschedule = (id, params) => API.get(PORT+`/projects/${id}/create_schedule`, { params })
+export const createattendances = (projectid) => API.post(PORT+'/attendances',projectid)
