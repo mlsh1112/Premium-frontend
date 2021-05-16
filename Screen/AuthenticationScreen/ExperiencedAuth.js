@@ -1,4 +1,4 @@
-import React, { Component,useState,Animated } from 'react';
+import React, { Component,useState,useEffect } from 'react';
 import {
     View,
     Text,
@@ -6,6 +6,7 @@ import {
     ImageBackground,
     Alert
 }from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import colors from '../../src/colors'
 import {Button} from '../../src/components'
 import cat from '../../assets/cat2.png'
@@ -19,12 +20,14 @@ const ExperienceAuth=({navigation,route})=>{
         {id:0,title:'Auhrate',rate:310*(rate[0].rate/100)},
         {id:1,title:'Progressrate',rate:310*(rate[1].rate/100)}
     ]);
+    const [tutee,setTutee]=useState();
     function handleSubmit(){
-        const deposit=route.params.project.deposit
-        console.log('프로젝트 신청',route.params.project.deposit)
-        navigation.navigate('PaymentPage',{deposit})
+        const project=route.params
+        console.log('프로젝트 신청',route.params)
+        navigation.navigate('PaymentPage',{project})
     }
-    
+    console.log(route.params)
+
     return(
     <View style={styles.container}>
         <View style={{borderColor:'#9FA5C0',

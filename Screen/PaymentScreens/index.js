@@ -24,7 +24,6 @@ const noHeader = {
 const hideHeader = {
   headerShown: false,
 };
-
 const AppNavigator = createStackNavigator({
   Home: {
     screen: Home,
@@ -60,11 +59,12 @@ const AppNavigator = createStackNavigator({
 
 const AppContainer = createAppContainer(AppNavigator);
 
+
 export default function App({navigation,route}) {
   const [isHeaderShow, setIsHeaderShow] = useState(false);
   const [headerTitle, setHeaderTitle] = useState('');
   const [currentScreen, setCurrentScreen] = useState('Home');
-  const deposit=route.params.deposit
+
   
   useEffect(() => {
     let headerTitle = '';
@@ -83,6 +83,7 @@ export default function App({navigation,route}) {
 
   function handleNavigation(prevState, newState) {
     const { routes } = newState;
+    routes[routes.length - 1].params={project:route.params.project}
     const { routeName } = routes[routes.length - 1];
     if (currentScreen !== routeName) {
       setCurrentScreen(routeName);
@@ -95,7 +96,9 @@ export default function App({navigation,route}) {
         ref={navigatorRef => {
           NavigationService.setTopLevelNavigator(navigatorRef);
         }}
+        project={route.params.project}
         onNavigationStateChange={handleNavigation}
+        
       />
     </Container>
   );

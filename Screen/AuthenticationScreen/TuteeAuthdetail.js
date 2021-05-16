@@ -19,7 +19,6 @@ const TuteeAutdetail=({navigation,route})=>{
   var pastDay=0
   
   console.log(remainDay,pastDay)
-  console.log(project)
   return(
     <ScrollView>
         

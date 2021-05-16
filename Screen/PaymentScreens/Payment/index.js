@@ -13,14 +13,14 @@ export default function Payment({ navigation }) {
     ...params,
     app_scheme: 'firstapp',
   };
-
+  console.log(data)
   return (
     <IMP.Payment
       userCode={getUserCode(pg, tierCode, 'certification')}
       //tierCode={tierCode}
       loading={<Loading />}
       data={data}
-      callback={response => navigation.replace('PaymentResult', { response })}
+      callback={response => navigation.replace('PaymentResult', { response ,data})}
     />
   );   
 }

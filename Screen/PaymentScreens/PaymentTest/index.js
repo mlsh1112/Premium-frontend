@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Content, Form, Item, Label, Input, Button, Text, Switch } from 'native-base';
 
 import Picker from '../Picker';
@@ -6,7 +6,7 @@ import { formStyles } from '../styles';
 import { PGS, TIER_CODES } from '../constants';
 import { getQuotas, getMethods } from '../utils';
 
-export default function PaymentTest({ navigation }) {
+export default function PaymentTest({ navigation,route }) {
   const { wrapper, form, item, label, input, radio, btn, btnText } = formStyles;
   const [pg, setPg] = useState('html5_inicis');
   const [tierCode, setTierCode] = useState(undefined);
@@ -14,7 +14,7 @@ export default function PaymentTest({ navigation }) {
   const [cardQuota, setCardQuota] = useState(0);
   const [merchantUid, setMerchantUid] = useState(`mid_${new Date().getTime()}`);
   const [name, setName] = useState('따숲');
-  const [amount, setAmount] = useState('1000');
+  const [amount, setAmount] = useState();
   const [buyerName, setBuyerName] = useState('홍길동');
   const [buyerTel, setBuyerTel] = useState('01012341234');
   const [buyerEmail, setBuyerEmail] = useState('example@example.com');
@@ -22,18 +22,25 @@ export default function PaymentTest({ navigation }) {
   const [bizNum, setBizNum] = useState('');
   const [escrow, setEscrow] = useState(false);
   const [digital, setDigital] = useState(false);
-
+  useEffect(()=>{
+    setAmount(navigation.state.params.project.project.deposit)
+    setBuyerName(navigation.state.params.project.tutee.name)
+  })
+  //console.log(navigation.state.params.project.project)
   onPress = () => {
+    console.log("dddd",navigation.state.params.project)
     const params = {
       pg,
       pay_method: method,
       merchant_uid: merchantUid,
       name,
-      amount,
+      amount:navigation.state.params.project.project.deposit,
       buyer_name: buyerName,
       buyer_tel: buyerTel,
       buyer_email: buyerEmail,
       escrow,
+      tuteeID:navigation.state.params.project.tutee.id,
+      projID:navigation.state.params.project.project.id
     };
     
     // 신용카드의 경우, 할부기한 추가
@@ -80,11 +87,11 @@ export default function PaymentTest({ navigation }) {
         payReferrer: 'NAVER_BOOK',
         count: 10,
       }];
+      console.log(params)
     }
 
     navigation.navigate('Payment', { params, tierCode });
   };
-
   return (
     <Content style={wrapper}>
       <Form style={form}>
@@ -180,12 +187,7 @@ export default function PaymentTest({ navigation }) {
         </Item>
         <Item inlineLabel style={item}>
           <Label style={label}>결제금액</Label>
-          <Input
-            style={input}
-            value={amount}
-            keyboardType="number-pad"
-            onChangeText={value => setAmount(value)}
-          />
+          <Text>{amount}</Text>
         </Item>
         <Item inlineLabel style={item}>
           <Label style={label}>주문번호</Label>

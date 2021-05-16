@@ -6,6 +6,7 @@ import { resultStyles, resultSuccessStyles, resultFailureStyles } from '../style
 
 export default function PaymentResult({ navigation }) {
   const response = navigation.getParam('response');
+  const data = navigation.getParam('data')
   const { imp_success, success, imp_uid, merchant_uid, error_msg, pay_method , pg_type} = response;
   const { wrapper, title, listContainer, list, label, value } = resultStyles;
 
@@ -13,8 +14,11 @@ export default function PaymentResult({ navigation }) {
   // 아임포트 서버로 결제내역 조회(GET /payments/${imp_uid})를 통해 그 응답(status)에 따라 결제 성공 여부를 판단하세요.
   const isSuccess = !(imp_success === 'false' || imp_success === false || success === 'false' || success === false);
   const { icon, btn, btnText, btnIcon } = isSuccess ? resultSuccessStyles : resultFailureStyles;
-  console.log(navigation.state.params.response)
-  
+  console.log(response)
+  console.log(data)
+
+  //imp_uid/merchant_uid
+  //tutee id/deposit/proj id
   const paysuccess=()=>{
     console.log('프로젝트 신청')
     navigation.navigate('Home')
