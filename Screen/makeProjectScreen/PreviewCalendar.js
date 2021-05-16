@@ -57,13 +57,13 @@ function PreviewCalendar(props){
         </View>
       );
   } 
-  
+
   return(
       <View style={{ paddingVertical:20, flex: 1,width:'100%',alignItems:'center' }}>
       <Agenda
         selected={moment(props.schedule[0].start_at).format("YYYY-MM-DD")}
         items={agenda}
-        onDayPress={markselectedDate}
+        onDayPress={(day)=>console.log(day)}
         markedDates={markedDates}
         markingType={'period'}
         renderItem={showchapter}
