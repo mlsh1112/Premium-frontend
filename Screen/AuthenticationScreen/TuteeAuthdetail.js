@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import {Button} from '../../src/components/Button'
 import {
     StyleSheet,
@@ -51,12 +51,7 @@ const TuteeAutdetail=({navigation,route})=>{
       <View style={{borderColor:'#9FA5C0',
          borderBottomWidth:1,width:'100%',paddingTop:10}}/>
       </View>
-      <View style={styles.box}>
-
-        <View style={styles.box1}>
-          <Text style={styles.plantext}>dddddddddddddddddddddddddddddddddddddddddddddddddddd</Text>
-        </View>
-      </View>
+         <Text backgroundColor='' style={styles.item}>dddddddddddddddddddddddddddddddddddddddddddddddddddd</Text>
       <View alignItems='center' style={{paddingTop:30}}>
         {
           pastDay===0?
@@ -86,7 +81,19 @@ const styles= {
     color:'black',
     textAlign:'center',
   },
-
+  item:{
+    padding:16,
+    marginTop:16,
+    borderColor:'#bbb',
+    borderWidth:3,
+    backgroundColor:'#e2f7e8',
+    borderStyle:'dashed',
+    borderRadius:20,
+    fontSize:15,
+    fontWeight:'bold',
+    color:'black',
+    
+  },
   box:{
     alignItems: 'center',
     justifycontent:'center',

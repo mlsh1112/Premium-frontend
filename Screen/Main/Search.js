@@ -1,10 +1,14 @@
 import React, { Component, useState } from 'react';
 import { CircularCard } from "react-native-circular-card-view";
+
+import cat from '../../assets/cat2.png'
 import { useEffect } from 'react';
 import {
+    Image,
     Text,
     View,
     Body,
+    ImageBackground,
     Button,
     StyleSheet,
     TextInput,
@@ -73,20 +77,59 @@ function Search({navigation}) {
             />
             
         </View>
+      <View style={styles.Searchlist}>
         <FlatList
-          style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':'white'}}
-          data={reqData}
-          renderItem={({item})=>
-         <TouchableOpacity onPress={()=>{navigation.navigate('ProjectDetail',{project:item})}}>
+           style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':'white'}}
+           data={reqData}
+           renderItem={({item})=>
+          <TouchableOpacity style={styles.Serach}onPress={()=>{
+             console.log(item)
+             navigation.navigate('ProjectDetail',{project:item})}}>
 
-            <Text style={{padding:20,fontSize:15}}>{item.title}</Text>
-          
-          </TouchableOpacity>
-          } 
-        />
+              <ImageBackground style={styles.thumbnail} source={cat}></ImageBackground>
+              <View>
+                <Text style={styles.Serachtitle}>제목 : {item.title}</Text>
+                <Text style={styles.Serachtitle}>프로젝트 설명 :{item.description} {item.title}</Text>
+                <Text style={styles.Serachtitle}>체험 일수 : {item.experience_period}</Text>
+                
+              </View>
+            </TouchableOpacity>
+            } 
+          />
+        </View>
     </View>
   )
 
 }
+
+const styles = StyleSheet.create({
+  Searchlist: {
+      flex:1,
+      padding: 10,
+  },
+  
+  Serach: {
+      margin: 5,
+      padding: 15,
+      borderRadius: 15,
+      elevation: 20,
+      borderRadius: 15,
+  },
+  thumbnail: {
+      borderRadius: 13,
+      width: 160,
+      height: 200,
+  },  
+  Serachtitle: {
+      fontWeight: 'bold',
+      fontSize: 16,
+      paddingHorizontal: 15,
+      paddingVertical: 2,
+  },
+  author: {
+      paddingHorizontal: 15,
+      paddingVertical: 4,
+  },
+});
 
 export default Search;
