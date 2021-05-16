@@ -12,6 +12,7 @@ let headers = {
     }
 }
 const PORT = baseurl.port
+// const PORT = baseurl.sungmin
 
 console.log(PORT)
 
@@ -46,3 +47,6 @@ export const getproject = (projectid) => API.get(PORT+`/projects/${projectid}`)
 export const getprojects = ( params ) => API.get(`${PORT}/projects`, { params })
 export const getattendances = () => API.get(PORT+"/attendances")
 export const createattendances = (projectid) => API.post(PORT+'/attendances',projectid)
+export const createlike = ( params ) => API.post(PORT + '/likes', params)
+export const deletelike = (id) => API.delete(PORT + `/likes/${id}`)
+export const islike = ( params ) => API.get(PORT+`/likes/is_like`, {params})
