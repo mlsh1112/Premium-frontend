@@ -14,10 +14,11 @@ import {Button} from '../../src/components'
 import { gettutees } from '../../src/Api';
 
 function TuteeListComponent({tutee,navigation}){
+    const tuteeinfo=tutee.tutee
     return(
         <View style={styles.tuteeBarStyle}>
             <Icons name='face' size={30} style={{marginLeft:'8%'}} ></Icons>
-            <Text style={styles.tuteenameStyle}>{tutee.name}</Text>
+            <Text style={styles.tuteenameStyle}>{tuteeinfo.name}</Text>
             <TouchableOpacity style={styles.tuteeBtnPosition} onPress={()=>{navigation.push('TutorAuthCheck',tutee)}}>
                 <View>
                     <Text style={styles.BtntextStyle}>인증 확인</Text>
@@ -28,14 +29,12 @@ function TuteeListComponent({tutee,navigation}){
 }
 
 const TutorAuthentication = ({navigation,route }) => {
-    const [projectlist,setProjectlist] = useState();
     const [tutees,setTutees] = useState();
     const [fin,setFin]=useState(true)
     const [project, setProject]=useState(route.params.project)
     const handleSubmitAuthenticatoin = () => {
         Keyboard.dismiss();
     }
-    console.log(tutees)
 
     useEffect(()=>{
         const callApi= async()=>{
@@ -73,7 +72,7 @@ const TutorAuthentication = ({navigation,route }) => {
 
 
             <View style={{marginRight:'55%', marginBottom:'5%'}}>
-            <Text style={styles.authtuteeStyle}>인증 한 튜티</Text>
+            <Text style={styles.authtuteeStyle}>   오늘 인증 한 튜티</Text>
             </View>
                 {fin ? 
                         <ScrollView style={{marginLeft:'20%', width:'100%'}}>
@@ -90,7 +89,7 @@ const TutorAuthentication = ({navigation,route }) => {
                                 </View>
                                     :
                                 <Text>
-                                        해당 프로젝트에 참여한 튜티가 없습니다.
+                                        
                                 </Text>
                             }
                             
@@ -115,7 +114,6 @@ const TutorAuthentication = ({navigation,route }) => {
 const styles = StyleSheet.create({
     container: {
         flex : 1,
-        width: "95%",
         justifyContent:'center',
         alignItems: 'center',
         margin:'3%',
@@ -154,7 +152,7 @@ const styles = StyleSheet.create({
     tuteeBarStyle:{
         backgroundColor:'#D0DBEA',
         width:'80%',
-        height:'60%',
+        height:'50%',
         marginBottom:'5%',
         alignItems: 'center',
         borderRadius:20,
@@ -165,8 +163,8 @@ const styles = StyleSheet.create({
         fontSize:20,
     },
     tuteeBtnPosition:{
-        marginLeft:'35%',
-        backgroundColor:'#1FCC79',
+        marginLeft:'28%',
+        backgroundColor:colors.maincolor,
         width:'30%',
         height:'60%',
         borderRadius:20,

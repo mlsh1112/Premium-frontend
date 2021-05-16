@@ -20,8 +20,9 @@ const ExperienceAuth=({navigation,route})=>{
         {id:1,title:'Progressrate',rate:310*(rate[1].rate/100)}
     ]);
     function handleSubmit(){
-        console.log('프로젝트 신청')
-        navigation.navigate('PaymentPage')
+        const deposit=route.params.project.deposit
+        console.log('프로젝트 신청',route.params.project.deposit)
+        navigation.navigate('PaymentPage',{deposit})
     }
     
     return(

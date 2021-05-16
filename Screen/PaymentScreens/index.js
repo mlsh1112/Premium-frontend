@@ -22,7 +22,7 @@ const noHeader = {
 };
 
 const hideHeader = {
-  header: null,
+  headerShown: false,
 };
 
 const AppNavigator = createStackNavigator({
@@ -60,18 +60,19 @@ const AppNavigator = createStackNavigator({
 
 const AppContainer = createAppContainer(AppNavigator);
 
-export default function App() {
+export default function App({navigation,route}) {
   const [isHeaderShow, setIsHeaderShow] = useState(false);
   const [headerTitle, setHeaderTitle] = useState('');
   const [currentScreen, setCurrentScreen] = useState('Home');
-
+  const deposit=route.params.deposit
+  
   useEffect(() => {
     let headerTitle = '';
     let isHeaderShow = true;
     if (currentScreen === 'PaymentTest') {
-      headerTitle = '아임포트 결제 테스트';
+      headerTitle = '아임포트 결제';
     } else if (currentScreen === 'CertificationTest') {
-      headerTitle = '아임포트 본인인증 테스트';
+      headerTitle = '아임포트 본인인증';
     } else {
       isHeaderShow = false;
     }

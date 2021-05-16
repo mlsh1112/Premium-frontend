@@ -6,13 +6,10 @@ import {
     ScrollView
 
   } from 'react-native';
-import TuteeAuthentication from '../AuthenticationScreen/TuteeAuthentication'
-import TutorAuthentication from '../AuthenticationScreen/TutorAuthentication'
 import TuteeAuthList from '../AuthenticationScreen/TuteeAuthList'
 import TutorAuthList from '../AuthenticationScreen/TutorAuthList'
 import AsyncStorage from '@react-native-community/async-storage';
 import {getproject} from '../../src/Api'
-import TuteeAutdetail from '../AuthenticationScreen/TuteeAuthdetail';
 
 const Authentication = ({navigation}) => {
     [userType, setuserType] = useState('');

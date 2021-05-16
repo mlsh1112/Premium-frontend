@@ -13,8 +13,8 @@ export default function PaymentTest({ navigation }) {
   const [method, setMethod] = useState('card');
   const [cardQuota, setCardQuota] = useState(0);
   const [merchantUid, setMerchantUid] = useState(`mid_${new Date().getTime()}`);
-  const [name, setName] = useState('아임포트 결제데이터분석');
-  const [amount, setAmount] = useState('39000');
+  const [name, setName] = useState('따숲');
+  const [amount, setAmount] = useState('1000');
   const [buyerName, setBuyerName] = useState('홍길동');
   const [buyerTel, setBuyerTel] = useState('01012341234');
   const [buyerEmail, setBuyerEmail] = useState('example@example.com');

@@ -14,6 +14,12 @@ export default function PaymentResult({ navigation }) {
   const isSuccess = !(imp_success === 'false' || imp_success === false || success === 'false' || success === false);
   const { icon, btn, btnText, btnIcon } = isSuccess ? resultSuccessStyles : resultFailureStyles;
   console.log(navigation.state.params.response)
+  
+  const paysuccess=()=>{
+    console.log('프로젝트 신청')
+    navigation.navigate('Home')
+  }
+  
   return (
     <View style={wrapper}>
       <Icon
@@ -40,15 +46,28 @@ export default function PaymentResult({ navigation }) {
           </ListItem>
         )}
       </List>
-      <Button
-        bordered
-        transparent
-        style={btn}
-        onPress={() => navigation.navigate('Home')}
-      >
-        <Icon name="arrow-back" style={btnIcon} />
-        <Text style={btnText}>돌아가기</Text>
-      </Button>
+      {
+        isSuccess?
+            <Button
+            bordered
+            transparent
+            style={btn}
+            onPress={paysuccess}
+          >
+            <Icon name="arrow-back" style={btnIcon} />
+            <Text style={btnText}>프로젝트 참여</Text>
+          </Button>
+        :
+            <Button
+            bordered
+            transparent
+            style={btn}
+            onPress={() => navigation.navigate('Home')}
+          >
+            <Icon name="arrow-back" style={btnIcon} />
+            <Text style={btnText}>돌아가기</Text>
+          </Button>
+      }
     </View>
   );
 }

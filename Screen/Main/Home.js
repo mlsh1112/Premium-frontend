@@ -74,6 +74,7 @@ class Home extends Component {
                <View style={styles.today}>
                     <Text style={styles.todaytext}>{this.state.user.name} 님의 오늘의 인증!</Text>
                     <ScrollView horizontal={true} style={{width:"100%",height:"100%"}}>
+           
                     {this.state.myprojects.map((project,index)=>{
                            return <TodayProject 
                            navigation={this.props.navigation}
@@ -82,6 +83,8 @@ class Home extends Component {
                            key={index}
                            />
                         })}
+                        
+                 
                     </ScrollView>
                 </View>
                 <View style={{marginTop:30,margin:20}}>

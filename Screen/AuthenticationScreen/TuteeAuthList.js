@@ -6,10 +6,6 @@ import colors from '../../src/colors'
 import TodayProject from '../../src/components/TodayProjectHome'
 
 const ProjectAuthCard = ({navigation,project}) => {
-     useEffect(()=>{
-         console.log("여긴 카드")
-         console.log({project})
-     })
     return(
         <View style={{width:350,margin:10,backgroundColor:colors.subcolor, borderRadius:10}}>
         <TouchableOpacity onPress={()=>{navigation('TuteeAuthdetail',{project})}}>
@@ -45,15 +41,11 @@ const TuteeAuthList = ({navigation}) => {
         getData()
         const callApi = async() =>{
             await getattendances()
-            .then(res=>{{console.log(JSON.stringify(res.data)+"여긴 res")
-                        setProjects(res.data)
-        }})
-            .catch(err=>{
-                console.log("여긴 에러")
-                console.log(err)})
+            .then(res=>setProjects(res.data))
+            .catch(err=>{console.log(err)})
         }
         //callApi()
-    });
+    },[]);
     return (
         <View style={styles.container}>
             {

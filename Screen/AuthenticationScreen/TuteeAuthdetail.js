@@ -17,11 +17,7 @@ const TuteeAutdetail=({navigation,route})=>{
   var remainDay=Math.floor(startDate / (1000 * 60 * 60 * 24))
   //var pastDay=project.project.experience_period-remainDay
   var pastDay=0
-  function isTrial(){
-
-    if (project.status==='trial') 
-    return false
-  }
+  
   console.log(remainDay,pastDay)
   console.log(project)
   return(

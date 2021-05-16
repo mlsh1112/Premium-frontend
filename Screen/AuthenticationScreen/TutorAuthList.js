@@ -24,19 +24,8 @@ const ProjectAuthCard = ({navigation,project}) => {
 
 const TutorAuthList = ({navigation}) => {
     const [projects, setProjects] = useState()
-    const [user,setUser]=useState()
     
     useEffect(()=>{
-        const getData = async()=>{
-
-            await AsyncStorage.getItem('userinfo')
-            .then(res=>{
-                setUser(JSON.parse(res))
-            })
-            .catch(err=>console.log(err))
-        }
-
-        getData()
 
         const callApi= async()=>{
             await gettutorprojs()
