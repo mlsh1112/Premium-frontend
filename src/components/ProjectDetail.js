@@ -1,15 +1,14 @@
-import AsyncStorage from '@react-native-community/async-storage';
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, View, Image,Text,TouchableOpacity,ScrollView,Alert } from 'react-native';
 import {  Card,IconButton,Colors } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../colors';
 import {Button} from '../components';
-import {createattendances,getproject} from '../Api'
+import {createattendances,getproject,getattendances} from '../Api'
+
 const ProjectDetail =({navigation,route})=> {
   var [isJoin,setisJoin]=useState(false)
   var [isExperienced,setisExperienced]=useState(true)
-  var [myprj,setMyprj]=useState() // 참가하고 있는 프로잭트
   const project=route.params.project
   const [latestpr,setLatestpr] = useState(project)
   
@@ -24,32 +23,36 @@ const ProjectDetail =({navigation,route})=> {
       Alert.alert('7일 체험이 신청되었습니다.')
       navigation.navigate('ProjectTrial',{latestpr})
     })
-    .catch(err=>console.log(err))
+    .catch(err=>{
+      console.log("--------------create attendance error---------------")
+      console.log(err)
+    })
   }
 
   useEffect(()=>{
-    // const getData= async()=>{
-      // await AsyncStorage.getItem('projects')
-      // .then(res=>setMyprj(JSON.parse(res)))
-      // .catch(err=>console.log(err))
-    // }
-    // getData()
+    getattendances()
+    .then(res=>{
+      if(res.data){
+        res.data.map((pr)=>{
+          if (pr.project.id===project.id){
+            if (pr.status === 'trial'){setisJoin(true)}
+          }
+        })
+      }
+    })
+    .catch(err => {
+      console.log("---------------getattendances error--------------")
+      console.log(err)
+    })
+
     console.log(project)
     getproject(project.id).then(res => {
       console.log(res.data)
       setLatestpr(res.data)
-    }).catch(e => console.log(e));
-
-    const myprojects=()=>{
-      if(myprj){
-         myprj.map((proj)=>{
-            if (proj.project.id===project.id){
-              if (proj.status === 'trial'){
-                setisJoin(true)
-      }}})
-        }
-      }
-    myprojects()
+    }).catch(e => {
+      console.log("---------------getproject error--------------")
+      console.log(e)
+    });
     
   },[])
   return (
@@ -57,23 +60,14 @@ const ProjectDetail =({navigation,route})=> {
         <Card style={styles.cardStyle}>
           <ScrollView>
           <View style={{margin:20}}>
-          <Text style={styles.titleStyle}>{latestpr.title}</Text>
-          <View style={{flexDirection:'row'}}>
-            <Text style={styles.subjectStyle}>고등 수학 / 수학</Text>
-            {/* <TouchableOpacity style={styles.likeStyle} onPress={()=>_toggle()}>
-            {liked === false ? (
-              <MaterialCommunityIcons name='heart-outline' size={20} color={colors.maincolor}/>
-            ) : (
-              <MaterialCommunityIcons name='heart' size={20} color={colors.maincolor}/>
-            )}<Text style={styles.likeText}>273 LIKES</Text>
-            </TouchableOpacity> */}
-            </View>
+          <Text style={styles.titleStyle}>제목 : {latestpr.title}</Text>
+         
           <View style={styles.eee}>
             <View style={styles.profile}>
               <View style={{flexDirection:'row', marginBottom:10 }}>
                 <Image></Image>
                 <TouchableOpacity onPress={()=> navigation.navigate('ProfileView',{latestpr})}>
-                  <Text>{latestpr.tutor.name}</Text>
+                  <Text>튜터 : {latestpr.tutor.name}</Text>
                 </TouchableOpacity>
               </View>
           </View>

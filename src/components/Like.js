@@ -23,7 +23,7 @@ const Like = (props) => {
                 }
             }
         ).then(res => {
-            console.log('좋아요 체크중')
+            console.log('좋아요 확인중')
             if (res.status === 200 ){
                 setLike(true)
                 setLikeid(res.data.id)
@@ -60,10 +60,10 @@ const Like = (props) => {
     return (
         <TouchableOpacity style={styles.likebox} onPress={()=>_toggle()}>
                 {like === false ? (
-                  <MaterialCommunityIcons name='heart-outline' size={20} color={colors.maincolor}/>
+                  <MaterialCommunityIcons name='heart-outline' size={24} color={colors.maincolor}/>
                 ) : (
-                  <MaterialCommunityIcons name='heart' size={20} color="red"/>
-                )}<Text style={styles.likeText}>{numOfLike} 좋아요</Text>
+                  <MaterialCommunityIcons name='heart' size={24} color="red"/>
+                )}<Text style={styles.likeText}>{numOfLike} likes</Text>
         </TouchableOpacity>
     );
 };
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     likeText:{
         fontWeight:'bold',
         color:colors.maincolor,
-        fontSize:17,
+        fontSize:20,
         marginLeft:5
       },
   });
