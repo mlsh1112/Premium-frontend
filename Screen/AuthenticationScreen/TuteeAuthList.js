@@ -10,17 +10,22 @@ import { ScrollView } from 'react-native';
 
 const ProjectAuthCard = ({navigation,project}) => {
     console.log(project)
+    var startDate=new Date().getTime() - new Date(project.created_at).getTime();
+    var remainDay=Math.floor(startDate / (1000 * 60 * 60 * 24))
+    var pastDay=project.project.experience_period-remainDay
     return( 
             <View style={{flexDirection:'row'}}>
             <Card >
                 <View style={cardstyles.card} >
-                    <View style={{margin:15, marginLeft:25}}>
+                    <View style={{margin:15, marginLeft:27}}>
                     <Text style={cardstyles.textstyle}>{project.project.title}</Text>
-                    <View style={{flexDirection:'row',margin:2}}>
-                    <Text style={cardstyles.dayStyle}>{} </Text>
-                    <Text style={cardstyles.dayStyle2}>일차 인증</Text>
+                    <View style={{marginTop:5}}>
+                        <View style={{flexDirection:'row',margin:2}}>
+                        <Text style={cardstyles.dayStyle}>{remainDay+1}  </Text>
+                        <Text style={cardstyles.dayStyle2}>일차 인증</Text>
+                        </View>
+                        <Text style={cardstyles.dayStyle3}>남은 인증 {pastDay-1}일</Text>
                     </View>
-                    <Text style={cardstyles.dayStyle3}>남은 인증 {}일</Text>
                     </View>
                 </View>
             </Card>
@@ -69,13 +74,6 @@ const TuteeAuthList = ({navigation}) => {
                             return  <View style={{margin:10, backgroundColor:colors.maincolor,borderRadius:20,marginBottom:20}}>
                                 <ProjectAuthCard navigation={navigation.navigate} project={project} tutee={project.tutee} key={index} ></ProjectAuthCard>
                                 </View>
-                            /*<View style={{margin:10, backgroundColor:colors.maincolor,borderRadius:20}}>
-                                            <TodayProject
-                                        navigation={navigation}
-                                        data={project.project}
-                                        startDay={project.created_at}
-                                        key={index}
-                                        /></View>*/
                             
                         })
                     }
@@ -125,17 +123,18 @@ const cardstyles={
         flexDirection:'row'
     },
     textstyle:{
-        fontSize:19,
+        fontWeight:'bold',
+        fontSize:20,
         margin:2
     },
     dayStyle:{
         fontWeight:'bold',
-        fontSize:20,
+        fontSize:17,
         color:"red"
     },
     dayStyle2:{
         fontWeight:'bold',
-        fontSize:20,
+        fontSize:17,
     },
     dayStyle3:{
         fontSize:15,
