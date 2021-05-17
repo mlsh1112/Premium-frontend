@@ -22,6 +22,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import {refresh,logout} from '../src/Api';
 import jwtDecode from "jwt-decode";
+import { AppleButton } from '@invertase/react-native-apple-authentication';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -144,6 +145,7 @@ const Signin = (props) => {
               >
               Sign Up
             </Text>
+            {Platform.OS === 'ios' && <AppleButton />}
          </>
        )}
      </Formik>
