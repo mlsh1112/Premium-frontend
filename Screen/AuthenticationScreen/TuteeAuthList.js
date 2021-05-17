@@ -1,22 +1,35 @@
 import React, { Component, useState, useEffect } from 'react';
-import { View,Text,TouchableOpacity,ImageBackground } from 'react-native';
+import { View,Text,TouchableOpacity,ImageBackground,Image } from 'react-native';
 import { getattendances } from '../../src/Api';
 import AsyncStorage from '@react-native-community/async-storage';
+import { Card } from 'react-native-paper';
 import colors from '../../src/colors'
 import TodayProject from '../../src/components/TodayProjectHome'
+import authBtn from '../../assets/authBtn-001.png'
+import { ScrollView } from 'react-native';
 
 const ProjectAuthCard = ({navigation,project}) => {
-    return(
-        <View style={{width:350,margin:10,backgroundColor:colors.subcolor, borderRadius:10}}>
-        <TouchableOpacity onPress={()=>{navigation('TuteeAuthdetail',{project})}}>
-                <View style={{margin:10}}>
-                <Text style={styles.titleStyle}>{project.project.title}</Text>
-                <Text style={styles.subStyle}>고등 수학 / 수학</Text>
-                <Text style={styles.dayStyle}>{project.project.experience_period} DAYS</Text>
+    console.log(project)
+    return( 
+            <View style={{flexDirection:'row'}}>
+            <Card >
+                <View style={cardstyles.card} >
+                    <View style={{margin:15, marginLeft:25}}>
+                    <Text style={cardstyles.textstyle}>{project.project.title}</Text>
+                    <View style={{flexDirection:'row',margin:2}}>
+                    <Text style={cardstyles.dayStyle}>{} </Text>
+                    <Text style={cardstyles.dayStyle2}>일차 인증</Text>
+                    </View>
+                    <Text style={cardstyles.dayStyle3}>남은 인증 {}일</Text>
+                    </View>
                 </View>
-        </TouchableOpacity>
+            </Card>
 
-    </View>
+            <TouchableOpacity style={{}} onPress={()=>{navigation('TuteeAuthdetail',{project})}}>
+                    <Image source={authBtn} style={{width:90,height:100}}></Image>
+                    </TouchableOpacity>
+            </View>
+
     )
 }
 
@@ -50,10 +63,12 @@ const TuteeAuthList = ({navigation}) => {
         <View style={styles.container}>
             {
                 projects?
-                <View>
+                <ScrollView>
                     {projects.map((project,index)=>{
                             console.log(project)
-                            return  <ProjectAuthCard navigation={navigation.navigate} project={project} tutee={project.tutee} key={index} ></ProjectAuthCard>
+                            return  <View style={{margin:10, backgroundColor:colors.maincolor,borderRadius:20,marginBottom:20}}>
+                                <ProjectAuthCard navigation={navigation.navigate} project={project} tutee={project.tutee} key={index} ></ProjectAuthCard>
+                                </View>
                             /*<View style={{margin:10, backgroundColor:colors.maincolor,borderRadius:20}}>
                                             <TodayProject
                                         navigation={navigation}
@@ -64,7 +79,7 @@ const TuteeAuthList = ({navigation}) => {
                             
                         })
                     }
-                </View>
+                </ScrollView>
                 :
                 <Text>진행 중인 프로젝트가 없습니다</Text>
             }
@@ -98,5 +113,36 @@ const styles={
         fontSize:15,
         color:'#2E3E5C'
     }
+}
+
+
+const cardstyles={
+    card:{
+        borderWidth:0,
+        borderRadius:20,
+        width:300,
+        height:100,
+        flexDirection:'row'
+    },
+    textstyle:{
+        fontSize:19,
+        margin:2
+    },
+    dayStyle:{
+        fontWeight:'bold',
+        fontSize:20,
+        color:"red"
+    },
+    dayStyle2:{
+        fontWeight:'bold',
+        fontSize:20,
+    },
+    dayStyle3:{
+        fontSize:15,
+        color:"#9E9E9E",
+        margin:2
+    }
+
+    
 }
 export default TuteeAuthList;
