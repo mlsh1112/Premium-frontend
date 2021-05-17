@@ -53,8 +53,8 @@ const TutorAuthList = ({navigation}) => {
                 projects?
                 <ScrollView>
                     {projects.map((project,index)=>{
-                            return  <View style={{margin:10, backgroundColor:colors.maincolor,borderRadius:20,marginBottom:20}}>
-                            <ProjectAuthCard navigation={navigation.navigate} project={project} key={index} ></ProjectAuthCard></View>
+                            return  <View style={{margin:10, backgroundColor:colors.maincolor,borderRadius:20,marginBottom:20}} key={index}>
+                            <ProjectAuthCard navigation={navigation.navigate} project={project}  ></ProjectAuthCard></View>
                         })
                     }
                 </ScrollView>
