@@ -70,7 +70,6 @@ const TuteeAuthList = ({navigation}) => {
                 projects?
                 <ScrollView>
                     {projects.map((project,index)=>{
-                            console.log(project)
                             return  <View style={{margin:10, backgroundColor:colors.maincolor,borderRadius:20,marginBottom:20}}>
                                 <ProjectAuthCard navigation={navigation.navigate} project={project} tutee={project.tutee} key={index} ></ProjectAuthCard>
                                 </View>
