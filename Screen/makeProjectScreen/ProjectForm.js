@@ -1,55 +1,102 @@
-import React, { Component,useState } from 'react';
-import colors from '../../src/colors';
+import React, { useEffect, useState } from 'react';
 import {Button} from '../../src/components'
 import {
     StyleSheet,
-    TouchableOpacity,
     View,
     Text,
     TextInput,
     ScrollView,
+    Keyboard,
   } from 'react-native';
 import { Formik } from "formik";
-import * as Yup from "yup";
-import RNDateTimePicker from '@react-native-community/datetimepicker'; 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Keyboard } from 'react-native';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
+import RNPickerSelect from 'react-native-picker-select';
 
-const validationSchema = Yup.object().shape({
-    title: Yup.string().min(5,"프로젝트 명이 너무 짧습니다.(최소 5글자 최대 30글자)").max(30,"프로젝트 명이 너무 깁니다.(최소 2글자 최대 30글자)").required("프로젝트 이름을 입력해주세요."),
-    startDate: Yup.date().nullable().min(new Date()).required("프로젝트 시작 날짜를 기입해주세요."),
-    duration: Yup.number().min(10,"프로젝트 최소 기간은 10일 이상입니다.").required("올바른 프로젝트 기간을 정수 값으로 입력해주세요"),
-    dailyStudyTime: Yup.number().min(0,"일일 최소학습 시간을 설정해주세요.").required("일일 최소학습 시간을 기입해주세요"),
-    howToAuth: Yup.string().min(5,"인증 방식을 올바르게 기입해주세요.").required("프로젝트 인증 방식을 기입해주세요."),
-    projectIntroduce: Yup.string().min(5,"프로젝트 소개를 올바르게 기입해주세요. 소개문구는 최소 5글자 이상입니다. ").required("프로젝트 소개를 올바르게 기입해주세요."),
-    repeatstrength: Yup.number().min(0,"최소 복습 강도는 0%입니다.").max(99,"최대 복습 강도는 99%입니다.").required("복습 강도를 입력해주세요"),
-  });
+import {Schema, InitValue,tommorow} from './ValueSchema';
+import {HelpMessage,RenderHelp} from './Help';
+import {RenderError} from './ValidMessage';
+import {createproject,getcategories} from '../../src/Api';
 
-const ProjectForm =()=> {
+function makeItem(projectlist){
+  const temp = projectlist.map((pr)=>({
+      label: pr.title,
+      value: pr.id,
+  }));
+  return temp;
+}
+
+const ProjectForm =(props)=> {
+    const validationSchema = Schema
     const [isDateTimePickerVisible,setIsDateTimePickerVisible] = useState(false)
-    const goToBookSearch = () => {
-      console.log("책 검색하러가기")
-    }
-    const handleSubmitPress = (values) =>{
-        console.log("프로젝트 제출 : " + JSON.stringify(values))
-    }
+    const [category,setCategory] = useState([
+      {
+        label: '',
+        value: -1,
+      }
+    ])
+    const [idx,setIdx] = useState(0)
+    const [categoryid,setCategoryid] = useState()
     const [date,setDate ] = useState(new Date())
-    const now = new Date()
-    const tommorow = now.setDate(now.getDate() + 1)
+    
+    const handleSubmitPress = (values) =>{
+      console.log("프로젝트 제출 : " + JSON.stringify(values))
+      createproject({
+        "experience_period": values.experienceduration, 
+        "description": values.projectIntroduce, 
+        "deposit": values.deposit,
+        "image": '',
+        "title": values.title,
+        "duration": values.duration,
+        "started_at": values.startDate,
+        "category_id": categoryid,
+        "required_time": values.dailyStudyTime,
+        "review_weight": values.repeatstrength,
+      }).then(res => {
+        console.log(res.data)
+        props.navigation.navigate({name: 'Book',params: {projectId: res.data.id}})
+      }).catch(e => {
+        console.log(e.response)
+      })
+    }
+    useEffect(() => {
+      getcategories().then(res => {
+        console.log(res.data)
+        setCategory(makeItem(res.data))
+      }).catch(e => {
+        console.log(e.response.data)
+      })
+    },[])
     return (
         <ScrollView>
         <View style={styles.container}>
             <Formik
               style={styles.FormStyle}
               validationSchema={validationSchema}
-              initialValues={{ title: '',startDate: tommorow, duration: '',repeatstrength: '',dailyStudyTime: '',howToAuth:'',projectIntroduce:'',chapter: []}}
+              initialValues={InitValue}
               onSubmit={values => {   
+                console.log(values)
                 handleSubmitPress(values)
               }}
             >
               {({ handleChange, handleBlur, handleSubmit,setFieldValue, values, errors,touched,}) => (
               
                 <>
+                <Text style={styles.subtitle}>0. 프로젝트 카테고리 </Text>
+                  <View style={styles.pickerstyle}>
+                    <RNPickerSelect
+                        useNativeAndroidPickerStyle={false}
+                        onValueChange={(value,idx) => {
+                          setCategoryid(value)
+                          setIdx(idx-1)
+                          setFieldValue('categoryid',value)
+                        }}
+                        items={category}
+                        >
+                        {idx < 0 ? <Text></Text> : <Text>{category[idx].label}</Text>}
+                    </RNPickerSelect>
+                  </View>  
+                <RenderError errors={errors.categoryid} touched={touched.categoryid} />
+                
                 <Text style={styles.subtitle}>1. 프로젝트 이름</Text>
                   <TextInput
                     name="title"
@@ -59,10 +106,10 @@ const ProjectForm =()=> {
                     onBlur={handleBlur('title')}
                     value={values.title}
                   />
-                  {(errors.title && touched.title) &&
-                  <Text style={styles.errorText}>{errors.title}</Text>
-                  }
-                  <Text style={styles.subtitle}>2. 프로젝트 시작 일자</Text>
+                <RenderError errors={errors.title} touched={touched.title} />
+                
+
+                <Text style={styles.subtitle}>2. 프로젝트 시작 일자</Text>
                   <TextInput
                     name="startDate"
                     style={styles.textInput}
@@ -93,19 +140,19 @@ const ProjectForm =()=> {
                         }}
                       />
                   )}
-                  {(errors.startDate && touched.startDate) &&
-                  <Text style={styles.errorText}>{errors.startDate}</Text>
-                  }
-                  <Text style={styles.subtitle}>3. 프로젝트 기간</Text>
+                <RenderError errors={errors.startDate} touched={touched.startDate} />
+                
+                  <Text style={styles.subtitle}>
+                    3. 프로젝트 기간 (단위: 일)
+                    <RenderHelp messagetype={HelpMessage.duration}/>
+                  </Text>
                   <TextInput
                     name="duration"
-                    placeholder="프로젝트 기간 입력(단위: 일)"
+                    placeholder="프로젝트 기간 입력"
                     style={styles.textInput}
                     onChangeText={value => {
-                        console.log(value)
                         const parsedvalue = parseInt(value)
                         if (!isNaN(parsedvalue)){
-                            console.log(parsedvalue)
                             setFieldValue('duration',parsedvalue,10);
                         }
                         else {
@@ -116,19 +163,44 @@ const ProjectForm =()=> {
                     onBlur={handleBlur('duration')}
                     keyboardType='numeric'
                   />
-                  {(errors.duration && touched.duration) &&
-                  <Text style={styles.errorText}>{errors.duration}</Text>
-                  }
-                  <Text style={styles.subtitle}>4. 최소 학습시간</Text>
+                <RenderError errors={errors.duration} touched={touched.duration} />
+                
+
+                <Text style={styles.subtitle}>
+                  4. 프로젝트 체험 기간 (단위: 일)
+                  <RenderHelp messagetype={HelpMessage.experienceduration}/> 
+                </Text>
                   <TextInput
-                    name="dailyStudyTime"
-                    placeholder="최소 학습시간 입력(단위: 분)"
+                    name="experienceduration"
+                    placeholder="프로젝트 체험 기간 입력"
                     style={styles.textInput}
                     onChangeText={value => {
-                        console.log(value)
                         const parsedvalue = parseInt(value)
                         if (!isNaN(parsedvalue)){
-                            console.log(parsedvalue)
+                            setFieldValue('experienceduration',parsedvalue,10);
+                        }
+                        else {
+                            values.experienceduration =''
+                            console.log("string is typed")
+                        }
+                    }}
+                    onBlur={handleBlur('experienceduration')}
+                    keyboardType='numeric'
+                  />
+                <RenderError errors={errors.experienceduration} touched={touched.experienceduration} />
+                
+
+                <Text style={styles.subtitle}>
+                  5. 최소 학습시간 (단위: 분)
+                  <RenderHelp messagetype={HelpMessage.dailyStudyTime}/>
+                </Text>
+                  <TextInput
+                    name="dailyStudyTime"
+                    placeholder="최소 학습시간 입력"
+                    style={styles.textInput}
+                    onChangeText={value => {
+                        const parsedvalue = parseInt(value)
+                        if (!isNaN(parsedvalue)){
                             setFieldValue('dailyStudyTime',parsedvalue,10);
                         }
                         else {
@@ -139,46 +211,49 @@ const ProjectForm =()=> {
                     onBlur={handleBlur('dailyStudyTime')}
                     keyboardType='numeric'
                   />
-                  {(errors.dailyStudyTime && touched.dailyStudyTime) &&
-                  <Text style={styles.errorText}>{errors.dailyStudyTime}</Text>
-                  }
-                  <Text style={styles.subtitle}>5. 복습 강도</Text>
+                <RenderError errors={errors.dailyStudyTime} touched={touched.dailyStudyTime} />
+                
+
+                <Text style={styles.subtitle}>
+                  6. 복습 강도 (최소 1단계 ~ 10단계)
+                  <RenderHelp messagetype={HelpMessage.repeatstrength}/>
+                </Text>
                   <TextInput
                     name="repeatstrength"
-                    placeholder="복습 강도(단위 %)"
+                    placeholder="복습 강도 입력"
                     style={styles.textInput}
                     onChangeText={value => {
-                        console.log(value)
                         const parsedvalue = parseInt(value)
                         if (!isNaN(parsedvalue)){
-                            console.log(parsedvalue)
                             setFieldValue('repeatstrength',parsedvalue,10);
                         }
                         else {
-                            values.dailyStudyTime =''
+                            values.repeatstrength =''
                             console.log("string is typed")
                         }
                     }}
                     onBlur={handleBlur('repeatstrength')}
                     keyboardType='numeric'
                   />
-                  {(errors.repeatstrength && touched.repeatstrength) &&
-                  <Text style={styles.errorText}>{errors.repeatstrength}</Text>
-                  }
-                  <Text style={styles.subtitle}>6. 프로젝트 인증 방식</Text>
+                <RenderError errors={errors.repeatstrength} touched={touched.repeatstrength} />
+
+                <Text style={styles.subtitle}>
+                  7. 프로젝트 인증 미션
+                  <RenderHelp messagetype={HelpMessage.howToAuth}/>
+                </Text>
                   <TextInput
                     name="howToAuth"
-                    placeholder="프로젝트 일일 인증 방식을 입력해주세요"
+                    placeholder="프로젝트 일일 인증 미션을 입력해주세요"
                     style={styles.bigtextInput}
                     onChangeText={handleChange('howToAuth')}
                     onBlur={handleBlur('howToAuth')}
                     value={values.howToAuth}
                     multiline={true}
                   />
-                  {(errors.howToAuth && touched.howToAuth) &&
-                  <Text style={styles.errorText}>{errors.howToAuth}</Text>
-                  }
-                  <Text style={styles.subtitle}>7. 프로젝트 소개</Text>
+                <RenderError errors={errors.howToAuth} touched={touched.howToAuth} />
+                
+
+                <Text style={styles.subtitle}>8. 프로젝트 소개</Text>
                   <TextInput
                     name="projectIntroduce"
                     placeholder="프로젝트 소개를 입력해주세요"
@@ -188,23 +263,42 @@ const ProjectForm =()=> {
                     value={values.projectIntroduce}
                     multiline={true}
                   />
-                  {(errors.projectIntroduce && touched.projectIntroduce) &&
-                  <Text style={styles.errorText}>{errors.projectIntroduce}</Text>
-                  }
-                  <Text style={styles.subtitle}>8. 프로젝트 교재 검색</Text>
-                  <View style={styles.button}>
-                    <Button onPress={goToBookSearch}>책 검색하러가기</Button>
-                  </View>
-                  <View style={styles.button}>
-                    <Button onPress={handleSubmit}>프로젝트 생성하기</Button>
-                  </View>
+                <RenderError errors={errors.projectIntroduce} touched={touched.projectIntroduce} />
+                
+
+                <Text style={styles.subtitle}>
+                  9. 보증금
+                  <RenderHelp messagetype={HelpMessage.deposit}/>
+                </Text>
+                  <TextInput
+                    name="deposit"
+                    placeholder="프로젝트의 보증금을 입력해주세요. (단위 원)"
+                    style={styles.textInput}
+                    onChangeText={value => {
+                      const parsedvalue = parseInt(value)
+                      if (!isNaN(parsedvalue)){
+                          setFieldValue('deposit',parsedvalue,10);
+                      }
+                      else {
+                          values.deposit =''
+                          console.log("string is typed")
+                      }
+                    }}
+                    onBlur={handleBlur('deposit')}
+                    keyboardType='numeric'
+                  />
+                <RenderError errors={errors.deposit} touched={touched.deposit} />
+                
+
+                <View style={styles.button}>
+                  <Button onPress={handleSubmit}>프로젝트 생성하기</Button>
+                </View>
                 </>
               )}
             </Formik>
         </View>
         </ScrollView>
         );
-
 }
 
 const styles = StyleSheet.create({
@@ -233,27 +327,14 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         fontSize:15,
         fontWeight:'bold'
-      },
-    errorText: {
-      fontSize: 12,
-      color: 'red',
     },
-     FormStyle: {
+    FormStyle: {
       flexDirection: 'row',
       height: 40,
       marginTop: 20,
       marginLeft: 35,
       marginRight: 35,
       margin: 10,
-    },
-     InputStyle: {
-      flex: 1,
-      color: "black",
-      paddingLeft: 15,
-      paddingRight: 15,
-      borderWidth: 1,
-      borderRadius: 30,
-      borderColor: '#dadae8',
     },
     button: {
       marginTop: 10,
@@ -268,7 +349,26 @@ const styles = StyleSheet.create({
         width: "90%",
         fontWeight:"bold",
         fontSize: 18,
-    }
+    },
+    textStyle: {
+      width: '55%',
+      padding: 10,
+      backgroundColor: 'white',
+      fontSize: 15,
+      marginTop: 7,
+      color: 'black',
+    },
+    pickerstyle:{
+      width: "90%",
+      marginTop:'1%',
+      paddingVertical: 10,
+      paddingHorizontal: 12,
+      borderWidth: 1,
+      borderRadius: 10,
+      paddingRight: 30,
+      color:"black",
+      backgroundColor: 'white',
+    },
   });
 
 export default ProjectForm;
