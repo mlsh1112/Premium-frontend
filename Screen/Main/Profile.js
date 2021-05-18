@@ -28,21 +28,20 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {TabView, TabBar} from 'react-native-tab-view';
 
 import colors from '../../src/colors'
-import {getproject, logout} from '../../src/Api';
+import {getproject, logout,getcurrentuser,getattendances} from '../../src/Api';
 import ProjectMini from '../../src/components/ProjectMini';
+import cat from '../../assets/cat2.png'
 
 const EachTabViewsProjects = (props) => {
   return(
     <ScrollView style={styles.menuWrapper}>
             <View style={{marginRight:-20, flex:1,flexDirection:'row',justifyContent:'space-between',flexWrap: 'wrap'}}>
               {props.project.map((pr, index )=> {
-                //return <PrintProject project={pr} key={index}/>
                 return(
                   <View key={index} style={{marginVertical:8}}>
-                    <ProjectMini navigation={props.navigation} project={pr} key={index}></ProjectMini>
+                    <ProjectMini navigation={props.navigation} project={pr.project} key={index}></ProjectMini>
                   </View>
                 )
-                //return <ProjectMini navigation={props.navigation} data={pr} key={index}></ProjectMini>
               })}  
             </View>
             
@@ -51,44 +50,51 @@ const EachTabViewsProjects = (props) => {
 }
 
 const Profile = (props) => {
-  
-
-
-  const [userinfo,setUserinfo] = useState(new Object())
+  const [myinfo,setMyinfo] = useState(
+    {
+      "email": "", "id": -1, "image": "", "info": "", "likes_count": -1, "name": "", "phone": "", "status": "", "type": ""
+    }
+  )
   const [showscreen,setShowscreen]=useState(false)
-  
-  const [userid,setUserid] = useState(8);
-  
   const [project,setProject] = useState([])
   const [finishedproject,setFinishedProject] = useState([]);
-  const [likeproject,setLikeproject] = useState([]);
-
-  const [school,setSchool] = useState('아주대학교');
-  const [like,setLike] = useState(1287);
   
-    useEffect(() => {
-      const getData = async() => {
-        try {
-         await AsyncStorage.getItem('userinfo').then(res => {
-           setUserinfo(JSON.parse(res))
-         })
-        } catch (error) {
-          console.log("get user info error")
-        } 
-    }
-    getData()
-
-    const getApiData = () => {
-      getproject(userid).then(res=>{
-        console.log("response is : "+ JSON.stringify(res.data))
-        setProject(pr => [...pr,res.data])
-      }).catch(error=>{
-        console.log("get project error: "+error)
-      })
-    }
-    
-    //getApiData()
-    setShowscreen(true)
+  const [school,setSchool] = useState('아주대학교');
+  
+  useEffect(() => {
+    // const getApiData = () => {
+    //   getproject(userid).then(res=>{
+    //     console.log("response is : "+ JSON.stringify(res.data))
+    //     setProject(pr => [...pr,res.data])
+    //   }).catch(error=>{
+    //     console.log("get project error: "+error)
+    //   })
+    // }
+    getcurrentuser().then(res => {
+      setMyinfo(res.data)
+      if(res.data.type ==='Tutee'){
+        getattendances().then(res => {
+          setProject(res.data)
+        }).catch(e => {
+          console.log('-----------------get attendance error----------------')
+          console.log(e.response.status)
+        })
+      }
+      else {
+        // 튜터의 경우 자신이 생성한 프로젝트 받아와야함
+        // gettutorproject().then(res => {
+        //   console.log(res.data)
+        //   setProject(res.data)
+        // }).catch(e => {
+        //   console.log("------------------get tutor's project error---------------")
+        //   console.log(e.response.status)
+        // })
+      }
+      setShowscreen(true)
+    }).catch(e => {
+      console.log(e)
+      alert('get user info error!!')
+    })
   
   },[])
   
@@ -96,8 +102,7 @@ const Profile = (props) => {
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     { key: 'first', title: '진행 중' },
-    { key: 'second', title: '종료' },
-    { key: 'third', title: '좋아요' },
+    { key: 'second', title: '완료' },
   ]);
   const renderTabBar = (props) => {
     return(<TabBar
@@ -114,8 +119,6 @@ const Profile = (props) => {
         return <EachTabViewsProjects project={project} navigation={props.navigation}/>;
       case 'second':
         return <EachTabViewsProjects project={finishedproject} navigation={props.navigation}/>
-      case 'third':
-        return <EachTabViewsProjects project={likeproject} navigation={props.navigation}/>
     }
   };
   
@@ -125,7 +128,10 @@ const Profile = (props) => {
       console.log(res)
       AsyncStorage.removeItem('token');
       props.navigation.popToTop()
-    }).catch(e => console.log(e.response))
+    }).catch(e => {
+      console.log('================== 로그아웃 에러 ==================')
+      console.log(e.response)
+    })
   }
   const goToCreateProject = () => {
     console.log("프로젝트 생성하러가기");
@@ -133,10 +139,10 @@ const Profile = (props) => {
   }
   const goToAuth = () => {
     console.log("인증하러 하러가기");
-    if(userinfo.type == 'Tutor'){
+    if(myinfo.type == 'Tutor'){
       props.navigation.navigate('SchoolAuth');
     }
-    else if(userinfo.type == 'Tutee'){
+    else if(myinfo.type == 'Tutee'){
       props.navigation.navigate('Authentication')
     }
     else {
@@ -148,15 +154,25 @@ const Profile = (props) => {
     {showscreen && (
       <View style={styles.userInfoSection}>
         <View style={{flexDirection: 'row', marginTop: 15}}>
-          <Text style={styles.avatar} />
+          <Image source={cat} style={styles.avatar} />
           <View style={{marginLeft: 20}}>
-            <Title style={[styles.title, {marginTop:15,marginBottom: 5,}]}>{userinfo.name}</Title>
+            <Title style={[styles.title, {marginTop:15,marginBottom: 5,}]}>{myinfo.name}</Title>
             <View>
-              <Icon name="teach" color="red" size={20}/>
-              <Text style={styles.caption,{color:"red"}}>{userinfo.type}</Text>
-              { userinfo.type === "Tutor"  
-                ? <Text style={styles.caption,{color:"red"}}>[ {userinfo.status} ]</Text>
-                : <Text style={styles.caption,{color:"red"}}></Text>
+              { myinfo.type === "Tutor"
+                ? (<View>
+                    <Icon name="teach" color="#F63D3D" size={20}/>
+                    <Text style={styles.caption,{color:"#F63D3D"}}>{myinfo.type}</Text>
+                    <Text style={styles.caption,{color:"#F48705"}}>[ {myinfo.status} ]</Text>
+                  </View>
+                  )
+                : (<View>
+                    <View style={{flexDirection:'row'}}>
+                      <Icon name="book-open-variant" color="#7EB3D9" size={20}/>
+                      <Icon name="human-child" color="#7EB3D9" size={20}/>
+                    </View>
+                    <Text style={styles.caption,{color:"#7EB3D9"}}>{myinfo.type}</Text>
+                  </View>
+                  )
               }
             </View>
           </View>
@@ -173,12 +189,12 @@ const Profile = (props) => {
           <Icon name="school" color="#777777" size={20} style={{textAlignVertical:'center'}}/>
           <Text style={{color:"#777777", marginLeft: 20,textAlignVertical:'center'}}>{school}</Text>
         </View>
-        { userinfo.type === "Tutor" && userinfo.status === "approved"
+        { myinfo.type === "Tutor" && myinfo.status === "approved"
             ? (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToCreateProject}>
                 <Text style={styles.buttonstyle}>프로젝트 생성</Text>
                </TouchableOpacity>)
             : (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToAuth}>
-                <Text style={styles.buttonstyle}> 인증하러가기</Text>
+                <Text style={styles.buttonstyle}>인증하러가기</Text>
                </TouchableOpacity>)}
       </View>
     )}
@@ -187,12 +203,18 @@ const Profile = (props) => {
       <View style={styles.infoBoxWrapper}>
         <View style={styles.infoBox}>
           <Title>{project.length}</Title>
-          <Caption>Projects</Caption>
+          <Caption>진행중인 프로젝트</Caption>
         </View>
-        <View style={styles.infoBox}>
-          <Title>{like}</Title>
+        {myinfo.type === "Tutor"
+        ? (<View style={styles.infoBox}>
+          <Title>{myinfo.likes_count}</Title>
           <Caption>좋아요 개수</Caption>
-        </View>
+          </View>)
+        : (<View style={styles.infoBox}>
+          <Title>{finishedproject.length}</Title>
+          <Caption>완료한 프로젝트</Caption>
+          </View>)   
+        }
       </View>
     )}
     
@@ -274,8 +296,6 @@ const styles = StyleSheet.create({
     height: 100,
     borderWidth: 3,
     borderColor: "black",
-    textAlign: 'center',
-    textAlignVertical: "center",
     borderRadius: 50,
   },
   CardContainer: {
