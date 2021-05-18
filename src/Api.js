@@ -62,3 +62,4 @@ export const createattendances = (projectid) => API.post(PORT+'/attendances',pro
 export const createlike = ( params ) => API.post(PORT + '/likes', params)
 export const deletelike = (id) => API.delete(PORT + `/likes/${id}`)
 export const islike = ( params ) => API.get(PORT+`/likes/is_like`, {params})
+export const getcurrentuser = () => API.get(PORT+'/get_current_user')
