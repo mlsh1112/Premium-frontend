@@ -12,7 +12,7 @@ const ProjectMini=({navigation,project})=>{
                     <Text style={styles.titleStyle}>{project.title}</Text>
                     <Text style={styles.subStyle}>튜터 : {project.tutor.name}</Text>
                     <Text style={styles.dayStyle}>체험기간 : {project.experience_period} DAYS</Text>
-                    <Text style={styles.dayStyle}>보증금 : {project.deposit} DAYS</Text>
+                    <Text style={styles.dayStyle}>보증금 : {project.deposit} 원</Text>
                 </View>
             </ImageBackground>
         </TouchableOpacity>
