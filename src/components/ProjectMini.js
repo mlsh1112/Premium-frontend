@@ -3,14 +3,16 @@ import { View, Text, TouchableOpacity, ImageBackground } from 'react-native';
 import colors from '../colors'
 import cat from '../../assets/cat2.png'
 const ProjectMini=({navigation,project})=>{
+    console.log(project)
   return (
     <View style={{marginRight:20}}>
         <TouchableOpacity onPress={()=>{navigation.navigate('ProjectDetail',{project})}}>
             <ImageBackground source={cat} style={styles.imgStyle} opacity={0.3} blurRadius={5}>
                 <View style={{margin:10}}>
-                <Text style={styles.titleStyle}>{project.title}</Text>
-                <Text style={styles.subStyle}>고등 수학 / 수학</Text>
-                <Text style={styles.dayStyle}>{project.experience_period} DAYS</Text>
+                    <Text style={styles.titleStyle}>{project.title}</Text>
+                    <Text style={styles.subStyle}>튜터 : {project.tutor.name}</Text>
+                    <Text style={styles.dayStyle}>체험기간 : {project.experience_period} DAYS</Text>
+                    <Text style={styles.dayStyle}>보증금 : {project.deposit} 원</Text>
                 </View>
             </ImageBackground>
         </TouchableOpacity>
@@ -27,19 +29,19 @@ const styles={
     titleStyle:{
         fontWeight:'bold',
         fontSize:20,
-        marginBottom:25
-
+        height: '45%'
     },
     subStyle:{
         fontWeight:'bold',
         fontSize:18,
-        marginBottom:20,
+        height: '25%',
         color:'#2E3E5C'
     },
     dayStyle:{
         fontWeight:'bold',
         fontSize:15,
-        color:'#2E3E5C'
+        color:'#2E3E5C',
+        height: '15%',
     }
 }
 
