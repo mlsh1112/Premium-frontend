@@ -30,30 +30,27 @@ const ProjectDetail =({navigation,route})=> {
   }
 
   useEffect(()=>{
-    getattendances()
-    .then(res=>{
+    getattendances().then(res=>{
       if(res.data){
         res.data.map((pr)=>{
-          if (pr.project.id===project.id){
-            if (pr.status === 'trial'){setisJoin(true)}
+          if (pr.project.id === project.id && pr.status === 'trial'){
+            setisJoin(true)
           }
         })
       }
+      getproject(project.id).then(res => {
+        console.log("---------------getproject--------------")
+        console.log(res.data)
+        setLatestpr(res.data)
+      }).catch(e => {
+        console.log("---------------getproject error--------------")
+        console.log(e.response.data)
+      });
     })
     .catch(err => {
       console.log("---------------getattendances error--------------")
       console.log(err)
     })
-
-    console.log(project)
-    getproject(project.id).then(res => {
-      console.log(res.data)
-      setLatestpr(res.data)
-    }).catch(e => {
-      console.log("---------------getproject error--------------")
-      console.log(e)
-    });
-    
   },[])
   return (
       <View style={styles.position}>
