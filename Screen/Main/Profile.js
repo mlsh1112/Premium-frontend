@@ -28,7 +28,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {TabView, TabBar} from 'react-native-tab-view';
 
 import colors from '../../src/colors'
-import {getproject, logout,getcurrentuser,getattendances,tutorgetproject} from '../../src/Api';
+import {logout,getcurrentuser,getattendances,tutorgetproject} from '../../src/Api';
 import ProjectMini from '../../src/components/ProjectMini';
 import cat from '../../assets/cat2.png'
 
@@ -67,45 +67,39 @@ const Profile = (props) => {
   const [showscreen,setShowscreen]=useState(false)
   const [project,setProject] = useState([])
   const [finishedproject,setFinishedProject] = useState([]);
-  
   const [school,setSchool] = useState('아주대학교');
   
   useEffect(() => {
-    // const getApiData = () => {
-    //   getproject(userid).then(res=>{
-    //     console.log("response is : "+ JSON.stringify(res.data))
-    //     setProject(pr => [...pr,res.data])
-    //   }).catch(error=>{
-    //     console.log("get project error: "+error)
-    //   })
-    // }
-    getcurrentuser().then(res => {
-      setMyinfo(res.data)
-      if(res.data.type ==='Tutee'){
-        getattendances().then(res => {
-          setProject(res.data)
-        }).catch(e => {
-          console.log('-----------------get attendance error----------------')
-          console.log(e.response.status)
-        })
-      }
-      else {
-        tutorgetproject({
-          q: {tutor_id_eq: res.data.id}
-        }).then(res => {
-          setProject(res.data)
-        }).catch(e => {
-          console.log("=======get tutor project error========")
-          console.log(e.response.status)
-        })
-      }
-      setShowscreen(true)
-    }).catch(e => {
-      console.log(e)
-      alert('get user info error!!')
+    const rerender = props.navigation.addListener('focus', e => {
+      console.log("welcome back")
+      getcurrentuser().then(res => {
+        setMyinfo(res.data)
+        if(res.data.type ==='Tutee'){
+          getattendances().then(res => {
+            setProject(res.data)
+          }).catch(e => {
+            console.log('-----------------get attendance error----------------')
+            console.log(e.response.status)
+          })
+        }
+        else {
+          tutorgetproject({
+            q: {tutor_id_eq: res.data.id}
+          }).then(res => {
+            console.log(res.data)
+            setProject(res.data)
+          }).catch(e => {
+            console.log("=======get tutor project error========")
+            console.log(e.response.status)
+          })
+        }
+        setShowscreen(true)
+      }).catch(e => {
+        console.log(e)
+        alert('get user info error!!')
+      })
     })
-  
-  },[])
+  },[props.navigation])
   
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
