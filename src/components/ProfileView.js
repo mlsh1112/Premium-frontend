@@ -47,7 +47,7 @@ function ProfileView({ navigation,route }){
             <View style={styles.bottomPosition}></View>    
             
             <View style={styles.projectPosition}>
-                <Text style={styles.projectText}>Projects</Text>
+                <Text style={styles.projectText}>선택하신 프로젝트</Text>
                 <View style={{marginVertical:30,width: '100%',height: '90%'}}>
                     <ScrollView
                         horizontal={true}
