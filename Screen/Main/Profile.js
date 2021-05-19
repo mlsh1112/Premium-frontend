@@ -28,20 +28,29 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {TabView, TabBar} from 'react-native-tab-view';
 
 import colors from '../../src/colors'
-import {getproject, logout,getcurrentuser,getattendances} from '../../src/Api';
+import {getproject, logout,getcurrentuser,getattendances,tutorgetproject} from '../../src/Api';
 import ProjectMini from '../../src/components/ProjectMini';
 import cat from '../../assets/cat2.png'
 
 const EachTabViewsProjects = (props) => {
+  // console.log(props.usertype)
   return(
     <ScrollView style={styles.menuWrapper}>
             <View style={{marginRight:-20, flex:1,flexDirection:'row',justifyContent:'space-between',flexWrap: 'wrap'}}>
               {props.project.map((pr, index )=> {
-                return(
-                  <View key={index} style={{marginVertical:8}}>
-                    <ProjectMini navigation={props.navigation} project={pr.project} key={index}></ProjectMini>
-                  </View>
-                )
+                if (props.usertype === 'Tutor'){
+                  return(
+                    <View key={index} style={{marginVertical:8}}>
+                      <ProjectMini navigation={props.navigation} project={pr} key={index}></ProjectMini>
+                    </View>
+                  )
+                }else {
+                  return(
+                    <View key={index} style={{marginVertical:8}}>
+                      <ProjectMini navigation={props.navigation} project={pr.project} key={index}></ProjectMini>
+                    </View>
+                  )
+                }
               })}  
             </View>
             
@@ -81,14 +90,14 @@ const Profile = (props) => {
         })
       }
       else {
-        // 튜터의 경우 자신이 생성한 프로젝트 받아와야함
-        // gettutorproject().then(res => {
-        //   console.log(res.data)
-        //   setProject(res.data)
-        // }).catch(e => {
-        //   console.log("------------------get tutor's project error---------------")
-        //   console.log(e.response.status)
-        // })
+        tutorgetproject({
+          q: {tutor_id_eq: res.data.id}
+        }).then(res => {
+          setProject(res.data)
+        }).catch(e => {
+          console.log("=======get tutor project error========")
+          console.log(e.response.status)
+        })
       }
       setShowscreen(true)
     }).catch(e => {
@@ -116,9 +125,9 @@ const Profile = (props) => {
   const renderScene = ({route}) =>{
     switch (route.key) {
       case 'first':
-        return <EachTabViewsProjects project={project} navigation={props.navigation}/>;
+        return <EachTabViewsProjects project={project} navigation={props.navigation} usertype={myinfo.type}/>;
       case 'second':
-        return <EachTabViewsProjects project={finishedproject} navigation={props.navigation}/>
+        return <EachTabViewsProjects project={finishedproject} navigation={props.navigation} usertype={myinfo.type}/>
     }
   };
   
