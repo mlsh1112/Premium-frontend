@@ -18,8 +18,6 @@ const kakaoBook = axios.create({
 const PORT = baseurl.port
 // const PORT = baseurl.sungmin
 
-console.log(PORT)
-
 const API = axios.create(headers);
 API.interceptors.request.use(
     async function (config){
@@ -62,3 +60,4 @@ export const createattendances = (projectid) => API.post(PORT+'/attendances',pro
 export const createlike = ( params ) => API.post(PORT + '/likes', params)
 export const deletelike = (id) => API.delete(PORT + `/likes/${id}`)
 export const islike = ( params ) => API.get(PORT+`/likes/is_like`, {params})
+export const getPlan=(project_id)=>API.get(PORT+'/options',{project_id})

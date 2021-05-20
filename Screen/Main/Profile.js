@@ -5,7 +5,7 @@
  * @format
  * @flow strict-local
  */
-
+import RNRestart from 'react-native-restart';
 import React, {useState,useEffect} from 'react';
 import {
   StyleSheet,
@@ -30,7 +30,6 @@ import {TabView, TabBar} from 'react-native-tab-view';
 import colors from '../../src/colors'
 import {getproject, logout} from '../../src/Api';
 import ProjectMini from '../../src/components/ProjectMini';
-
 const EachTabViewsProjects = (props) => {
   return(
     <ScrollView style={styles.menuWrapper}>
@@ -64,8 +63,19 @@ const Profile = (props) => {
   const [likeproject,setLikeproject] = useState([]);
 
   const [school,setSchool] = useState('아주대학교');
+
+
   const [like,setLike] = useState(1287);
-  
+
+  const deletokenfortest = async() => { //asyncstorage 테스트용 token 삭제
+    try{
+        await AsyncStorage.removeItem('token');
+    }
+    catch (error){
+        console.log("AsyncStorage remove Error: " + error.message);
+    };
+}
+
     useEffect(() => {
       const getData = async() => {
         try {
@@ -119,13 +129,13 @@ const Profile = (props) => {
     }
   };
   
-  const handleLogoutPress = ()=> {  //로그아웃 function
-    console.log('로그아웃 버튼 눌림!')
-    logout().then(res => {
-      console.log(res)
-      AsyncStorage.removeItem('token');
-      props.navigation.popToTop()
-    }).catch(e => console.log(e.response))
+  const handleLogoutPress = async()=> {  //로그아웃 function
+     await logout()
+     .then(console.log("로그아웃 성공"))
+     
+     deletokenfortest()
+     .then(console.log('token 삭제 성공'))
+     RNRestart.Restart();
   }
   const goToCreateProject = () => {
     console.log("프로젝트 생성하러가기");

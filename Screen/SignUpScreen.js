@@ -14,6 +14,7 @@ import {
    TouchableOpacity,
  } from 'react-native';
  
+import {Picker} from '@react-native-picker/picker';
 import {signup} from '../src/Api';
 import {setToken} from '../src/Asyncstorage';
 import { Formik } from "formik";
@@ -25,14 +26,22 @@ const validationSchema = Yup.object().shape({
     .required("이메일을 입력해주세요.")
     .email("이메일 형식이 아닙니다."),
   password: Yup.string()
-    .required("비밀번호를 입력해주세요"),
+    .required("비밀번호를 입력해주세요."),
   Comfirm_password: Yup.string()
-    .required("비밀번호 확인을 입력해주세요")
+    .required("비밀번호 확인을 입력해주세요."),
+  Banck:Yup.string()
+    .required("은행이름을 입력해주세요."),
+  Account_Number: Yup.string()
+    .required("환불 받으실 계좌번호를 입력해주세요."),
+  Account_Name: Yup.string()
+    .required("환불 받으실 계좌주를 입력해주세요.")
+    
  });
 
 const SignUp=(props)=>{
   
 
+  const [selectedPicker,setSelectedPicker]=useState("은행 선택")
   var userType;
   const [isSelected,setSelection]=useState(false);
 
@@ -42,6 +51,7 @@ const SignUp=(props)=>{
   })
 
   const handleSubmitPress = (values)=>{  
+    console.log(values.email)
     signup({
       "email":values.email,
       "password":values.password,
@@ -49,14 +59,11 @@ const SignUp=(props)=>{
       "phone":null,
       "user_type":userType
      }
-    ).then(res => {
-      console.log(res.data.token);
-      setToken(res.data.token);
-    }).then(() => {
-      props.navigation.replace('AuthLoading');
+    ).then(() => {
+      props.navigation.replace('Signin');
       console.log("Go to Home from sign in ");
     }).catch(error => {
-      alert("이메일 혹은 패스워드를 확인해주세요.")
+      alert("이미 생성되어 있는 아이디 입니다.")
       console.log(error);
     });
   }  
@@ -69,8 +76,8 @@ const SignUp=(props)=>{
      <Formik
        style={styles.FormStyle}
        validationSchema={validationSchema}
-       initialValues={{ email: '', password: '',Comfirm_password:'', }}
-       onSubmit={values => {
+       initialValues={{email:'', password:'',Comfirm_password:'',Account_Number:'',Account_Name:''}}
+       onSubmit={(values) => {
          console.log(values)
          handleSubmitPress(values)
        }}
@@ -107,28 +114,73 @@ const SignUp=(props)=>{
              placeholder="Confirm_Password"
              style={styles.textInput}
              onChangeText={handleChange('Comfirm_password')}
-             onBlur={handleBlur('Comfrim_password')}
+             onBlur={handleBlur('Comfirm_password')}
              value={values.Comfirm_password}
              secureTextEntry
            />
            {(errors.Comfirm_password && touched.Comfirm_password) &&
-           <Text style={styles.errorText}>{errors.password}</Text>
+           <Text style={styles.errorText}>{errors.Comfirm_password}</Text>
            }
-           <View>
+
+           <View style={{width:'95%',flexDirection:'row'}}>
+           <View style={styles.PickerBox}/>
+           
+           <Picker
+              style={{height:50,width:'40%'}}
+              selectedValue={selectedPicker}
+              onValueChange={(itemValue,itemIndex)=>
+              setSelectedPicker(itemValue)}
+            >
+              <Picker.Item label="선택" value="선택" color='grey'/> 
+              <Picker.Item label="국민" value="국민"/>
+              <Picker.Item label="신한" value="신한"/>
+              <Picker.Item label="기업" value="기업"/>
+              <Picker.Item label="농협" value="농협"/>
+            
+            </Picker>
+            
+           <TextInput
+              name="Account_Number"
+              placeholder="Account_Number"
+              style={styles.AccountInput}
+              onChangeText={handleChange('Account_Number')}
+              onBlur={handleBlur('Account_Number')}
+              value={values.Account_Number}
+             
+           />
+           </View>
+           {(errors.Account_Number && touched.Account_Number) &&
+           <Text style={styles.errorText}>{errors.Account_Number}</Text>
+           }
+           <TextInput
+             name="Account_Name"
+             placeholder="Account_Name"
+             style={styles.textInput}
+             onChangeText={handleChange('Account_Name')}
+             onBlur={handleBlur('Account_Name')}
+             value={values.Account_Name}
+             keyboardType="Account_Name"
+           />
+           {(errors.Account_Name && touched.Account_Name) &&
+           <Text style={styles.errorText}>{errors.Account_Name}</Text>
+           }
               <CheckBox
                 value={isSelected}
                 onValueChange={setSelection}
                 style={styles.checkbox}
               />
-              <Text style={styles.lable}>당신은 튜터 입니까?</Text>
-           </View>
+            <Text style={styles.lable}>당신은 튜터 입니까?</Text>
+           
            <View style={styles.button}>
-             <Button onPress={handleSubmit}>Sing Up</Button>
+             <Button onPress={()=>{handleSubmitPress(values)}}>Sign Up</Button>
            </View>
+         
          </>
        )}
      </Formik>
+     
    </View>
+   
 
   )
 }
@@ -151,6 +203,39 @@ const styles = StyleSheet.create({
    marginRight: 35,
    margin: 10,
  },
+ 
+ PickerBox: {
+  position:'absolute',
+  height: 40,
+  width: '35%',
+  margin: 10,
+  backgroundColor: 'white',
+  borderWidth: 1,
+  borderRadius: 10,  
+},
+
+AccountInput: {
+  height: 40,
+  width: '55%',
+  margin: 10,
+  backgroundColor: 'white',
+  borderWidth: 1,
+  borderRadius: 10,
+  fontSize:15,
+  fontWeight:'bold'
+    
+},
+ textInput: {
+  height: 40,
+  width: '90%',
+  margin: 10,
+  backgroundColor: 'white',
+  borderWidth: 1,
+  borderRadius: 10,
+  fontSize:15,
+  fontWeight:'bold'
+    
+},
   InputStyle: {
    flex: 1,
    color: "black",
@@ -175,6 +260,11 @@ const styles = StyleSheet.create({
    alignSelf: 'center',
    padding: 5,
  },
+ title: {
+  fontSize: 36,
+  fontWeight: "bold",
+  marginBottom:10,
+},
  checkbox:{
   alignSelf:"center",
 },
