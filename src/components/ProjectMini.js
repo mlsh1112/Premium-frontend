@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ImageBackground } from 'react-native';
 import colors from '../colors'
 import cat from '../../assets/cat2.png'
 const ProjectMini=({navigation,project})=>{
-    console.log(project)
+
   return (
     <View style={{marginRight:20}}>
         <TouchableOpacity onPress={()=>{navigation.navigate('ProjectDetail',{project})}}>

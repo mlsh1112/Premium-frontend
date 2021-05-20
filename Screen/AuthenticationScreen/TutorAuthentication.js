@@ -37,6 +37,7 @@ const TutorAuthentication = ({navigation,route }) => {
     }
 
     useEffect(()=>{
+        
         const callApi= async()=>{
             await gettutees({
                 "project_id":project.id
@@ -47,6 +48,7 @@ const TutorAuthentication = ({navigation,route }) => {
         
         callApi()
     },[])
+    console.log(project)
 
     return (
         <View style={styles.container}>

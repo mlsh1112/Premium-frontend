@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import TodayProject from '../../src/components/TodayProjectHome'
 import ProjectMini from '../../src/components/ProjectMini'
-import {getprojects,getattendances} from '../../src/Api'
+import {getprojects,getattendances,gettutorprojs} from '../../src/Api'
 import colors from '../../src/colors'
 import homelogo from '../../assets/homeLogo2.png';
 import card1 from '../../assets/cardNews1/cardNews1-001.png'
@@ -23,6 +23,7 @@ class Home extends Component {
         subject:'',
         projects:[],
         myprojects:[],
+        tutorproj:[],
         user:[]
     };
     constructor(props) {
@@ -41,8 +42,12 @@ class Home extends Component {
 
         const getApi = async()=>{
             await getattendances()
-            .then(res=>setProjects(res.data))
-            .catch(err => console.log(err))
+            .then(res=>this.setState({myprojects:res.data}))
+            .catch(err => console.log('attendances',err))
+
+            await gettutorprojs()
+            .then(res=>this.setState({tutorproj:res.data}))
+            .catch(err=>console.log(err))
         }
 
         getApi()
@@ -54,17 +59,20 @@ class Home extends Component {
             })
             .catch(err=>console.log(err))
 
-            await AsyncStorage.getItem('projects')
+            /*await AsyncStorage.getItem('projects')
             .then(res=>{
                 this.setState({myprojects:JSON.parse(res)})
             })
-            .catch(err=>console.log(err))
+            .catch(err=>console.log(err))*/
         }
         getData()
     
     }
+    
     render() {
         console.log(this.state.user)
+        //console.log(this.state.myprojects)
+        console.log(this.state.tutorproj)
         return (
             <View style={styles.container}>
                 <View style={styles.logoposition} >
@@ -73,23 +81,46 @@ class Home extends Component {
 
                <View style={styles.today}>
                     <Text style={styles.todaytext}>{this.state.user.name} 님의 오늘의 인증!</Text>
-                    <ScrollView horizontal={true} style={{width:"100%",height:"100%"}}>
-           
-                    {this.state.myprojects?
-                    <View>
-                    {this.state.myprojects.map((project,index)=>{
-                           return <TodayProject 
-                           navigation={this.props.navigation}
-                           data={project.project}
-                           startDay={project.created_at}
-                           key={index}
-                           />
-                        })}</View>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={true} style={{width:"100%",height:"100%"}}>
+                        {this.state.user.type==='Tutor'?
+                        <View>
+                        {this.state.tutorproj?
+                            <View style={{flexDirection:'row'}}>
+                            {this.state.tutorproj.map((project,index)=>{
+                                   return <TodayProject 
+                                   navigation={this.props.navigation}
+                                   data={project}
+                                   startDay={project.started_at}
+                                   key={index}
+                                   />
+                                })}</View>
+                                :
+                                <View>
+        
+                                </View>
+                            }
+                            </View>
+                    
                         :
                         <View>
-
-                        </View>
-                    }
+                        {this.state.myprojects?
+                            <View style={{flexDirection:'row'}}>
+                            {this.state.myprojects.map((project,index)=>{
+                                   return <TodayProject 
+                                   navigation={this.props.navigation}
+                                   data={project.project}
+                                   startDay={project.created_at}
+                                   key={index}
+                                   />
+                                })}</View>
+                                :
+                                <View>
+        
+                                </View>
+                            }
+                            </View>
+                        }
+                    
 
                         
                  

@@ -5,21 +5,39 @@ import authBtn from '../../assets/authBtn-001.png'
 class Projectcard extends Component {
     
     render() {
+        //console.log(this.props.data)
         var startDate=new Date().getTime() - new Date(this.props.startDay).getTime();
         var remainDay=Math.floor(startDate / (1000 * 60 * 60 * 24))
         var pastDay=this.props.data.experience_period-remainDay
         const project=this.props.data
+        console.log(remainDay,this.props.data.experience_period)
         return (
         <View style={{marginLeft:30}}>
             <Card >
                 <View style={styles.card} >
                     <View style={{margin:15, marginLeft:25}}>
                     <Text style={styles.textstyle}>{this.props.data.title}</Text>
+
+                    {this.props.data.experience_period>=remainDay+1?
                     <View style={{flexDirection:'row',margin:2}}>
                     <Text style={styles.dayStyle}>{remainDay+1} </Text>
                     <Text style={styles.dayStyle2}>일차 인증</Text>
                     </View>
-                    <Text style={styles.dayStyle3}>남은 인증 {pastDay-1}일</Text>
+                    :
+                    <View style={{flexDirection:'row',margin:2}}>
+                    <Text style={styles.dayStyle}>{this.props.data.experience_period} </Text>
+                    <Text style={styles.dayStyle2}>일차 인증</Text>
+                    </View>
+                    }
+                    
+                    {
+                        pastDay-1<0?
+                        <Text style={styles.dayStyle3}>프로젝트가 끝났습니다.</Text>
+                        :
+                        <Text style={styles.dayStyle3}>남은 인증 {pastDay-1}일</Text>
+
+                    }
+                   
                     </View>
                     <TouchableOpacity style={{marginLeft:"20%"}} onPress={() => {
                         this.props.navigation.navigate('Authentication',{project})
@@ -27,6 +45,7 @@ class Projectcard extends Component {
                     <Image source={authBtn} style={{width:130,height:100}}></Image>
                     </TouchableOpacity>
                 </View>
+
             </Card>
       </View>
 
@@ -64,6 +83,6 @@ const styles={
 
     
 }
-
+ 
 
 export default Projectcard;
