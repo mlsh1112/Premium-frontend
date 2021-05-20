@@ -10,31 +10,8 @@ import {
   
 import {Button} from '../../src/components/Button';
 import Imagepicker from '../../src/image-picker';
-import authrequest from '../../src/Api';
-import axios from 'axios';
-import AsyncStorage from '@react-native-community/async-storage';
-import baseurl from '../../config'
-let headers = {
-  headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'multipart/form-data',
-      'Authorization': ''
-  }
-}
-const PORT = baseurl.port
-console.log(PORT)
-const API = axios.create(headers);
-API.interceptors.request.use(
-    async function (config){
-        const token = await AsyncStorage.getItem('token')
-        config.headers['Authorization'] = token
-        console.log(config)
-        return config;
-    },
-    function(error){
-        return Promise.reject(error)
-    }
-);
+import {submitauth} from '../../src/Api';
+
 const SchoolAuth = (props) => {
     const [imageinfo,setImageinfo] = useState();
     const submitPhoto = () => {
@@ -43,9 +20,7 @@ const SchoolAuth = (props) => {
       formData.append('auth[images_attributes][0][image]', {uri: imageinfo.uri, name: imageinfo.fileName, type: imageinfo.type});
      
       if(imageinfo !== undefined){
-          //authrequest(formData).then(res => console.log(res)).catch(error => console.log(error))
-          API.post(PORT+"/auths/", formData)
-          .then(res => {
+          submitauth(formData).then(res => {
             console.log(res)
             Alert.alert("","제출이 완료되었습니다!",[
               { text: "OK", onPress: () => {
