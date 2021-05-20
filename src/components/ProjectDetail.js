@@ -164,20 +164,20 @@ const ProjectDetail =(props)=> {
         <View style={styles.buttonStyle}>
           {latestpr.tutor.email === myinfo.email
           ?(
-            <View>
+            <View style={styles.inbuttonStyle}>
               <Button onPress={() => {tutordeleteproject()}}>프로젝트 삭제하기</Button>
             </View>
           )
           :
             (isExperienced ?
-              <View>
+              <View style={styles.inbuttonStyle}>
                 { isJoin === false
                   ? (<Button onPress={()=>{handleAttendence()}}>{latestpr.experience_period} DAYS  체험하기</Button> )
                   : (<Button onPress={()=>{tuteequitproject()}}>프로젝트 그만두기</Button> )
                 }
               </View>
             :
-              <View>
+              <View style={styles.inbuttonStyle}>
                 { isJoin === false 
                   ? (<Button onPress={()=>{
                     //handleAttendence()
@@ -255,6 +255,13 @@ const ProjectDetail =(props)=> {
     buttonStyle:{
       marginTop:20,
       marginRight:25,
+      flex:1,
+      width: "100%",
+      justifyContent:'center',
+    },
+    inbuttonStyle: {
+      width:'100%',
+      alignItems:'center'
     }
   }
 export default ProjectDetail;
