@@ -4,6 +4,37 @@ import AsyncStorage from '@react-native-community/async-storage';
 import baseurl from '../config'
 
 
+const PORT = baseurl.port
+// const PORT = baseurl.sungmin
+
+let formheaders = {
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        'Authorization': ''
+    }
+}
+
+const FORMAPI = axios.create(formheaders);
+FORMAPI.interceptors.request.use(
+    async function (config){
+        const token = await AsyncStorage.getItem('token')
+        config.headers['Authorization'] = token
+        console.log(config)
+
+        config.paramsSerializer = params => {
+            return Qs.stringify(params, {
+                arrayFormat: "brackets",
+                encode: false,
+            });
+        };
+        return config;
+    },
+    function(error){
+        return Promise.reject(error)
+    }
+);
+
 let headers = {
     headers: {
         'Accept': 'application/json',
@@ -14,9 +45,6 @@ let headers = {
 const kakaoBook = axios.create({
     headers: { 'Authorization': baseurl.kakaotoken },
 })
-
-const PORT = baseurl.port
-// const PORT = baseurl.sungmin
 
 const API = axios.create(headers);
 API.interceptors.request.use(
@@ -65,3 +93,4 @@ export const tutorgetproject = (params) => API.get(PORT+'/projects',{params})
 export const deleteproject = (projectid) => API.delete(PORT+`/projects/${projectid}`)
 export const quitproject = (params) => API.delete(PORT+'/attendances',{params})
 export const getPlan=(project_id)=>API.get(PORT+'/options',{project_id})
+export const submitauth = (formData) => FORMAPI.post(PORT+"/auths/", formData)
