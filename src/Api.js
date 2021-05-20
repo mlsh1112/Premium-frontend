@@ -61,3 +61,6 @@ export const createattendances = (projectid) => API.post(PORT+'/attendances',pro
 export const gettutees = (params) => API.get(PORT+'/auths/show_all',{ params })
 export const gettutorprojs=()=>API.get(PORT+"/get_project_list")
 export const paymentstatus = (params) => API.patch(PORT+`/attendances`,params)
+export const createlike = ( params ) => API.post(PORT + '/likes', params)
+export const deletelike = (id) => API.delete(PORT + `/likes/${id}`)
+export const islike = ( params ) => API.get(PORT+`/likes/is_like`, {params})

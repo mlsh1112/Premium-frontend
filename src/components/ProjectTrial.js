@@ -7,6 +7,7 @@ import colors from '../colors';
 import {Button} from '../components';
 
 const ProjectTrial =({navigation,route})=> {
+        const latestpr = route.params.latestpr
         return (
             <View style={styles.position}>
                 <Card style={styles.cardStyle}>
@@ -17,7 +18,7 @@ const ProjectTrial =({navigation,route})=> {
                     <Text style={{marginBottom:30, color:'red', fontWeight:'bold', fontSize:20}}>
                         7일 체험 중 입니다. 
                     </Text>
-                    <Text style={styles.titleStyle}>{route.params.project.title}</Text>
+                    <Text style={styles.titleStyle}>{route.params.latestpr.title}</Text>
                     <View style={{flexDirection:'row'}}>
                         <Text style={styles.subjectStyle}>고등 수학 / 수학</Text>
                     </View>
@@ -28,7 +29,9 @@ const ProjectTrial =({navigation,route})=> {
                     <View style={styles.profile}>
                     <View style={{flexDirection:'row', marginBottom:10 }}>
                         <Image></Image>
-                    <Text>이모씨</Text>
+                        <TouchableOpacity onPress={()=> navigation.navigate('ProfileView',{latestpr})}>
+                          <Text>{route.params.latestpr.tutor.name}</Text>
+                        </TouchableOpacity>
                     </View>
                     </View>
                 </View>
@@ -43,7 +46,7 @@ const ProjectTrial =({navigation,route})=> {
 
                 <View style={styles.eee}>
                     <Text style={styles.headStyle} >보증금</Text>
-                    <Text style={styles.describeStyle}>실천보증금 {route.params.project.deposit}원</Text>
+                    <Text style={styles.describeStyle}>실천보증금 {route.params.latestpr.deposit}원</Text>
                 </View>
 
 

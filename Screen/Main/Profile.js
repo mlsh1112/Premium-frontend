@@ -60,12 +60,8 @@ const Profile = (props) => {
   const [userid,setUserid] = useState(8);
   
   const [project,setProject] = useState([])
-  const [finishedproject,setFinishedProject] = useState([
-    {id: 1,title: "수학1 마스터하기", info:"반복학습을 통한 수학1 마스터하기"},
-  ]);
-  const [likeproject,setLikeproject] = useState([
-    {id: 1,title: "화학1 마스터하기", info:"화학1 중 원소주기율표 마스터하기"},
-  ]);
+  const [finishedproject,setFinishedProject] = useState([]);
+  const [likeproject,setLikeproject] = useState([]);
 
   const [school,setSchool] = useState('아주대학교');
   const [like,setLike] = useState(1287);

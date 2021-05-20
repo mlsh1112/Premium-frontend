@@ -1,59 +1,61 @@
-import React, { Component } from 'react';
+import React, { useState,useEffect } from 'react';
 import {  View, Image,Text,TouchableOpacity,ScrollView,Alert } from 'react-native';
 import {  Card,IconButton,Colors } from 'react-native-paper';
 import cat from '../../assets/cat2.png'
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from '../components'
 import ProjectMini from './ProjectMini'
+import Like from './Like';
+import {getproject} from '../Api'
 
-function ProfileView({ navigation }){
+function ProfileView({ navigation,route }){
+    const project = route.params.latestpr
+    const [latestpr,setLatestpr]=useState()
+    useEffect(()=>{
+        getproject(project.id).then(res => {
+            setLatestpr(res.data)
+        }).catch(e => {
+            console.log(e)
+        });    
+    },[])
     return(
         <View>
             <Card style={styles.cardStyle}>
                 <View style={styles.topPosition}>
                     <View style={styles.profilePosition}> 
                         <Image source={cat} style={styles.imgStyle}></Image>
-                        <View style={{flexDirection:'row',marginBottom:10}}>
-                            <Text style={styles.nameStyle1}>튜터  </Text>
-                            <Text style={styles.nameStyle2}> 이모씨</Text>
-                        </View>
+                        <View style={{flexDirection : 'row',alignItems: 'center',justifyContent:'space-between',width:'100%'}}>
+                            <View >
+                                <View style={{flexDirection:'row',marginBottom:10}}>
+                                    <Text style={styles.nameStyle1}>{project.tutor.type}  </Text>
+                                    <Text style={styles.nameStyle2}> {project.tutor.name}</Text>
+                                </View>
 
-                        <View style={{flexDirection:'row',marginBottom:10}}>
-                        <Icons name='school' size={20} color="#9FA5C0"></Icons>
-                        <Text style={styles.schoolStyle}>아주대학교</Text>
+                                <View style={{flexDirection:'row',marginBottom:10}}>
+                                    <Icons name='school' size={20} color="#9FA5C0"></Icons>
+                                    <Text style={styles.schoolStyle}>아주대학교</Text>
+                                </View>
+                            </View>
+                            <View>
+                                {latestpr !== undefined ? <Like project={latestpr}/> : <></>}
+                            </View>
                         </View>
+                        
                     </View>
-
-
-                    <View style={{flexDirection:'row',marginTop:30}}>
-                        <View style={styles.detailPosition}>
-                            <Text style={styles.detailtext1}>1</Text>
-                            <Text style={styles.detailtext2}>Projects</Text>
-                        </View>
-
-                        <View style={styles.detailPosition}>
-                            <Text style={styles.detailtext1}>782</Text>
-                            <Text style={styles.detailtext2}>Following</Text>
-                        </View>
-
-                        <View style={styles.detailPosition}>
-                            <Text style={styles.detailtext1}>1</Text>
-                            <Text style={styles.detailtext2}>Followers</Text>
-                        </View>
-                    </View>
-                    <Button style={styles.buttonStyle}>Following</Button>
                 </View>
 
             <View style={styles.bottomPosition}></View>    
             
             <View style={styles.projectPosition}>
-            <Text style={styles.projectText}>Projects</Text>
-            <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator = {true}
-                style={styles.projectScroll}>
-                    <ProjectMini navigation={navigation}></ProjectMini>
-            </ScrollView>
+                <Text style={styles.projectText}>Projects</Text>
+                <View style={{marginVertical:30,width: '100%',height: '90%'}}>
+                    <ScrollView
+                        horizontal={true}
+                        showsHorizontalScrollIndicator = {true}
+                        style={styles.projectScroll}>
+                            {latestpr !==undefined ? <ProjectMini navigation={navigation} project={latestpr}></ProjectMini> : <></>}
+                    </ScrollView>
+                </View>
             </View>
         </Card>
 
@@ -74,15 +76,15 @@ const styles={
         borderBottomWidth:2,
     },
     profilePosition:{
-        marginLeft:'30%',
+        width:'100%',
+        justifyContent:'center',
+        alignItems: 'center',
     },
     imgStyle:{
         width: 80,
         height:80,
         borderRadius:50,
         marginBottom:20,
-        marginLeft:20
-
     },
     nameStyle1:{
         fontWeight:'bold',
@@ -108,6 +110,8 @@ const styles={
         marginBottom:10
     },
     detailtext2:{
+        textAlignVertical: 'center',
+        height: '100%',
         fontWeight:'bold',
         fontSize:18,
         color:'#9FA5C0',
@@ -124,16 +128,14 @@ const styles={
     },
 
     projectPosition:{
-        margin:25
+        margin:15
     },
     projectText:{
         fontSize:25,
         fontWeight:'bold',
         color:'#3E5481',
-        marginBottom:10
     },
     projectScroll:{
-        backgroundColor:'#eee',
         height:'30%',
         marginBottom:10,
         borderRadius:10

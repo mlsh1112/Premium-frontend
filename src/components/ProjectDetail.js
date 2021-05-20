@@ -1,24 +1,18 @@
-import AsyncStorage from '@react-native-community/async-storage';
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, View, Image,Text,TouchableOpacity,ScrollView,Alert } from 'react-native';
 import {  Card,IconButton,Colors } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../colors';
 import {Button} from '../components';
-import {createattendances} from '../Api'
-const ProjectDetail =({navigation,route})=> {
-   var [liked,setLiked]=useState(false)
-   var [isJoin,setisJoin]=useState(false)
-   var [isExperienced,setisExperienced]=useState(true)
-   var [myprj,setMyprj]=useState() // 참가하고 있는 프로잭트
-   const project=route.params.project
+import {createattendances,getproject,getattendances} from '../Api'
 
-  const _toggle = () => {
-    let localLiked = liked;
-    // Toggle the state variable liked
-    localLiked = !localLiked;
-    setLiked( liked = localLiked);
-  };
+const ProjectDetail =({navigation,route})=> {
+  var [isJoin,setisJoin]=useState(false)
+  var [isExperienced,setisExperienced]=useState(true)
+  const project=route.params.project
+  const [latestpr,setLatestpr] = useState(project)
+  
+
   const handleAttendence=()=>{
     console.log(project.id)
     createattendances({
@@ -27,58 +21,57 @@ const ProjectDetail =({navigation,route})=> {
     .then(res=>{
       console.log(res)
       Alert.alert('7일 체험이 신청되었습니다.')
-      navigation.navigate('ProjectTrial',{project})
+      navigation.navigate('ProjectTrial',{latestpr})
     })
-    .catch(err=>console.log(err))
+    .catch(err=>{
+      console.log("--------------create attendance error---------------")
+      console.log(err)
+    })
   }
 
   useEffect(()=>{
-    const getData= async()=>{
-      await AsyncStorage.getItem('projects')
-      .then(res=>setMyprj(JSON.parse(res)))
-      .catch(err=>console.log(err))
-    }
-    getData()
-
-    const myprojects=()=>{
-      if(myprj){
-         myprj.map((proj)=>{
-            if (proj.project.id===project.id){
-              if (proj.status === 'trial'){
-                setisJoin(true)
-      }}})
-        }
+    getattendances().then(res=>{
+      if(res.data){
+        res.data.map((pr)=>{
+          if (pr.project.id === project.id && pr.status === 'trial'){
+            setisJoin(true)
+          }
+        })
       }
-    myprojects()
-    
-  })
+      getproject(project.id).then(res => {
+        console.log("---------------getproject--------------")
+        console.log(res.data)
+        setLatestpr(res.data)
+      }).catch(e => {
+        console.log("---------------getproject error--------------")
+        console.log(e.response.data)
+      });
+    })
+    .catch(err => {
+      console.log("---------------getattendances error--------------")
+      console.log(err)
+    })
+  },[])
   return (
       <View style={styles.position}>
         <Card style={styles.cardStyle}>
           <ScrollView>
           <View style={{margin:20}}>
-          <Text style={styles.titleStyle}>{route.params.project.title}</Text>
-          <View style={{flexDirection:'row'}}>
-            <Text style={styles.subjectStyle}>고등 수학 / 수학</Text>
-            <TouchableOpacity style={styles.likeStyle} onPress={()=>_toggle()}>
-            {liked === false ? (
-              <MaterialCommunityIcons name='heart-outline' size={20} color={colors.maincolor}/>
-            ) : (
-              <MaterialCommunityIcons name='heart' size={20} color={colors.maincolor}/>
-            )}<Text style={styles.likeText}>273 LIKES</Text>
-            </TouchableOpacity>
-            </View>
+          <Text style={styles.titleStyle}>제목 : {latestpr.title}</Text>
+         
           <View style={styles.eee}>
             <View style={styles.profile}>
               <View style={{flexDirection:'row', marginBottom:10 }}>
                 <Image></Image>
-                <Text>이모씨</Text>
+                <TouchableOpacity onPress={()=> navigation.navigate('ProfileView',{latestpr})}>
+                  <Text>튜터 : {latestpr.tutor.name}</Text>
+                </TouchableOpacity>
               </View>
           </View>
           </View>
           <View style={styles.eee}>
               <Text style={styles.headStyle} >프로젝트 소개</Text>
-              <Text style={styles.describeStyle}>{route.params.project.description}</Text>
+              <Text style={styles.describeStyle}>{latestpr.description}</Text>
           </View>
 
           <View style={styles.eee}>
@@ -91,12 +84,12 @@ const ProjectDetail =({navigation,route})=> {
 
           <View style={styles.eee}>
             <Text style={styles.headStyle} >보증금</Text>
-            <Text style={styles.describeStyle}>실천보증금 {route.params.project.deposit}원</Text>
+            <Text style={styles.describeStyle}>실천보증금 {latestpr.deposit}원</Text>
           </View>
 
           <View style={styles.eee}>
             <Text style={styles.headStyle} >프로젝트 기간</Text>
-            <Text style={styles.describeStyle}>{route.params.project.experience_period} DAYS</Text>
+            <Text style={styles.describeStyle}>{latestpr.experience_period} DAYS</Text>
           </View>
           </View>
         </ScrollView>
