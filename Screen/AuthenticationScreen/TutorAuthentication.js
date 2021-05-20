@@ -14,7 +14,8 @@ import {Button} from '../../src/components'
 import { gettutees } from '../../src/Api';
 
 function TuteeListComponent({tutee,navigation}){
-    const tuteeinfo=tutee.tutee
+    const tuteeinfo=tutee.target
+    console.log(tutee.target)
     return(
         <View style={styles.tuteeBarStyle}>
             <Icons name='face' size={30} style={{marginLeft:'8%'}} ></Icons>

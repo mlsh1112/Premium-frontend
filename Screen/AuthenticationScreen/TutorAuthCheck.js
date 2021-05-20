@@ -10,12 +10,13 @@ import {Button} from '../../src/components';
 
 
 const TutorAuthCheck = ({navigation, route}) => {
-    const tutee=route.params.tutee
+    const tutee=route.params
+    console.log(tutee.target)
     return (
         <View style={styles.container}>
             <View style={styles.tuteeBarStyle}>
             <Icons name='face' size={30}></Icons>
-            <Text style={styles.tuteenameStyle}>{tutee.name}</Text>
+            <Text style={styles.tuteenameStyle}>{tutee.target.name}</Text>
         </View>
         <View style={styles.tuteeBarStyle}>
             <Text style={styles.textStyle}>Today 인증 내용 👍</Text>

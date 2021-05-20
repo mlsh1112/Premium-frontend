@@ -34,7 +34,7 @@ const AuthLoading = (props) => {
         };
     };
     useEffect(() => {
-        //deletokenfortest();
+       // deletokenfortest();
         CheckUserToken(props);
     });
     return (
