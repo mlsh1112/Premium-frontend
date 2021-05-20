@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {useState,useEffect} from 'react';
+import React, {useState,useEffect, useRef} from 'react';
 import {
   StyleSheet,
   View,
@@ -33,7 +33,6 @@ import ProjectMini from '../../src/components/ProjectMini';
 import cat from '../../assets/cat2.png'
 
 const EachTabViewsProjects = (props) => {
-  // console.log(props.usertype)
   return(
     <ScrollView style={styles.menuWrapper}>
             <View style={{marginRight:-20, flex:1,flexDirection:'row',justifyContent:'space-between',flexWrap: 'wrap'}}>
@@ -64,7 +63,7 @@ const Profile = (props) => {
       "email": "", "id": -1, "image": "", "info": "", "likes_count": -1, "name": "", "phone": "", "status": "", "type": ""
     }
   )
-  const [showscreen,setShowscreen]=useState(false)
+  const showscreen = useRef(false)
   const [project,setProject] = useState([])
   const [finishedproject,setFinishedProject] = useState([]);
   const [school,setSchool] = useState('아주대학교');
@@ -93,7 +92,7 @@ const Profile = (props) => {
             console.log(e.response.status)
           })
         }
-        setShowscreen(true)
+        showscreen.current = true
       }).catch(e => {
         console.log(e)
         alert('get user info error!!')
