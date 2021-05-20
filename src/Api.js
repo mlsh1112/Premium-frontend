@@ -17,7 +17,6 @@ const kakaoBook = axios.create({
 
 const PORT = baseurl.port
 // const PORT = baseurl.sungmin
-
 console.log(PORT)
 
 const API = axios.create(headers);
@@ -61,3 +60,4 @@ export const createschedule = (id, params) => API.get(PORT+`/projects/${id}/crea
 export const createattendances = (projectid) => API.post(PORT+'/attendances',projectid)
 export const gettutees = (params) => API.get(PORT+'/auths/show_all',{ params })
 export const gettutorprojs=()=>API.get(PORT+"/get_project_list")
+export const paymentstatus = (params) => API.patch(PORT+`/attendances`,params)

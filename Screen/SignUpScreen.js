@@ -6,14 +6,13 @@ import {
    StyleSheet,
    ScrollView,
    View,
-   CheckBox,
    Text,
    Image,
    StatusBar,
    TextInput,
    TouchableOpacity,
  } from 'react-native';
- 
+ import CheckBox from '@react-native-community/checkbox';
 import {signup} from '../src/Api';
 import {setToken} from '../src/Asyncstorage';
 import { Formik } from "formik";
