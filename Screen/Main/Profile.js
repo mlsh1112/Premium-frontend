@@ -5,8 +5,9 @@
  * @format
  * @flow strict-local
  */
+
+import React, {useState,useEffect, useRef} from 'react';
 import RNRestart from 'react-native-restart';
-import React, {useState,useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -28,20 +29,28 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {TabView, TabBar} from 'react-native-tab-view';
 
 import colors from '../../src/colors'
-import {getproject, logout} from '../../src/Api';
+import {logout,getcurrentuser,getattendances,tutorgetproject} from '../../src/Api';
 import ProjectMini from '../../src/components/ProjectMini';
+import cat from '../../assets/cat2.png'
+
 const EachTabViewsProjects = (props) => {
   return(
     <ScrollView style={styles.menuWrapper}>
             <View style={{marginRight:-20, flex:1,flexDirection:'row',justifyContent:'space-between',flexWrap: 'wrap'}}>
               {props.project.map((pr, index )=> {
-                //return <PrintProject project={pr} key={index}/>
-                return(
-                  <View key={index} style={{marginVertical:8}}>
-                    <ProjectMini navigation={props.navigation} project={pr} key={index}></ProjectMini>
-                  </View>
-                )
-                //return <ProjectMini navigation={props.navigation} data={pr} key={index}></ProjectMini>
+                if (props.usertype === 'Tutor'){
+                  return(
+                    <View key={index} style={{marginVertical:8}}>
+                      <ProjectMini navigation={props.navigation} project={pr} key={index}></ProjectMini>
+                    </View>
+                  )
+                }else {
+                  return(
+                    <View key={index} style={{marginVertical:8}}>
+                      <ProjectMini navigation={props.navigation} project={pr.project} key={index}></ProjectMini>
+                    </View>
+                  )
+                }
               })}  
             </View>
             
@@ -50,64 +59,53 @@ const EachTabViewsProjects = (props) => {
 }
 
 const Profile = (props) => {
-  
-
-
-  const [userinfo,setUserinfo] = useState(new Object())
-  const [showscreen,setShowscreen]=useState(false)
-  
-  const [userid,setUserid] = useState(8);
-  
+  const [myinfo,setMyinfo] = useState(
+    {
+      "email": "", "id": -1, "image": "", "info": "", "likes_count": -1, "name": "", "phone": "", "status": "", "type": ""
+    }
+  )
+  const showscreen = useRef(false)
   const [project,setProject] = useState([])
   const [finishedproject,setFinishedProject] = useState([]);
-  const [likeproject,setLikeproject] = useState([]);
-
   const [school,setSchool] = useState('아주대학교');
-
-
-  const [like,setLike] = useState(1287);
-
-  const deletokenfortest = async() => { //asyncstorage 테스트용 token 삭제
-    try{
-        await AsyncStorage.removeItem('token');
-    }
-    catch (error){
-        console.log("AsyncStorage remove Error: " + error.message);
-    };
-}
-
-    useEffect(() => {
-      const getData = async() => {
-        try {
-         await AsyncStorage.getItem('userinfo').then(res => {
-           setUserinfo(JSON.parse(res))
-         })
-        } catch (error) {
-          console.log("get user info error")
-        } 
-    }
-    getData()
-
-    const getApiData = () => {
-      getproject(userid).then(res=>{
-        console.log("response is : "+ JSON.stringify(res.data))
-        setProject(pr => [...pr,res.data])
-      }).catch(error=>{
-        console.log("get project error: "+error)
-      })
-    }
-    
-    //getApiData()
-    setShowscreen(true)
   
-  },[])
+  useEffect(() => {
+    const rerender = props.navigation.addListener('focus', e => {
+      console.log("welcome back")
+      getcurrentuser().then(res => {
+        setMyinfo(res.data)
+        if(res.data.type ==='Tutee'){
+          getattendances().then(res => {
+            setProject(res.data)
+          }).catch(e => {
+            console.log('-----------------get attendance error----------------')
+            console.log(e.response.status)
+          })
+        }
+        else {
+          tutorgetproject({
+            q: {tutor_id_eq: res.data.id}
+          }).then(res => {
+            console.log(res.data)
+            setProject(res.data)
+          }).catch(e => {
+            console.log("=======get tutor project error========")
+            console.log(e.response.status)
+          })
+        }
+        showscreen.current = true
+      }).catch(e => {
+        console.log(e)
+        alert('get user info error!!')
+      })
+    })
+  },[props.navigation])
   
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     { key: 'first', title: '진행 중' },
-    { key: 'second', title: '종료' },
-    { key: 'third', title: '좋아요' },
+    { key: 'second', title: '완료' },
   ]);
   const renderTabBar = (props) => {
     return(<TabBar
@@ -121,21 +119,22 @@ const Profile = (props) => {
   const renderScene = ({route}) =>{
     switch (route.key) {
       case 'first':
-        return <EachTabViewsProjects project={project} navigation={props.navigation}/>;
+        return <EachTabViewsProjects project={project} navigation={props.navigation} usertype={myinfo.type}/>;
       case 'second':
-        return <EachTabViewsProjects project={finishedproject} navigation={props.navigation}/>
-      case 'third':
-        return <EachTabViewsProjects project={likeproject} navigation={props.navigation}/>
+        return <EachTabViewsProjects project={finishedproject} navigation={props.navigation} usertype={myinfo.type}/>
     }
   };
   
-  const handleLogoutPress = async()=> {  //로그아웃 function
-     await logout()
-     .then(console.log("로그아웃 성공"))
-     
-     deletokenfortest()
-     .then(console.log('token 삭제 성공'))
-     RNRestart.Restart();
+  const handleLogoutPress = ()=> {  //로그아웃 function
+    console.log('로그아웃 버튼 눌림!')
+    logout().then(res => {
+      console.log(res)
+      AsyncStorage.removeItem('token');
+      props.navigation.popToTop()
+    }).catch(e => {
+      console.log('================== 로그아웃 에러 ==================')
+      console.log(e.response)
+    })
   }
   const goToCreateProject = () => {
     console.log("프로젝트 생성하러가기");
@@ -143,10 +142,10 @@ const Profile = (props) => {
   }
   const goToAuth = () => {
     console.log("인증하러 하러가기");
-    if(userinfo.type == 'Tutor'){
+    if(myinfo.type == 'Tutor'){
       props.navigation.navigate('SchoolAuth');
     }
-    else if(userinfo.type == 'Tutee'){
+    else if(myinfo.type == 'Tutee'){
       props.navigation.navigate('Authentication')
     }
     else {
@@ -158,15 +157,25 @@ const Profile = (props) => {
     {showscreen && (
       <View style={styles.userInfoSection}>
         <View style={{flexDirection: 'row', marginTop: 15}}>
-          <Text style={styles.avatar} />
+          <Image source={cat} style={styles.avatar} />
           <View style={{marginLeft: 20}}>
-            <Title style={[styles.title, {marginTop:15,marginBottom: 5,}]}>{userinfo.name}</Title>
+            <Title style={[styles.title, {marginTop:15,marginBottom: 5,}]}>{myinfo.name}</Title>
             <View>
-              <Icon name="teach" color="red" size={20}/>
-              <Text style={styles.caption,{color:"red"}}>{userinfo.type}</Text>
-              { userinfo.type === "Tutor"  
-                ? <Text style={styles.caption,{color:"red"}}>[ {userinfo.status} ]</Text>
-                : <Text style={styles.caption,{color:"red"}}></Text>
+              { myinfo.type === "Tutor"
+                ? (<View>
+                    <Icon name="teach" color="#F63D3D" size={20}/>
+                    <Text style={styles.caption,{color:"#F63D3D"}}>{myinfo.type}</Text>
+                    <Text style={styles.caption,{color:"#F48705"}}>[ {myinfo.status} ]</Text>
+                  </View>
+                  )
+                : (<View>
+                    <View style={{flexDirection:'row'}}>
+                      <Icon name="book-open-variant" color="#7EB3D9" size={20}/>
+                      <Icon name="human-child" color="#7EB3D9" size={20}/>
+                    </View>
+                    <Text style={styles.caption,{color:"#7EB3D9"}}>{myinfo.type}</Text>
+                  </View>
+                  )
               }
             </View>
           </View>
@@ -183,12 +192,12 @@ const Profile = (props) => {
           <Icon name="school" color="#777777" size={20} style={{textAlignVertical:'center'}}/>
           <Text style={{color:"#777777", marginLeft: 20,textAlignVertical:'center'}}>{school}</Text>
         </View>
-        { userinfo.type === "Tutor" && userinfo.status === "approved"
+        { myinfo.type === "Tutor" && myinfo.status === "approved"
             ? (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToCreateProject}>
                 <Text style={styles.buttonstyle}>프로젝트 생성</Text>
                </TouchableOpacity>)
             : (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToAuth}>
-                <Text style={styles.buttonstyle}> 인증하러가기</Text>
+                <Text style={styles.buttonstyle}>인증하러가기</Text>
                </TouchableOpacity>)}
       </View>
     )}
@@ -197,12 +206,18 @@ const Profile = (props) => {
       <View style={styles.infoBoxWrapper}>
         <View style={styles.infoBox}>
           <Title>{project.length}</Title>
-          <Caption>Projects</Caption>
+          <Caption>진행중인 프로젝트</Caption>
         </View>
-        <View style={styles.infoBox}>
-          <Title>{like}</Title>
+        {myinfo.type === "Tutor"
+        ? (<View style={styles.infoBox}>
+          <Title>{myinfo.likes_count}</Title>
           <Caption>좋아요 개수</Caption>
-        </View>
+          </View>)
+        : (<View style={styles.infoBox}>
+          <Title>{finishedproject.length}</Title>
+          <Caption>완료한 프로젝트</Caption>
+          </View>)   
+        }
       </View>
     )}
     
@@ -284,8 +299,6 @@ const styles = StyleSheet.create({
     height: 100,
     borderWidth: 3,
     borderColor: "black",
-    textAlign: 'center',
-    textAlignVertical: "center",
     borderRadius: 50,
   },
   CardContainer: {
