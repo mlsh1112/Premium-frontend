@@ -41,11 +41,15 @@ class Home extends Component {
 
         const getApi = async()=>{
             await getattendances()
-            .then(res=>setProjects(res.data))
-            .catch(err => console.log(err))
+            .then(res=>{setProjects(res.data)
+                console.log("여긴 어텐던스 성공")
+            })
+            .catch(err => {
+                console.log("여긴 어텐던스 에러")
+                console.log(err)})
         }
 
-        getApi()
+       getApi()
 
         const getData = async()=>{
             await AsyncStorage.getItem('userinfo')
@@ -64,7 +68,6 @@ class Home extends Component {
     
     }
     render() {
-        console.log(this.state.projects)
         return (
             <View style={styles.container}>
                 <View style={styles.logoposition} >
@@ -86,7 +89,7 @@ class Home extends Component {
                 </View>
                 <View style={{marginTop:30,margin:20}}>
                     <Text style={styles.todayProjectTxt}>따숲이 추천하는 오늘의 카드 뉴스 </Text>
-                    <Text style={{marginBottom:10}}>이거만 보고 다시 열공하기 •'-'•)و✧ </Text>
+                    <Text style={{marginBottom:10}}>이거만 보고 다시 열공하기 •'-'•)و✧ </Text>
                     <ScrollView horizontal={true}>
                     <TouchableOpacity
                     style={{marginRight:15}}

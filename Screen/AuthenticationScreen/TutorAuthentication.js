@@ -10,7 +10,6 @@ import {
     TextInput,
     Keyboard,
   } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
 import {Button} from '../../src/components'
 function makeItem(projectlist){
     const temp = projectlist.map((pr)=>({
@@ -19,6 +18,7 @@ function makeItem(projectlist){
     }));
     return temp;
 }
+
 function TuteeListComponent({tutee,navigation}){
     return(
         <View style={styles.tuteeBarStyle}>

@@ -6,6 +6,7 @@ import Signin from '../Screen/SigninScreen';
 import Signup from '../Screen/SignUpScreen'
 import Tabnavigation from './BottomTabNav';
 
+
 const Stack = createStackNavigator();
 
 export default function StackForLogin(){

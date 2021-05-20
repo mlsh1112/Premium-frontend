@@ -54,8 +54,8 @@ const ProjectDetail =({navigation,route})=> {
   })
   return (
       <View style={styles.position}>
+        <ScrollView>
         <Card style={styles.cardStyle}>
-          <ScrollView>
           <View style={{margin:20}}>
           <Text style={styles.titleStyle}>{route.params.project.title}</Text>
           <View style={{flexDirection:'row'}}>
@@ -99,7 +99,6 @@ const ProjectDetail =({navigation,route})=> {
             <Text style={styles.describeStyle}>{route.params.project.experience_period} DAYS</Text>
           </View>
           </View>
-        </ScrollView>
         </Card>
         <View style={styles.buttonStyle}>
           {
@@ -128,6 +127,8 @@ const ProjectDetail =({navigation,route})=> {
           }
           
         </View>
+        </ScrollView>
+        
       </View>
     );
   
@@ -170,7 +171,6 @@ const ProjectDetail =({navigation,route})=> {
     borderBottomWidth:2,
     padding: 5,
     marginTop:10
-
     },
 
     profile:{
@@ -191,7 +191,8 @@ const ProjectDetail =({navigation,route})=> {
       marginBottom:30
     },
     buttonStyle:{
-      margin:20
+      marginTop:20,
+      marginRight:25,
     }
   }
 export default ProjectDetail;
