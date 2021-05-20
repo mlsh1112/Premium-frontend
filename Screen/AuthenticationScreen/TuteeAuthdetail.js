@@ -82,7 +82,7 @@ const TuteeAutdetail=({navigation,route})=>{
           </View>
           
           :
-          <Button onPress={()=>{navigation.navigate('TuteeAuthentication')}}>인증하기 </Button>
+          <Button onPress={()=>{navigation.navigate('TuteeAuthentication',project)}}>인증하기 </Button>
 
         }
       </View>
