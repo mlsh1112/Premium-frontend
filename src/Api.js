@@ -15,8 +15,8 @@ const kakaoBook = axios.create({
     headers: { 'Authorization': baseurl.kakaotoken },
 })
 
-const PORT = baseurl.port
-// const PORT = baseurl.sungmin
+// const PORT = baseurl.port
+const PORT = baseurl.sungmin
 
 console.log(PORT)
 
@@ -65,4 +65,4 @@ export const islike = ( params ) => API.get(PORT+`/likes/is_like`, {params})
 export const getcurrentuser = () => API.get(PORT+'/get_current_user')
 export const tutorgetproject = (params) => API.get(PORT+'/projects',{params})
 export const deleteproject = (projectid) => API.delete(PORT+`/projects/${projectid}`)
-export const quitproject = (projectid) => API.delete(PORT+'/attendances',{projectid})
+export const quitproject = (params) => API.delete(PORT+'/attendances',{params})
