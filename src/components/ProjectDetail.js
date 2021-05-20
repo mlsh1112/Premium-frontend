@@ -25,7 +25,7 @@ const ProjectDetail =(props)=> {
     })
     .then(res=>{
       console.log(res)
-      Alert.alert('7일 체험이 신청되었습니다.')
+      Alert.alert('체험기간 신청이 완료되었습니다.')
       props.navigation.navigate('ProjectTrial',{latestpr})
     })
     .catch(err=>{
@@ -141,7 +141,7 @@ const ProjectDetail =(props)=> {
               <Text style={styles.headStyle} >인증 방법</Text>
               <View style={{flexDirection:'row', marginBottom:10 }}>
               <MaterialCommunityIcons name='checkbox-marked-outline' size={26} color={colors.maincolor}/>
-              <Text style={styles.describeStyle}> 공부 시간 인증</Text>
+              <Text style={styles.describeStyle}> {latestpr.mission}</Text>
             </View>
           </View>
 
@@ -152,7 +152,7 @@ const ProjectDetail =(props)=> {
 
           <View style={styles.eee}>
             <Text style={styles.headStyle} >프로젝트 기간</Text>
-            <Text style={styles.describeStyle}>{latestpr.experience_period} DAYS</Text>
+            <Text style={styles.describeStyle}>{latestpr.duration} DAYS</Text>
           </View>
           </View>
         </ScrollView>
@@ -168,7 +168,7 @@ const ProjectDetail =(props)=> {
             (isExperienced ?
               <View>
                 { isJoin === false
-                  ? (<Button onPress={()=>{handleAttendence()}}>7 DAYS  체험하기</Button> )
+                  ? (<Button onPress={()=>{handleAttendence()}}>{latestpr.experience_period} DAYS  체험하기</Button> )
                   : (<Button onPress={()=>{tuteequitproject()}}>프로젝트 그만두기</Button> )
                 }
               </View>
