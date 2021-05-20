@@ -35,25 +35,30 @@ const ProjectDetail =(props)=> {
   }
   const tutordeleteproject = () => {
     console.log('프로젝트 삭제!!')
-    Alert.alert("프로젝트를 정말 삭제하시겠습니까?","프로젝트를 삭제하실 경우 보상은 얻으실 수 없습니다.",[
-      { text: "확인", onPress: () => {
-          console.log("확인 누름")
-          deleteproject(latestpr.id).then(res => {
-            console.log('--------- delete project ----------')
-            console.log(res.data)
-            props.navigation.popToTop()
-          }).catch(e => {
-            console.log('========= delete project error =========')
-            console.log(e)
-          })   
-        }
-      },
-      { text: "취소", onPress: () => {
-          console.log("취소 누름")
-        }
-      }
-      ]
-    )
+    if(latestpr.attendance_presence){
+      Alert.alert("프로젝트 삭제가 불가능합니다.","해당 프로젝트에 참여한 튜티가 있어 삭제가 불가능합니다. 불가피한 삭제 필요시 관리자에게 연락드립니다.")
+    }else{
+      Alert.alert("프로젝트를 정말 삭제하시겠습니까?","프로젝트를 삭제하실 경우 보상은 얻으실 수 없습니다.",[
+          { text: "확인", onPress: () => {
+              console.log("확인 누름")
+              deleteproject(latestpr.id).then(res => {
+                console.log('--------- delete project ----------')
+                console.log(res.data)
+                props.navigation.popToTop()
+              }).catch(e => {
+                console.log('========= delete project error =========')
+                console.log(e)
+              })   
+            }
+          },
+          { text: "취소", onPress: () => {
+              console.log("취소 누름")
+            }
+          }
+        ]
+      )
+    }
+    
   }
   const tuteequitproject = () => {
     console.log('프로젝트 그만두기!!!')
