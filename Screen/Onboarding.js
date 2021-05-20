@@ -1,10 +1,11 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component, useEffect,useState } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
+
 import jwt_decode from "jwt-decode"
 import {Button} from '../src/components';
 import {refresh,logout} from '../src/Api';
 import {setToken} from '../src/Asyncstorage';
-
+import RNRestart from 'react-native-restart';
 import {
     StyleSheet,
     TouchableOpacity,
@@ -16,22 +17,21 @@ import icon from '../assets/icon2.png'
 
 const Onboarding = (props)=>  {
 
-        const Timer_set =(decode_token_ToNumber,now_time)=>{
-        setTimeout(onSilentRefresh,((decode_token_ToNumber-now_time)-120)*1000)
-       }
-
-       const deletokenfortest = async() => {
+    const deletokenfortest = async() => {
         try{
            await AsyncStorage.removeItem('token');
-           
         }
         catch (error){
            console.log("토큰 삭제 실패: " + error.message);
          };
+    }
+        const Timer_set =(decode_token_ToNumber,now_time)=>{
+            setTimeout(onSilentRefresh,((decode_token_ToNumber-now_time)-120)*1000)        
         }
 
        const onSilentRefresh =()=>{
-        refresh().then(
+        refresh()
+        .then(
           res=>{
              deletokenfortest()
              setToken(res.data.token);
@@ -45,15 +45,17 @@ const Onboarding = (props)=>  {
         .catch(async(error)=>{
           alert("로그인 만료시간이 다되었습니다. 다시 로그인해주세요");
           console.log(error)  
-            await AsyncStorage.removeItem('token');
-            props.navigation.replace('Onboarding');
+          deletokenfortest()
+          RNRestart.Restart();
           
+
          })
       }
 
-    const CheckUserToken = async(props) => {
+    const CheckUserToken = async() => {
         try{
             const item = await AsyncStorage.getItem('token');
+            console.log("여긴 try")
             if (item){
                 console.log("token in authloading (in item true) : " + item)
                 let decode_token=jwt_decode(item)
@@ -64,10 +66,12 @@ const Onboarding = (props)=>  {
                 let now_time=new Date().getTime()/1000;
                 console.log('now_time: ',now_time)
 
+
                 if(decode_token_ToNumber-now_time<0){
-                    console.log("여기는 엑세스토큰이 시간이 초과되었을때")
+                    console.log("여기는 엑세스토큰이 초과됐을때")    
                     onSilentRefresh()
-                }
+              }
+                
 
                 else{
                     console.log("여기는 엑세스토큰이 초과안됐을때")
@@ -75,16 +79,13 @@ const Onboarding = (props)=>  {
                 }
                 
             }
-        }
-        
+        }   
         catch (error){
             console.log("토큰체크 실패: " + error.message);
         };
     
     }
-    
     useEffect(()=>{
-
         CheckUserToken()
     },[])
 

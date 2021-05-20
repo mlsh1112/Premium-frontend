@@ -4,12 +4,9 @@ import { getattendances } from '../../src/Api';
 import AsyncStorage from '@react-native-community/async-storage';
 import colors from '../../src/colors'
 import TodayProject from '../../src/components/TodayProjectHome'
+import { ScrollView } from 'react-native';
 
 const ProjectAuthCard = ({navigation,project}) => {
-     useEffect(()=>{
-         console.log("여긴 카드")
-         console.log({project})
-     })
     return(
         <View style={{width:350,margin:10,backgroundColor:colors.subcolor, borderRadius:10}}>
         <TouchableOpacity onPress={()=>{navigation('TuteeAuthdetail',{project})}}>
@@ -28,6 +25,7 @@ const TuteeAuthList = ({navigation}) => {
     const [projects, setProjects] = useState();
     const [user,setUser]=useState();
 
+
     useEffect(() => {
             
         const getData = async() =>{
@@ -42,40 +40,41 @@ const TuteeAuthList = ({navigation}) => {
             .catch(err=>console.log(err))
         }
 
-        getData()
+       // getData()
         const callApi = async() =>{
             await getattendances()
-            .then(res=>{{console.log(JSON.stringify(res.data)+"여긴 res")
-                        setProjects(res.data)
-        }})
-            .catch(err=>{
-                console.log("여긴 에러")
-                console.log(err)})
+            .then(res=>{setProjects(res.data)
+                console.log("Tutee list")
+            })
+            .catch(err=>{console.log(err)})
         }
         callApi()
-    }, []);
-    console.log(projects)
+    },[]);
     return (
         <View style={styles.container}>
+            
+            <ScrollView>
             {
                 projects?
                 <View>
                     {projects.map((project,index)=>{
                         
-                            return  <View style={{margin:17, backgroundColor:colors.maincolor,borderRadius:20}}>
+                            return  <ProjectAuthCard navigation={navigation.navigate} project={project} key={index} ></ProjectAuthCard>
+                            /*<View style={{margin:10, backgroundColor:colors.maincolor,borderRadius:20}}>
                                             <TodayProject
                                         navigation={navigation}
                                         data={project.project}
                                         startDay={project.created_at}
                                         key={index}
-                                        /></View>
-                            //<ProjectAuthCard navigation={navigation.navigate} project={project} key={index} ></ProjectAuthCard>
+                                        /></View>*/
+                            
                         })
                     }
                 </View>
                 :
                 <Text>진행 중인 프로젝트가 없습니다</Text>
             }
+            </ScrollView>
         </View>
     )
 }

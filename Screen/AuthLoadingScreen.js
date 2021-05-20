@@ -16,6 +16,7 @@ const AuthLoading = (props) => {
             console.log("AsyncStorage remove Error: " + error.message);
         };
     }
+
     const CheckUserToken = async(props) => {
         try{
             const item = await AsyncStorage.getItem('token');
@@ -35,7 +36,7 @@ const AuthLoading = (props) => {
         };
     };
     useEffect(() => {
-       //deletokenfortest();
+   //    deletokenfortest();
         CheckUserToken(props);
     });
     return (

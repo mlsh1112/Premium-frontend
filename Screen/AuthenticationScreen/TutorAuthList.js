@@ -36,12 +36,14 @@ const TutorAuthList = ({navigation}) => {
             await AsyncStorage.getItem('userinfo')
             .then(res=>{
                 setUser(JSON.parse(res))
+                console.log("tutor list")
+   
             })
             .catch(err=>console.log(err))
         }
 
         getData()
-    },[])
+         },[])
 
     return (
         <View style={styles.container}>

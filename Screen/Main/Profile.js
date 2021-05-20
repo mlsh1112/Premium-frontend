@@ -7,6 +7,7 @@
  */
 
 import React, {useState,useEffect, useRef} from 'react';
+import RNRestart from 'react-native-restart';
 import {
   StyleSheet,
   View,

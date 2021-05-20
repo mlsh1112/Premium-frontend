@@ -122,8 +122,8 @@ const ProjectDetail =(props)=> {
   },[props.navigation])
   return (
       <View style={styles.position}>
+        <ScrollView>
         <Card style={styles.cardStyle}>
-          <ScrollView>
           <View style={{margin:20}}>
           <Text style={styles.titleStyle}>제목 : {latestpr.title}</Text>
          
@@ -160,7 +160,6 @@ const ProjectDetail =(props)=> {
             <Text style={styles.describeStyle}>{latestpr.duration} DAYS</Text>
           </View>
           </View>
-        </ScrollView>
         </Card>
         <View style={styles.buttonStyle}>
           {latestpr.tutor.email === myinfo.email
@@ -190,6 +189,8 @@ const ProjectDetail =(props)=> {
           }
           
         </View>
+        </ScrollView>
+        
       </View>
     );
   
@@ -232,7 +233,6 @@ const ProjectDetail =(props)=> {
     borderBottomWidth:2,
     padding: 5,
     marginTop:10
-
     },
 
     profile:{
@@ -253,7 +253,8 @@ const ProjectDetail =(props)=> {
       marginBottom:30
     },
     buttonStyle:{
-      margin:20
+      marginTop:20,
+      marginRight:25,
     }
   }
 export default ProjectDetail;

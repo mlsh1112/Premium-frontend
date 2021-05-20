@@ -47,18 +47,28 @@ const Signin = (props) => {
        alert("이메일 혹은 패스워드를 확인해주세요.")
        console.log(error);
      });
-     const onLoinSuccess=(res)=>{
+     const onLoinSuccess=(res)=>{      
       let decode_token=jwt_decode(res.data.token)
       let decode_token_ToNumber= Number(decode_token.exp)
       let now_time=new Date().getTime()/1000;
       now_time=Math.ceil(now_time)
-      setToken(res.data.token);
-      setType(res.data.type);
-      setStatus(res.data.status);
-      setName(res.data.name)
-      setUser(res.data)
+      setToken(res.data.token).then(
+        console.log("토큰 저장 성공")
+      );
+      setType(res.data.type).then(
+        console.log("타입 저장 성공")
+      );
+      setStatus(res.data.status).then(
+        console.log("상태저장 성공")
+      );
+      setName(res.data.name).then(
+        console.log("네임저장 성공")
+      )
+      setUser(res.data).then(
+        console.log("데이터 저장성공")
+      )
       setTIMEout(decode_token_ToNumber,now_time)
-     }
+    }
      const setTIMEout =(decode_token_ToNumber,now_time)=>{
       setTimeout(onSilentRefresh,((decode_token_ToNumber-now_time)-120)*1000)
      }
@@ -66,6 +76,7 @@ const Signin = (props) => {
        refresh().then(
         async (res)=>{
           await AsyncStorage.removeItem('token');
+            console.log("리프레쉬")
             setToken(res.data.token);
             let decode_token=jwt_decode(res.data.token)
             let decode_token_ToNumber= Number(decode_token.exp)
@@ -81,6 +92,7 @@ const Signin = (props) => {
           props.navigation.replace('Onboarding');
         
        })
+       
      }
      const deletokenfortest = async() => {
        try{

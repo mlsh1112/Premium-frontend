@@ -62,7 +62,7 @@ function Search({navigation}) {
     },[reqData])
   
   return(
-    <View style={{flex:1}} >
+    <View style={{flex:30}} >
         <View
                     style={{height:80,
                     backgroundColor:'#1FCC79',
@@ -74,6 +74,10 @@ function Search({navigation}) {
                 placeholder="Search"
                 onChangeText={ChangeSearchData}
                 onIconPress={SearchVal}
+                onKeyPress={(e)=>{if(e.key==='Enter')
+                console.log('엔터클릭')
+              
+            }}
             />
             
         </View>
@@ -81,12 +85,12 @@ function Search({navigation}) {
         <FlatList
            style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':'white'}}
            data={reqData}
-           renderItem={({item})=>
+           renderItem={({item,index})=>
           <TouchableOpacity style={styles.Serach}onPress={()=>{
              console.log(item)
              navigation.navigate('ProjectDetail',{project:item})}}>
 
-              <ImageBackground style={styles.thumbnail} source={cat}></ImageBackground>
+              <Image style={styles.thumbnail} source={cat}></Image>
               <View>
                 <Text style={styles.Serachtitle}>제목 : {item.title}</Text>
                 <Text style={styles.Serachtitle}>프로젝트 설명 :{item.description} {item.title}</Text>
