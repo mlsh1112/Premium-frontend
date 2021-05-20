@@ -61,7 +61,7 @@ const ProjectDetail =(props)=> {
       Alert.alert("프로젝트를 정말 그만 두시겠습니까?","체험기간 이후의 프로젝트 중도 하차는 보증금 환급이 어려울 수 있습니다.",[
         { text: "확인", onPress: () => {
             console.log("확인 누름")
-            quitproject(latestpr.id).then(res => {
+            quitproject({project_id:latestpr.id}).then(res => {
               console.log('--------- quit project ----------')
               console.log(res)
               props.navigation.popToTop()
