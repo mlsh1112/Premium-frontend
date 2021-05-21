@@ -15,6 +15,7 @@ import { Card } from 'react-native-paper';
 import Calender from '../../src/components/Calender'
 import colors from '../../src/colors'
 import ProgressBar from "react-native-animated-progress";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const TuteeAutdetail=({navigation,route})=>{
  
     const project=route.params.project
@@ -72,6 +73,54 @@ const TuteeAutdetail=({navigation,route})=>{
             </View>
         </Card>
       </View>
+
+      <View alignItems='center' style={{padding:30}}>
+        {
+          pastDay<=0?
+          <View>
+            {
+              project.status==='trial'?
+              <Button onPress={()=>{navigation.navigate('ExperienceAuth',project)}}>프로젝트 신청하기</Button>
+              :
+              <Button onPress={()=>{navigation.navigate('AuthPayBack',project)}}>보증금 환급받기 </Button>
+            }
+          </View>
+          
+          :
+          <Button onPress={()=>{navigation.navigate('TuteeAuthentication')}}>인증하기 </Button>
+
+        }
+      </View>
+
+      <View style={styles.todayplanBack}>
+        <Text style={styles.titleTxt}>Today 일정 👻 </Text>
+        <Card style={styles.cardStyle}>
+          <View style={styles.todayTxt}>
+            <Text style={styles.todayblackTxt}>⦁ 오늘 진행할 챕터 : </Text>
+            <Text style={styles.todayredTxt}> 1. 집합</Text>
+          </View>
+          <View style={styles.todayTxt}>
+            <Text style={styles.todayblackTxt}>⦁ 공부 시간 : </Text>
+            <Text style={styles.todayredTxt}>3</Text>
+            <Text style={styles.todayblackTxt}> 시간</Text>
+          </View>
+          <View style={styles.todayTxt}>
+            <Text style={styles.todayblackTxt}>⦁ 복습 시간 : </Text>
+            <Text style={styles.todayredTxt}>1</Text>
+            <Text style={styles.todayblackTxt}> 시간</Text>
+          </View>
+            <Text style={styles.todayblackTxt}>⦁ 인증 방법</Text>
+            <View style={{flexDirection:'row'}}>
+              <MaterialCommunityIcons name='checkbox-marked-outline' size={26} color={colors.maincolor} style={{margin:4}}/>
+              <Text style={{margin:4,color:'grey',fontSize:16}}>5문제 풀어서 사진 찍기</Text>
+            </View>
+        </Card>
+      </View>
+
+      <View style={styles.todayplanBack}>
+        <Text style={styles.titleTxt}>{project.project.title} 전체 일정 💫</Text>
+        <Calender/>
+      </View>
     </ScrollView>
   )
 }
@@ -97,7 +146,7 @@ const styles={
   },
   textPosition:{
     flexDirection:'row',
-    paddingRight:10
+    paddingRight:10,
   },
   dayTextPosition:{
     flexDirection:'row',
@@ -125,7 +174,32 @@ const styles={
     fontWeight:'bold',
     fontSize:27,
     marginLeft:'65%'
+  },
+  todayplanBack:{
+    flex:1,
+    padding:20,
+    
+  },
+  titleTxt:{
+    fontWeight:'bold',
+    fontSize:20,
+    paddingLeft:8,
+    paddingBottom:13
+  },
+  todayTxt:{
+    flexDirection:'row',
+    paddingBottom:8
+  },
+  todayblackTxt:{
+    fontWeight:'bold',
+    fontSize:15
+  },
+  todayredTxt:{
+    fontWeight:'bold',
+    fontSize:15,
+    color:'red'
   }
+
 
 }
 
