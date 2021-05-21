@@ -12,10 +12,9 @@ import {
    TextInput,
    TouchableOpacity,
    KeyboardAvoidingView,
-  } from 'react-native';
+ } from 'react-native';
+ import CheckBox from '@react-native-community/checkbox';
 
- 
-import CheckBox from '@react-native-community/checkbox';
 import {Picker} from '@react-native-picker/picker';
 import {signup} from '../src/Api';
 import { Formik } from "formik";
@@ -160,7 +159,6 @@ const SignUp=(props)=>{
              onChangeText={handleChange('Account_Name')}
              onBlur={handleBlur('Account_Name')}
              value={values.Account_Name}
-             keyboardType="Account_Name"
            />
            {(errors.Account_Name && touched.Account_Name) &&
            <Text style={styles.errorText}>{errors.Account_Name}</Text>

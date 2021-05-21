@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
+import com.iamport.IamportPackage;
 import com.reactnativerestart.RestartPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
@@ -29,6 +31,14 @@ public class MainApplication extends Application implements ReactApplication {
           // packages.add(new MyReactNativePackage());
           return packages;
         }
+       /* @Override
+        protected List<ReactPackage> getPackages() {
+          return Arrays.<ReactPackage>asList(
+              new MainReactPackage(),
+                new IamportPackage(), // 아임포트 패키지를 추가합니다.
+                new RNCWebViewPackage(), // 리액트 네이티브 웹뷰 패키지를 추가합니다.
+          );
+        }*/
 
         @Override
         protected String getJSMainModuleName() {
