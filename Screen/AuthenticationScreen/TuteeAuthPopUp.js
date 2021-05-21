@@ -9,7 +9,7 @@ import ImageModal from 'react-native-image-modal';
 
 const TuteeAuthPopUp = props => {
   const {width,height} = useWindowDimensions();
-  console.log(props.route.params.file)
+  console.log(props.route.params.imagesource)
   return(
       <View style={styles.modalBackground}>
         <View style={{flex:1,margin:20,width:'100%',justifyContent:'center'}}>
@@ -20,7 +20,7 @@ const TuteeAuthPopUp = props => {
               height: height*0.7,
             }}
             source={{
-              uri:props.route.params.file.uri
+              uri:props.route.params.imagesource
             }}
           />
         </View>

@@ -41,7 +41,7 @@ const TuteeAuthentication = ({navigation, route}) => {
     const renderimagepopup = (key) => {
         console.log('show image')
         console.log(key)
-        navigation.navigate('TuteeAuthPopUp',{file: files[key]})
+        navigation.navigate('TuteeAuthPopUp',{imagesource: files[key].uri})
     }
     const handleSubmitAuthenticatoin = () => {
         Keyboard.dismiss();
