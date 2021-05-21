@@ -50,12 +50,12 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
   }
 }
  const Signin = (props) => {
-  useEffect(() => {
+  /*useEffect(() => {
     // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
     return appleAuth.onCredentialRevoked(async () => {
       console.warn('If this function executes, User Credentials have been Revoked');
     });
-  }, []);
+  }, []);*/
    const handleSubmitPress = (values) =>{
       login({
         "email":values.email,
@@ -184,15 +184,7 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
 
         
       </Formik>
-      <AppleButton
-         buttonType={AppleButton.Type.SIGN_IN}
-        style={{
-          marginTop:100,
-          width: 160, // You must specify a width
-          height: 45, // You must specify a height
-        }}
-        onPress={() => onAppleButtonPress()}
-      />
+      
     </View>
    );
  };
