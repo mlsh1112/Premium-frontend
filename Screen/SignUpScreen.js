@@ -6,17 +6,18 @@ import {
    StyleSheet,
    ScrollView,
    View,
-   CheckBox,
    Text,
    Image,
    StatusBar,
    TextInput,
    TouchableOpacity,
- } from 'react-native';
+   KeyboardAvoidingView,
+  } from 'react-native';
+
  
+import CheckBox from '@react-native-community/checkbox';
 import {Picker} from '@react-native-picker/picker';
 import {signup} from '../src/Api';
-import {setToken} from '../src/Asyncstorage';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
@@ -70,7 +71,7 @@ const SignUp=(props)=>{
 
   return(
     <View style={styles.container}>
-     <View >
+     <View style={{paddingTop:10}}>
        <Text style={styles.title}>Welcome to 따숲</Text>
      </View>
      <Formik
@@ -83,9 +84,9 @@ const SignUp=(props)=>{
        }}
      >
        {({ handleChange, handleBlur, handleSubmit, values, errors,touched,}) => (
-       
+       <ScrollView>   
          <>
-           <TextInput
+          <TextInput
              name="email"
              placeholder="Email Address"
              style={styles.textInput}
@@ -164,18 +165,19 @@ const SignUp=(props)=>{
            {(errors.Account_Name && touched.Account_Name) &&
            <Text style={styles.errorText}>{errors.Account_Name}</Text>
            }
-              <CheckBox
+               <CheckBox
                 value={isSelected}
                 onValueChange={setSelection}
                 style={styles.checkbox}
               />
-            <Text style={styles.lable}>당신은 튜터 입니까?</Text>
+            <Text style={{alignSelf:'center'}}>당신은 튜터 입니까?</Text> 
            
-           <View style={styles.button}>
+           <View style={{paddingTop:10}}>
              <Button onPress={()=>{handleSubmitPress(values)}}>Sign Up</Button>
            </View>
-         
+        
          </>
+         </ScrollView>
        )}
      </Formik>
      
@@ -224,6 +226,11 @@ AccountInput: {
   fontSize:15,
   fontWeight:'bold'
     
+},
+errorText: {
+  fontSize: 12,
+  color: 'red',
+  alignSelf:'center'
 },
  textInput: {
   height: 40,
