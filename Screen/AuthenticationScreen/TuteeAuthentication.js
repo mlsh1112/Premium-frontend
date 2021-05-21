@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {submitauth} from '../../src/Api'
 
 const TuteeAuthentication = ({navigation, route}) => {
-    console.log(route.params.project)
+    // console.log(route.params.project)
     const {width} = useWindowDimensions();
     const [files,setFiles] = useState([]);
     const [text,setText] = useState('');
@@ -46,6 +46,7 @@ const TuteeAuthentication = ({navigation, route}) => {
     const handleSubmitAuthenticatoin = () => {
         Keyboard.dismiss();
         const formData = new FormData();
+        formData.append('description', text)
         files.map((file,index)=> {
             formData.append(`auth[images_attributes][${index}][image]`, {uri: file.uri, name: file.name, type: file.type});
         })
