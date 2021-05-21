@@ -8,7 +8,7 @@
 
  import AsyncStorage from '@react-native-community/async-storage';
  import jwt_decode from "jwt-decode"
- import React from 'react';
+ import React,{useEffect} from 'react';
  import {Button} from '../src/components'
  import {
    StyleSheet,
@@ -22,7 +22,7 @@
  import * as Yup from "yup";
  import {refresh,logout} from '../src/Api';
  import jwtDecode from "jwt-decode";
- 
+import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authentication';
  const validationSchema = Yup.object().shape({
    email: Yup.string()
      .required("이메일을 입력해주세요.")
@@ -30,9 +30,32 @@
    password: Yup.string()
      .required("비밀번호를 입력해주세요")
  });
- 
+ async function onAppleButtonPress() {
+  // performs login request
+  const appleAuthRequestResponse = await appleAuth.performRequest({
+    requestedOperation: appleAuth.Operation.LOGIN,
+    requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+  });
+  console.log(appleAuthRequestResponse)
+  // get current authentication state for user
+  // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+  const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+
+  // use credentialState response to ensure the user is authenticated
+  if (credentialState === appleAuth.State.AUTHORIZED) {
+    // user is authenticated
+    const { identityToken, email, user } = appleAuthRequestResponse;
+    console.log(user)
+
+  }
+}
  const Signin = (props) => {
-  
+  useEffect(() => {
+    // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
+    return appleAuth.onCredentialRevoked(async () => {
+      console.warn('If this function executes, User Credentials have been Revoked');
+    });
+  }, []);
    const handleSubmitPress = (values) =>{
       login({
         "email":values.email,
@@ -158,7 +181,18 @@
              </Text>
           </>
         )}
+
+        
       </Formik>
+      <AppleButton
+         buttonType={AppleButton.Type.SIGN_IN}
+        style={{
+          marginTop:100,
+          width: 160, // You must specify a width
+          height: 45, // You must specify a height
+        }}
+        onPress={() => onAppleButtonPress()}
+      />
     </View>
    );
  };
