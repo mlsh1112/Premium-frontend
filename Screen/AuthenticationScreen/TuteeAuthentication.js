@@ -15,7 +15,7 @@ import {
 import {PickMultipleFile} from '../../src/DocumentPicker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {submitauth} from '../../src/Api'
-
+import LoadingModal from '../../src/components/LoadingModal'
 const TuteeAuthentication = ({navigation, route}) => {
     // console.log(route.params.project)
     const {width} = useWindowDimensions();
@@ -23,7 +23,7 @@ const TuteeAuthentication = ({navigation, route}) => {
     const [text,setText] = useState('');
     const [fin,setFin]=useState(false);
     const [project,setProject]=useState();
-    
+    const [modalVisible,setModalVisible] = useState(false)
     const savePickedFiles = async() => {
         console.log("pick file")
         const pickedfiles = await PickMultipleFile();
@@ -53,8 +53,10 @@ const TuteeAuthentication = ({navigation, route}) => {
         formData.append('project_id',route.params.project.id)
         console.log(formData)
       if(files.length !== 0){
+          setModalVisible(true)
           submitauth(formData).then(res => {
             console.log(res)
+            setModalVisible(false)
             Alert.alert("","제출이 완료되었습니다!",[
               { text: "OK", onPress: () => {
                   console.log("확인 누름")
@@ -145,6 +147,7 @@ const TuteeAuthentication = ({navigation, route}) => {
                 }
 
             </View>
+            <LoadingModal visible={modalVisible}/>
       </View>
     );
     
