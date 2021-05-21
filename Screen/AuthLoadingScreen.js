@@ -15,6 +15,7 @@ const AuthLoading = (props) => {
             console.log("AsyncStorage remove Error: " + error.message);
         };
     }
+
     const CheckUserToken = async(props) => {
         try{
             const item = await AsyncStorage.getItem('token');

@@ -17,7 +17,6 @@ const kakaoBook = axios.create({
 
 const PORT = baseurl.port
 // const PORT = baseurl.sungmin
-console.log(PORT)
 
 const API = axios.create(headers);
 API.interceptors.request.use(
@@ -25,7 +24,7 @@ API.interceptors.request.use(
         const token = await AsyncStorage.getItem('token')      
         config.headers['Authorization'] = token
         console.log(config)
-
+        
 
         config.paramsSerializer = params => {
             return Qs.stringify(params, {
@@ -64,3 +63,8 @@ export const paymentstatus = (params) => API.patch(PORT+`/attendances`,params)
 export const createlike = ( params ) => API.post(PORT + '/likes', params)
 export const deletelike = (id) => API.delete(PORT + `/likes/${id}`)
 export const islike = ( params ) => API.get(PORT+`/likes/is_like`, {params})
+export const getcurrentuser = () => API.get(PORT+'/get_current_user')
+export const tutorgetproject = (params) => API.get(PORT+'/projects',{params})
+export const deleteproject = (projectid) => API.delete(PORT+`/projects/${projectid}`)
+export const quitproject = (params) => API.delete(PORT+'/attendances',{params})
+export const getPlan=(project_id)=>API.get(PORT+'/options',{project_id})

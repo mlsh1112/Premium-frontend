@@ -13,7 +13,7 @@ import Imagepicker from '../../src/image-picker';
 import authrequest from '../../src/Api';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import baseurl from '../../config'
 let headers = {
   headers: {
       'Accept': 'application/json',
@@ -21,7 +21,7 @@ let headers = {
       'Authorization': ''
   }
 }
-const PORT = "http://localhost:3000"
+const PORT = baseurl.port
 console.log(PORT)
 const API = axios.create(headers);
 API.interceptors.request.use(
@@ -45,15 +45,16 @@ const SchoolAuth = (props) => {
       if(imageinfo !== undefined){
           //authrequest(formData).then(res => console.log(res)).catch(error => console.log(error))
           API.post(PORT+"/auths/", formData)
-          .then(res => console.log(res))
-          .catch(error => console.log(error))  
-          Alert.alert("","제출이 완료되었습니다!",[
-          { text: "OK", onPress: () => {
-              console.log("확인 누름")
-              props.navigation.goBack()
-            }
-          }]
-          )
+          .then(res => {
+            console.log(res)
+            Alert.alert("","제출이 완료되었습니다!",[
+              { text: "OK", onPress: () => {
+                  console.log("확인 누름")
+                  props.navigation.goBack()
+                }
+              }]
+              )
+          }).catch(error => console.log(error.response.data))  
           console.log('사진제출!!')
         }
         else {
@@ -64,7 +65,7 @@ const SchoolAuth = (props) => {
             <View style={styles.container}>
                 
                 <View style={styles.ImagepickerStyle}>
-                <Text style={styles.info}>공부 하자는 튜터인증을 위해 학교 인증을 진행 하고있습니다. 학교 인증을 위해 학생증과 함께 
+                <Text style={styles.info}>따:숲은 튜터인증을 위해 학교 인증을 진행 하고있습니다. 학교 인증을 위해 학생증과 함께 
 자신의 모습이 나오게 사진을 찍어 전송해주세요</Text>
                     <Imagepicker getImage={setImageinfo}/>
                     

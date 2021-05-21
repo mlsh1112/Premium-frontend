@@ -42,6 +42,7 @@ const TuteeAuthList = ({navigation}) => {
     const [projects, setProjects] = useState();
     const [user,setUser]=useState();
 
+
     useEffect(() => {
             
         const getData = async() =>{
@@ -56,7 +57,7 @@ const TuteeAuthList = ({navigation}) => {
             .catch(err=>console.log(err))
         }
 
-        getData()
+       // getData()
         const callApi = async() =>{
             await getattendances()
             .then(res=>setProjects(res.data))
@@ -66,6 +67,8 @@ const TuteeAuthList = ({navigation}) => {
     },[]);
     return (
         <View style={styles.container}>
+            
+            <ScrollView>
             {
                 projects?
                 <ScrollView>
@@ -80,6 +83,7 @@ const TuteeAuthList = ({navigation}) => {
                 :
                 <Text>진행 중인 프로젝트가 없습니다</Text>
             }
+            </ScrollView>
         </View>
     )
 }

@@ -12,7 +12,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {getproject} from '../../src/Api'
 
 const Authentication = ({navigation}) => {
-    [userType, setuserType] = useState('');
+   const [userType, setuserType] = useState('');
 
     useEffect(() => {
      
@@ -22,7 +22,16 @@ const Authentication = ({navigation}) => {
         setuserType(type)
       }
       getData()
-    })
+    
+
+      async function gettoken(){
+        const token = await AsyncStorage.getItem('token');
+        console.log(token)
+
+      }
+      gettoken()
+    
+    },[])
 
 
     return (
@@ -36,12 +45,12 @@ const Authentication = ({navigation}) => {
         </View>
         
             {
-                userType==='Tutor' ? (
+                userType==='Tutor' ? 
                     <TutorAuthList navigation={navigation}></TutorAuthList>
-                ):(
+                :
                     <TuteeAuthList navigation={navigation}></TuteeAuthList>
                     
-                )
+                
             }
             
       </View>

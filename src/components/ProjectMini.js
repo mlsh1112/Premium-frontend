@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, ImageBackground } from 'react-native';
 import colors from '../colors'
 import ddasup_icon from '../../assets/ddasup_icon.png'
 const ProjectMini=({navigation,project})=>{
-
   return (
     <View style={{marginRight:20}}>
         <TouchableOpacity onPress={()=>{navigation.navigate('ProjectDetail',{project})}}>

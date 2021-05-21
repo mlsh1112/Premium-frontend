@@ -1,4 +1,6 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component, useEffect, useState } from 'react';
+
+import {getPlan} from '../../src/Api'
 import {Button} from '../../src/components/Button'
 import {
     StyleSheet,
@@ -12,30 +14,50 @@ import {
 import Calender from '../../src/components/Calender'
 import colors from '../../src/colors'
 const TuteeAutdetail=({navigation,route})=>{
-  const project=route.params.project
-  var startDate=new Date().getTime() - new Date(project.created_at).getTime();
-  var remainDay=Math.floor(startDate / (1000 * 60 * 60 * 24))
-  var pastDay=0//project.project.experience_period-remainDay
-  
+ 
+    const project=route.params.project
+    var startDate=new Date().getTime() - new Date(project.created_at).getTime();
+    var remainDay=Math.floor(startDate / (1000 * 60 * 60 * 24))
+    var pastDay=project.project.experience_period-remainDay
+
+    console.log(project)
+    console.log(pastDay)
+    console.log("여긴 체험")
+    var Trial_Comment=`현재 체험기간 ${pastDay} 일 남았습니다. `
+
+    
+  useEffect(()=>{
+      console.log((project.id))
+      getPlan("83").then((res)=>{
+        console.log(res);
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+  })
+
   return(
     <ScrollView>
         
       <View >
-        <Text style={styles.todaytext}>Title</Text>
+        
+        {project.status==='trial'?
+        <Text style={{ color:'red',
+        fontWeight:'bold'
+        ,
+        paddingTop:10,
+        fontSize:20,textAlign:'center'}}>{Trial_Comment}</Text>
+        :<Text></Text>  
+      }
         <View style={{borderColor:'#9FA5C0',
          borderBottomWidth:1,width:'100%',paddingTop:10}}/>
         
-          <View style={{paddingBottom:20,paddingTop:20}}>
-            <View style={styles.box2}>
-              <View style={{paddingTop:10,paddingLeft:10}}>
-                <View style={styles.imgbax}>
-                </View>
-              </View>
-          </View>
+      <View style={{paddingTop:10}}>
+        
       </View>
       
       <View style={{paddingBottom:10}}>
-      <Text style={styles.todaytext}>전체 Title 일정</Text>
+      <Text style={styles.todaytext}>{project.project.title} 일정</Text>
       <View style={{borderColor:'#9FA5C0',
          borderBottomWidth:1,width:'100%',paddingTop:10}}/>
       </View>

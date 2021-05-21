@@ -104,22 +104,71 @@ const Signin = (props) => {
          await AsyncStorage.removeItem('token');
          props.navigation.replace('Onboarding');
        
-      })
+     }).catch(error => {
+       alert("이메일 혹은 패스워드를 확인해주세요.")
+       console.log(error);
+     });
+     const onLoinSuccess=(res)=>{      
+      let decode_token=jwt_decode(res.data.token)
+      let decode_token_ToNumber= Number(decode_token.exp)
+      let now_time=new Date().getTime()/1000;
+      now_time=Math.ceil(now_time)
+      setToken(res.data.token).then(
+        console.log("토큰 저장 성공")
+      );
+      setType(res.data.type).then(
+        console.log("타입 저장 성공")
+      );
+      setStatus(res.data.status).then(
+        console.log("상태저장 성공")
+      );
+      setName(res.data.name).then(
+        console.log("네임저장 성공")
+      )
+      setUser(res.data).then(
+        console.log("데이터 저장성공")
+      )
+      setTIMEout(decode_token_ToNumber,now_time)
     }
-    const deletokenfortest = async() => {
-      try{
-         await AsyncStorage.removeItem('token');
-         return true;
+     const setTIMEout =(decode_token_ToNumber,now_time)=>{
+      setTimeout(onSilentRefresh,((decode_token_ToNumber-now_time)-120)*1000)
      }
-     catch (error){
-         console.log("AsyncStorage remove Error: " + error.message);
-         return false;
-       };
- }
- }
-  // passing in an empty array as the second argument ensures this is only ran once when component mounts initially.
-  return(
-    <View style={styles.container}>
+     const onSilentRefresh =()=>{
+       refresh().then(
+        async (res)=>{
+          await AsyncStorage.removeItem('token');
+            console.log("리프레쉬")
+            setToken(res.data.token);
+            let decode_token=jwt_decode(res.data.token)
+            let decode_token_ToNumber= Number(decode_token.exp)
+            let now_time=new Date().getTime()/1000;
+            now_time=Math.ceil(now_time)
+            setTIMEout(decode_token_ToNumber,now_time)
+          }
+       )
+       .catch(async(error)=>{
+          alert("로그인 만료시간이 다되었습니다. 다시 로그인해주세요");
+          console.log(error)  
+          await AsyncStorage.removeItem('token');
+          props.navigation.replace('Onboarding');
+        
+       })
+       
+     }
+     const deletokenfortest = async() => {
+       try{
+          await AsyncStorage.removeItem('token');
+          return true;
+      }
+      catch (error){
+          console.log("AsyncStorage remove Error: " + error.message);
+          return false;
+        };
+  }
+  }
+   
+  return (
+   <View style={styles.container}>
      <View >
        <Text style={styles.title}>Welcome to 따숲</Text>
      </View>

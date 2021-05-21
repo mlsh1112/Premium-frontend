@@ -14,6 +14,7 @@ const Imagepicker = (props) => {
   
   const options = {
     title: 'Load Photo',
+    mediaType: 'photo',
     customButtons: [
       { name: 'button_id_1', title: 'CustomButton 1' },
       { name: 'button_id_2', title: 'CustomButton 2' }
@@ -31,6 +32,7 @@ const Imagepicker = (props) => {
       }
       else {
         console.log("user take picture!!")
+        console.log(response)
         console.log(response.uri)
         props.getImage(response)
         setImageSource(response.uri);
@@ -45,6 +47,7 @@ const Imagepicker = (props) => {
       }
       else {
         console.log("user pick picture!!")
+        console.log("=================================")
         console.log(response.uri)
         props.getImage(response)
         setImageSource(response.uri);
@@ -81,7 +84,6 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     textstyle:{
-     
     },
     pickedImage:{
       flex:2,
@@ -107,11 +109,12 @@ const styles = StyleSheet.create({
     ImagepickerButton : {
       flex:1,
       alignItems: 'center',
+      justifyContent: 'center',
       backgroundColor: colors.maincolor,
       borderRadius: 5,
       paddingVertical: 10,
       paddingHorizontal: 15,
-      height:'40%',
+      height:50,
       marginHorizontal: 10,
     },
   });

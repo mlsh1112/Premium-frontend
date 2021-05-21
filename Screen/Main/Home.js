@@ -50,7 +50,7 @@ class Home extends Component {
             .catch(err=>console.log(err))
         }
 
-        getApi()
+       getApi()
 
         const getData = async()=>{
             await AsyncStorage.getItem('userinfo')
@@ -70,9 +70,6 @@ class Home extends Component {
     }
     
     render() {
-        console.log(this.state.user)
-        //console.log(this.state.myprojects)
-        console.log(this.state.tutorproj)
         return (
             <View style={styles.container}>
                 <View style={styles.logoposition} >
@@ -128,7 +125,7 @@ class Home extends Component {
                 </View>
                 <View style={{marginTop:30,margin:20}}>
                     <Text style={styles.todayProjectTxt}>따숲이 추천하는 오늘의 카드 뉴스 </Text>
-                    <Text style={{marginBottom:10}}>이거만 보고 다시 열공하기 •'-'•)و✧ </Text>
+                    <Text style={{marginBottom:10}}>이거만 보고 다시 열공하기 •'-'•)و✧ </Text>
                     <ScrollView horizontal={true}>
                     <TouchableOpacity
                     style={{marginRight:15}}
