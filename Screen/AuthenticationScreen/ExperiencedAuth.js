@@ -12,10 +12,11 @@ import colors from '../../src/colors'
 import {Button} from '../../src/components'
 import cat from '../../assets/cat2.png'
 import App from '../PaymentScreens/index'
+import ProgressBar from "react-native-animated-progress";
 
 const ExperienceAuth=({navigation,route})=>{
     const [rate,setRate]=useState([
-            {id:0,title:'Auhrate',rate:30},
+            {id:0,title:'Auhrate',rate:route.params.percent},
             {id:1,title:'Progressrate',rate:100}
         ])
     const [ratebar,setRatebar]=useState([
@@ -67,18 +68,11 @@ const ExperienceAuth=({navigation,route})=>{
                 
             </View >
             <View >
-                <View style={{flexDirection:'row', marginBottom:10}}>
-                    <View style={{borderColor:colors.maincolor,
-                                borderBottomWidth:15,borderRadius:10,
-                                width:ratebar[1].rate,}}>
-                    </View>
-                    <Text style={styles.presentBarTextStyle}>{rate[1].rate}%</Text>
+                <View style={{marginLeft:20,marginRight:20}}>
+                    <ProgressBar progress={100} height={10} backgroundColor={colors.maincolor} />
                 </View>
-                <View style={{flexDirection:'row', marginBottom:20}}>
-                    <View style={{borderColor:'#FF6464',
-                                borderBottomWidth:15,borderRadius:10,
-                                width:ratebar[0].rate}}></View>
-                    <Text style={styles.authBarTextStyle}>{rate[0].rate}%</Text>
+                <View style={{margin:20}}>
+                    <ProgressBar progress={rate[0].rate} height={10} backgroundColor='#FF6464'/>
                 </View>
             </View>
             <View style={styles.textPosition}>
