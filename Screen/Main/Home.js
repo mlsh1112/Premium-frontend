@@ -40,18 +40,6 @@ class Home extends Component {
         )
 
 
-        const getApi = async()=>{
-            await getattendances()
-            .then(res=>this.setState({myprojects:res.data}))
-            .catch(err => console.log('attendances',err))
-
-            await gettutorprojs()
-            .then(res=>this.setState({tutorproj:res.data}))
-            .catch(err=>console.log(err))
-        }
-
-       getApi()
-
         const getData = async()=>{
             await AsyncStorage.getItem('userinfo')
             .then(res=>{
@@ -66,10 +54,26 @@ class Home extends Component {
             .catch(err=>console.log(err))*/
         }
         getData()
+        const getApi = async()=>{
+            if(this.state.user.type==='Tutee'){
+                await getattendances()
+                .then(res=>this.setState({myprojects:res.data}))
+                .catch(err => console.log('attendances',err))
+            }
+            else{
+                await gettutorprojs()
+                .then(res=>this.setState({tutorproj:res.data}))
+                .catch(err=>console.log(err))
+            }
+        }
+
+       getApi()
+
     
     }
     
     render() {
+        console.log('USER',this.state.user)
         return (
             <View style={styles.container}>
                 <View style={styles.logoposition} >
