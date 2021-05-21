@@ -4,6 +4,7 @@ import {
     StyleSheet,
     View,
     Text,
+    Image
   } from 'react-native';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from '../../src/components';
@@ -22,7 +23,9 @@ const TutorAuthCheck = ({navigation, route}) => {
             <Text style={styles.textStyle}>Today 인증 내용 👍</Text>
         </View>
         <View style={styles.fileboxStyle}>
-            <Text>{route.params.auth}</Text>
+          <Image
+            style={{height:'50%',width:'50%'}}
+            source={{uri:tutee.target.image.small.url}}/>
         </View>
 
         <Button onPress={() => navigation.pop()}>{tutee.name} 님  인증 확인 ✌️</Button>
