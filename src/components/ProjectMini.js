@@ -1,13 +1,13 @@
 import React,{ Component } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground } from 'react-native';
 import colors from '../colors'
-import cat from '../../assets/cat2.png'
+import ddasup_icon from '../../assets/ddasup_icon.png'
 const ProjectMini=({navigation,project})=>{
 
   return (
     <View style={{marginRight:20}}>
         <TouchableOpacity onPress={()=>{navigation.navigate('ProjectDetail',{project})}}>
-            <ImageBackground source={cat} style={styles.imgStyle} opacity={0.3} blurRadius={5}>
+            <ImageBackground source={ddasup_icon} style={styles.imgStyle} opacity={0.07} blurRadius={5}>
                 <View style={{margin:10}}>
                     <Text style={styles.titleStyle}>{project.title}</Text>
                     <Text style={styles.subStyle}>튜터 : {project.tutor.name}</Text>
