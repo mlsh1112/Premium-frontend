@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import { CircularCard } from "react-native-circular-card-view";
-
+import {SafeAreaView} from "react-native"
 import cat from '../../assets/cat2.png'
 import { useEffect } from 'react';
 import {
@@ -31,7 +31,10 @@ function Search({navigation}) {
   const [isLoading,SetIsLoading]=useState(false);
   const [reqData,SetreqData]=useState([])
   
-   const ChangeSearchData=((text)=>{
+  let ScreenWidth = Dimensions.get('window').width    //screen 너비
+  let ScreenHeight = Dimensions.get('window').height   //height 높이
+  
+  const ChangeSearchData=((text)=>{
       if(text){
         SetSearchblur(true);
       }
@@ -62,13 +65,13 @@ function Search({navigation}) {
     },[reqData])
   
   return(
-    <View style={{flex:30}} >
-        <View
+    <SafeAreaView style={{flex:1}}>
+    <View style={{flex:1}} >
+      <View
                     style={{height:80,
                     backgroundColor:'#1FCC79',
                     justifyContent:'center',
-                    paddingHorizontal:5
-                    
+                    paddingHorizontal:5,
                 }}>
            <Searchbar
                 placeholder="Search"
@@ -102,6 +105,7 @@ function Search({navigation}) {
           />
         </View>
     </View>
+    </SafeAreaView>
   )
 
 }
