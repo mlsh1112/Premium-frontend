@@ -12,7 +12,7 @@ class Projectcard extends Component {
         const project=this.props.data
         
         return (
-            <View style={{flexDirection:'row',backgroundColor:'white',marginLeft:25,borderRadius:8,}}>
+            <View style={{flexDirection:'row',backgroundColor:'white',marginLeft:25,borderRadius:8,height:110}}>
             <Card >
                 <View style={styles.card} >
                     <View style={{margin:15, marginLeft:27}}>
