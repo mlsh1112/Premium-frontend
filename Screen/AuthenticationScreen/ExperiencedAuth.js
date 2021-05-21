@@ -23,10 +23,10 @@ const ExperienceAuth=({navigation,route})=>{
         {id:0,title:'Auhrate',rate:310*(rate[0].rate/100)},
         {id:1,title:'Progressrate',rate:310*(rate[1].rate/100)}
     ]);
-    const [tutee,setTutee]=useState();
+    const project=route.params.project.project
     function handleSubmit(){
-        const project=route.params
-        console.log('프로젝트 신청',route.params)
+        const project=route.params.project
+        console.log('프로젝트 신청',project)
         navigation.navigate('PaymentPage',{project})
     }
     console.log(route.params)
@@ -45,13 +45,13 @@ const ExperienceAuth=({navigation,route})=>{
 
             <ImageBackground source={cat} style={styles.imgStyle} opacity={0.3} blurRadius={5}>
                 <View style={{margin:10}}>
-                    <Text style={styles.titleStyle}>{route.params.project.title}</Text>
-                    <Text style={styles.subStyle}>{route.params.project.description}</Text>
-                    <Text style={styles.dayStyle}>{route.params.project.experience_period} DAYS</Text>
+                    <Text style={styles.titleStyle}>{project.title}</Text>
+                    <Text style={styles.subStyle}>{project.description}</Text>
+                    <Text style={styles.dayStyle}>{project.experience_period} DAYS</Text>
                 </View>
             </ImageBackground>
             <View style={styles.textPosition}>
-                <Text style={styles.textStyle}>{route.params.project.experience_period} 일 체험 기한이 끝났습니다 !</Text>
+                <Text style={styles.textStyle}>{project.experience_period} 일 체험 기한이 끝났습니다 !</Text>
                  <Text style={styles.textStyle}>프로젝트에 참여해보세요 🙌</Text>
             </View>
             <View style={{flexDirection:'row',marginBottom:'5%',
