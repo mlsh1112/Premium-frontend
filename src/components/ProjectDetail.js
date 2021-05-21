@@ -255,6 +255,7 @@ const ProjectDetail =(props)=> {
     buttonStyle:{
       marginTop:20,
       marginRight:25,
+      marginLeft:30
     }
   }
 export default ProjectDetail;

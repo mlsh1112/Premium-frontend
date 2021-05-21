@@ -20,11 +20,24 @@ const ProjectAuthCard = ({navigation,project}) => {
                     <View style={{margin:15, marginLeft:27}}>
                     <Text style={cardstyles.textstyle}>{project.project.title}</Text>
                     <View style={{marginTop:5}}>
+                    {project.project.experience_period>=remainDay+1?
                         <View style={{flexDirection:'row',margin:2}}>
-                        <Text style={cardstyles.dayStyle}>{remainDay+1}  </Text>
+                        <Text style={cardstyles.dayStyle}>{remainDay+1} </Text>
                         <Text style={cardstyles.dayStyle2}>일차 인증</Text>
                         </View>
+                        :
+                        <View style={{flexDirection:'row',margin:2}}>
+                        <Text style={cardstyles.dayStyle}>{project.project.experience_period} </Text>
+                        <Text style={cardstyles.dayStyle2}>일차 인증</Text>
+                        </View>
+                        }
+                        {
+                        pastDay-1<0?
+                        <Text style={cardstyles.dayStyle3}>프로젝트가 끝났습니다.</Text>
+                        :
                         <Text style={cardstyles.dayStyle3}>남은 인증 {pastDay-1}일</Text>
+
+                    }
                     </View>
                     </View>
                 </View>
@@ -60,10 +73,12 @@ const TuteeAuthList = ({navigation}) => {
        // getData()
         const callApi = async() =>{
             await getattendances()
-            .then(res=>setProjects(res.data))
+            .then(res=>{setProjects(res.data)
+                console.log("Tutee list")
+            })
             .catch(err=>{console.log(err)})
         }
-        //callApi()
+        callApi()
     },[]);
     return (
         <View style={styles.container}>
