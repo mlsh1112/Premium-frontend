@@ -4,26 +4,31 @@ import {
     StyleSheet,
     View,
     Text,
+    Image
   } from 'react-native';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from '../../src/components';
 
 
 const TutorAuthCheck = ({navigation, route}) => {
+    const tutee=route.params
+    console.log(tutee.target)
     return (
         <View style={styles.container}>
             <View style={styles.tuteeBarStyle}>
             <Icons name='face' size={30}></Icons>
-            <Text style={styles.tuteenameStyle}>{route.params.name}</Text>
+            <Text style={styles.tuteenameStyle}>{tutee.target.name}</Text>
         </View>
         <View style={styles.tuteeBarStyle}>
             <Text style={styles.textStyle}>Today 인증 내용 👍</Text>
         </View>
         <View style={styles.fileboxStyle}>
-            <Text>{route.params.auth}</Text>
+          <Image
+            style={{height:'50%',width:'50%'}}
+            source={{uri:tutee.target.image.small.url}}/>
         </View>
 
-        <Button onPress={() => navigation.popToTop()}>{route.params.name} 님 인증 확인 ✌️</Button>
+        <Button onPress={() => navigation.pop()}>{tutee.name} 님  인증 확인 ✌️</Button>
         </View>
     );
     

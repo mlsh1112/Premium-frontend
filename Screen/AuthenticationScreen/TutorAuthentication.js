@@ -1,4 +1,4 @@
-import React, { Component,useState } from 'react';
+import React, { Component,useEffect,useState } from 'react';
 import colors from '../../src/colors';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -7,23 +7,19 @@ import {
     View,
     Text,
     ScrollView,
-    TextInput,
     Keyboard,
   } from 'react-native';
+import {Card} from 'react-native-paper';
 import {Button} from '../../src/components'
-function makeItem(projectlist){
-    const temp = projectlist.map((pr)=>({
-        label: pr.title,
-        value: pr.title,
-    }));
-    return temp;
-}
+import { gettutees } from '../../src/Api';
 
 function TuteeListComponent({tutee,navigation}){
+    const tuteeinfo=tutee.target
+    console.log(tutee.target)
     return(
         <View style={styles.tuteeBarStyle}>
             <Icons name='face' size={30} style={{marginLeft:'8%'}} ></Icons>
-            <Text style={styles.tuteenameStyle}>{tutee.name}</Text>
+            <Text style={styles.tuteenameStyle}>{tuteeinfo.name}</Text>
             <TouchableOpacity style={styles.tuteeBtnPosition} onPress={()=>{navigation.push('TutorAuthCheck',tutee)}}>
                 <View>
                     <Text style={styles.BtntextStyle}>인증 확인</Text>
@@ -34,23 +30,27 @@ function TuteeListComponent({tutee,navigation}){
 }
 
 const TutorAuthentication = ({navigation,route }) => {
-    const [projectlist,setProjectlist] = useState([
-        {id:1,title: "수학2 마스터하기", info:"반복학습을 통한 수학2 마스터하기", fin:true},
-        {id:2,title: "비문학 마스터하기", info:"회독을 통한 비문학 마스터하기", fin:false},
-        {id:3,title: "국사 마스터하기", info:"중요파트 집중을 통한 국사 마스터하기", fin:true}
-      ]);
-    const listitem = makeItem(projectlist)
-    const [selectedpr,setSelectedpr] = useState('')
-    const [tutees,setTutees] = useState([
-        {id: 0,name: "LEE", auth:"1+1=2"},
-        {id: 1,name: "KIM", auth:"5*5=25"},
-      ]);
-    const [fin,setFin]=useState(false)
+    const [tutees,setTutees] = useState();
+    const [fin,setFin]=useState(true)
     const [project, setProject]=useState(route.params.project)
     const handleSubmitAuthenticatoin = () => {
         Keyboard.dismiss();
     }
-    
+
+    useEffect(()=>{
+        
+        const callApi= async()=>{
+            await gettutees({
+                "project_id":project.id
+            })
+            .then(res=>setTutees(res.data))
+            .catch(err=>console.log(err))
+        }
+        
+        callApi()
+    },[])
+    console.log(project)
+
     return (
         <View style={styles.container}>
             <View style={{flexDirection:'row',}}>
@@ -58,10 +58,10 @@ const TutorAuthentication = ({navigation,route }) => {
             </View>
 
             <View style={{flexDirection:'row',borderColor:'#D0DBEA',
-        borderBottomWidth:2,width:'80%',marginBottom:'5%',
-        justifyContent:'center',
-        alignItems: 'center',}}>
-            
+                            borderBottomWidth:2,width:'80%',marginBottom:'5%',
+                            justifyContent:'center',
+                            alignItems: 'center',}}>
+                                
                 <View style={styles.precentPosition}>
                     <Text style={styles.presentTextStyle}>현재 진행률</Text>
                     <Text style={styles.percentStyle}>30%</Text>
@@ -75,17 +75,27 @@ const TutorAuthentication = ({navigation,route }) => {
 
 
             <View style={{marginRight:'55%', marginBottom:'5%'}}>
-            <Text style={styles.authtuteeStyle}>인증 한 튜티</Text>
+            <Text style={styles.authtuteeStyle}>   오늘 인증 한 튜티</Text>
             </View>
                 {fin ? 
                         <ScrollView style={{marginLeft:'20%', width:'100%'}}>
-                            {tutees.map((tutee,index)=>{
+                            {
+                                tutees?
+                                <View>
+                                {tutees.map((tutee,index)=>{
                                     return <TuteeListComponent 
                                     tutee={tutee}
                                     navigation={navigation}
                                     key={index}
                                     />
                                     })}
+                                </View>
+                                    :
+                                <Text>
+                                        
+                                </Text>
+                            }
+                            
                         </ScrollView>
                         :
                         <View >
@@ -107,21 +117,9 @@ const TutorAuthentication = ({navigation,route }) => {
 const styles = StyleSheet.create({
     container: {
         flex : 1,
-        width: "100%",
         justifyContent:'center',
         alignItems: 'center',
         margin:'3%',
-    },
-    pickerstyle:{
-        width: "90%",
-        marginTop:'1%',
-        paddingVertical: 10,
-        paddingHorizontal: 12,
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 8,
-        paddingRight: 30,
-        color:"black"
     },
     precentPosition:{
         flex:1,
@@ -157,7 +155,7 @@ const styles = StyleSheet.create({
     tuteeBarStyle:{
         backgroundColor:'#D0DBEA',
         width:'80%',
-        height:'60%',
+        height:'50%',
         marginBottom:'5%',
         alignItems: 'center',
         borderRadius:20,
@@ -168,8 +166,8 @@ const styles = StyleSheet.create({
         fontSize:20,
     },
     tuteeBtnPosition:{
-        marginLeft:'35%',
-        backgroundColor:'#1FCC79',
+        marginLeft:'28%',
+        backgroundColor:colors.maincolor,
         width:'30%',
         height:'60%',
         borderRadius:20,
@@ -184,11 +182,10 @@ const styles = StyleSheet.create({
     paytxtStyle:{
             fontSize:20,
             fontWeight:'bold',
-            
-        
     },
     prjtitlestlye:{
-        fontSize:27,
+        marginTop:10,
+        fontSize:24,
         fontWeight:'bold',
     }
   });

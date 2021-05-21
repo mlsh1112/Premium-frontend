@@ -6,7 +6,6 @@ import {
     View, 
     ActivityIndicator,
   } from 'react-native';
-
 const AuthLoading = (props) => {
     const deletokenfortest = async() => { //asyncstorage 테스트용 token 삭제
         try{
@@ -36,7 +35,7 @@ const AuthLoading = (props) => {
         };
     };
     useEffect(() => {
-   //    deletokenfortest();
+       // deletokenfortest();
         CheckUserToken(props);
     });
     return (

@@ -2,21 +2,21 @@ import React, {Component, useState,createRef,useEffect} from 'react';
 import {Button} from '../src/components'
 import axios from 'axios'
 import {
-   SafeAreaView,
    StyleSheet,
    ScrollView,
    View,
-   CheckBox,
    Text,
+   SafeAreaView,
    Image,
    StatusBar,
    TextInput,
    TouchableOpacity,
+   KeyboardAvoidingView,
  } from 'react-native';
- 
+ import CheckBox from '@react-native-community/checkbox';
+
 import {Picker} from '@react-native-picker/picker';
 import {signup} from '../src/Api';
-import {setToken} from '../src/Asyncstorage';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
@@ -34,8 +34,12 @@ const validationSchema = Yup.object().shape({
   Account_Number: Yup.string()
     .required("환불 받으실 계좌번호를 입력해주세요."),
   Account_Name: Yup.string()
-    .required("환불 받으실 계좌주를 입력해주세요.")
-    
+    .required("환불 받으실 계좌주를 입력해주세요."),
+  Phone:Yup.number()
+  .integer("숫자만 입력해주세요")
+  .min(8)  
+  .required("환불 받으실 계좌주를 입력해주세요."),
+
  });
 
 const SignUp=(props)=>{
@@ -46,7 +50,7 @@ const SignUp=(props)=>{
   const [isSelected,setSelection]=useState(false);
 
   useEffect(()=>{
-    userType=isSelected?"튜터":"튜티"
+    userType=isSelected?"Tutor":"Tutee"
     console.log(userType);
   })
 
@@ -55,9 +59,9 @@ const SignUp=(props)=>{
     signup({
       "email":values.email,
       "password":values.password,
-      "name":"dfdgsfdg",
-      "phone":null,
-      "user_type":userType
+      "name":values.Account_Name,
+      "phone":values.Phone,
+      "type":userType,
      }
     ).then(() => {
       props.navigation.replace('Signin');
@@ -70,22 +74,23 @@ const SignUp=(props)=>{
 
   return(
     <View style={styles.container}>
-     <View >
+     <SafeAreaView>
+     <View style={{marginTop:10}}>
        <Text style={styles.title}>Welcome to 따숲</Text>
      </View>
      <Formik
        style={styles.FormStyle}
        validationSchema={validationSchema}
-       initialValues={{email:'', password:'',Comfirm_password:'',Account_Number:'',Account_Name:''}}
+       initialValues={{email:'', password:'',Comfirm_password:'',Account_Number:'',Account_Name:'',Phone:''}}
        onSubmit={(values) => {
          console.log(values)
          handleSubmitPress(values)
        }}
      >
        {({ handleChange, handleBlur, handleSubmit, values, errors,touched,}) => (
-       
+       <ScrollView>   
          <>
-           <TextInput
+          <TextInput
              name="email"
              placeholder="Email Address"
              style={styles.textInput}
@@ -125,17 +130,17 @@ const SignUp=(props)=>{
            <View style={{width:'95%',flexDirection:'row'}}>
            <View style={styles.PickerBox}/>
            
-           <Picker
-              style={{height:50,width:'40%'}}
-              selectedValue={selectedPicker}
-              onValueChange={(itemValue,itemIndex)=>
-              setSelectedPicker(itemValue)}
-            >
-              <Picker.Item label="선택" value="선택" color='grey'/> 
-              <Picker.Item label="국민" value="국민"/>
-              <Picker.Item label="신한" value="신한"/>
-              <Picker.Item label="기업" value="기업"/>
-              <Picker.Item label="농협" value="농협"/>
+              <Picker
+                style={{width:'40%'}}
+                selectedValue={selectedPicker}
+               onValueChange={(itemValue,itemIndex)=>
+               setSelectedPicker(itemValue)}
+              >
+                <Picker.Item label="선택" value="선택" color='grey'/> 
+                <Picker.Item label="국민" value="국민"/>
+                <Picker.Item label="신한" value="신한"/>
+                <Picker.Item label="기업" value="기업"/>
+                <Picker.Item label="농협" value="농협"/>
             
             </Picker>
             
@@ -159,26 +164,38 @@ const SignUp=(props)=>{
              onChangeText={handleChange('Account_Name')}
              onBlur={handleBlur('Account_Name')}
              value={values.Account_Name}
-             keyboardType="Account_Name"
            />
            {(errors.Account_Name && touched.Account_Name) &&
            <Text style={styles.errorText}>{errors.Account_Name}</Text>
            }
-              <CheckBox
+           <TextInput
+             name="Phone"
+             placeholder="Please enter only the number without '-' "
+             style={styles.textInput}
+             onChangeText={handleChange('Phone')}
+             onBlur={handleBlur('Phone')}
+             value={values.Phone}
+           />
+           {(errors.Phone && touched.Phone) &&
+           <Text style={styles.errorText}>{errors.Phone}</Text>
+           }
+               <CheckBox
                 value={isSelected}
                 onValueChange={setSelection}
                 style={styles.checkbox}
               />
-            <Text style={styles.lable}>당신은 튜터 입니까?</Text>
+            <Text style={{alignSelf:'center'}}>당신은 튜터 입니까?</Text> 
            
-           <View style={styles.button}>
+           
+           <View style={styles.Button}>
              <Button onPress={()=>{handleSubmitPress(values)}}>Sign Up</Button>
            </View>
-         
+        
          </>
+         </ScrollView>
        )}
      </Formik>
-     
+     </SafeAreaView>
    </View>
    
 
@@ -225,6 +242,11 @@ AccountInput: {
   fontWeight:'bold'
     
 },
+errorText: {
+  fontSize: 12,
+  color: 'red',
+  alignSelf:'center'
+},
  textInput: {
   height: 40,
   width: '90%',
@@ -264,6 +286,7 @@ AccountInput: {
   fontSize: 36,
   fontWeight: "bold",
   marginBottom:10,
+  alignSelf:"center"
 },
  checkbox:{
   alignSelf:"center",
@@ -271,6 +294,10 @@ AccountInput: {
 lable:{
   margin:9,
 },
+Button:{
+  marginTop:10,
+  alignSelf:"center"
+}
 });
 
 

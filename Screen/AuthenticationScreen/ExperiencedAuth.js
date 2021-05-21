@@ -1,14 +1,18 @@
-import React, { Component,useState,Animated } from 'react';
+import React, { Component,useState,useEffect } from 'react';
 import {
     View,
     Text,
     StyleSheet,
     ImageBackground,
-    Alert
+    Alert,
+    ScrollView
 }from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import colors from '../../src/colors'
 import {Button} from '../../src/components'
 import cat from '../../assets/cat2.png'
+import App from '../PaymentScreens/index'
+
 const ExperienceAuth=({navigation,route})=>{
     const [rate,setRate]=useState([
             {id:0,title:'Auhrate',rate:30},
@@ -18,11 +22,17 @@ const ExperienceAuth=({navigation,route})=>{
         {id:0,title:'Auhrate',rate:310*(rate[0].rate/100)},
         {id:1,title:'Progressrate',rate:310*(rate[1].rate/100)}
     ]);
+    const [tutee,setTutee]=useState();
     function handleSubmit(){
-        console.log('프로젝트 신청')
+        const project=route.params
+        console.log('프로젝트 신청',route.params)
+        navigation.navigate('PaymentPage',{project})
     }
-    
+    console.log(route.params)
+
     return(
+        <ScrollView>
+
     <View style={styles.container}>
         <View style={{borderColor:'#9FA5C0',
                             borderBottomWidth:2,width:'100%',marginBottom:'3%'}}>
@@ -79,6 +89,7 @@ const ExperienceAuth=({navigation,route})=>{
             
         </View>
     </View>
+        </ScrollView>
     )
 }
 const styles = StyleSheet.create({
