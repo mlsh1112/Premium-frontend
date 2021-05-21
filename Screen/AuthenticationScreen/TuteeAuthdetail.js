@@ -9,6 +9,7 @@ import {
     Text,
     ScrollView,
     TextInput,
+    LogBox,
     Keyboard,
   } from 'react-native';
 import { Card } from 'react-native-paper';
@@ -16,6 +17,8 @@ import Calender from '../../src/components/Calender'
 import colors from '../../src/colors'
 import ProgressBar from "react-native-animated-progress";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+
 const TuteeAutdetail=({navigation,route})=>{
  
     const project=route.params.project
@@ -27,16 +30,17 @@ const TuteeAutdetail=({navigation,route})=>{
     console.log(project)
     var Trial_Comment=`현재 체험기간 ${pastDay} 일 남았습니다. `
 
-    
-  /*useEffect(()=>{
-      console.log((project.id))
+
+  useEffect(()=>{
+      /*console.log((project.id))
       getPlan("83").then((res)=>{
         console.log(res);
       })
       .catch((err)=>{
         console.log(err)
-      })
-  })*/
+      })*/
+      LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+  })
 
   return(
     <ScrollView >
@@ -80,7 +84,7 @@ const TuteeAutdetail=({navigation,route})=>{
           <View>
             {
               project.status==='trial'?
-              <Button onPress={()=>{navigation.navigate('ExperienceAuth',project)}}>프로젝트 신청하기</Button>
+              <Button onPress={()=>{navigation.navigate('ExperienceAuth',{project,percent})}}>프로젝트 신청하기</Button>
               :
               <Button onPress={()=>{navigation.navigate('AuthPayBack',project)}}>보증금 환급받기 </Button>
             }
