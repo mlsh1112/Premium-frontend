@@ -11,22 +11,23 @@ import {
     TextInput,
     Keyboard,
   } from 'react-native';
+import { Card } from 'react-native-paper';
 import Calender from '../../src/components/Calender'
 import colors from '../../src/colors'
+import ProgressBar from "react-native-animated-progress";
 const TuteeAutdetail=({navigation,route})=>{
  
     const project=route.params.project
     var startDate=new Date().getTime() - new Date(project.created_at).getTime();
     var remainDay=Math.floor(startDate / (1000 * 60 * 60 * 24))
     var pastDay=project.project.experience_period-remainDay
-
+    var auths=3
+    var percent = Math.floor((auths/project.project.experience_period)*100)
     console.log(project)
-    console.log(pastDay)
-    console.log("여긴 체험")
     var Trial_Comment=`현재 체험기간 ${pastDay} 일 남았습니다. `
 
     
-  useEffect(()=>{
+  /*useEffect(()=>{
       console.log((project.id))
       getPlan("83").then((res)=>{
         console.log(res);
@@ -34,195 +35,100 @@ const TuteeAutdetail=({navigation,route})=>{
       .catch((err)=>{
         console.log(err)
       })
-  })
+  })*/
 
   return(
-    <ScrollView>
-        
-      <View >
-        
-        {project.status==='trial'?
-        <Text style={{ color:'red',
-        fontWeight:'bold'
-        ,
-        paddingTop:10,
-        fontSize:20,textAlign:'center'}}>{Trial_Comment}</Text>
-        :<Text></Text>  
-      }
-        <View style={{borderColor:'#9FA5C0',
-         borderBottomWidth:1,width:'100%',paddingTop:10}}/>
-        
-      <View style={{paddingTop:10}}>
-        
-      </View>
-      
-      <View style={{paddingBottom:10}}>
-      <Text style={styles.todaytext}>{project.project.title} 일정</Text>
-      <View style={{borderColor:'#9FA5C0',
-         borderBottomWidth:1,width:'100%',paddingTop:10}}/>
-      </View>
-      <Calender/>
-      
-      <View style={{paddingBottom:10}}>
-      <Text style={styles.todaytext}>오늘의 일정</Text>
-      <View style={{borderColor:'#9FA5C0',
-         borderBottomWidth:1,width:'100%',paddingTop:10}}/>
-      </View>
-         <Text backgroundColor='' style={styles.item}>dddddddddddddddddddddddddddddddddddddddddddddddddddd</Text>
-      <View alignItems='center' style={{paddingTop:30}}>
-        {
-          pastDay<=0?
-          <View>
-            {
-              project.status==='trial'?
-              <Button onPress={()=>{navigation.navigate('ExperienceAuth',project)}}>프로젝트 신청하기</Button>
-              :
-              <Button onPress={()=>{navigation.navigate('AuthPayBack',project)}}>보증금 환급받기 </Button>
-            }
+    <ScrollView >
+      <View style={styles.cardBack}>
+        <Text style={styles.cardText}>{project.project.title} 의 진행 사항</Text>
+        <Card style={styles.cardStyle}>
+          <View style={styles.dayTextPosition}>
+            <View style={styles.textPosition}>
+              <Text style={styles.redDayText}>{remainDay}</Text><Text style={styles.blackDayTxt}>일 차  |</Text>
+            </View>
+            <View style={styles.textPosition}>
+              <Text style={styles.redDayText}>{auths+1}</Text><Text style={styles.blackDayTxt}>번째 인증</Text>
+            </View>
           </View>
-          
-          :
-          <Button onPress={()=>{navigation.navigate('TuteeAuthentication')}}>인증하기 </Button>
+          <View >
+              {
+                pastDay<=0?
+                <Text style={styles.grayDayTxt}>종료된 프로젝트 입니다!</Text>
+                :
+                <View style={styles.textPosition}>
+                <Text style={styles.grayDayTxt}>남은 인증 날 : </Text>
+                <Text style={styles.grayDayTxt}>{pastDay-1}</Text>
+                <Text style={styles.grayDayTxt}>일</Text>
+                </View>
+              }
+            </View>
 
-        }
+            <View style={{paddingTop:30}}>
+              <View style={{flexDirection:'row',marginBottom:20}}>
+              <Text style={styles.grayDayTxt}>인증률</Text>
+              <Text style={styles.percentTxt}>{percent}%</Text>
+              </View>
+              <ProgressBar progress={percent} height={7} backgroundColor={colors.subcolor} />
+            </View>
+        </Card>
       </View>
-    </View>
     </ScrollView>
   )
 }
 
-const styles= {
-  todaytext:{
-    fontSize:20,
-    fontWeight:'bold',
-    color:'black',
-    textAlign:'center',
-  },
-  item:{
-    padding:16,
-    marginTop:16,
-    borderColor:'#bbb',
-    borderWidth:3,
-    backgroundColor:'#e2f7e8',
-    borderStyle:'dashed',
-    borderRadius:20,
-    fontSize:15,
-    fontWeight:'bold',
-    color:'black',
-    
-  },
-  box:{
-    alignItems: 'center',
-    justifycontent:'center',
-    paddingTop:10,
-    width:350,
+const styles={
+  cardBack:{
     flex:1,
-    height:150,
-    borderRadius:20,
-    backgroundColor:'#1FCC79',
-    
+    backgroundColor:colors.maincolor,
+    padding:20,
+    alignItems:'center'
   },
-  box1:{
-    borderRadius:20,
-    height:120,
-    width:320,
-    alignItems: 'center',
-    justifycontent:'center',
-    backgroundColor:'#e2f7e8',
-  },
-  
-  box2:{
-    borderRadius:20,
-    height:120,
-    width:350,
-    backgroundColor:'#DDECCA',
-    paddingBottom:20,
-    justifyContent:'center'
-  },
-  imgbax:{
-    borderRadius:20,
-    height:90,
-    width:100,
-    backgroundColor:'white',
-    
-  },
-  plantext:{
-    fontSize:15,
-    fontWeight:'bold',
-    color:'black',
-    paddingTop:15,
-    paddingRight:10,
-    paddingLeft:10,
-    paddingBottom:10
-  },
-  pickerstyle:{
-    width: "90%",
-    marginTop:'1%',
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 8,
-    paddingRight: 30,
-    color:"black"
-},
-precentPosition:{
-    flex:1,
-    margin: '10%',
-    height:'25%'
-},
-presentTextStyle:{
-    fontWeight:'bold',
-    fontSize:20,
-    color:colors.maincolor,
-    marginBottom:'20%'
-},
-authTextStyle:{
-    fontWeight:'bold',
-    fontSize:20,
-    color:'#FF6464',
-    marginBottom:'20%'
-
-},
-percentStyle:{
-    fontWeight:'bold',
-    color:'#9FA5C0',
-    fontSize:25
-},
-authtuteeStyle:{
-    fontWeight:'bold',
-    fontSize:20,
-    color:'#9FA5C0',
-
-},
-tuteeBarStyle:{
-    backgroundColor:'#D0DBEA',
-    width:'80%',
-    height:'60%',
-    marginBottom:'5%',
-    alignItems: 'center',
-    borderRadius:20,
-    flexDirection:'row'
-},
-tuteenameStyle:{
-    marginLeft:'5%',
-    fontSize:20,
-},
-tuteeBtnPosition:{
-    marginLeft:'35%',
-    backgroundColor:'#1FCC79',
-    width:'30%',
-    height:'60%',
-    borderRadius:20,
-    alignItems: 'center',
-    justifyContent:'center',
-},
-BtntextStyle:{
+  cardText:{
     color:'white',
     fontWeight:'bold',
+    fontSize:23,
+    marginBottom:20,
+  },
+  cardStyle:{
+    width:'100%',
+    height:200,
+    borderRadius:20,
+    padding:25
+  },
+  textPosition:{
+    flexDirection:'row',
+    paddingRight:10
+  },
+  dayTextPosition:{
+    flexDirection:'row',
+    paddingBottom:10
+  },
+  redDayText:{
+    color:'red',
+    fontWeight:'bold',
+    fontSize:20
+  },
+  blackDayTxt:{
+    fontWeight:'bold',
+    fontSize:20
+  },
+  grayDayTxt:{
+    color:'grey',
     fontSize:17
-},
+  },
+  barStlye:{
+    width:'100%',
+    height:3,
+    backgroundColor:'grey'
+  },
+  percentTxt:{
+    fontWeight:'bold',
+    fontSize:27,
+    marginLeft:'65%'
+  }
+
 }
+
 
 export default TuteeAutdetail
 

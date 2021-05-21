@@ -47,15 +47,9 @@ class Home extends Component {
             })
             .catch(err=>console.log(err))
 
-            /*await AsyncStorage.getItem('projects')
-            .then(res=>{
-                this.setState({myprojects:JSON.parse(res)})
-            })
-            .catch(err=>console.log(err))*/
-        }
-        getData()
-        const getApi = async()=>{
+
             if(this.state.user.type==='Tutee'){
+                console.log('user state tutee')
                 await getattendances()
                 .then(res=>this.setState({myprojects:res.data}))
                 .catch(err => console.log('attendances',err))
@@ -63,13 +57,12 @@ class Home extends Component {
             else{
                 await gettutorprojs()
                 .then(res=>this.setState({tutorproj:res.data}))
-                .catch(err=>console.log(err))
+                .catch(err=>console.log('tutorproj',err))
             }
         }
+       
+        getData()
 
-       getApi()
-
-    
     }
     
     render() {
