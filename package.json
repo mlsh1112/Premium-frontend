@@ -12,7 +12,7 @@
   "dependencies": {
     "@freakycoder/react-native-helpers": "1.0.1",
     "@react-native-community/async-storage": "^1.12.1",
-    "@react-native-community/checkbox": "^0.5.7",
+    "@react-native-community/checkbox": "0.5.7",
     "@react-native-community/datetimepicker": "^3.4.3",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-picker/picker": "1.16.0",
@@ -23,13 +23,21 @@
     "axios": "^0.21.1",
     "formik": "^2.2.6",
     "jwt-decode": "3.1.2",
+<<<<<<< HEAD
     "moment": "2.29.1",
+=======
+    "moment": "^2.29.1",
+>>>>>>> 4094be9632f48a32d7d8aec50cbc127aa6ad9e55
     "react": "16.13.1",
     "react-moment": "^1.1.1",
     "react-native": "0.63.4",
     "react-native-androw": "0.0.34",
     "react-native-animated-dialog": "^1.0.3",
+<<<<<<< HEAD
     "react-native-calendars": "1.1260.0",
+=======
+    "react-native-calendars": "^1.1260.0",
+>>>>>>> 4094be9632f48a32d7d8aec50cbc127aa6ad9e55
     "react-native-circular-card-view": "^0.1.2",
     "react-native-dialog-component": "^0.2.17",
     "react-native-document-picker": "^5.0.3",
@@ -49,6 +57,7 @@
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^2.18.1",
     "react-native-simple-modal": "^9.0.1",
+    "react-native-status-bar-height": "2.6.0",
     "react-native-tab-view": "^3.0.0",
     "react-native-vector-icons": "^8.1.0",
     "react-navigation": "^4.4.4",
