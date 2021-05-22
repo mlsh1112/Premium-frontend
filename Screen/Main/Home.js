@@ -30,14 +30,7 @@ class Home extends Component {
         super(props);
     }
     componentDidMount() {
-        getprojects()
-        .then(res=>{
-            this.setState({
-                projects: res.data
-            })
-        }).catch(err=>
-            console.log(err)
-        )
+
 
 
         const getData = async()=>{
@@ -60,9 +53,20 @@ class Home extends Component {
                 .then(res=>this.setState({tutorproj:res.data}))
                 .catch(err=>console.log('tutorproj',err))
             }
+
+            getprojects()
+            .then(res=>{
+                this.setState({
+                    projects: res.data
+                })
+            }).catch(err=>
+                console.log(err)
+            )
         }
        
         getData()
+
+
 
     }
     
