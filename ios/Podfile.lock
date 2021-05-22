@@ -197,8 +197,8 @@ PODS:
     - React-Core
   - react-native-safe-area-context (3.2.0):
     - React-Core
-  - react-native-webview (11.6.1):
-    - React-Core
+  - react-native-webview (5.8.1):
+    - React
   - React-RCTActionSheet (0.63.4):
     - React-Core/RCTActionSheetHeaders (= 0.63.4)
   - React-RCTAnimation (0.63.4):
@@ -484,7 +484,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: d728200ac02cad7ccacc5903d0b65ff7b8c00cde
   react-native-restart: d4ea7637e193da7558d229b3704d500ec0d75f9c
   react-native-safe-area-context: e471852c5ed67eea4b10c5d9d43c1cebae3b231d
-  react-native-webview: 1b16ef457d58598bdf9fc7e473ac251267714b4b
+  react-native-webview: a95842e3f351a6d2c8bc8bcc9eab689c7e7e5ad4
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
   React-RCTBlob: a97d378b527740cc667e03ebfa183a75231ab0f0
