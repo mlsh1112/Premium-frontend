@@ -22,6 +22,7 @@ const ProjectAuthCard = ({navigation,project}) => {
     return( 
             <View style={{flexDirection:'row'}}>
             <Card >
+            <TouchableOpacity onPress={()=> navigation('ProjectDetail',project)}>
                 <View style={cardstyles.card} >
                     <View style={{margin:15, marginLeft:27}}>
                     <Text style={cardstyles.textstyle}>{project.project.title}</Text>
@@ -47,6 +48,7 @@ const ProjectAuthCard = ({navigation,project}) => {
                     </View>
                     </View>
                 </View>
+                </TouchableOpacity>
             </Card>
 
             <TouchableOpacity style={{}} onPress={()=>{navigation('TuteeAuthdetail',{project})}}>
