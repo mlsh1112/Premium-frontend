@@ -8,11 +8,17 @@ import TodayProject from '../../src/components/TodayProjectHome'
 import authBtn from '../../assets/authBtn-001.png'
 import { ScrollView } from 'react-native';
 
+const moment = require("moment");
+
 const ProjectAuthCard = ({navigation,project}) => {
     console.log(project)
-    var startDate=new Date().getTime() - new Date(project.created_at).getTime();
-    var remainDay=Math.floor(startDate / (1000 * 60 * 60 * 24))
-    var pastDay=project.project.experience_period-remainDay
+    const startDate = moment(project.project.started_at)
+    const now = moment()
+    const remainDay = now.diff(startDate,'days') //시작하는 날짜가 0일차
+    var pastDay = project.project.duration
+    if(remainDay >= 0){
+        pastDay = project.project.duration - remainDay
+    }
     return( 
             <View style={{flexDirection:'row'}}>
             <Card >
@@ -20,22 +26,22 @@ const ProjectAuthCard = ({navigation,project}) => {
                     <View style={{margin:15, marginLeft:27}}>
                     <Text style={cardstyles.textstyle}>{project.project.title}</Text>
                     <View style={{marginTop:5}}>
-                    {project.project.experience_period>=remainDay+1?
+                    {remainDay >= 0?
                         <View style={{flexDirection:'row',margin:2}}>
                         <Text style={cardstyles.dayStyle}>{remainDay+1} </Text>
-                        <Text style={cardstyles.dayStyle2}>일차 인증</Text>
+                        <Text style={cardstyles.dayStyle2}>번째 인증</Text>
                         </View>
                         :
                         <View style={{flexDirection:'row',margin:2}}>
-                        <Text style={cardstyles.dayStyle}>{project.project.experience_period} </Text>
-                        <Text style={cardstyles.dayStyle2}>일차 인증</Text>
+                        <Text style={cardstyles.dayStyle}>프로젝트</Text>
+                        <Text style={cardstyles.dayStyle2}> 시작 전입니다.</Text>
                         </View>
                         }
                         {
-                        pastDay-1<0?
+                        pastDay<1?
                         <Text style={cardstyles.dayStyle3}>프로젝트가 끝났습니다.</Text>
                         :
-                        <Text style={cardstyles.dayStyle3}>남은 인증 {pastDay-1}일</Text>
+                        <Text style={cardstyles.dayStyle3}>남은 일일인증 {pastDay}개</Text>
 
                     }
                     </View>

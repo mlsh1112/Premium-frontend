@@ -12,8 +12,10 @@ class Projectcard extends Component {
         const startDate = moment(project.started_at)
         const now = moment()
         const remainDay = now.diff(startDate,'days') //시작하는 날짜가 0일차
-        const pastDay = project.duration - remainDay
-        
+        var pastDay = project.duration
+        if(remainDay >= 0){
+            pastDay = project.duration - remainDay
+        }
         return (
             <View style={{flexDirection:'row',backgroundColor:'white',marginLeft:25,borderRadius:8,height:110}}>
             <Card >
