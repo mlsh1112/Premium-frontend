@@ -51,6 +51,7 @@ const ProjectForm =(props)=> {
         "category_id": categoryid,
         "required_time": values.dailyStudyTime,
         "review_weight": values.repeatstrength,
+        "mission": values.howToAuth
       }).then(res => {
         console.log(res.data)
         props.navigation.navigate({name: 'Book',params: {projectId: res.data.id}})
