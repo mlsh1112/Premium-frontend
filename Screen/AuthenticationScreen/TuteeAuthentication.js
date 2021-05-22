@@ -1,4 +1,4 @@
-import React, { Component,useState } from 'react';
+import React, { useState } from 'react';
 import colors from '../../src/colors';
 import {Button} from '../../src/components';
 import {
@@ -9,78 +9,90 @@ import {
     ScrollView,
     TextInput,
     Keyboard,
+    Alert,
+    useWindowDimensions,
   } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
-import {PickMultipleFile,PickSingleFile} from '../../src/DocumentPicker';
-import {getproject} from '../../src/Api'
-function makeItem(projectlist){
-    const temp = projectlist.map((pr)=>({
-        label: pr.title,
-        value: pr.title,
-    }));
-    return temp;
-}
-const getProject=(title,projectlist)=>{
-    const project =  projectlist.filter(project=>project.title==title)
-    return project
-}
+import {PickMultipleFile} from '../../src/DocumentPicker';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {submitauth} from '../../src/Api'
+import LoadingModal from '../../src/components/LoadingModal'
 const TuteeAuthentication = ({navigation, route}) => {
-    const [projectlist,setProjectlist] = useState([
-        {id:0,title: "수학2 마스터하기", info:"반복학습을 통한 수학2 마스터하기",fin:true,experience:true},
-        {id:1,title: "비문학 마스터하기", info:"회독을 통한 비문학 마스터하기",fin:false,experience:false},
-        {id:2,title: "국사 마스터하기", info:"중요파트 집중을 통한 국사 마스터하기",fin:true,experience:false}
-      ]);
-    const listitem = makeItem(projectlist)
-    const [selectedpr,setSelectedpr] = useState('')
+    // console.log(route.params.project)
+    const {width} = useWindowDimensions();
     const [files,setFiles] = useState([]);
     const [text,setText] = useState('');
     const [fin,setFin]=useState(false);
     const [project,setProject]=useState();
+    const [modalVisible,setModalVisible] = useState(false)
     const savePickedFiles = async() => {
         console.log("pick file")
         const pickedfiles = await PickMultipleFile();
         if(pickedfiles != null){
-            //console.log("user picked : " + JSON.stringify(pickedfiles))
-            //setFiles(files => [...files,pickedfiles[0]]);
+            console.log(files)
             setFiles(files => files.concat(pickedfiles))
-        }
+        }        
     }
     const deleteFiles = (key) => {
-        console.log("----------------------------" +key)
+        console.log("----------------------------")
         setFiles(files.filter((f,idx) => idx !== key))
-        console.log("----------------------------" +JSON.stringify(files))
+        console.log(files.name)
+        console.log("----------------------------")
     }
-    
+    const renderimagepopup = (key) => {
+        console.log('show image')
+        console.log(key)
+        navigation.navigate('TuteeAuthPopUp',{imagesource: files[key].uri})
+    }
     const handleSubmitAuthenticatoin = () => {
         Keyboard.dismiss();
-        
+        const formData = new FormData();
+        formData.append('description', text)
+        files.map((file,index)=> {
+            formData.append(`auth[images_attributes][${index}][image]`, {uri: file.uri, name: file.name, type: file.type});
+        })
+        formData.append('project_id',route.params.project.id)
+        console.log(formData)
+      if(files.length !== 0){
+          setModalVisible(true)
+          submitauth(formData).then(res => {
+            console.log(res)
+            setModalVisible(false)
+            Alert.alert("","제출이 완료되었습니다!",[
+              { text: "OK", onPress: () => {
+                  console.log("확인 누름")
+                  navigation.goBack()
+                }
+              }]
+              )
+          }).catch(error => {
+            console.log(error)
+          })  
+        }
+        else {
+            alert('제출하실 사진을 선택해주세요!')
+        }
     }
     function RenderPickedFiles({pickedfiles}){
         console.log("selected files : " + JSON.stringify(files))
         return(
           <ScrollView>
-                  <View>
+                  <View style={{width: width*0.9}}>
                     {pickedfiles.map((file,key) => {
-                        //console.log("files and key : " +file + key)
                       return(
-                        <View key={key}>
-                            <Text name={file.name} style={styles.textStyle}>
-                              File Name: {file.name ? file.name : ''}
-                              {'\n'}
-                              Type: {file.type ? file.type : ''}
-                              {'\n'}
-                              File Size: {file.size ? file.size : ''}
-                              {'\n'}
-                              URI: {file.uri ? file.uri : ''}
-                              {'\n'}
-                                <TouchableOpacity
-                                style={styles.cancelButton} 
-                                onPress={(e)=>{
-                                    deleteFiles(key);
-                                }}>
-                                    <Text stlye={styles.cancelText}>Cancel</Text>
+                        <View key={key} style={{flex: 1,flexDirection:'row',justifyContent:'center',alignItems:'center',marginVertical:8,padding:5,backgroundColor:'white'}}>
+                            <Icon name="file-upload-outline" color={colors.subcolor2} size={20}/>
+                            <View style={{width:'75%',padding:5,alignItems:'flex-start',justifyContent:'center'}}>
+                                <TouchableOpacity onPress={()=>renderimagepopup(key)}>
+                                    <Text name={file.name} style={{fontSize:15,}}>
+                                      파일명: {file.name}
+                                    </Text>
                                 </TouchableOpacity>
-                            </Text>
+                            </View>
+                            <View style={{width:'20%',justifyContent:'center',alignItems:'center'}}>
+                                <TouchableOpacity onPress={()=>{deleteFiles(key);}}>
+                                    <Icon name="file-excel-box" color={colors.maincolor} size={30}/>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                       )
                     })}  
@@ -107,7 +119,7 @@ const TuteeAuthentication = ({navigation, route}) => {
                         Keyboard.dismiss();
                         await savePickedFiles();
                     }}>
-                        <Text>파일 제출</Text>
+                        <Text>파일 선택</Text>
                 </Button>
             </View>
             <RenderPickedFiles pickedfiles={files}/>
@@ -130,11 +142,12 @@ const TuteeAuthentication = ({navigation, route}) => {
                     }
                 </View>
                 :
-                <Button onPress={handleSubmitAuthenticatoin}><Text>인증 완료</Text></Button>
+                <Button onPress={handleSubmitAuthenticatoin}><Text>인증 제출</Text></Button>
                 
                 }
-                
+
             </View>
+            <LoadingModal visible={modalVisible}/>
       </View>
     );
     
@@ -146,7 +159,7 @@ const styles = StyleSheet.create({
         width: "100%",
         justifyContent:'center',
         alignItems: 'center',
-        margin:'3%',
+        marginTop: 5,
     },
     textposition:{
         marginTop:70,
@@ -166,10 +179,9 @@ const styles = StyleSheet.create({
         color:"black"
     },
     textStyle: {
+      textAlign:'center',
       padding: 10,
-      backgroundColor: 'white',
       fontSize: 15,
-      marginTop: 16,
       color: 'black',
     },
     InputStyle: {
@@ -183,15 +195,8 @@ const styles = StyleSheet.create({
       borderRadius: 30,
       borderColor: '#dadae8',
     },
-    cancelButton: {
-        backgroundColor:colors.maincolor,
-        padding:3,
-        margin:3,
-        borderRadius:5,
-        alignItems: 'flex-end'
-    },
+    
     cancelText: {
-        color: 'red',
         fontWeight: "bold",
     },
   });
