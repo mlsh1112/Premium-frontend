@@ -40,18 +40,6 @@ class Home extends Component {
         )
 
 
-        const getApi = async()=>{
-            await getattendances()
-            .then(res=>this.setState({myprojects:res.data}))
-            .catch(err => console.log('attendances',err))
-
-            await gettutorprojs()
-            .then(res=>this.setState({tutorproj:res.data}))
-            .catch(err=>console.log(err))
-        }
-
-       getApi()
-
         const getData = async()=>{
             await AsyncStorage.getItem('userinfo')
             .then(res=>{
@@ -59,17 +47,26 @@ class Home extends Component {
             })
             .catch(err=>console.log(err))
 
-            /*await AsyncStorage.getItem('projects')
-            .then(res=>{
-                this.setState({myprojects:JSON.parse(res)})
-            })
-            .catch(err=>console.log(err))*/
+
+            if(this.state.user.type==='Tutee'){
+                console.log('user state tutee')
+                await getattendances()
+                .then(res=>this.setState({myprojects:res.data}))
+                .catch(err => console.log('attendances',err))
+            }
+            else{
+                await gettutorprojs()
+                .then(res=>this.setState({tutorproj:res.data}))
+                .catch(err=>console.log('tutorproj',err))
+            }
         }
+       
         getData()
-    
+
     }
     
     render() {
+        console.log('USER',this.state.user)
         return (
             <View style={styles.container}>
                 <View style={styles.logoposition} >

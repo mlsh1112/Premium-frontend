@@ -26,7 +26,7 @@ export default function createProjectStackNav(){
             <StackForAuth.Screen name="ProjectDetail" component={ProjectDetail} options={{headerTitle: '프로젝트 상세보기'}}/>
             <StackForAuth.Screen name="TuteeAuthList" component={TuteeAuthList}/>
             <StackForAuth.Screen name="TutorAuthList" component={TutorAuthList}/>
-            <StackForAuth.Screen name="TuteeAuthdetail" component={TuteeAuthdetail}/>
+            <StackForAuth.Screen name="TuteeAuthdetail" component={TuteeAuthdetail}  options={{headerTitle: "오늘의 인증"}}/>
             <StackForAuth.Screen name="ExperienceAuth" component={ExperienceAuth} options={{headerShown: false}} />
             <StackForAuth.Screen name="TuteeAuthPopUp" component={TuteeAuthPopUp} options={{headerShown: false}} />
             <StackForAuth.Screen name="PaymentPage" component={App} options={{headerShown: false}} />
