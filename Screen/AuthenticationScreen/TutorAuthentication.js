@@ -22,13 +22,21 @@ const TutorAuthentication = ({navigation,route }) => {
     const startDate = moment(project.started_at)
     const now = moment()
     const remainDay = now.diff(startDate,'days') //시작하는 날짜가 0일차
-    
+    var pastDay = project.duration
+    // var pastDay = 0
+    if(remainDay >= 0){
+        pastDay = project.duration - remainDay
+    }
+    console.log(project)
     useEffect(()=>{    
             gettutees({
                 "project_id":project.id
             })
             .then(res=>{
-                setTutees(res.data)
+                const filteredauth = res.data.filter((auth) => {
+                    return now.diff(auth.created_at,'days') === 0
+                })
+                setTutees(filteredauth)
             }).catch(err=>{
                 console.log('--------------get tutees 에러 ---------------')
                 console.log(err)
@@ -69,7 +77,7 @@ const TutorAuthentication = ({navigation,route }) => {
             <View style={{marginRight:'55%', marginBottom:'5%'}}>
                 <Text style={styles.authtuteeStyle}>   오늘 인증 한 튜티</Text>
             </View>
-            {   fin 
+            {   pastDay > 0 
                     ?   (<ScrollView>
                         { tutees
                             ? (<View style={styles.tuteelistview}>
