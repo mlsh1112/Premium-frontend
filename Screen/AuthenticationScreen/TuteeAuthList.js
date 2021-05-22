@@ -137,7 +137,7 @@ const cardstyles={
         borderWidth:0,
         borderRadius:20,
         width:300,
-        height:100,
+        height:110,
         flexDirection:'row'
     },
     textstyle:{

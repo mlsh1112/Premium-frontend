@@ -49,12 +49,13 @@ class Home extends Component {
 
 
             if(this.state.user.type==='Tutee'){
-                console.log('user state tutee')
+                console.log('User state : tutee')
                 await getattendances()
                 .then(res=>this.setState({myprojects:res.data}))
                 .catch(err => console.log('attendances',err))
             }
             else{
+                console.log('User state : tutor')
                 await gettutorprojs()
                 .then(res=>this.setState({tutorproj:res.data}))
                 .catch(err=>console.log('tutorproj',err))

@@ -18,11 +18,11 @@ const ProjectAuthCard = ({navigation,project}) => {
                 <Card>
                     <TouchableOpacity onPress={()=> navigation.navigate('ProjectDetail',{project})}>
                         <View style={cardstyles.card}>
-                            <View style={{marginVertical: 10,marginHorizontal: 15}}>
+                            <View style={{marginVertical: 18,marginHorizontal: 20}}>
                                 <Text style={cardstyles.textstyle}>{project.title}</Text>
                                 <View>
                                     {   remainDay >= 0
-                                        ?   <View style={{flexDirection:'row',margin:2}}>
+                                        ?   <View style={{flexDirection:'row',margin:5}}>
                                                 <Text style={cardstyles.dayStyle}>{remainDay + 1} </Text>
                                                 <Text style={cardstyles.dayStyle2}>번째 인증</Text>
                                             </View>
@@ -108,7 +108,7 @@ const cardstyles={
         borderWidth:0,
         borderRadius:20,
         width:300,
-        height:100,
+        height:110,
         flexDirection:'row'
     },
     textstyle:{
