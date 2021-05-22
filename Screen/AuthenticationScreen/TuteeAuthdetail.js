@@ -116,7 +116,7 @@ const TuteeAutdetail=({navigation,route})=>{
             <Text style={styles.todayblackTxt}>⦁ 인증 방법</Text>
             <View style={{flexDirection:'row'}}>
               <MaterialCommunityIcons name='checkbox-marked-outline' size={26} color={colors.maincolor} style={{margin:4}}/>
-              <Text style={{margin:4,color:'grey',fontSize:16}}>5문제 풀어서 사진 찍기</Text>
+              <Text style={{margin:4,color:'grey',fontSize:16}}>{project.mission}</Text>
             </View>
         </Card>
       </View>
