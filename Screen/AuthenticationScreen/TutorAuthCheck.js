@@ -15,33 +15,30 @@ import {Button} from '../../src/components';
 
 const TutorAuthCheck = ({navigation, route}) => {
     const tutee=route.params
-    // const [submittedfiles,setSubmittedfiles] = useState(tutee.images)
-    const [submittedfiles,setSubmittedfiles] = useState([{url: 'https://cdn.pixabay.com/photo/2018/01/11/09/52/three-3075752_960_720.jpg'}])
+    const [submittedfiles,setSubmittedfiles] = useState(tutee.images)
     const {width} = useWindowDimensions();
-    console.log(tutee.images)
-
+    
     const renderimagepopup = (key) => {
         console.log('show image')
-        console.log(key)
-        navigation.navigate('TuteeAuthPopUp',{imagesource: submittedfiles[key].url})
+        navigation.navigate('TuteeAuthPopUp',{imagesource: submittedfiles[key].image_url})
     }
+
     function RenderSubmitFiles({pickedfiles}){
-        
         return(
           <ScrollView>
                   <View style={{width: width*0.8}}>
                     {pickedfiles.map((file,key) => {
                       return(
-                                <TouchableOpacity key={key} onPress={()=>renderimagepopup(key)}>
-                        <View  style={{flex: 1,flexDirection:'row',justifyContent:'center',alignItems:'center',marginVertical:8,padding:5,backgroundColor:'white'}}>
-                            <Icons name="file-upload-outline" color={colors.subcolor2} size={20}/>
-                            <View style={{width:'75%',padding:5,alignItems:'flex-start',justifyContent:'center'}}>
-                                    <Text name={key} style={{fontSize:15,}}>
-                                      {key + 1} 번째 파일
-                                    </Text>
-                            </View>
-                        </View>
-                                </TouchableOpacity>
+                            <TouchableOpacity key={key} onPress={()=>renderimagepopup(key)}>
+                                <View  style={{flex: 1,flexDirection:'row',justifyContent:'center',alignItems:'center',marginVertical:8,padding:5,backgroundColor:'white'}}>
+                                    <Icons name="file-upload-outline" color={colors.subcolor2} size={20}/>
+                                    <View style={{width:'75%',padding:5,alignItems:'flex-start',justifyContent:'center'}}>
+                                            <Text name={key} style={{fontSize:15,}}>
+                                              {key + 1} 번째 파일
+                                            </Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
                       )
                     })}  
                   </View>
@@ -58,10 +55,9 @@ const TutorAuthCheck = ({navigation, route}) => {
             <Text style={styles.textStyle}>제출한 인증 👍</Text>
         </View>
         <View style={styles.fileboxStyle}>
-        <RenderSubmitFiles pickedfiles={submittedfiles}/>
+            <RenderSubmitFiles pickedfiles={submittedfiles}/>
         </View>
-
-        <Button onPress={() => navigation.pop()}>{tutee.target.name} 님  인증 확인 ✌️</Button>
+            <Button onPress={() => navigation.pop()}>{tutee.target.name} 님  인증 확인 ✌️</Button>
         </View>
     );
     
