@@ -9,52 +9,33 @@ import {
 import TuteeAuthList from '../AuthenticationScreen/TuteeAuthList'
 import TutorAuthList from '../AuthenticationScreen/TutorAuthList'
 import AsyncStorage from '@react-native-community/async-storage';
-import {getproject} from '../../src/Api'
 
 const Authentication = ({navigation}) => {
-   const [userType, setuserType] = useState('');
+  const [userType, setuserType] = useState('');
 
-    useEffect(() => {
-     
+  useEffect(() => {
     async function getData(){
-        const type = await AsyncStorage.getItem('type');
-        console.log(type)
-        setuserType(type)
-      }
-      getData()
-    
+      const type = await AsyncStorage.getItem('type');
+      console.log(type)
+      setuserType(type)
+    }
+    getData()
+  },[])
 
-      async function gettoken(){
-        const token = await AsyncStorage.getItem('token');
-        console.log(token)
-
-      }
-      gettoken()
-    
-    },[])
-
-
-    return (
-        <View style={styles.container}>
-        
-         
-        <View style={{borderColor:'#9FA5C0',
-         borderBottomWidth:2,width:'100%',marginBottom:'5%'}}>
-        <Text style={styles.projecttextStyle}>프로젝트 인증하기</Text>
-        
-        </View>
-        
-            {
-                userType==='Tutor' ? 
-                    <TutorAuthList navigation={navigation}></TutorAuthList>
-                :
-                    <TuteeAuthList navigation={navigation}></TuteeAuthList>
-                    
-                
-            }
-            
-      </View>
-    );
+  return (
+    <View style={styles.container}>
+    <View style={{borderColor:'#9FA5C0',borderBottomWidth:2,width:'100%',marginBottom:'5%'}}>
+      <Text style={styles.projecttextStyle}>프로젝트 인증하기</Text>
+    </View>
+        {
+          userType==='' 
+          ? null 
+          : ( userType === 'Tutor'
+            ?<TutorAuthList navigation={navigation}></TutorAuthList>
+            :<TuteeAuthList navigation={navigation}></TuteeAuthList>)   
+        }
+    </View>
+  );
     
 }
 

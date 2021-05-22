@@ -10,43 +10,22 @@ import {
   
 import {Button} from '../../src/components/Button';
 import Imagepicker from '../../src/image-picker';
-import authrequest from '../../src/Api';
-import axios from 'axios';
-import AsyncStorage from '@react-native-community/async-storage';
-import baseurl from '../../config'
-let headers = {
-  headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'multipart/form-data',
-      'Authorization': ''
-  }
-}
-const PORT = baseurl.port
-console.log(PORT)
-const API = axios.create(headers);
-API.interceptors.request.use(
-    async function (config){
-        const token = await AsyncStorage.getItem('token')
-        config.headers['Authorization'] = token
-        console.log(config)
-        return config;
-    },
-    function(error){
-        return Promise.reject(error)
-    }
-);
+import {submitauth} from '../../src/Api';
+import LoadingModal from '../../src/components/LoadingModal'
+
 const SchoolAuth = (props) => {
     const [imageinfo,setImageinfo] = useState();
+    const [modalVisible,setModalVisible] = useState(false)
     const submitPhoto = () => {
       const formData = new FormData();
       
       formData.append('auth[images_attributes][0][image]', {uri: imageinfo.uri, name: imageinfo.fileName, type: imageinfo.type});
      
       if(imageinfo !== undefined){
-          //authrequest(formData).then(res => console.log(res)).catch(error => console.log(error))
-          API.post(PORT+"/auths/", formData)
-          .then(res => {
+          setModalVisible(true)
+          submitauth(formData).then(res => {
             console.log(res)
+            setModalVisible(false)
             Alert.alert("","제출이 완료되었습니다!",[
               { text: "OK", onPress: () => {
                   console.log("확인 누름")
@@ -68,11 +47,11 @@ const SchoolAuth = (props) => {
                 <Text style={styles.info}>따:숲은 튜터인증을 위해 학교 인증을 진행 하고있습니다. 학교 인증을 위해 학생증과 함께 
 자신의 모습이 나오게 사진을 찍어 전송해주세요</Text>
                     <Imagepicker getImage={setImageinfo}/>
-                    
                 </View>
                 <View styles={styles.confirm}>
                     <Button  onPress={submitPhoto}>사진 제출</Button>
                 </View>
+                <LoadingModal visible={modalVisible}/>
           </View>
         );
 }
