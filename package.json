@@ -25,22 +25,14 @@
     "formik": "^2.2.6",
     "iamport-react-native": "^1.6.3",
     "jwt-decode": "3.1.2",
-<<<<<<< HEAD
-    "moment": "^2.29.1",
-=======
     "moment": "2.29.1",
     "native-base": "^2.15.2",
->>>>>>> b4d82f652b54e3340e7a2b6aa9fe62ac240f7f73
     "react": "16.13.1",
     "react-moment": "^1.1.1",
     "react-native": "0.63.4",
     "react-native-androw": "0.0.34",
     "react-native-animated-dialog": "^1.0.3",
-<<<<<<< HEAD
-    "react-native-calendars": "^1.1260.0",
-=======
     "react-native-calendars": "1.1260.0",
->>>>>>> b4d82f652b54e3340e7a2b6aa9fe62ac240f7f73
     "react-native-circular-card-view": "^0.1.2",
     "react-native-dialog-component": "^0.2.17",
     "react-native-document-picker": "^5.0.3",
