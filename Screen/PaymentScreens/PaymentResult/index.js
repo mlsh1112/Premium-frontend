@@ -31,7 +31,7 @@ export default function PaymentResult({ navigation }) {
         "project_id":projID
       }
     ).then(res => console.log(res)).catch(e => console.log(e))
-    navigation.navigate('Home')
+    navigation.popToTop()
   }
   
   return (

@@ -12,7 +12,7 @@ import PaymentResult from './PaymentResult';
 import CertificationTest from './CertificationTest';
 import Certification from './Certification';
 import CertificationResult from './CertificationResult';
-
+import TuteeAuthlist from '../AuthenticationScreen/TuteeAuthList'
 import NavigationService from './NavigationService';
 
 const noHeader = {
@@ -27,6 +27,10 @@ const hideHeader = {
 const AppNavigator = createStackNavigator({
   Home: {
     screen: Home,
+    navigationOptions: noHeader,
+  },
+  TuteeAuthlist: {
+    screen: TuteeAuthlist,
     navigationOptions: noHeader,
   },
   PaymentTest: {

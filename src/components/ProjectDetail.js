@@ -199,10 +199,12 @@ const ProjectDetail =(props)=> {
 
   const styles={
     position:{
-      margin:20
+      //margin:20
+      marginTop:20,
+      marginHorizontal:20
     },
     cardStyle:{
-      height:'89%'
+      height:'87%'
     },
     titleStyle:{
       fontWeight:'bold',

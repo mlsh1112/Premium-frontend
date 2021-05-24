@@ -31,6 +31,7 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
      .required("비밀번호를 입력해주세요")
  });
  async function onAppleButtonPress() {
+   console.log('apple login')
   // performs login request
   const appleAuthRequestResponse = await appleAuth.performRequest({
     requestedOperation: appleAuth.Operation.LOGIN,
@@ -44,18 +45,20 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
   // use credentialState response to ensure the user is authenticated
   if (credentialState === appleAuth.State.AUTHORIZED) {
     // user is authenticated
-    const { identityToken, email, user } = appleAuthRequestResponse;
-    console.log(user)
+    const { identityToken, email, user,realUserStatus } = appleAuthRequestResponse;
+    
+    if(realUserStatus===1){console.log('login')}
+    else console.log('register')
 
   }
 }
  const Signin = (props) => {
-  /*useEffect(() => {
+  useEffect(() => {
     // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
     return appleAuth.onCredentialRevoked(async () => {
       console.warn('If this function executes, User Credentials have been Revoked');
     });
-  }, []);*/
+  }, []);
    const handleSubmitPress = (values) =>{
       login({
         "email":values.email,
@@ -184,7 +187,15 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
 
         
       </Formik>
-      
+      <AppleButton
+        buttonStyle={AppleButton.Style.WHITE}
+        buttonType={AppleButton.Type.SIGN_IN}
+        style={{
+          width: 160, // You must specify a width
+          height: 45, // You must specify a height
+        }}
+        onPress={() => onAppleButtonPress()}
+      />
     </View>
    );
  };
