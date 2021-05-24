@@ -5,6 +5,7 @@ import AuthLoading from '../Screen/AuthLoadingScreen';
 import Signin from '../Screen/SigninScreen';
 import Signup from '../Screen/SignUpScreen'
 import Tabnavigation from './BottomTabNav';
+import AdditionalInfo from '../Screen/AdditionalInfo'
 
 
 const Stack = createStackNavigator();
@@ -15,6 +16,7 @@ export default function StackForLogin(){
             <Stack.Screen name="Onboarding" component={Onboarding} options={{headerShown: false}}/>
             <Stack.Screen name="Signin" component={Signin} options={{headerShown: false}}/>
             <Stack.Screen name="Signup" component={Signup} options={{headerShown: false}}/>
+            <Stack.Screen name="AdditionalInfo" component={AdditionalInfo} options={{headerShown: false}}/>
             <Stack.Screen name="AuthLoading" component={AuthLoading} options={{headerShown: false}}/>
             <Stack.Screen name="Main" component={Tabnavigation} options={{headerShown: false}}/>
         </Stack.Navigator>

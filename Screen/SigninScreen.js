@@ -30,28 +30,7 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
    password: Yup.string()
      .required("비밀번호를 입력해주세요")
  });
- async function onAppleButtonPress() {
-   console.log('apple login')
-  // performs login request
-  const appleAuthRequestResponse = await appleAuth.performRequest({
-    requestedOperation: appleAuth.Operation.LOGIN,
-    requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-  });
-  console.log(appleAuthRequestResponse)
-  // get current authentication state for user
-  // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-  const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
-
-  // use credentialState response to ensure the user is authenticated
-  if (credentialState === appleAuth.State.AUTHORIZED) {
-    // user is authenticated
-    const { identityToken, email, user,realUserStatus } = appleAuthRequestResponse;
-    
-    if(realUserStatus===1){console.log('login')}
-    else console.log('register')
-
-  }
-}
+ 
  const Signin = (props) => {
   useEffect(() => {
     // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
@@ -59,6 +38,33 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
       console.warn('If this function executes, User Credentials have been Revoked');
     });
   }, []);
+  async function onAppleButtonPress() {
+    console.log('apple login')
+   // performs login request
+   const appleAuthRequestResponse = await appleAuth.performRequest({
+     requestedOperation: appleAuth.Operation.LOGIN,
+     requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+   });
+   console.log(appleAuthRequestResponse)
+   // get current authentication state for user
+   // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+   const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+ 
+   // use credentialState response to ensure the user is authenticated
+   if (credentialState === appleAuth.State.AUTHORIZED) {
+     // user is authenticated
+     const { identityToken, email, user,realUserStatus } = appleAuthRequestResponse;
+     
+     if(realUserStatus===1){
+       console.log('login success')
+     }
+     else {
+       console.log('register success')
+       props.navigation.replace('AdditionalInfo');
+     }
+ 
+   }
+ }
    const handleSubmitPress = (values) =>{
       login({
         "email":values.email,
