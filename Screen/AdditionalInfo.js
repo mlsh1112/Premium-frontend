@@ -25,8 +25,7 @@ const validationSchema = Yup.object().shape({
  });
 
 const AdditionalInfo=(props)=>{
-  
-  console.log(props)
+  var userName=props.route.params.user_name
   var userType;
   const [isSelected,setSelection]=useState(false);
 
@@ -58,11 +57,12 @@ const AdditionalInfo=(props)=>{
     <View style={styles.container}>
      <View >
        <Text style={styles.title}>회원 가입을 위한 추가정보를 입력해주세요</Text>
+       <Text style={styles.title}>이름 : {userName}</Text>
      </View>
      <Formik
        style={styles.FormStyle}
        validationSchema={validationSchema}
-       initialValues={{ phoneNumber: '' }}
+       initialValues={{ userName:'',phoneNumber: '' }}
        onSubmit={values => {
          //console.log(values)
          handleSubmitPress(values)
@@ -71,7 +71,16 @@ const AdditionalInfo=(props)=>{
        {({ handleChange, handleBlur, handleSubmit, values, errors,touched,}) => (
        
          <>
-           <Text style={styles.subtitle}>1. 전화 번호</Text>
+          <Text style={styles.subtitle}>1. 이름</Text>
+           <TextInput
+             name="user-name"
+             placeholder={userName}
+             style={styles.textInput}
+             onChangeText={handleChange('userName')}
+             onBlur={handleBlur('userName')}
+             value={values.userName}
+           />
+           <Text style={styles.subtitle}>2. 전화 번호</Text>
            <TextInput
              name="phone-number"
              placeholder="010-XXXX-XXXX"
