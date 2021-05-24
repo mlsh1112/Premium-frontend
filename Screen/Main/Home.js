@@ -1,6 +1,5 @@
 import React, { Component, useState} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-
 import TodayProject from '../../src/components/TodayProjectHome'
 import ProjectMini from '../../src/components/ProjectMini'
 import {getprojects,getattendances,gettutorprojs} from '../../src/Api'
@@ -30,15 +29,13 @@ class Home extends Component {
         super(props);
     }
     componentDidMount() {
-
-
-
+        
         const getData = async()=>{
             await AsyncStorage.getItem('userinfo')
             .then(res=>{
                 this.setState({user:JSON.parse(res)})
             })
-            .catch(err=>console.log(err))
+            .catch(err=>console.log("여긴 겟데이터 에러"+err))
 
 
             if(this.state.user.type==='Tutee'){
@@ -65,8 +62,32 @@ class Home extends Component {
         }
        
         getData()
+    
+        const getApi = async()=>{
+            await getattendances()
+            .then((res)=>{
+                console.log("여긴 콜백x 성공")
+                this.setState({myprojects:res.data})})
+            .catch(err => console.log('콜백 x:attendances',err))
+
+        //    await gettutorprojs()
+          //  .then(res=>this.setState({tutorproj:res.data}))
+            //.catch(err=>console.log("gettutorprojs"+err))
+        }
+
+       getApi()
 
 
+       getprojects()
+        .then(res=>{
+            this.setState({
+                projects: res.data
+            })
+        })
+        .catch(err=>
+            console.log("여긴 겟프로젝트 에러"+err)
+        )
+        
 
     }
     

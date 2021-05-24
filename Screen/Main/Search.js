@@ -88,12 +88,15 @@ function Search({navigation}) {
         <FlatList
            style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':'white'}}
            data={reqData}
-           renderItem={({item,index})=>
+           
+           renderItem={({item})=>
+            
           <TouchableOpacity style={styles.Serach}onPress={()=>{
              console.log(item)
              navigation.navigate('ProjectDetail',{project:item})}}>
 
-              <Image style={styles.thumbnail} source={cat}></Image>
+              <Image style={styles.thumbnail} source={cat}>
+              </Image>
               <View>
                 <Text style={styles.Serachtitle}>제목 : {item.title}</Text>
                 <Text style={styles.Serachtitle}>프로젝트 설명 :{item.description} {item.title}</Text>
@@ -101,7 +104,10 @@ function Search({navigation}) {
                 
               </View>
             </TouchableOpacity>
-            } 
+             
+          
+        }
+          
           />
         </View>
     </View>

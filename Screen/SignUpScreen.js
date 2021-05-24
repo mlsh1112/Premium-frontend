@@ -9,13 +9,13 @@ import {
    SafeAreaView,
    Image,
    StatusBar,
+  Picker,
    TextInput,
    TouchableOpacity,
    KeyboardAvoidingView,
  } from 'react-native';
  import CheckBox from '@react-native-community/checkbox';
 
-import {Picker} from '@react-native-picker/picker';
 import {signup} from '../src/Api';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -131,7 +131,7 @@ const SignUp=(props)=>{
            <View style={styles.PickerBox}/>
            
               <Picker
-                style={{width:'40%'}}
+                style={{marginTop:5,marginLeft:5, width:'40%'}}
                 selectedValue={selectedPicker}
                onValueChange={(itemValue,itemIndex)=>
                setSelectedPicker(itemValue)}
