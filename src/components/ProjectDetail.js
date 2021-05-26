@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import { Modal, View, Image,Text,TouchableOpacity,ScrollView,Alert } from 'react-native';
 import {  Card,IconButton,Colors } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../colors';
 import {Button} from '../components';
 import {createattendances,getproject,getattendances,getcurrentuser,deleteproject,quitproject} from '../Api'
-
+import firebase,{firestore} from '../../FirebaseConfig/Firebase'
 const ProjectDetail =(props)=> {
   // console.log(props)
   var [isJoin,setisJoin]=useState(false)
@@ -17,7 +17,8 @@ const ProjectDetail =(props)=> {
       "email": "", "id": -1, "image": "", "info": "", "likes_count": -1, "name": "", "phone": "", "status": "", "type": ""
     }
   )
-
+  const [chatroom,setChatroom] = useState(null)
+  
   const handleAttendence=()=>{
     console.log(project.id)
     createattendances({
@@ -44,7 +45,7 @@ const ProjectDetail =(props)=> {
               deleteproject(latestpr.id).then(res => {
                 console.log('--------- delete project ----------')
                 console.log(res.data)
-                props.navigation.popToTop()
+                props.navigation.navigate('DeleteChatRoom',{myinfo,latestpr,chatroom})
               }).catch(e => {
                 console.log('========= delete project error =========')
                 console.log(e)
@@ -87,9 +88,26 @@ const ProjectDetail =(props)=> {
       console.log(error)
     }
   }
+  const gotoChatroom = () => {
+    console.log('채팅방 생성')
+    props.navigation.navigate('CreateChatRoom',{myinfo,latestpr})
+  }
+  const deleteChatRoom = () => {
+    console.log('채팅방 삭제')
+    Alert.alert("채팅방 삭제","채팅방을 삭제할 경우 참가자, 메세지 모두 일괄 삭제됩니다.",[
+      { text: "OK", onPress: () => {
+          console.log("확인 누름")
+          props.navigation.navigate('DeleteChatRoom',{myinfo,latestpr,chatroom})
+        }
+      }]
+      )
+    
+  }
   useEffect(()=>{
     const rerender = props.navigation.addListener('focus', e =>{
       console.log("effect is working")
+      console.log(chatroom)
+      
       getattendances().then(res=>{
         if(res.data){
           res.data.map((pr)=>{
@@ -104,6 +122,17 @@ const ProjectDetail =(props)=> {
           setLatestpr(res.data)
           getcurrentuser().then(res => {
             console.log(res.data)
+            if(res.data.type === 'Tutor'){
+              const groupsRef = firestore.collection('GROUPS').where('projectID','==',project.id)
+              groupsRef.get().then(res => {
+                res.forEach((r)=>{
+                    console.log('--------------------chat target------------------')
+                    setChatroom(r.data())
+                })
+              }).catch(e => {
+                  console.log(e)
+              })
+            }
             setMyinfo(res.data)
           }).catch(e => {
             console.log('============get current user error =========')
@@ -118,6 +147,7 @@ const ProjectDetail =(props)=> {
         console.log("---------------getattendances error--------------")
         console.log(err)
       })
+      
     })
   },[props.navigation])
   return (
@@ -126,14 +156,24 @@ const ProjectDetail =(props)=> {
         <Card style={styles.cardStyle}>
           <View style={{margin:20}}>
           <Text style={styles.titleStyle}>제목 : {latestpr.title}</Text>
-         
           <View style={styles.eee}>
             <View style={styles.profile}>
-              <View style={{flexDirection:'row', marginBottom:10 }}>
+              <View style={{flexDirection:'row', marginBottom:10,width: '100%',alignItems:'center' }}>
                 <Image></Image>
                 <TouchableOpacity onPress={()=> props.navigation.navigate('ProfileView',{latestpr})}>
                   <Text>튜터 : {latestpr.tutor.name}</Text>
                 </TouchableOpacity>
+                { myinfo.type === 'Tutor' 
+                  ?
+                    chatroom === null
+                      ?(<TouchableOpacity style={styles.chatbuttonposition} onPress={gotoChatroom}>
+                          <Text style={styles.chatbuttonstyle}>채팅방생성</Text>
+                        </TouchableOpacity>)
+                      :(<TouchableOpacity style={styles.chatbuttonposition} onPress={deleteChatRoom}>
+                          <Text style={styles.chatbuttonstyle}>채팅방삭제</Text>
+                        </TouchableOpacity>)
+                  : null
+                }
               </View>
           </View>
           </View>
@@ -262,6 +302,24 @@ const ProjectDetail =(props)=> {
     inbuttonStyle: {
       width:'100%',
       alignItems:'center'
-    }
+    },
+    chatbuttonposition:{
+      width: 100,
+      height: 30,
+      backgroundColor: colors.maincolor,
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 32,
+      marginTop: 30,
+      position: 'absolute',
+      right: 10,
+      textAlignVertical: 'top',
+      bottom: 10
+    },
+    chatbuttonstyle:{
+        color:'white',
+        fontWeight: 'bold',
+        fontSize: 18,
+    },
   }
 export default ProjectDetail;
