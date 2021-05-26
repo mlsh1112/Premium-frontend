@@ -12,6 +12,10 @@ import ProjectMini from '../src/components/ProjectMini'
 import CardNews from '../src/components/CardNews'
 import Book from '../Screen/makeProjectScreen/Book';
 import Chapter from '../Screen/makeProjectScreen/Chapter';
+import Chatroom from '../Screen/chatting/Chatroom'
+import CreateChatRoom from '../Screen/chatting/CreateChatRoom'
+import Message from '../Screen/chatting/Message'
+import DeleteChatRoom from '../Screen/chatting/DeleteChatRoom'
 
 const StackForCreatePrj = createStackNavigator();
 
@@ -30,6 +34,10 @@ export default function createProjectStackNav(){
             <StackForCreatePrj.Screen name="ProjectMini" component={ProjectMini} options={{headerShown: false}}/>
             <StackForCreatePrj.Screen name="ProjectTrial" component={ProjectTrial} options={{headerShown: false}}/>
             <StackForCreatePrj.Screen name="CardNews" component={CardNews} options={{headerShown: false}} />
+            <StackForCreatePrj.Screen name="Chatroom" component={Chatroom} options={{headerTitle: '프로젝트 채팅방'}}/>
+            <StackForCreatePrj.Screen name="CreateChatRoom" component={CreateChatRoom} options={{headerShown: false}}/>
+            <StackForCreatePrj.Screen name="DeleteChatRoom" component={DeleteChatRoom} options={{headerShown: false}}/>
+            <StackForCreatePrj.Screen name="Message" component={Message} options={({ route }) => ({title: route.params.item.groupName})}/>
         </StackForCreatePrj.Navigator>
     );
 }
