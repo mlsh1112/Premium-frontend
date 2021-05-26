@@ -61,3 +61,6 @@ buck-out/
 
 #api data
 config.js
+
+#google-service json
+google-services.json
