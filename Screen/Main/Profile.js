@@ -136,6 +136,15 @@ const Profile = (props) => {
       console.log(e.response)
     })
   }
+  const gotoChatroom = () => {
+    console.log('채팅룸 입장')
+    // console.log(project)
+    if (myinfo.type === 'Tutee'){
+      props.navigation.navigate('Chatroom',{myinfo,latestpr:project})
+    }else{
+      props.navigation.navigate('Chatroom',{myinfo,latestpr:project})
+    }
+  }
   const goToCreateProject = () => {
     console.log("프로젝트 생성하러가기");
     props.navigation.navigate('ProjectForm');
@@ -158,8 +167,13 @@ const Profile = (props) => {
       <View style={styles.userInfoSection}>
         <View style={{flexDirection: 'row', marginTop: 15}}>
           <Image source={cat} style={styles.avatar} />
-          <View style={{marginLeft: 20}}>
-            <Title style={[styles.title, {marginTop:15,marginBottom: 5,}]}>{myinfo.name}</Title>
+          <View style={{marginLeft: 20,width:'70%'}}>
+            <View>
+              <Title style={[styles.title, {marginTop:15,marginBottom: 5}]}>{myinfo.name}</Title>
+              <TouchableOpacity style={styles.buttonposition} onPress={gotoChatroom}>
+                  <Text style={styles.buttonstyle}>채팅방</Text>
+              </TouchableOpacity>
+            </View>
             <View>
               { myinfo.type === "Tutor"
                 ? (<View>
@@ -177,11 +191,11 @@ const Profile = (props) => {
                   </View>
                   )
               }
+              <TouchableOpacity style={styles.buttonposition} onPress={handleLogoutPress}>
+                  <Text style={styles.buttonstyle}>로그 아웃</Text>
+              </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity style={styles.buttonposition} onPress={handleLogoutPress}>
-              <Text style={styles.buttonstyle}>로그 아웃</Text>
-          </TouchableOpacity>
         </View>
       </View>
     )}
