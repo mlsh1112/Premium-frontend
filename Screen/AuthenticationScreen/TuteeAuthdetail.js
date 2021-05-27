@@ -3,14 +3,10 @@ import React, { Component, useEffect, useState } from 'react';
 import {getPlan} from '../../src/Api'
 import {Button} from '../../src/components/Button'
 import {
-    StyleSheet,
-    TouchableOpacity,
     View,
     Text,
     ScrollView,
-    TextInput,
     LogBox,
-    Keyboard,
   } from 'react-native';
 import { Card } from 'react-native-paper';
 import Calender from '../../src/components/Calender'
@@ -27,20 +23,27 @@ const TuteeAutdetail=({navigation,route})=>{
     var pastDay=project.project.experience_period-remainDay
     var auths=project.auth_count
     var percent = Math.floor((auths/project.project.experience_period)*100)
+    var requireTime = project.project.required_time
+    var reviewTime = 0
+    requireTime===0?reviewTime = 0: reviewTime = Math.floor(project.project.review_weight/requireTime)
+    var studyTime = requireTime-reviewTime
+    var [plan,setPlan]=useState()
     console.log(project)
-    var Trial_Comment=`현재 체험기간 ${pastDay} 일 남았습니다. `
+    console.log(requireTime,reviewTime,studyTime)
 
 
   useEffect(()=>{
-      /*console.log((project.id))
-      getPlan("83").then((res)=>{
-        console.log(res);
+      console.log(project.id)
+      getPlan({
+        "project_id":41
+      }).then((res)=>{
+        setPlan(res.data);
       })
       .catch((err)=>{
         console.log(err)
-      })*/
+      })
       LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
-  })
+  },[])
 
   return(
     <ScrollView >
@@ -105,18 +108,18 @@ const TuteeAutdetail=({navigation,route})=>{
           </View>
           <View style={styles.todayTxt}>
             <Text style={styles.todayblackTxt}>⦁ 공부 시간 : </Text>
-            <Text style={styles.todayredTxt}>3</Text>
+            <Text style={styles.todayredTxt}>{studyTime}</Text>
             <Text style={styles.todayblackTxt}> 시간</Text>
           </View>
           <View style={styles.todayTxt}>
             <Text style={styles.todayblackTxt}>⦁ 복습 시간 : </Text>
-            <Text style={styles.todayredTxt}>1</Text>
+            <Text style={styles.todayredTxt}>{reviewTime}</Text>
             <Text style={styles.todayblackTxt}> 시간</Text>
           </View>
             <Text style={styles.todayblackTxt}>⦁ 인증 방법</Text>
             <View style={{flexDirection:'row'}}>
               <MaterialCommunityIcons name='checkbox-marked-outline' size={26} color={colors.maincolor} style={{margin:4}}/>
-              <Text style={{margin:4,color:'grey',fontSize:16}}>{project.mission}</Text>
+              <Text style={{margin:4,color:'grey',fontSize:16}}>{project.project.mission}</Text>
             </View>
         </Card>
       </View>
