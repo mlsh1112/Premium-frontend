@@ -16,7 +16,7 @@
    Text,
    TextInput,  
  } from 'react-native';
- import {login} from '../src/Api';
+ import {login,appleLogin} from '../src/Api';
  import {setToken,setType,setStatus,setName,setUser} from '../src/Asyncstorage';
  import { Formik } from "formik";
  import * as Yup from "yup";
@@ -39,6 +39,7 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
     });
   }, []);
   async function onAppleButtonPress() {
+
     console.log('apple login')
    // performs login request
    const appleAuthRequestResponse = await appleAuth.performRequest({
@@ -57,11 +58,24 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
      var user_name=fullName.familyName+fullName.givenName
      if(realUserStatus===1){
        console.log('login success')
+       appleLogin(appleAuthRequestResponse)
+       .then(res=>{
+         console.log(res.data.token)
+         setToken(res.data.token);
+         props.navigation.replace('Main');
+       })
        //props.navigation.replace('Main');
      }
      else {
        console.log('register success')
-       props.navigation.navigate('AdditionalInfo',{user_name});
+       appleLogin(appleAuthRequestResponse)
+        .then(res=>{
+          console.log(res.data.token)
+          setToken(res.data.token);
+          props.navigation.navigate('AdditionalInfo',{name:user_name, userID:res.data})
+        })
+        .catch(err=>console.log(err))
+       //props.navigation.navigate('AdditionalInfo',{name:user_name,userID:'ss'});
      }
  
    }

@@ -97,3 +97,5 @@ export const deleteproject = (projectid) => API.delete(PORT+`/projects/${project
 export const quitproject = (params) => API.delete(PORT+'/attendances',{params})
 export const getPlan=(params)=>API.get(PORT+'/options',{params})
 export const submitauth = (formData) => FORMAPI.post(PORT+"/auths/", formData)
+export const appleLogin = (params) => API.get(PORT+'/apple/login',{params})
+export const userUpdate = (id,{user}) => API.patch(PORT+`/users/${id}`,{user})

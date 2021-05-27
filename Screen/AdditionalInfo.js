@@ -13,7 +13,7 @@ import {
    TouchableOpacity,
  } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import {signup} from '../src/Api';
+import {userUpdate} from '../src/Api';
 import {setToken} from '../src/Asyncstorage';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -25,32 +25,38 @@ const validationSchema = Yup.object().shape({
  });
 
 const AdditionalInfo=(props)=>{
-  var userName=props.route.params.user_name
+  var userName=props.route.params.name
+  var user_ID=props.route.params.userID.user_id
   var userType;
   const [isSelected,setSelection]=useState(false);
-
+  console.log(props.route.params)
   useEffect(()=>{
-    userType=isSelected?"튜터":"튜티"
+    userType=isSelected?"Tutor":"Tutee"
     console.log(userType);
   })
+  console.log(user_ID)
 
   const handleSubmitPress = (values)=>{  
     console.log(values)
     console.log(userType)
-    //signup({
-    //  "phone": values.phoneNumber,
-    //  "user_type":userType
-    // }
-    //).then(res => {
-    //  console.log(res.data.token);
-    //  setToken(res.data.token);
-    //}).then(() => {
-    //  props.navigation.replace('AuthLoading');
-    //}).catch(error => {
-    //  alert("이메일 혹은 패스워드를 확인해주세요.")
-    //  console.log(error);
-    //});
-    props.navigation.replace('Main')
+    userUpdate(user_ID,
+    {
+        "user":{
+                  "name":userName,
+                  "phone":values.phoneNumber,
+                  "type":userType
+                }
+    }).then(res => {
+      console.log(res.data.token);
+      //setToken(res.data.token);
+    }).then(() => {
+      console.log('update success')
+      props.navigation.replace('Main');
+    }).catch(error => {
+      alert("이메일 혹은 패스워드를 확인해주세요.")
+      console.log(error);
+    });
+    //props.navigation.replace('Main')
   }  
 
   return(
