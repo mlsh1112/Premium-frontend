@@ -25,7 +25,7 @@ const TuteeAutdetail=({navigation,route})=>{
     var startDate=new Date().getTime() - new Date(project.created_at).getTime();
     var remainDay=Math.floor(startDate / (1000 * 60 * 60 * 24))
     var pastDay=project.project.experience_period-remainDay
-    var auths=3
+    var auths=project.auth_count
     var percent = Math.floor((auths/project.project.experience_period)*100)
     console.log(project)
     var Trial_Comment=`현재 체험기간 ${pastDay} 일 남았습니다. `
