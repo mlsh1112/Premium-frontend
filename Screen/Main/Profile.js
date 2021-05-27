@@ -164,17 +164,18 @@ const Profile = (props) => {
   return (
     <SafeAreaView style={styles.container}>
     {showscreen && (
-      <View style={styles.userInfoSection}>
-        <View style={{flexDirection: 'row', marginTop: 15}}>
-          <Image source={cat} style={styles.avatar} />
-          <View style={{marginLeft: 20,width:'70%'}}>
-            <View>
-              <Title style={[styles.title, {marginTop:15,marginBottom: 5}]}>{myinfo.name}</Title>
+        <View style={{flexDirection:'row',marginTop:30,paddingHorizontal:20}}>
+          <View style={{width: '30%',justifyContent:'center',alignItems:'flex-start'}}>
+            <Image source={cat} style={styles.avatar} />
+          </View>
+          <View style={{width:'70%'}}>
+            <View style={[styles.userinfoWrapper,{height:50}]}>
+              <Text style={{fontSize:20,fontWeight:'bold'}}>{myinfo.name}</Text>
               <TouchableOpacity style={styles.buttonposition} onPress={gotoChatroom}>
                   <Text style={styles.buttonstyle}>채팅방</Text>
               </TouchableOpacity>
             </View>
-            <View>
+            <View style={styles.userinfoWrapper}>
               { myinfo.type === "Tutor"
                 ? (<View>
                     <Icon name="teach" color="#F63D3D" size={20}/>
@@ -197,23 +198,23 @@ const Profile = (props) => {
             </View>
           </View>
         </View>
-      </View>
     )}
     
     {showscreen && (
-      <View style={styles.userInfoSection}>
-        <View style={styles.row}>
-          <Icon name="school" color="#777777" size={20} style={{textAlignVertical:'center'}}/>
-          <Text style={{color:"#777777", marginLeft: 20,textAlignVertical:'center'}}>{school}</Text>
-        </View>
-        { myinfo.type === "Tutor" && myinfo.status === "approved"
-            ? (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToCreateProject}>
+        <View style={{height: 30,flexDirection: 'row',justifyContent:'space-between',paddingHorizontal: 20,marginTop:10}}>
+          <View style={{flexDirection:'row'}}>
+            <Icon name="school" color="#777777" size={20} style={{textAlignVertical:'center', marginLeft: 10}}/>
+            <Text style={{color:"#777777", marginLeft: 10,textAlignVertical:'center'}}>{school}</Text>
+          </View>
+          { myinfo.type === "Tutor" && myinfo.status === "approved"
+            ? (<TouchableOpacity style={[styles.buttonposition,{width: 140,}]} onPress={goToCreateProject}>
                 <Text style={styles.buttonstyle}>프로젝트 생성</Text>
                </TouchableOpacity>)
-            : (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToAuth}>
+            : (<TouchableOpacity style={[styles.buttonposition,{width: 140,}]} onPress={goToAuth}>
                 <Text style={styles.buttonstyle}>인증하러가기</Text>
                </TouchableOpacity>)}
-      </View>
+        </View>
+     
     )}
 
     {showscreen && (
@@ -259,11 +260,10 @@ const styles = StyleSheet.create({
   container:{
     flex: 1,
   },
-  userInfoSection: {
-    paddingHorizontal: 30,
-    marginTop: 10,
-    marginBottom: 10,
-    alignContent: 'center',
+  userinfoWrapper: {
+    flexDirection:'row', 
+    justifyContent:'space-between',
+    alignItems: 'center'
   },
   infoBoxWrapper: {
     justifyContent: "space-around",
@@ -315,26 +315,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderRadius: 50,
   },
-  CardContainer: {
-    padding: 20,
-    elevation: 5,
-    borderRadius: 4,
-    borderWidth: 0.5,
-    borderColor: '#d6d7da',
-    margin: 20,
-    elevation: 5
-  },
-  CardTitle: {
-      width: '100%',
-      fontWeight: 'bold',
-      fontSize: 20,
-      padding: 3
-  },
-  CardContent: {
-      width: '100%',
-      fontSize: 12,
-      padding: 3
-  },
+  
   buttonposition:{
     width: 100,
     height: 30,
@@ -342,27 +323,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 32,
-    marginTop: 30,
-    position: 'absolute',
-    right: 10,
-    textAlignVertical: 'top',
-    bottom: 10
+    
   },
   buttonstyle:{
       color:'white',
       fontWeight: 'bold',
       fontSize: 18,
   },
-  buttonposition_createpro:{
-    width: 140,
-    height: 30,
-    backgroundColor: colors.maincolor,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 32,
-    position: 'absolute',
-    right: 40,
-  }
 });
   
 export default Profile;
