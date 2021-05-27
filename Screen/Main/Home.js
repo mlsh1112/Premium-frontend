@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import TodayProject from '../../src/components/TodayProjectHome'
 import ProjectMini from '../../src/components/ProjectMini'
-import {getprojects,getattendances,gettutorprojs} from '../../src/Api'
+import {getprojects,getattendances,gettutorprojs,getcurrentuser} from '../../src/Api'
 import colors from '../../src/colors'
 import homelogo from '../../assets/homeLogo2.png';
 import card1 from '../../assets/cardNews1/cardNews1-001.png'
@@ -34,12 +34,17 @@ class Home extends Component {
 
 
         const getData = async()=>{
-            await AsyncStorage.getItem('userinfo')
+            /*await AsyncStorage.getItem('userinfo')
             .then(res=>{
                 this.setState({user:JSON.parse(res)})
             })
-            .catch(err=>console.log(err))
+            .catch(err=>console.log(err))*/
 
+            await getcurrentuser()
+            .then(res=>{
+                this.setState({user:res.data})
+            })
+            .catch(err=>console.log(err))
 
             if(this.state.user.type==='Tutee'){
                 console.log('User state : tutee')
