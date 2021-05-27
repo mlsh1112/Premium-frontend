@@ -6,6 +6,7 @@ import colors from '../colors';
 import {Button} from '../components';
 import {createattendances,getproject,getattendances,getcurrentuser,deleteproject,quitproject} from '../Api'
 import firebase,{firestore} from '../../FirebaseConfig/Firebase'
+
 const ProjectDetail =(props)=> {
   // console.log(props)
   var [isJoin,setisJoin]=useState(false)
@@ -149,6 +150,7 @@ const ProjectDetail =(props)=> {
       })
       
     })
+    return rerender
   },[props.navigation])
   return (
       <View style={styles.position}>
@@ -158,8 +160,7 @@ const ProjectDetail =(props)=> {
           <Text style={styles.titleStyle}>제목 : {latestpr.title}</Text>
           <View style={styles.eee}>
             <View style={styles.profile}>
-              <View style={{flexDirection:'row', marginBottom:10,width: '100%',alignItems:'center' }}>
-                <Image></Image>
+              <View style={{flexDirection:'row', marginBottom:10,width: '100%',justifyContent:'space-between',alignItems:'center'}}>
                 <TouchableOpacity onPress={()=> props.navigation.navigate('ProfileView',{latestpr})}>
                   <Text>튜터 : {latestpr.tutor.name}</Text>
                 </TouchableOpacity>
@@ -310,11 +311,6 @@ const ProjectDetail =(props)=> {
       justifyContent: "center",
       alignItems: "center",
       borderRadius: 32,
-      marginTop: 30,
-      position: 'absolute',
-      right: 10,
-      textAlignVertical: 'top',
-      bottom: 10
     },
     chatbuttonstyle:{
         color:'white',
