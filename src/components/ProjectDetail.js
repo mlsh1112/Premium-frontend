@@ -46,7 +46,11 @@ const ProjectDetail =(props)=> {
               deleteproject(latestpr.id).then(res => {
                 console.log('--------- delete project ----------')
                 console.log(res.data)
-                props.navigation.navigate('DeleteChatRoom',{myinfo,latestpr,chatroom})
+                if(chatroom !== null){
+                  props.navigation.navigate('DeleteChatRoom',{myinfo,latestpr,chatroom})
+                }else {
+                  props.navigation.popToTop()
+                }
               }).catch(e => {
                 console.log('========= delete project error =========')
                 console.log(e)
