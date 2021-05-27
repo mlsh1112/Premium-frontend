@@ -27,22 +27,23 @@ const TuteeAutdetail=({navigation,route})=>{
     var reviewTime = 0
     requireTime===0?reviewTime = 0: reviewTime = Math.floor(project.project.review_weight/requireTime)
     var studyTime = requireTime-reviewTime
-    var [plan,setPlan]=useState()
-    console.log(project)
-    console.log(requireTime,reviewTime,studyTime)
+    var [plans,setPlans]=useState()
 
 
   useEffect(()=>{
       console.log(project.id)
-      getPlan({
+       getPlan({
         "project_id":41
       }).then((res)=>{
-        setPlan(res.data);
+         setPlans(res.data);
       })
       .catch((err)=>{
         console.log(err)
       })
+
+
       LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+
   },[])
 
   return(
@@ -103,8 +104,12 @@ const TuteeAutdetail=({navigation,route})=>{
         <Text style={styles.titleTxt}>Today 일정 👻 </Text>
         <Card style={styles.cardStyle}>
           <View style={styles.todayTxt}>
-            <Text style={styles.todayblackTxt}>⦁ 오늘 진행할 챕터 : </Text>
-            <Text style={styles.todayredTxt}> 1. 집합</Text>
+            {plans.chapter?
+            <Text style={styles.todayblackTxt}>⦁ 오늘 진행할 챕터 {plans.chapter}
+            :
+            </Text>:<Text style={styles.todayblackTxt}>⦁ 오늘 진행할 챕터 : </Text>
+            }
+            <Text style={styles.todayredTxt}> {}</Text>
           </View>
           <View style={styles.todayTxt}>
             <Text style={styles.todayblackTxt}>⦁ 공부 시간 : </Text>
