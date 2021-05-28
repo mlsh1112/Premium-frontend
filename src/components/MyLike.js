@@ -12,7 +12,6 @@ import colors from '../colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getmylikes} from '../Api';
 import cat from '../../assets/cat2.png' 
-import LikelistCard from './LikelistCard'
 
 
 const RenderLikeList = (props) => {
@@ -40,11 +39,11 @@ const MyLike = (props) => {
     const [likelist,setLikelist] = useState(props.route.params.mylikelists)
     useEffect(() => {
         console.log(props.route.params.mylikelists)
-        // getmylikes().then(res => {
-            // console.log(res.data)
-        // }).catch(e => {
-            // console.log(e)
-        // })
+        getmylikes().then(res => {
+            console.log(res.data)
+        }).catch(e => {
+            console.log(e)
+        })
     },[])
     
     return (
