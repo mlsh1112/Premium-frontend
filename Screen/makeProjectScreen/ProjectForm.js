@@ -24,7 +24,16 @@ function makeItem(projectlist){
   }));
   return temp;
 }
-
+function makeItemlist(start,end){
+  var item = []
+  for(var i = start ; i < end + 1 ; i++){
+    item.push({
+      label: `${i}`,
+      value: `${i}`
+    })
+  }
+  return item
+}
 const ProjectForm =(props)=> {
     const validationSchema = Schema
     const [isDateTimePickerVisible,setIsDateTimePickerVisible] = useState(false)
@@ -171,23 +180,23 @@ const ProjectForm =(props)=> {
                   4. 프로젝트 체험 기간 (단위: 일)
                   <RenderHelp messagetype={HelpMessage.experienceduration}/> 
                 </Text>
-                  <TextInput
-                    name="experienceduration"
-                    placeholder="프로젝트 체험 기간 입력"
-                    style={styles.textInput}
-                    onChangeText={value => {
-                        const parsedvalue = parseInt(value)
-                        if (!isNaN(parsedvalue)){
-                            setFieldValue('experienceduration',parsedvalue,10);
+                  <View style={styles.pickerstyle}>
+                    <RNPickerSelect
+                        useNativeAndroidPickerStyle={false}
+                        onValueChange={(value,idx) => {
+                          setFieldValue('experienceduration',value)
+                        }}
+                        items={makeItemlist(1,7)}
+                        placeholder={
+                          {
+                            label: '체험기간을 선택해주세요',
+                            value: '0'
+                          }
                         }
-                        else {
-                            values.experienceduration =''
-                            console.log("string is typed")
-                        }
-                    }}
-                    onBlur={handleBlur('experienceduration')}
-                    keyboardType='numeric'
-                  />
+                        >
+                          <Text>{values.experienceduration} 일</Text>
+                    </RNPickerSelect>
+                  </View>  
                 <RenderError errors={errors.experienceduration} touched={touched.experienceduration} />
                 
 
@@ -219,23 +228,23 @@ const ProjectForm =(props)=> {
                   6. 복습 강도 (최소 1단계 ~ 10단계)
                   <RenderHelp messagetype={HelpMessage.repeatstrength}/>
                 </Text>
-                  <TextInput
-                    name="repeatstrength"
-                    placeholder="복습 강도 입력"
-                    style={styles.textInput}
-                    onChangeText={value => {
-                        const parsedvalue = parseInt(value)
-                        if (!isNaN(parsedvalue)){
-                            setFieldValue('repeatstrength',parsedvalue,10);
+                <View style={styles.pickerstyle}>
+                    <RNPickerSelect
+                        useNativeAndroidPickerStyle={false}
+                        onValueChange={(value,idx) => {
+                          setFieldValue('repeatstrength',value)
+                        }}
+                        items={makeItemlist(1,10)}
+                        placeholder={
+                          {
+                            label: '복습강도를 선택해주세요',
+                            value: '0'
+                          }
                         }
-                        else {
-                            values.repeatstrength =''
-                            console.log("string is typed")
-                        }
-                    }}
-                    onBlur={handleBlur('repeatstrength')}
-                    keyboardType='numeric'
-                  />
+                        >
+                          <Text>{values.repeatstrength} 단계</Text>
+                    </RNPickerSelect>
+                  </View>  
                 <RenderError errors={errors.repeatstrength} touched={touched.repeatstrength} />
 
                 <Text style={styles.subtitle}>
@@ -245,7 +254,7 @@ const ProjectForm =(props)=> {
                   <TextInput
                     name="howToAuth"
                     placeholder="프로젝트 일일 인증 미션을 입력해주세요"
-                    style={styles.bigtextInput}
+                    style={[styles.textInput,{height: 100}]}
                     onChangeText={handleChange('howToAuth')}
                     onBlur={handleBlur('howToAuth')}
                     value={values.howToAuth}
@@ -258,7 +267,7 @@ const ProjectForm =(props)=> {
                   <TextInput
                     name="projectIntroduce"
                     placeholder="프로젝트 소개를 입력해주세요"
-                    style={styles.bigtextInput}
+                    style={[styles.textInput,{height: 100}]}
                     onChangeText={handleChange('projectIntroduce')}
                     onBlur={handleBlur('projectIntroduce')}
                     value={values.projectIntroduce}
@@ -313,21 +322,12 @@ const styles = StyleSheet.create({
       height: 40,
       width: '90%',
       margin: 10,
+      padding:10,
       backgroundColor: 'white',
       borderWidth: 1,
       borderRadius: 10,
       fontSize:15,
       fontWeight:'bold'
-    },
-    bigtextInput: {
-        height: 100,
-        width: '90%',
-        margin: 10,
-        backgroundColor: 'white',
-        borderWidth: 1,
-        borderRadius: 10,
-        fontSize:15,
-        fontWeight:'bold'
     },
     FormStyle: {
       flexDirection: 'row',
