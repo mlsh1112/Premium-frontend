@@ -16,7 +16,7 @@ import {Schema, InitValue,tommorow} from './ValueSchema';
 import {HelpMessage,RenderHelp} from './Help';
 import {RenderError} from './ValidMessage';
 import {createproject,getcategories} from '../../src/Api';
-
+import SwiperModal from './SwiperModal'
 function makeItem(projectlist){
   const temp = projectlist.map((pr)=>({
       label: pr.title,
@@ -35,6 +35,7 @@ function makeItemlist(start,end){
   return item
 }
 const ProjectForm =(props)=> {
+    const [modalVisible,setModalVisible] = useState(true)
     const validationSchema = Schema
     const [isDateTimePickerVisible,setIsDateTimePickerVisible] = useState(false)
     const [category,setCategory] = useState([
@@ -79,6 +80,7 @@ const ProjectForm =(props)=> {
     return (
         <ScrollView>
         <View style={styles.container}>
+        <SwiperModal visible={modalVisible} setModalVisible={setModalVisible} />
             <Formik
               style={styles.FormStyle}
               validationSchema={validationSchema}
@@ -306,6 +308,7 @@ const ProjectForm =(props)=> {
                 </>
               )}
             </Formik>
+            
         </View>
         </ScrollView>
         );
