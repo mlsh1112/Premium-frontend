@@ -12,6 +12,10 @@ import CreateChatRoom from '../Screen/chatting/CreateChatRoom'
 import Message from '../Screen/chatting/Message'
 import DeleteChatRoom from '../Screen/chatting/DeleteChatRoom'
 import Profile from '../Screen/Main/Profile';
+import UpdateProject from '../Screen/UpdateProject/UpdateProject'
+import MyLike from '../src/components/MyLike'
+import Book from '../Screen/makeProjectScreen/Book'
+import Chapter from '../Screen/makeProjectScreen/Chapter'
 const Stack = createStackNavigator();
 
 export default function ProjectNavigation(){
@@ -29,6 +33,10 @@ export default function ProjectNavigation(){
             <Stack.Screen name="CreateChatRoom" component={CreateChatRoom} options={{headerShown: false}}/>
             <Stack.Screen name="DeleteChatRoom" component={DeleteChatRoom} options={{headerShown: false}}/>
             <Stack.Screen name="Message" component={Message} options={({ route }) => ({title: route.params.item.groupName})}/>
+            <Stack.Screen name="UpdateProject" component={UpdateProject} options={{headerTitle: '프로젝트 업데이트'}}/>
+            <Stack.Screen name="Book" component={Book} options={{headerTitle: "책 선택"}}/>
+            <Stack.Screen name="Chapter" component={Chapter} options={{headerTitle: "챕터 가중치 설정"}}/>
+            <Stack.Screen name="MyLike" component={MyLike} options={{headerTitle: '좋아요 리스트'}} />
         </Stack.Navigator>
         
     );

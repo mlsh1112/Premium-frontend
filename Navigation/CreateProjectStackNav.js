@@ -16,7 +16,9 @@ import Chatroom from '../Screen/chatting/Chatroom'
 import CreateChatRoom from '../Screen/chatting/CreateChatRoom'
 import Message from '../Screen/chatting/Message'
 import DeleteChatRoom from '../Screen/chatting/DeleteChatRoom'
+import UpdateProject from '../Screen/UpdateProject/UpdateProject'
 
+import MyLike from '../src/components/MyLike'
 const StackForCreatePrj = createStackNavigator();
 
 export default function createProjectStackNav(){
@@ -38,6 +40,8 @@ export default function createProjectStackNav(){
             <StackForCreatePrj.Screen name="CreateChatRoom" component={CreateChatRoom} options={{headerShown: false}}/>
             <StackForCreatePrj.Screen name="DeleteChatRoom" component={DeleteChatRoom} options={{headerShown: false}}/>
             <StackForCreatePrj.Screen name="Message" component={Message} options={({ route }) => ({title: route.params.item.groupName})}/>
+            <StackForCreatePrj.Screen name="UpdateProject" component={UpdateProject} options={{headerTitle: '프로젝트 업데이트'}} />
+            <StackForCreatePrj.Screen name="MyLike" component={MyLike} options={{headerTitle: '좋아요 리스트'}} />
         </StackForCreatePrj.Navigator>
     );
 }

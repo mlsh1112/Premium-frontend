@@ -29,7 +29,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {TabView, TabBar} from 'react-native-tab-view';
 
 import colors from '../../src/colors'
-import {logout,getcurrentuser,getattendances,tutorgetproject} from '../../src/Api';
+import {logout,getcurrentuser,getattendances,tutorgetproject,getmylikes} from '../../src/Api';
 import ProjectMini from '../../src/components/ProjectMini';
 import cat from '../../assets/cat2.png'
 
@@ -68,7 +68,7 @@ const Profile = (props) => {
   const [project,setProject] = useState([])
   const [finishedproject,setFinishedProject] = useState([]);
   const [school,setSchool] = useState('아주대학교');
-  
+  const [mylikelists,setMylikelists] = useState([])
   useEffect(() => {
     const rerender = props.navigation.addListener('focus', e => {
       console.log("welcome back")
@@ -76,6 +76,13 @@ const Profile = (props) => {
         setMyinfo(res.data)
         if(res.data.type ==='Tutee'){
           getattendances().then(res => {
+            // getmylikes().then(res =>{
+            //   console.log(res.data)
+            //   mylikelists.current = res.data
+            // }).catch(e => {
+            //   console.log(e)
+            // })
+            setMylikelists([{name:'노근탁'},{name: '이혜민'},{name:'호호호'}])
             setProject(res.data)
           }).catch(e => {
             console.log('-----------------get attendance error----------------')
@@ -223,16 +230,24 @@ const Profile = (props) => {
           <Title>{project.length}</Title>
           <Caption>진행중인 프로젝트</Caption>
         </View>
-        {myinfo.type === "Tutor"
-        ? (<View style={styles.infoBox}>
-          <Title>{myinfo.likes_count}</Title>
-          <Caption>좋아요 개수</Caption>
-          </View>)
-        : (<View style={styles.infoBox}>
+        <View style={styles.infoBox}>
           <Title>{finishedproject.length}</Title>
           <Caption>완료한 프로젝트</Caption>
-          </View>)   
+        </View>   
+        
+        {
+          myinfo.type === 'Tutor'
+          ? <View style={styles.infoBox}>
+              <Title>{myinfo.likes_count}</Title>
+              <Caption>좋아요 개수</Caption>
+            </View>
+          : 
+            <TouchableOpacity style={styles.infoBox} onPress={() => props.navigation.navigate('MyLike',{mylikelists})}>
+                <Title>{mylikelists.length}</Title>
+                <Caption>좋아요 개수</Caption>
+            </TouchableOpacity>
         }
+        
       </View>
     )}
     
