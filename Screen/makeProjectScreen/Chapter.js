@@ -16,7 +16,7 @@ import CheckBox from '@react-native-community/checkbox';
 import SchedulePopup from './SchedulePopup'
 import {HelpMessage,RenderHelp} from './Help';
 import {Picker} from '@react-native-picker/picker';
-
+import ExplainModal from './ExplainModal'
 
 function makelist(end){
   var array = [...Array(end).keys()]
@@ -28,6 +28,7 @@ function makelist(end){
   )
 }
 const Chapter = (props) => {
+    const [explainVisible,setExplainVisible] = useState(true)
     const [visibleconfim,setVisibleconfirm] = useState(false)
     const [schedule,setSchedule] = useState({})
     const [book,setBook] = useState()
@@ -136,6 +137,7 @@ const Chapter = (props) => {
     return (
         <ScrollView >
             <View>
+            <ExplainModal visible={explainVisible} setModalVisible={setExplainVisible} />
                 <View style={styles.FormStyle}>
                     <Text style={styles.subtitle}>1. 프로젝트 교재</Text>
                     {bookvisible && (
@@ -151,7 +153,13 @@ const Chapter = (props) => {
                 <View style={styles.FormStyle}>
                     <Text style={styles.subtitle}>
                       2. 챕터별 가중치 설정 (최소 1 이상)
-                      <RenderHelp messagetype={HelpMessage.weight}/>
+                      <TouchableOpacity onPress={() => {
+                        setExplainVisible(true)
+                      }}>
+                        <View style={{marginHorizontal: 5}}>
+                          <Icon name="comment-question-outline" color="red" size={20}/>
+                        </View>
+                      </TouchableOpacity>
                     </Text>
                     <Button onPress={goToChapterSearch}>챕터 불러오기</Button>
                     <RenderChapter chapters={chapters}/>
