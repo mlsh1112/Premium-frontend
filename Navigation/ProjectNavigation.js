@@ -7,6 +7,7 @@ import ProjectTrial from '../src/components/ProjectTrial'
 import ProfileView from '../src/components/ProfileView'
 import ProjectMini from '../src/components/ProjectMini'
 import CardNews from '../src/components/CardNews'
+import MyLike from '../src/components/MyLike'
 const Stack = createStackNavigator();
 
 export default function ProjectNavigation(){
@@ -19,6 +20,7 @@ export default function ProjectNavigation(){
             <Stack.Screen name="ProjectMini" component={ProjectMini} options={{headerShown: false}}/>
             <Stack.Screen name="ProjectTrial" component={ProjectTrial} options={{headerShown: false}}/>
             <Stack.Screen name="CardNews" component={CardNews} options={{headerShown: false}} />
+            <Stack.Screen name="MyLike" component={MyLike} options={{headerTitle: '좋아요 리스트'}} />
         </Stack.Navigator>
         
     );
