@@ -62,5 +62,8 @@ buck-out/
 #api data
 config.js
 
-Firebase.js
+#google-service json
 google-services.json
+
+#firebase init 설정
+Firebase.js 
