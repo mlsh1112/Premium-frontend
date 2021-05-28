@@ -46,7 +46,7 @@ const ProjectForm =(props)=> {
     const [idx,setIdx] = useState(0)
     const [categoryid,setCategoryid] = useState()
     const [date,setDate ] = useState(new Date())
-    
+    var timezoneOffset = date.getTimezoneOffset() * 60000
     const handleSubmitPress = (values) =>{
       console.log("프로젝트 제출 : " + JSON.stringify(values))
       createproject({
@@ -123,7 +123,7 @@ const ProjectForm =(props)=> {
                   <TextInput
                     name="startDate"
                     style={styles.textInput}
-                    value={date.toISOString().substring(0,10)}
+                    value={new Date(date - timezoneOffset).toISOString().substring(0,10)}
                     onChangeText={handleChange}
                     onFocus={()=>{
                       Keyboard.dismiss()
