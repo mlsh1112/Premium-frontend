@@ -12,6 +12,7 @@ import ProjectMini from '../src/components/ProjectMini'
 import CardNews from '../src/components/CardNews'
 import Book from '../Screen/makeProjectScreen/Book';
 import Chapter from '../Screen/makeProjectScreen/Chapter';
+import UpdateProject from '../Screen/UpdateProject/UpdateProject'
 
 const StackForCreatePrj = createStackNavigator();
 
@@ -30,6 +31,7 @@ export default function createProjectStackNav(){
             <StackForCreatePrj.Screen name="ProjectMini" component={ProjectMini} options={{headerShown: false}}/>
             <StackForCreatePrj.Screen name="ProjectTrial" component={ProjectTrial} options={{headerShown: false}}/>
             <StackForCreatePrj.Screen name="CardNews" component={CardNews} options={{headerShown: false}} />
+            <StackForCreatePrj.Screen name="UpdateProject" component={UpdateProject} options={{headerTitle: '프로젝트 업데이트'}} />
         </StackForCreatePrj.Navigator>
     );
 }
