@@ -33,7 +33,7 @@ const TuteeAutdetail=({navigation,route})=>{
   useEffect(()=>{
       console.log(project.id)
        getPlan({
-        "project_id":41
+        "project_id":project.id
       }).then((res)=>{
          setPlans(res.data);
       })

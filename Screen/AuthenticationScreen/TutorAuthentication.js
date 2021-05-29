@@ -19,6 +19,7 @@ const TutorAuthentication = ({navigation,route }) => {
     const [tutees,setTutees] = useState();
     const [fin,setFin]=useState(true)
     const project=route.params.project
+    const howmany=0
     const startDate = moment(project.started_at)
     const now = moment()
     const remainDay = now.diff(startDate,'days') //시작하는 날짜가 0일차
@@ -28,6 +29,7 @@ const TutorAuthentication = ({navigation,route }) => {
         pastDay = project.duration - remainDay
     }
     console.log(project)
+    console.log(tutees)
     useEffect(()=>{    
             gettutees({
                 "project_id":project.id
@@ -37,6 +39,7 @@ const TutorAuthentication = ({navigation,route }) => {
                     return now.diff(auth.created_at,'days') === 0
                 })
                 setTutees(filteredauth)
+                howmany=tutees.length
             }).catch(err=>{
                 console.log('--------------get tutees 에러 ---------------')
                 console.log(err)
@@ -69,8 +72,8 @@ const TutorAuthentication = ({navigation,route }) => {
                     <Text style={styles.percentStyle}>{remainDay +1} / {project.duration}</Text>
                 </View>
                 <View style={styles.precentPosition}>
-                    <Text style={styles.authTextStyle}>인증 진행률</Text>
-                    <Text style={styles.percentStyle}>30%</Text>
+                    <Text style={styles.authTextStyle}>인증 진행</Text>
+                    <Text style={styles.percentStyle}>{howmany} 명</Text>
                 </View>
             </View >
 
