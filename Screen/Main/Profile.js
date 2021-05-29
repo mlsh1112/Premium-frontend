@@ -12,13 +12,11 @@ import {
   StyleSheet,
   View,
   Image,
-  ScrollView,
   TouchableOpacity,
   SafeAreaView,
   useWindowDimensions, 
 } from 'react-native';
 import {
-  Avatar,
   Title,
   Caption,
   Text,
@@ -26,49 +24,20 @@ import {
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-community/async-storage';
-import {TabView, TabBar} from 'react-native-tab-view';
-
+import {TabView} from 'react-native-tab-view';
 import colors from '../../src/colors'
 import {logout,getcurrentuser,getattendances,tutorgetproject,getmylikes} from '../../src/Api';
-import ProjectMini from '../../src/components/ProjectMini';
 import cat from '../../assets/cat2.png'
-
-const EachTabViewsProjects = (props) => {
-  return(
-    <ScrollView style={styles.menuWrapper}>
-            <View style={{marginRight:-20, flex:1,flexDirection:'row',justifyContent:'space-between',flexWrap: 'wrap'}}>
-              {props.project.map((pr, index )=> {
-                if (props.usertype === 'Tutor'){
-                  return(
-                    <View key={index} style={{marginVertical:8}}>
-                      <ProjectMini navigation={props.navigation} project={pr} key={index}></ProjectMini>
-                    </View>
-                  )
-                }else {
-                  return(
-                    <View key={index} style={{marginVertical:8}}>
-                      <ProjectMini navigation={props.navigation} project={pr.project} key={index}></ProjectMini>
-                    </View>
-                  )
-                }
-              })}  
-            </View>
-            
-    </ScrollView>
-  );
-}
+import {EachTabViewsProjects,renderTabBar} from '../../src/utils/EachTab'
 
 const Profile = (props) => {
-  const [myinfo,setMyinfo] = useState(
-    {
-      "email": "", "id": -1, "image": "", "info": "", "likes_count": -1, "name": "", "phone": "", "status": "", "type": ""
-    }
-  )
+  const [myinfo,setMyinfo] = useState({"email": "", "id": -1, "image": "", "info": "", "likes_count": -1, "name": "", "phone": "", "status": "", "type": ""})
   const showscreen = useRef(false)
   const [project,setProject] = useState([])
   const [finishedproject,setFinishedProject] = useState([]);
   const [school,setSchool] = useState('아주대학교');
   const [mylikelists,setMylikelists] = useState([])
+  
   useEffect(() => {
     const rerender = props.navigation.addListener('focus', e => {
       console.log("welcome back")
@@ -76,28 +45,27 @@ const Profile = (props) => {
         setMyinfo(res.data)
         if(res.data.type ==='Tutee'){
           getattendances().then(res => {
-            // getmylikes().then(res =>{
-            //   console.log(res.data)
-            //   mylikelists.current = res.data
-            // }).catch(e => {
-            //   console.log(e)
-            // })
-            setMylikelists([{name:'노근탁'},{name: '이혜민'},{name:'호호호'}])
+            getmylikes().then(res =>{
+              console.log('tutee get their like list complete')
+              setMylikelists(res.data)
+            }).catch(e => {
+              console.log(e)
+            })
             setProject(res.data)
           }).catch(e => {
             console.log('-----------------get attendance error----------------')
-            console.log(e.response.status)
+            console.log(e)
           })
         }
         else {
           tutorgetproject({
             q: {tutor_id_eq: res.data.id}
           }).then(res => {
-            console.log(res.data)
+            console.log('tutor get project list complete')
             setProject(res.data)
           }).catch(e => {
             console.log("=======get tutor project error========")
-            console.log(e.response.status)
+            console.log(e)
           })
         }
         showscreen.current = true
@@ -106,6 +74,7 @@ const Profile = (props) => {
         alert('get user info error!!')
       })
     })
+    return rerender
   },[props.navigation])
   
   const layout = useWindowDimensions();
@@ -114,15 +83,7 @@ const Profile = (props) => {
     { key: 'first', title: '진행 중' },
     { key: 'second', title: '완료' },
   ]);
-  const renderTabBar = (props) => {
-    return(<TabBar
-      {...props}
-      activeColor={colors.maincolor}
-      inactiveColor={"black"}
-      style={{backgroundColor:''}}
-      indicatorStyle={{backgroundColor:colors.maincolor}}
-    />);
-  }
+
   const renderScene = ({route}) =>{
     switch (route.key) {
       case 'first':
@@ -135,7 +96,7 @@ const Profile = (props) => {
   const handleLogoutPress = ()=> {  //로그아웃 function
     console.log('로그아웃 버튼 눌림!')
     logout().then(res => {
-      console.log(res)
+      console.log('로그아웃 성공!!!')
       AsyncStorage.removeItem('token');
       props.navigation.popToTop()
     }).catch(e => {
@@ -302,12 +263,6 @@ const styles = StyleSheet.create({
     width: '50%',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  menuWrapper: {
-    padding: 10,
-    width: "100%",
-    marginTop: 5,
-
   },
   menuItem: {
     flexDirection: 'row',

@@ -10,24 +10,15 @@ import {
   } from 'react-native';
 import {Button} from '../../src/components/Button';
 import {getchapter, postoptions, createschedule} from '../../src/Api';
-import colors from '../../src/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CheckBox from '@react-native-community/checkbox';
 import SchedulePopup from './SchedulePopup'
 import {HelpMessage,RenderHelp} from './Help';
-import {Picker} from '@react-native-picker/picker';
+import ExplainModal from './ExplainModal'
+import {RenderChapter} from '../../src/utils/RenderChapter'
 
-
-function makelist(end){
-  var array = [...Array(end).keys()]
-  console.log(array)
-  return(
-    array.map((value)=> {
-      return <Picker.Item key={value+1} label={(value+1).toString()} value={(value+1).toString()} />
-    })
-  )
-}
 const Chapter = (props) => {
+    const [explainVisible,setExplainVisible] = useState(true)
     const [visibleconfim,setVisibleconfirm] = useState(false)
     const [schedule,setSchedule] = useState({})
     const [book,setBook] = useState()
@@ -37,6 +28,7 @@ const Chapter = (props) => {
     const [toggleCheckBox, setToggleCheckBox] = useState(false) //false 휴식 허용 true 휴식 없음
     const [rest, setRest] = useState(0) //false 휴식 허용 true 휴식 없음
     const [modalVisible,setModalVisible] = useState(false)
+    
     useEffect(() => {
       if (props.route.params?.selectedBook){
         setBook(props.route.params.selectedBook)
@@ -44,43 +36,6 @@ const Chapter = (props) => {
       }
     },[props.route.params?.selectedBook])
     
-    function RenderChapter({chapters}){
-      console.log(chapters)
-        return(
-                    <View style={styles.chapterlist}>
-                      {chapters.map((chapter,key) => {
-                        return(
-                          <View key={key} style={{flex:1,height:60,flexDirection:'row',alignItems: 'center',justifyContent: 'space-between',marginVertical:3}}>
-                              <Text style={styles.textStyle}>
-                                {chapter.title}
-                              </Text>
-                              <View style={{width:' 25%',backgroundColor:'white',borderWidth:1,borderRadius: 20,borderColor: colors.subcolor}}>
-                                <Picker
-                                  selectedValue={chapters[key].weight}
-                                  style={{ height: '100%', width: '100%',}}
-                                  onValueChange={(itemValue)=> {
-                                    const idx = key
-                                    chapters[idx].weight = itemValue
-                                    console.log(chapters[idx])
-                                  }}
-                                >
-                                  {makelist(10)}
-                                </Picker>
-                              </View>
-
-                              <TouchableOpacity
-                                onPress={(e)=>{
-                                    deletechapter(key);
-                                }}
-                              >
-                                  <Icon name="close-box" color={colors.maincolor} size={30} />
-                              </TouchableOpacity>
-                          </View>
-                        )
-                      })}  
-                    </View>
-        )
-      }
     const deletechapter = (key) => {
         setChapters(chapters.filter((f,idx) => idx !== key))
     }
@@ -136,6 +91,7 @@ const Chapter = (props) => {
     return (
         <ScrollView >
             <View>
+            <ExplainModal visible={explainVisible} setModalVisible={setExplainVisible} />
                 <View style={styles.FormStyle}>
                     <Text style={styles.subtitle}>1. 프로젝트 교재</Text>
                     {bookvisible && (
@@ -151,10 +107,16 @@ const Chapter = (props) => {
                 <View style={styles.FormStyle}>
                     <Text style={styles.subtitle}>
                       2. 챕터별 가중치 설정 (최소 1 이상)
-                      <RenderHelp messagetype={HelpMessage.weight}/>
+                      <TouchableOpacity onPress={() => {
+                        setExplainVisible(true)
+                      }}>
+                        <View style={{marginHorizontal: 5}}>
+                          <Icon name="comment-question-outline" color="red" size={20}/>
+                        </View>
+                      </TouchableOpacity>
                     </Text>
                     <Button onPress={goToChapterSearch}>챕터 불러오기</Button>
-                    <RenderChapter chapters={chapters}/>
+                    <RenderChapter chapters={chapters} deletechapter={deletechapter}/>
                 </View>
                 <View style={styles.FormStyle}>
                     <Text style={styles.subtitle}>
@@ -197,105 +159,57 @@ const Chapter = (props) => {
 }
 
 const styles = StyleSheet.create({
-
-    FormStyle: {
-        width: '100%',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 10,
-        marginVertical: 10,
-    },
-    LastFormStyle: {
+  FormStyle: {
       width: '100%',
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
       padding: 10,
-    },
-    textinput: {
-        height: 40,
-        width: '90%',
-        margin: 10,
-        backgroundColor: 'white',
-        borderWidth: 1,
-        borderRadius: 10,
-        fontSize:15,
-        fontWeight:'bold'
-    },
-    textStyle: {
-        width: '65%',
-        height: '100%',
-        borderTopLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        backgroundColor: colors.subcolor,
-        textAlignVertical:'center',
-        padding: 10,
-        fontSize: 16,
-        color: 'black',
-      },
-    chapterlist: {
-        width: '100%',
-        padding: 10,
-        marginBottom: 10,
-        justifyContent: 'space-between',
-    },
-    cancelButton: {
-      backgroundColor:colors.maincolor,
-      padding:3,
-      margin:3,
-      borderRadius:15,
-      width: "20%",
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    thumbnail: {
-        borderRadius: 13,
-        width: 160,
-        height: 200,
-    },  
-    booktitle: {
-        fontWeight: 'bold',
-        fontSize: 16,
-        paddingHorizontal: 15,
-        paddingVertical: 2,
-    },
-    author: {
-        paddingHorizontal: 15,
-        paddingVertical: 4,
-    },
-    subtitle: {
-        width: "90%",
-        fontWeight:"bold",
-        fontSize: 20,
-        margin: 5,
-    },
-    bookImage: {
-        width: 200,
-        height:250,
-        margin: 10,
-    },
-    booktitle: {
-        fontWeight: 'bold',
-        fontSize: 16,
-        paddingHorizontal: 15,
-        paddingVertical: 2,
-    },
-    author: {
-        paddingHorizontal: 15,
-        paddingVertical: 4,
-    },
-    pickerstyle:{
-      width: "20%",
-      marginTop:'1%',
-      paddingVertical: 10,
-      paddingHorizontal: 12,
-      borderWidth: 1,
-      borderRadius: 10,
-      paddingRight: 30,
-      color:"black",
-      backgroundColor: 'white',
-    },
-  });
+      marginVertical: 10,
+  },
+  LastFormStyle: {
+    width: '100%',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+  },
+  thumbnail: {
+      borderRadius: 13,
+      width: 160,
+      height: 200,
+  },  
+  booktitle: {
+      fontWeight: 'bold',
+      fontSize: 16,
+      paddingHorizontal: 15,
+      paddingVertical: 2,
+  },
+  author: {
+      paddingHorizontal: 15,
+      paddingVertical: 4,
+  },
+  subtitle: {
+      width: "90%",
+      fontWeight:"bold",
+      fontSize: 20,
+      margin: 5,
+  },
+  bookImage: {
+      width: 200,
+      height:250,
+      margin: 10,
+  },
+  booktitle: {
+      fontWeight: 'bold',
+      fontSize: 16,
+      paddingHorizontal: 15,
+      paddingVertical: 2,
+  },
+  author: {
+      paddingHorizontal: 15,
+      paddingVertical: 4,
+  },
+});
 
 export default Chapter;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {Button} from '../../src/components'
 import {
     StyleSheet,
@@ -16,28 +16,11 @@ import RNPickerSelect from 'react-native-picker-select';
 import {Schema,tommorow} from './UpdateSchema';
 import {HelpMessage,RenderHelp} from '../makeProjectScreen/Help';
 import {RenderError} from '../makeProjectScreen/ValidMessage';
-import {getcategories,updateproject} from '../../src/Api';
-
-function makeItem(projectlist){
-  const temp = projectlist.map((pr)=>({
-      label: pr.title,
-      value: pr.id,
-  }));
-  return temp;
-}
-  function makeItemlist(start,end){
-    var item = []
-    for(var i = start ; i < end + 1 ; i++){
-      item.push({
-        label: `${i}`,
-        value: `${i}`
-      })
-    }
-    return item
-  }
+import {updateproject} from '../../src/Api';
+import colors from '../../src/colors';
+import {makePickerItemlist} from '../../src/utils/MakePickerItem'
 
 const UpdateProject =(props)=> {
-    // console.log(props)
     const {myinfo,latestpr} = props.route.params
     const validationSchema = Schema
     const InitValue = {
@@ -52,12 +35,6 @@ const UpdateProject =(props)=> {
         deposit: latestpr.deposit,
       }
     const [isDateTimePickerVisible,setIsDateTimePickerVisible] = useState(false)
-    const [category,setCategory] = useState([
-      {
-        label: '',
-        value: -1,
-      }
-    ])
     var timezoneOffset = new Date().getTimezoneOffset() * 60000
     const [date,setDate ] = useState(new Date(latestpr.started_at))
     const conditionfordate = new Date() >= date
@@ -111,14 +88,7 @@ const UpdateProject =(props)=> {
             console.log(e)
         })
     }
-    useEffect(() => {
-      getcategories().then(res => {
-        console.log(res.data)
-        setCategory(makeItem(res.data))
-      }).catch(e => {
-        console.log(e)
-      })
-    },[])
+    
     return (
         <ScrollView>
         <View style={styles.container}>
@@ -216,7 +186,7 @@ const UpdateProject =(props)=> {
                         onValueChange={(value,idx) => {
                           setFieldValue('experienceduration',value)
                         }}
-                        items={makeItemlist(1,7)}
+                        items={makePickerItemlist(1,7)}
                         placeholder={
                           {
                             label: '체험기간을 선택해주세요',
@@ -224,7 +194,7 @@ const UpdateProject =(props)=> {
                           }
                         }
                         >
-                          <Text>{values.experienceduration} 일</Text>
+                          <Text style={{fontWeight: 'bold'}}>{values.experienceduration} 일</Text>
                     </RNPickerSelect>
                   </View>  
                 <RenderError errors={errors.experienceduration} touched={touched.experienceduration} />
@@ -265,7 +235,7 @@ const UpdateProject =(props)=> {
                         onValueChange={(value,idx) => {
                           setFieldValue('repeatstrength',value)
                         }}
-                        items={makeItemlist(1,10)}
+                        items={makePickerItemlist(1,10)}
                         placeholder={
                           {
                             label: '복습강도를 선택해주세요',
@@ -273,7 +243,7 @@ const UpdateProject =(props)=> {
                           }
                         }
                         >
-                          <Text>{values.repeatstrength} 단계</Text>
+                          <Text style={{fontWeight: 'bold'}}>{values.repeatstrength} 단계</Text>
                     </RNPickerSelect>
                   </View>  
                 <RenderError errors={errors.repeatstrength} touched={touched.repeatstrength} />
@@ -359,18 +329,9 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       borderWidth: 1,
       borderRadius: 10,
+      borderColor: colors.subcolor,
       fontSize:15,
       fontWeight:'bold'
-    },
-    bigtextInput: {
-        height: 100,
-        width: '90%',
-        margin: 10,
-        backgroundColor: 'white',
-        borderWidth: 1,
-        borderRadius: 10,
-        fontSize:15,
-        fontWeight:'bold'
     },
     FormStyle: {
       flexDirection: 'row',
@@ -409,6 +370,7 @@ const styles = StyleSheet.create({
       paddingHorizontal: 12,
       borderWidth: 1,
       borderRadius: 10,
+      borderColor: colors.subcolor,
       paddingRight: 30,
       color:"black",
       backgroundColor: 'white',

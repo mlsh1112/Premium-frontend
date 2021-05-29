@@ -274,7 +274,9 @@ const ProjectDetail =(props)=> {
 
   const styles=StyleSheet.create({
     position:{
-      margin:20
+      //margin:20
+      marginTop:20,
+      marginHorizontal:20
     },
     cardStyle:{
       height:'100%'

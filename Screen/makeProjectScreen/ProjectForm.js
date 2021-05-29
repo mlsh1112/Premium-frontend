@@ -11,44 +11,26 @@ import {
 import { Formik } from "formik";
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
-
 import {Schema, InitValue,tommorow} from './ValueSchema';
 import {HelpMessage,RenderHelp} from './Help';
 import {RenderError} from './ValidMessage';
 import {createproject,getcategories} from '../../src/Api';
+import SwiperModal from './SwiperModal'
+import {makeCategoryItem,makePickerItemlist} from '../../src/utils/MakePickerItem'
+import colors from '../../src/colors';
 
-function makeItem(projectlist){
-  const temp = projectlist.map((pr)=>({
-      label: pr.title,
-      value: pr.id,
-  }));
-  return temp;
-}
-function makeItemlist(start,end){
-  var item = []
-  for(var i = start ; i < end + 1 ; i++){
-    item.push({
-      label: `${i}`,
-      value: `${i}`
-    })
-  }
-  return item
-}
 const ProjectForm =(props)=> {
+    const [modalVisible,setModalVisible] = useState(true)
     const validationSchema = Schema
     const [isDateTimePickerVisible,setIsDateTimePickerVisible] = useState(false)
-    const [category,setCategory] = useState([
-      {
-        label: '',
-        value: -1,
-      }
-    ])
+    const [category,setCategory] = useState([{label: '',value: -1,}])
     const [idx,setIdx] = useState(0)
     const [categoryid,setCategoryid] = useState()
     const [date,setDate ] = useState(new Date())
     var timezoneOffset = date.getTimezoneOffset() * 60000
+
     const handleSubmitPress = (values) =>{
-      console.log("프로젝트 제출 : " + JSON.stringify(values))
+      console.log("프로젝트 제출 : ", values)
       createproject({
         "experience_period": values.experienceduration, 
         "description": values.projectIntroduce, 
@@ -68,17 +50,20 @@ const ProjectForm =(props)=> {
         console.log(e.response)
       })
     }
+
     useEffect(() => {
       getcategories().then(res => {
         console.log(res.data)
-        setCategory(makeItem(res.data))
+        setCategory(makeCategoryItem(res.data))
       }).catch(e => {
         console.log(e.response.data)
       })
     },[])
+
     return (
         <ScrollView>
         <View style={styles.container}>
+            <SwiperModal visible={modalVisible} setModalVisible={setModalVisible} />
             <Formik
               style={styles.FormStyle}
               validationSchema={validationSchema}
@@ -102,7 +87,7 @@ const ProjectForm =(props)=> {
                         }}
                         items={category}
                         >
-                        {idx < 0 ? <Text></Text> : <Text>{category[idx].label}</Text>}
+                        {idx < 0 ? <Text></Text> : <Text style={{fontWeight: 'bold'}}>{category[idx].label}</Text>}
                     </RNPickerSelect>
                   </View>  
                 <RenderError errors={errors.categoryid} touched={touched.categoryid} />
@@ -186,7 +171,7 @@ const ProjectForm =(props)=> {
                         onValueChange={(value,idx) => {
                           setFieldValue('experienceduration',value)
                         }}
-                        items={makeItemlist(1,7)}
+                        items={makePickerItemlist(1,7)}
                         placeholder={
                           {
                             label: '체험기간을 선택해주세요',
@@ -194,7 +179,7 @@ const ProjectForm =(props)=> {
                           }
                         }
                         >
-                          <Text>{values.experienceduration} 일</Text>
+                          <Text style={{fontWeight: 'bold'}}>{values.experienceduration} 일</Text>
                     </RNPickerSelect>
                   </View>  
                 <RenderError errors={errors.experienceduration} touched={touched.experienceduration} />
@@ -234,7 +219,7 @@ const ProjectForm =(props)=> {
                         onValueChange={(value,idx) => {
                           setFieldValue('repeatstrength',value)
                         }}
-                        items={makeItemlist(1,10)}
+                        items={makePickerItemlist(1,10)}
                         placeholder={
                           {
                             label: '복습강도를 선택해주세요',
@@ -242,7 +227,7 @@ const ProjectForm =(props)=> {
                           }
                         }
                         >
-                          <Text>{values.repeatstrength} 단계</Text>
+                          <Text style={{fontWeight: 'bold'}}>{values.repeatstrength} 단계</Text>
                     </RNPickerSelect>
                   </View>  
                 <RenderError errors={errors.repeatstrength} touched={touched.repeatstrength} />
@@ -306,6 +291,7 @@ const ProjectForm =(props)=> {
                 </>
               )}
             </Formik>
+            
         </View>
         </ScrollView>
         );
@@ -326,6 +312,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       borderWidth: 1,
       borderRadius: 10,
+      borderColor: colors.subcolor,
       fontSize:15,
       fontWeight:'bold'
     },
@@ -351,14 +338,6 @@ const styles = StyleSheet.create({
         fontWeight:"bold",
         fontSize: 18,
     },
-    textStyle: {
-      width: '55%',
-      padding: 10,
-      backgroundColor: 'white',
-      fontSize: 15,
-      marginTop: 7,
-      color: 'black',
-    },
     pickerstyle:{
       width: "90%",
       marginTop:'1%',
@@ -367,6 +346,7 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       borderRadius: 10,
       paddingRight: 30,
+      borderColor: colors.subcolor,
       color:"black",
       backgroundColor: 'white',
     },
