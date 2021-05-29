@@ -147,7 +147,7 @@ const TuteeAutdetail=({navigation,route})=>{
 
       <View style={styles.todayplanBack}>
         <Text style={styles.titleTxt}>{project.project.title} 전체 일정 💫</Text>
-        <Calender plans={plans.options} project={project}/>
+        <Calender plans={plans} project={project}/>
       </View>
     </ScrollView>
   )
