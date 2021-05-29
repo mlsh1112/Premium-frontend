@@ -21,6 +21,7 @@
  import { Formik } from "formik";
  import * as Yup from "yup";
  import {refresh,logout} from '../src/Api';
+ import icon from '../assets/ddasup_icon.png'
  import jwtDecode from "jwt-decode";
 import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authentication';
  const validationSchema = Yup.object().shape({
@@ -217,6 +218,7 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
         }}
         onPress={() => onAppleButtonPress()}
       />
+      
     </View>
    );
  };
@@ -228,14 +230,18 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
        alignItems:'center',
    },
    textInput: {
-     height: 40,
+     height: 50,
      width: '90%',
      margin: 10,
      backgroundColor: 'white',
-     borderWidth: 1,
      borderRadius: 10,
      fontSize:15,
-     fontWeight:'bold'
+     fontWeight:'bold',
+     elevation: 5,
+     shadowColor: 'gray',
+     shadowOffset: { width: 0, height: 3 },
+     shadowOpacity: 0.5,
+     shadowRadius: 5,  
    },
    errorText: {
      fontSize: 12,
