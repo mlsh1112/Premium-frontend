@@ -14,6 +14,7 @@
    StyleSheet,
    View,
    Text,
+   Image,
    TextInput,  
  } from 'react-native';
  import {login,appleLogin} from '../src/Api';
@@ -24,6 +25,7 @@
  import icon from '../assets/ddasup_icon.png'
  import jwtDecode from "jwt-decode";
 import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authentication';
+//import { Image } from 'native-base';
  const validationSchema = Yup.object().shape({
    email: Yup.string()
      .required("이메일을 입력해주세요.")
@@ -156,9 +158,7 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
     
    return (
     <View style={styles.container}>
-      <View >
-        <Text style={styles.title}>Welcome to 따숲</Text>
-      </View>
+      <Image source={icon} style={styles.iconstyle} />
       <Formik
         style={styles.FormStyle}
         validationSchema={validationSchema}
@@ -198,12 +198,7 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
             <View style={styles.button}>
               <Button onPress={handleSubmit}>Log in</Button>
             </View>
-            <Text style={styles.SignUpQStyle}>따숲이 처음이신가요?</Text>
-             <Text style={styles.SignUpStyle}
-               onPress={() => props.navigation.navigate("Signup")}
-               >
-               Sign Up
-             </Text>
+
           </>
         )}
 
@@ -213,12 +208,19 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
         buttonStyle={AppleButton.Style.WHITE}
         buttonType={AppleButton.Type.SIGN_IN}
         style={{
+          marginTop:20,
           width: 160, // You must specify a width
           height: 45, // You must specify a height
         }}
         onPress={() => onAppleButtonPress()}
       />
-      
+      <View style={{flexDirection:'row',marginTop:20}}>
+        <Text style={styles.SignUpQStyle}>따숲이 처음이신가요?</Text>
+        <Text style={styles.SignUpStyle}
+            onPress={() => props.navigation.navigate("Signup")}>
+        Sign Up
+        </Text>
+      </View>
     </View>
    );
  };
@@ -241,7 +243,8 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
      shadowColor: 'gray',
      shadowOffset: { width: 0, height: 3 },
      shadowOpacity: 0.5,
-     shadowRadius: 5,  
+     shadowRadius: 5,
+     borderRadius:20 
    },
    errorText: {
      fontSize: 12,
@@ -265,21 +268,23 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
      borderColor: '#dadae8',
    },
    SignUpQStyle: {
-     color: "black",
+     color: "gray",
      textAlign: 'center',
-     fontSize: 15,
+     fontSize: 16,
      fontWeight: "bold",
      alignSelf: 'center',
      marginTop:10,
+     marginRight:30
    },
    SignUpStyle: {
      color: "blue",
      textAlign: 'center',
      fontWeight: 'bold',
-     fontSize: 14,
+     fontSize: 16,
      alignSelf: 'center',
      borderBottomWidth: 1,
      paddingBottom: 1,
+     marginTop:10,
      borderBottomColor: "blue",
    },
    button: {
@@ -287,9 +292,15 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
      marginBottom: 10,
    },
    title: {
-     fontSize: 36,
+     fontSize: 26,
      fontWeight: "bold",
      marginBottom:10,
+     color:'gray'
+   },
+   iconstyle:{
+     width:100,
+     height:100,
+     marginBottom:30
    }
   });
   
