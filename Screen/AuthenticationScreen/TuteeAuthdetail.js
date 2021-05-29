@@ -118,7 +118,7 @@ const TuteeAutdetail=({navigation,route})=>{
           pastDay<=0?
           <Card style={styles.cardStyle}>
             <Text style={styles.grayDayTxt}>종료된 프로젝트 입니다!</Text>
-        </Card>
+          </Card>
         :
         <Card style={styles.cardStyle}>
         <View style={styles.todayTxt}>
