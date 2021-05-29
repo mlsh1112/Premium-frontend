@@ -1,15 +1,15 @@
-import React, { Component,useState,useEffect } from 'react';
-import { ScrollView } from 'react-native';
-import { TextInput } from 'react-native';
+import React, { useState } from 'react';
 import {
     StyleSheet,
     View,
     Text,
-    TouchableOpacity,
-    Image,
+    TextInput,
+    ScrollView
   } from 'react-native';
 import {Button} from '../../src/components/Button';
 import {getBook,createBook,updateproject} from '../../src/Api';
+import colors from '../../src/colors';
+import {RenderBook} from '../../src/utils/RenderBook'
 
 const Book = (props) => {
     const [title,setTitle] = useState('');
@@ -44,8 +44,8 @@ const Book = (props) => {
             "publisher": book.publisher,
             "image": book.thumbnail,
             "url": book.url,
-        }).then(async(res) => {
-            await setBookid(res.data.id)
+        }).then((res) => {
+            setBookid(res.data.id)
             updateproject(props.route.params.projectId,
                 {
                     "project":{
@@ -61,24 +61,6 @@ const Book = (props) => {
             console.log(e)
         })
     }
-    function RenderBook({booklist}){
-        return(
-            <View style={styles.booklist}>
-                      {booklist.map((book,key) => {
-                        return(
-                          <TouchableOpacity style={styles.book} key={key} onPress={()=> registerBook(book)}>
-                            <Image style={styles.thumbnail} source={{uri: book.thumbnail}} />
-                            <View>
-                                <Text style={styles.booktitle}>제목 : {book.title}</Text>
-                                <Text style={styles.author}>저자 : {book.authors}</Text>
-                            </View>
-                          </TouchableOpacity>
-                        )
-                      })} 
-            </View>
-        )
-    }
-
     return (
         <ScrollView >
             <View>
@@ -94,7 +76,7 @@ const Book = (props) => {
                     <Button onPress={requestBookSearch}>검색</Button>
                 </View>
                 <View>
-                    <RenderBook booklist={booklist} />
+                    <RenderBook booklist={booklist} registerBook={registerBook}/>
                 </View>
             </View>
         </ScrollView>
@@ -104,7 +86,6 @@ const Book = (props) => {
 }
 
 const styles = StyleSheet.create({
-
     FormStyle: {
         width: '100%',
         flex: 1,
@@ -120,34 +101,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderWidth: 1,
         borderRadius: 10,
+        borderColor: colors.maincolor,
         fontSize:15,
         fontWeight:'bold'
-    },
-    booklist: {
-        flex:1,
-        padding: 10,
-    },
-    book: {
-        margin: 5,
-        padding: 15,
-        borderRadius: 15,
-        elevation: 20,
-        borderRadius: 15,
-    },
-    thumbnail: {
-        borderRadius: 13,
-        width: 160,
-        height: 200,
-    },  
-    booktitle: {
-        fontWeight: 'bold',
-        fontSize: 16,
-        paddingHorizontal: 15,
-        paddingVertical: 2,
-    },
-    author: {
-        paddingHorizontal: 15,
-        paddingVertical: 4,
     },
     subtitle: {
         width: "90%",

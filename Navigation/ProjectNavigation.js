@@ -18,15 +18,15 @@ export default function ProjectNavigation(){
         <Stack.Navigator initialRouteName='Home'>
             <Stack.Screen name="Home" component={Home} options={{headerShown: false}} />
             <Stack.Screen name="Projectcard" component={Projectcard} options={{headerShown: false}}/>
-            <Stack.Screen name="ProjectDetail" component={ProjectDetail} options={{headerTitle: '프로젝트 상세보기'}}/>
-            <Stack.Screen name="ProfileView" component={ProfileView} options={{headerTitle: '튜터 프로필'}}/>
+            <Stack.Screen name="ProjectDetail" component={ProjectDetail} options={{headerTitle: '프로젝트 상세보기',headerTitleStyle: {fontWeight: 'bold'}}}/>
+            <Stack.Screen name="ProfileView" component={ProfileView} options={{headerTitle: '튜터 프로필',headerTitleStyle: {fontWeight: 'bold'}}}/>
             <Stack.Screen name="ProjectMini" component={ProjectMini} options={{headerShown: false}}/>
             <Stack.Screen name="ProjectTrial" component={ProjectTrial} options={{headerShown: false}}/>
             <Stack.Screen name="CardNews" component={CardNews} options={{headerShown: false}} />
-            <Stack.Screen name="UpdateProject" component={UpdateProject} options={{headerTitle: '프로젝트 업데이트'}}/>
-            <Stack.Screen name="Book" component={Book} options={{headerTitle: "책 선택"}}/>
-            <Stack.Screen name="Chapter" component={Chapter} options={{headerTitle: "챕터 가중치 설정"}}/>
-            <Stack.Screen name="MyLike" component={MyLike} options={{headerTitle: '좋아요 리스트'}} />
+            <Stack.Screen name="UpdateProject" component={UpdateProject} options={{headerTitle: '프로젝트 업데이트',headerTitleStyle: {fontWeight: 'bold'}}}/>
+            <Stack.Screen name="Book" component={Book} options={{headerTitle: "책 선택",headerTitleStyle: {fontWeight: 'bold'}}}/>
+            <Stack.Screen name="Chapter" component={Chapter} options={{headerTitle: "챕터 가중치 설정",headerTitleStyle: {fontWeight: 'bold'}}}/>
+            <Stack.Screen name="MyLike" component={MyLike} options={{headerTitle: '좋아요 리스트',headerTitleStyle: {fontWeight: 'bold'}}} />
         </Stack.Navigator>
         
     );

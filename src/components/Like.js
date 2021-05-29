@@ -11,29 +11,32 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {createlike, deletelike,islike} from '../Api';
 
 const Like = (props) => {
-    const [like,setLike] = useState(false);
-    const [numOfLike,setNumOfLike] = useState(props.project.tutor.likes_count) //api 요청보내서 받아옴
-    const [likeid,setLikeid] = useState(-1)
+    const [like,setLike] = useState(props.likecondition);
+    const [numOfLike,setNumOfLike] = useState(props.tutor.likes_count) //api 요청보내서 받아옴
+    const [likeid,setLikeid] = useState()
     useEffect(() => {
-        islike(
-            {
-                "like":{
-                    likable_type: 'User',
-                    likable_id: props.project.tutor.id,
+        console.log(props.tutor.id)
+        console.log(props.likecondition)
+        if(!props.likecondition){
+            islike(
+                {
+                    "like":{
+                        likable_type: 'User',
+                        likable_id: props.tutor.id,
+                    }
                 }
-            }
-        ).then(res => {
-            console.log('좋아요 확인중')
-            if (res.status === 200 ){
+            ).then(res => {
+                console.log('좋아요 확인중')  
+                console.log(res.data.id)  
                 setLike(true)
-                setLikeid(res.data.id)
+                setLikeid(res.data.id) 
             }
+            ).catch(e => {
+                console.log('///////////////////////////////')
+                console.log(e)
+                console.log('///////////////////////////////')
+            })
         }
-        ).catch(e => {
-            if(e.response.status ===404){
-                console.log('좋아요 객체 에러')
-            }
-        })
     },[])
 
     const _toggle = () => {
@@ -43,7 +46,7 @@ const Like = (props) => {
             createlike(
                 {"like":{
                         likable_type: 'User',
-                        likable_id: props.project.tutor.id,
+                        likable_id: props.tutor.id,
                     }
                 }
             ).then(res => {
@@ -52,8 +55,14 @@ const Like = (props) => {
             }).catch(e => console.log(e))
         }else {
             setNumOfLike((prev) => prev - 1)
-            console.log('좋아요 취소')
-            deletelike(likeid).then(res => console.log(res)).catch(e => console.log(e))
+            console.log('좋아요 취소 id : ',likeid)
+            deletelike(likeid).then(res => {
+                console.log(res)
+            }).catch(e => {
+                console.log('★★★★★★★★★★★★★★★★★★')
+                console.log(e)
+                console.log('★★★★★★★★★★★★★★★★★★')
+            })
         }
         setLike((prev) => !prev);
     };
