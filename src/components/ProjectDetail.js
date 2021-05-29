@@ -121,6 +121,17 @@ const ProjectDetail =(props)=> {
         getcurrentuser().then(res => {
           console.log("---------------get current user--------------")
           console.log(res.data)
+          if(res.data.type === 'Tutor'){
+            const groupsRef = firestore.collection('GROUPS').where('projectID','==',project.id)
+            groupsRef.get().then(res => {
+              res.forEach((r)=>{
+                  console.log('--------------------chat target------------------')
+                  setChatroom(r.data())
+              })
+            }).catch(e => {
+                console.log(e)
+            })
+          }
           setMyinfo(res.data)
         }).catch(e => {
           console.log('============get current user error =========')
@@ -133,24 +144,12 @@ const ProjectDetail =(props)=> {
             }
           })
         }
-        
         getproject(project.id).then(res => {
           console.log("---------------getproject--------------")
           console.log(res.data)
           setLatestpr(res.data)
           getbookforproject(res.data.book_id).then(res => {
             console.log(res.data)
-            if(res.data.type === 'Tutor'){
-              const groupsRef = firestore.collection('GROUPS').where('projectID','==',project.id)
-              groupsRef.get().then(res => {
-                res.forEach((r)=>{
-                    console.log('--------------------chat target------------------')
-                    setChatroom(r.data())
-                })
-              }).catch(e => {
-                  console.log(e)
-              })
-            }
             setBook(res.data)
           }).catch(e => {
             console.log(e)
