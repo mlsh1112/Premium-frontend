@@ -37,7 +37,7 @@ function ProfileView({ navigation,route }){
                                 </View>
                             </View>
                             <View>
-                                {latestpr !== undefined ? <Like project={latestpr}/> : <></>}
+                                {latestpr !== undefined ? <Like tutor={latestpr.tutor} likecondition={false}/> : <></>}
                             </View>
                         </View>
                         
