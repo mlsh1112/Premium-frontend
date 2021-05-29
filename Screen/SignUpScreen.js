@@ -20,6 +20,7 @@ import {signup} from '../src/Api';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
+import colors from '../src/colors';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -70,7 +71,7 @@ const SignUp=(props)=>{
     <View style={styles.container}>
      <SafeAreaView>
      <View style={styles.topstyle}>
-       <Image source={icon} style={styles.iconstyle}/>
+       <Text style={styles.textstyle}>Create Account</Text>
      </View>
      <Formik
        style={styles.FormStyle}
@@ -84,10 +85,9 @@ const SignUp=(props)=>{
        {({ handleChange, handleBlur, handleSubmit, values, errors,touched,}) => (
        <View>   
          <>
-         <Text>Enter Your Email</Text>
           <TextInput
              name="email"
-             placeholder="     Email Address"
+             placeholder="     이메일 주소"
              style={styles.textInput}
              onChangeText={handleChange('email')}
              onBlur={handleBlur('email')}
@@ -97,10 +97,9 @@ const SignUp=(props)=>{
            {(errors.email && touched.email) &&
            <Text style={styles.errorText}>{errors.email}</Text>
            }
-           <Text>Enter Your Password</Text>
            <TextInput
              name="password"
-             placeholder="     Password"
+             placeholder="     비밀번호"
              style={styles.textInput}
              onChangeText={handleChange('password')}
              onBlur={handleBlur('password')}
@@ -110,10 +109,9 @@ const SignUp=(props)=>{
            {(errors.password && touched.password) &&
            <Text style={styles.errorText}>{errors.password}</Text>
            }
-           <Text>Enter Your Email</Text>
            <TextInput
              name="Confirm_password"
-             placeholder="     Confirm Password"
+             placeholder="     비밀번호 확인"
              style={styles.textInput}
              onChangeText={handleChange('Comfirm_password')}
              onBlur={handleBlur('Comfirm_password')}
@@ -123,10 +121,9 @@ const SignUp=(props)=>{
            {(errors.Comfirm_password && touched.Comfirm_password) &&
            <Text style={styles.errorText}>{errors.Comfirm_password}</Text>
            }
-           <Text>Enter Your Phone Number </Text>
            <TextInput
              name="Phone"
-             placeholder="     Please enter only the number without '-'      "
+             placeholder="     전화번호 (- 없이 입력)     "
              style={styles.textInput}
              onChangeText={handleChange('Phone')}
              onBlur={handleBlur('Phone')}
@@ -135,18 +132,27 @@ const SignUp=(props)=>{
            {(errors.Phone && touched.Phone) &&
            <Text style={styles.errorText}>{errors.Phone}</Text>
            }
-               <CheckBox
+          <View style={{marginVertical:30,flexDirection:'row'}}>
+              <Text style={styles.typeQtxt}>Tutor로 가입하시겠습니까?</Text>
+              <CheckBox
                 value={isSelected}
                 onValueChange={setSelection}
                 style={styles.checkbox}
+                lineWidth={3}
+                tintColor={'white'}
               />
-            <Text style={{alignSelf:'center'}}>당신은 튜터 입니까?</Text> 
-           
-           
-           <View style={styles.Button}>
-             <Button onPress={handleSubmit}>Sign Up</Button>
-           </View>
-        
+            </View>
+          <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity style={styles.buttonposition} onPress={handleSubmit}>
+                <Text style={styles.buttonstyle}>가입하기</Text>
+              </TouchableOpacity>
+          </View>
+          <View style={{flexDirection:'row',marginTop:20}}>
+              <Text style={styles.SignUpStyle}
+                    onPress={() => props.navigation.pop()}>
+               로그인으로 돌아기기
+              </Text>
+          </View>
          </>
          </View>
        )}
@@ -163,18 +169,34 @@ const styles = StyleSheet.create({
       flex : 1,
       justifyContent:'center',
       alignItems:'center',
+      backgroundColor:colors.maincolor
   },
   iconstyle:{
     width:90,
     height:90
   },
   topstyle:{
-    justifyContent:'center',
-    alignItems:'center',
+    marginVertical:30
   },
   textstyle:{
+    color:'white',
+    fontSize:33,
+    fontWeight:'bold',
+    elevation: 5,
+    shadowColor: '#5B7459',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+  },
+  typeQtxt:{
+    color:'white',
     fontSize:20,
-    fontWeight:'bold'
+    fontWeight:'bold',
+    elevation: 5,
+    shadowColor: '#5B7459',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
   },
   FormStyle: {
    flexDirection: 'row',
@@ -213,8 +235,8 @@ errorText: {
 },
  textInput: {
   height: 50,
-  width: '90%',
-  margin: 10,
+  width: '100%',
+  marginVertical: 10,
   backgroundColor: 'white',
   borderRadius: 10,
   fontSize:15,
@@ -247,7 +269,7 @@ errorText: {
    color: "blue",
    textAlign: 'center',
    fontWeight: 'bold',
-   fontSize: 14,
+   fontSize: 15,
    alignSelf: 'center',
    padding: 5,
  },
@@ -259,6 +281,7 @@ errorText: {
 },
  checkbox:{
   alignSelf:"center",
+  marginLeft:40,
 },
 lable:{
   margin:9,
@@ -266,6 +289,26 @@ lable:{
 Button:{
   marginTop:10,
   alignSelf:"center"
+},
+buttonposition:{
+  width: 327,
+  height: 50,
+  backgroundColor: 'white',
+  justifyContent: "center",
+  alignItems: "center",
+  borderRadius: 32,
+  elevation: 5,
+  shadowColor: 'grey',
+  shadowOffset: { width: 0, height: 5 },
+  shadowOpacity: 0.5,
+  shadowRadius: 5,
+  borderRadius:20 
+    
+},
+buttonstyle:{
+  color:colors.maincolor,
+  fontWeight: 'bold',
+  fontSize: 20,
 }
 });
 
