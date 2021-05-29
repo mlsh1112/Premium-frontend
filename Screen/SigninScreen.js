@@ -37,9 +37,11 @@ import colors from '../src/colors'
  const Signin = (props) => {
   useEffect(() => {
     // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
-    return appleAuth.onCredentialRevoked(async () => {
-      console.warn('If this function executes, User Credentials have been Revoked');
-    });
+    if(appleAuth.isSupported){
+      return appleAuth.onCredentialRevoked(async () => {
+        console.warn('If this function executes, User Credentials have been Revoked');
+      });
+    }
   }, []);
   async function onAppleButtonPress() {
 
@@ -204,16 +206,19 @@ import colors from '../src/colors'
 
         
       </Formik>
-      <AppleButton
-        buttonStyle={AppleButton.Style.WHITE}
-        buttonType={AppleButton.Type.SIGN_IN}
-        style={{
-          marginTop:20,
-          width: 160, // You must specify a width
-          height: 45, // You must specify a height
-        }}
-        onPress={() => onAppleButtonPress()}
-      />
+      {appleAuth.isSupported
+       ? <AppleButton
+           buttonStyle={AppleButton.Style.WHITE}
+           buttonType={AppleButton.Type.SIGN_IN}
+           style={{
+             marginTop:20,
+             width: 160, // You must specify a width
+             height: 45, // You must specify a height
+           }}
+           onPress={() => onAppleButtonPress()}
+         />
+       : null
+      }
       <View style={{flexDirection:'row',marginTop:20}}>
         <Text style={styles.SignUpQStyle}>따숲이 처음이신가요?</Text>
         <Text style={styles.SignUpStyle}
