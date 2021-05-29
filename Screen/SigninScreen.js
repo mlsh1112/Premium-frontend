@@ -25,7 +25,7 @@
  import icon from '../assets/ddasup_icon.png'
  import jwtDecode from "jwt-decode";
 import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authentication';
-//import { Image } from 'native-base';
+import colors from '../src/colors'
  const validationSchema = Yup.object().shape({
    email: Yup.string()
      .required("이메일을 입력해주세요.")
@@ -173,7 +173,7 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
           <>
             <TextInput
               name="email"
-              placeholder="Email Address"
+              placeholder="     Email Address"
               style={styles.textInput}
               onChangeText={handleChange('email')}
               onBlur={handleBlur('email')}
@@ -185,7 +185,7 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
             }
             <TextInput
               name="password"
-              placeholder="Password"
+              placeholder="     Password"
               style={styles.textInput}
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
@@ -301,7 +301,8 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
      width:100,
      height:100,
      marginBottom:30
-   }
+   },
+   
   });
   
   export default Signin;
