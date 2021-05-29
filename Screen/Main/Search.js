@@ -88,7 +88,7 @@ function Search({navigation}) {
         <FlatList
            style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':'white'}}
            data={reqData}
-           
+           keyExtractor={(item,index)=>index}
            renderItem={({item})=>
             
           <TouchableOpacity style={styles.Serach}onPress={()=>{

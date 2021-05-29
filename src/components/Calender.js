@@ -1,4 +1,5 @@
 const moment = require("moment");
+import {getPlan} from '../../src/Api'
 import React, { Component } from 'react';
 import {Button} from '../../src/components/Button';
 import {Calendar,CalenderList,Agenda, CalendarList} from 'react-native-calendars';
@@ -9,10 +10,14 @@ import {
     Text,
   } from 'react-native';
 import { useEffect,useState } from 'react';
+
 import { object } from 'yup';
 
-function Calender(){
+function Calender(props){
 
+  
+  console.log(props.props);  
+    
   const [markedDates,setmarkedDates]=useState()
   const [CalenderDay,SetCalendderDay]=useState([
     {start_date:'2021-04-05', date1:'', date2:'', date3:'', end_date:'2021-04-09'},
@@ -28,7 +33,6 @@ function Calender(){
       var c={}
       var i=0;
 
-      
       CalenderDay.map((item)=>{
         const DateB = moment(item.start_date)
         const DateC = moment(item.end_date)
@@ -48,6 +52,7 @@ function Calender(){
       Object.assign(c,{[now]:{marked:true,dotColor:'red'}})
       setmarkedDates(c);
       console.log(c)
+      
       
   } 
   

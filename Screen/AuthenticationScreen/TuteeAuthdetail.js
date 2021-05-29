@@ -80,10 +80,10 @@ const TuteeAutdetail=({navigation,route})=>{
 
       <View alignItems='center' style={{padding:30}}>
         {
-          pastDay<=0?
+          pastDay=true?
           <View>
             {
-              project.status==='trial'?
+              project.status=false?
               <Button onPress={()=>{navigation.navigate('ExperienceAuth',{project,percent})}}>프로젝트 신청하기</Button>
               :
               <Button onPress={()=>{navigation.navigate('AuthPayBack',project)}}>보증금 환급받기 </Button>
@@ -123,7 +123,7 @@ const TuteeAutdetail=({navigation,route})=>{
 
       <View style={styles.todayplanBack}>
         <Text style={styles.titleTxt}>{project.project.title} 전체 일정 💫</Text>
-        <Calender/>
+        <Calender props={project.id}/>
       </View>
     </ScrollView>
   )

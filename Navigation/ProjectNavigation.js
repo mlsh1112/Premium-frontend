@@ -7,6 +7,7 @@ import ProjectTrial from '../src/components/ProjectTrial'
 import ProfileView from '../src/components/ProfileView'
 import ProjectMini from '../src/components/ProjectMini'
 import CardNews from '../src/components/CardNews'
+import Modifyprofile from '../src/components/Modifyprofile'
 const Stack = createStackNavigator();
 
 export default function ProjectNavigation(){
@@ -17,6 +18,7 @@ export default function ProjectNavigation(){
             <Stack.Screen name="ProjectDetail" component={ProjectDetail} options={{headerTitle: '프로젝트 상세보기'}}/>
             <Stack.Screen name="ProfileView" component={ProfileView} options={{headerTitle: '튜터 프로필'}}/>
             <Stack.Screen name="ProjectMini" component={ProjectMini} options={{headerShown: false}}/>
+            <Stack.Screen name="Modifyprofile" component={Modifyprofile} options={{headerShown: false}}/>
             <Stack.Screen name="ProjectTrial" component={ProjectTrial} options={{headerShown: false}}/>
             <Stack.Screen name="CardNews" component={CardNews} options={{headerShown: false}} />
         </Stack.Navigator>

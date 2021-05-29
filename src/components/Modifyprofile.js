@@ -1,5 +1,5 @@
 import React, {Component, useState,createRef,useEffect} from 'react';
-import {Button} from '../src/components'
+import {Button} from '../components/Button'
 import axios from 'axios'
 import {
    StyleSheet,
@@ -9,17 +9,15 @@ import {
    SafeAreaView,
    Image,
    StatusBar,
-  Picker,
    TextInput,
    TouchableOpacity,
    KeyboardAvoidingView,
  } from 'react-native';
- import CheckBox from '@react-native-community/checkbox';
 
-import {signup} from '../src/Api';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
+
+import CheckBox from '@react-native-community/checkbox';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -29,80 +27,47 @@ const validationSchema = Yup.object().shape({
     .required("비밀번호를 입력해주세요."),
   Comfirm_password: Yup.string()
     .required("비밀번호 확인을 입력해주세요."),
-  Banck:Yup.string()
-    .required("은행이름을 입력해주세요."),
-  Account_Number: Yup.string()
-    .required("환불 받으실 계좌번호를 입력해주세요."),
-  Account_Name: Yup.string()
-    .required("환불 받으실 계좌주를 입력해주세요."),
+  Name: Yup.string()
+    .required("이름을 입력해주세요."),
   Phone:Yup.number()
-  .integer("숫자만 입력해주세요")
-  .min(8)  
+  .typeError("슷지만 입력해주세요.")
+  .min(11)  
   .required("핸드폰 번호를 입력해주세요."),
-
+  
  });
 
-const SignUp=(props)=>{
+const Modifyprofile=(props)=>{
   
-
   const [selectedPicker,setSelectedPicker]=useState("은행 선택")
   var userType;
   const [isSelected,setSelection]=useState(false);
 
+  const handleSubmitPress = ()=>{  
+    console.log("개인 정보 수정")
+  }  
   useEffect(()=>{
     userType=isSelected?"Tutor":"Tutee"
     console.log(userType);
   })
 
-  const handleSubmitPress = (values)=>{  
-    console.log(values.email)
-    signup({
-      "email":values.email,
-      "password":values.password,
-      "name":values.Account_Name,
-      "phone":values.Phone,
-      "type":userType,
-     }
-    ).then(() => {
-      alert("회원가입이 성공하였습니다.")
-      props.navigation.replace('Signin');
-      console.log("Go to Home from sign in ");
-    }).catch(error => {
-      alert("이미 생성되어 있는 아이디 입니다.")
-      console.log(error);
-    });
-  }  
-
   return(
     <View style={styles.container}>
      <SafeAreaView>
      <View style={{marginTop:10}}>
-       <Text style={styles.title}>Welcome to 따숲</Text>
+       <Text style={styles.title}>개인 정보 수정</Text>
      </View>
      <Formik
        style={styles.FormStyle}
        validationSchema={validationSchema}
-       initialValues={{email:'', password:'',Comfirm_password:'',Account_Number:'',Account_Name:'',Phone:''}}
+       initialValues={{email:'', password:'',Comfirm_password:'',Name:'',Phone:''}}
        onSubmit={(values) => {
          console.log(values)
          handleSubmitPress(values)
        }}
      >
        {({ handleChange, handleBlur, handleSubmit, values, errors,touched,}) => (
-       <ScrollView>   
+       <ScrollView style={{alignSelf:'center'}}>   
          <>
-          <TextInput
-             name="email"
-             placeholder="Email Address"
-             style={styles.textInput}
-             onChangeText={handleChange('email')}
-             onBlur={handleBlur('email')}
-             value={values.email}
-             keyboardType="email-address"
-           />
-           {(errors.email && touched.email) &&
-           <Text style={styles.errorText}>{errors.email}</Text>
-           }
            <TextInput
              name="password"
              placeholder="Password"
@@ -124,16 +89,20 @@ const SignUp=(props)=>{
              value={values.Comfirm_password}
              secureTextEntry
            />
+           {(errors.Comfirm_password && touched.Comfirm_password) &&
+           <Text style={styles.errorText}>{errors.Comfirm_password}</Text>
+           }
+
            <TextInput
-             name="Account_Name"
-             placeholder="Account_Name"
+             name="Name"
+             placeholder="Name"
              style={styles.textInput}
-             onChangeText={handleChange('Account_Name')}
-             onBlur={handleBlur('Account_Name')}
-             value={values.Account_Name}
+             onChangeText={handleChange('Name')}
+             onBlur={handleBlur('Name')}
+             value={values.Name}
            />
-           {(errors.Account_Name && touched.Account_Name) &&
-           <Text style={styles.errorText}>{errors.Account_Name}</Text>
+           {(errors.Name && touched.Name) &&
+           <Text style={styles.errorText}>{errors.Name}</Text>
            }
            <TextInput
              name="Phone"
@@ -146,22 +115,25 @@ const SignUp=(props)=>{
            {(errors.Phone && touched.Phone) &&
            <Text style={styles.errorText}>{errors.Phone}</Text>
            }
-               <CheckBox
+
+              <CheckBox
                 value={isSelected}
                 onValueChange={setSelection}
                 style={styles.checkbox}
               />
             <Text style={{alignSelf:'center'}}>당신은 튜터 입니까?</Text> 
            
-           
+                 
            <View style={styles.Button}>
-             <Button onPress={()=>{handleSubmitPress(values)}}>Sign Up</Button>
+             <Button onPress={handleSubmitPress}>개인 정보 수정 완료</Button>
            </View>
         
          </>
          </ScrollView>
        )}
      </Formik>
+     
+     
      </SafeAreaView>
    </View>
    
@@ -268,4 +240,4 @@ Button:{
 });
 
 
-export default SignUp;
+export default Modifyprofile;
