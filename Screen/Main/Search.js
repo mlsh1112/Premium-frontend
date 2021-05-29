@@ -88,12 +88,12 @@ function Search({navigation}) {
         <FlatList
            style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':'white'}}
            data={reqData}
-           renderItem={({item,index})=>
+           renderItem={({item,index})=>{{
           <TouchableOpacity style={styles.Serach}onPress={()=>{
              console.log(item)
              navigation.navigate('ProjectDetail',{project:item})}}>
 
-              <Image style={styles.thumbnail} source={cat}></Image>
+              <Image style={styles.thumbnail} source={{url:'https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F464248%3Ftimestamp%3D20210325144241'}}></Image>
               <View>
                 <Text style={styles.Serachtitle}>제목 : {item.title}</Text>
                 <Text style={styles.Serachtitle}>프로젝트 설명 :{item.description} {item.title}</Text>
@@ -102,6 +102,8 @@ function Search({navigation}) {
               </View>
             </TouchableOpacity>
             } 
+          }
+        }
           />
         </View>
     </View>
