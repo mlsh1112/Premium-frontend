@@ -236,11 +236,7 @@ const ProjectDetail =(props)=> {
       marginHorizontal:20
     },
     cardStyle:{
-<<<<<<< HEAD
-      height:'87%'
-=======
       height:'100%'
->>>>>>> develop
     },
     titleStyle:{
       fontWeight:'bold',
