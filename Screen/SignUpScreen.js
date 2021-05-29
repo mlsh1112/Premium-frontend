@@ -14,7 +14,7 @@ import {
    KeyboardAvoidingView,
  } from 'react-native';
  import CheckBox from '@react-native-community/checkbox';
-
+import icon from '../assets/ddasup_icon.png'
 import {Picker} from '@react-native-picker/picker';
 import {signup} from '../src/Api';
 import { Formik } from "formik";
@@ -29,16 +29,10 @@ const validationSchema = Yup.object().shape({
     .required("비밀번호를 입력해주세요."),
   Comfirm_password: Yup.string()
     .required("비밀번호 확인을 입력해주세요."),
-  Banck:Yup.string()
-    .required("은행이름을 입력해주세요."),
-  Account_Number: Yup.string()
-    .required("환불 받으실 계좌번호를 입력해주세요."),
-  Account_Name: Yup.string()
-    .required("환불 받으실 계좌주를 입력해주세요."),
   Phone:Yup.number()
   .integer("숫자만 입력해주세요")
   .min(8)  
-  .required("환불 받으실 계좌주를 입력해주세요."),
+  .required("전화번호를 입력해주세요."),
 
  });
 
@@ -75,24 +69,25 @@ const SignUp=(props)=>{
   return(
     <View style={styles.container}>
      <SafeAreaView>
-     <View style={{marginTop:10}}>
-       <Text style={styles.title}>Welcome to 따숲</Text>
+     <View style={styles.topstyle}>
+       <Image source={icon} style={styles.iconstyle}/>
      </View>
      <Formik
        style={styles.FormStyle}
        validationSchema={validationSchema}
-       initialValues={{email:'', password:'',Comfirm_password:'',Account_Number:'',Account_Name:'',Phone:''}}
+       initialValues={{email:'', password:'',Comfirm_password:'',Phone:''}}
        onSubmit={(values) => {
          console.log(values)
-         handleSubmitPress(values)
+         handleSubmit(values)
        }}
      >
        {({ handleChange, handleBlur, handleSubmit, values, errors,touched,}) => (
-       <ScrollView>   
+       <View>   
          <>
+         <Text>Enter Your Email</Text>
           <TextInput
              name="email"
-             placeholder="Email Address"
+             placeholder="     Email Address"
              style={styles.textInput}
              onChangeText={handleChange('email')}
              onBlur={handleBlur('email')}
@@ -102,9 +97,10 @@ const SignUp=(props)=>{
            {(errors.email && touched.email) &&
            <Text style={styles.errorText}>{errors.email}</Text>
            }
+           <Text>Enter Your Password</Text>
            <TextInput
              name="password"
-             placeholder="Password"
+             placeholder="     Password"
              style={styles.textInput}
              onChangeText={handleChange('password')}
              onBlur={handleBlur('password')}
@@ -114,9 +110,10 @@ const SignUp=(props)=>{
            {(errors.password && touched.password) &&
            <Text style={styles.errorText}>{errors.password}</Text>
            }
+           <Text>Enter Your Email</Text>
            <TextInput
              name="Confirm_password"
-             placeholder="Confirm_Password"
+             placeholder="     Confirm Password"
              style={styles.textInput}
              onChangeText={handleChange('Comfirm_password')}
              onBlur={handleBlur('Comfirm_password')}
@@ -126,51 +123,10 @@ const SignUp=(props)=>{
            {(errors.Comfirm_password && touched.Comfirm_password) &&
            <Text style={styles.errorText}>{errors.Comfirm_password}</Text>
            }
-
-           <View style={{width:'95%',flexDirection:'row'}}>
-           <View style={styles.PickerBox}/>
-           
-              <Picker
-                style={{width:'40%'}}
-                selectedValue={selectedPicker}
-               onValueChange={(itemValue,itemIndex)=>
-               setSelectedPicker(itemValue)}
-              >
-                <Picker.Item label="선택" value="선택" color='grey'/> 
-                <Picker.Item label="국민" value="국민"/>
-                <Picker.Item label="신한" value="신한"/>
-                <Picker.Item label="기업" value="기업"/>
-                <Picker.Item label="농협" value="농협"/>
-            
-            </Picker>
-            
-           <TextInput
-              name="Account_Number"
-              placeholder="Account_Number"
-              style={styles.AccountInput}
-              onChangeText={handleChange('Account_Number')}
-              onBlur={handleBlur('Account_Number')}
-              value={values.Account_Number}
-             
-           />
-           </View>
-           {(errors.Account_Number && touched.Account_Number) &&
-           <Text style={styles.errorText}>{errors.Account_Number}</Text>
-           }
-           <TextInput
-             name="Account_Name"
-             placeholder="Account_Name"
-             style={styles.textInput}
-             onChangeText={handleChange('Account_Name')}
-             onBlur={handleBlur('Account_Name')}
-             value={values.Account_Name}
-           />
-           {(errors.Account_Name && touched.Account_Name) &&
-           <Text style={styles.errorText}>{errors.Account_Name}</Text>
-           }
+           <Text>Enter Your Phone Number </Text>
            <TextInput
              name="Phone"
-             placeholder="Please enter only the number without '-' "
+             placeholder="     Please enter only the number without '-'      "
              style={styles.textInput}
              onChangeText={handleChange('Phone')}
              onBlur={handleBlur('Phone')}
@@ -188,11 +144,11 @@ const SignUp=(props)=>{
            
            
            <View style={styles.Button}>
-             <Button onPress={()=>{handleSubmitPress(values)}}>Sign Up</Button>
+             <Button onPress={handleSubmit}>Sign Up</Button>
            </View>
         
          </>
-         </ScrollView>
+         </View>
        )}
      </Formik>
      </SafeAreaView>
@@ -207,6 +163,14 @@ const styles = StyleSheet.create({
       flex : 1,
       justifyContent:'center',
       alignItems:'center',
+  },
+  iconstyle:{
+    width:90,
+    height:90
+  },
+  topstyle:{
+    justifyContent:'center',
+    alignItems:'center',
   },
   textstyle:{
     fontSize:20,
@@ -248,14 +212,19 @@ errorText: {
   alignSelf:'center'
 },
  textInput: {
-  height: 40,
+  height: 50,
   width: '90%',
   margin: 10,
   backgroundColor: 'white',
-  borderWidth: 1,
   borderRadius: 10,
   fontSize:15,
-  fontWeight:'bold'
+  fontWeight:'bold',
+  elevation: 5,
+  shadowColor: 'gray',
+  shadowOffset: { width: 0, height: 3 },
+  shadowOpacity: 0.5,
+  shadowRadius: 5,
+  borderRadius:20 
     
 },
   InputStyle: {
