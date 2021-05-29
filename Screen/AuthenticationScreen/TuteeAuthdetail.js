@@ -23,12 +23,13 @@ const TuteeAutdetail=({navigation,route})=>{
     var pastDay=project.project.experience_period-remainDay
     var auths=project.auth_count
     var percent = Math.floor((auths/project.project.experience_period)*100)
+    
     var requireTime = project.project.required_time
     var reviewTime = 0
     requireTime===0?reviewTime = 0: reviewTime = Math.floor(project.project.review_weight/requireTime)
     var studyTime = requireTime-reviewTime
     var [plans,setPlans]=useState()
-
+    var [chapter,setChapter]=useState()
 
   useEffect(()=>{
       console.log(project.id)
@@ -36,6 +37,7 @@ const TuteeAutdetail=({navigation,route})=>{
         "project_id":project.id
       }).then((res)=>{
          setPlans(res.data);
+         setChapter(plans.chapter)
       })
       .catch((err)=>{
         console.log(err)
@@ -104,11 +106,7 @@ const TuteeAutdetail=({navigation,route})=>{
         <Text style={styles.titleTxt}>Today 일정 👻 </Text>
         <Card style={styles.cardStyle}>
           <View style={styles.todayTxt}>
-            {plans.chapter?
-            <Text style={styles.todayblackTxt}>⦁ 오늘 진행할 챕터 {plans.chapter}
-            :
-            </Text>:<Text style={styles.todayblackTxt}>⦁ 오늘 진행할 챕터 : </Text>
-            }
+            <Text style={styles.todayblackTxt}>⦁ 오늘 진행할 챕터 : {chapter}</Text>
             <Text style={styles.todayredTxt}> {}</Text>
           </View>
           <View style={styles.todayTxt}>
