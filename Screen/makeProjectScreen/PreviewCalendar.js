@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
-import {Calendar,CalenderList,Agenda, CalendarList} from 'react-native-calendars';
+import React from 'react';
+import { Agenda } from 'react-native-calendars';
 import {
     StyleSheet,
-    TouchableOpacity,
     View,
-    ScrollView,
     Text,
 } from 'react-native';
 import { useState,useEffect } from 'react';
@@ -13,14 +11,9 @@ import colors from '../../src/colors'
 const moment = require("moment");
 
 function PreviewCalendar(props){
-  // console.log('=================schedule=================')
-  // console.log(props.schedule)
-  // console.log('==========================================')
-  
   const [markedDates,setmarkedDates]=useState()
   const [agenda,setAgenda] = useState()
-
-  const color=[['#50cebb','#70d7c7'],['#5C7210','#A3C821'],['#EFA519','#C8880E'],['#049413','#09CD1D']];
+  const color=[['#A1EBEB','#5FDBDB'],['#FFDF93','#FFCC53'],['#ACC2FF','#7372FF'],['#FFDBEC','#FF9BCA']];
 
   useEffect(()=>{
     var tempschedule={}
@@ -68,8 +61,17 @@ function PreviewCalendar(props){
   },[])
 
   const showchapter=(item)=>{
+    var boxcolor = ''
+    const agendaobject = Object.values(agenda)
+    const markedobject = Object.values(markedDates)
+    for(var i = 0;i < agendaobject.length; i ++){
+      if(item.title === agendaobject[i][0].title){
+        boxcolor = markedobject[i].color
+        break
+      }  
+    }
     return (
-        <View style={styles.itemContainer}>
+        <View style={[styles.itemContainer,{backgroundColor: boxcolor}]}>
           <Text>{item.title}</Text>
         </View>
       );
@@ -90,11 +92,11 @@ function PreviewCalendar(props){
           calendarBackground: '#e2f7e8',
           textSectionTitleColor: 'black',
           textSectionTitleDisabledColor: 'gray',
-          selectedDayTextColor: '#D050C5',
           monthTextColor: 'black',
           todayTextColor: '#00adf5',
-          agendaKnobColor: 'black',
           agendaTodayColor: 'red',
+          agendaKnobColor: 'green',
+          
         }}
        />
       </View>
@@ -109,13 +111,13 @@ const styles = StyleSheet.create({
         backgroundColor:colors.subcolor,
     },
     itemContainer: {
-        backgroundColor: "#9BE1C2",
-        margin: 5,
+        flex:1,
+        marginVertical: 10,
+        marginHorizontal:5,
         borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        flex: 1,
-    }
+    },
 });
     
 export default PreviewCalendar;
