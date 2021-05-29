@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View,Text,TouchableOpacity,ScrollView,Image } from 'react-native';
 import { gettutorprojs } from '../../src/Api';
 import colors from '../../src/colors'
@@ -8,11 +8,15 @@ import authBtn from '../../assets/authBtn-001.png'
 const moment = require("moment");
 
 const ProjectAuthCard = ({navigation,project}) => {
+    console.log(project)
     const startDate = moment(project.started_at)
     const now = moment()
     const remainDay = now.diff(startDate,'days') //시작하는 날짜가 0일차
-    const pastDay = project.duration - remainDay
-
+    var pastDay = project.duration
+    if(remainDay >= 0){
+        pastDay = project.duration - remainDay
+    }
+    
     return( 
             <View style={{flexDirection:'row'}}>
                 <Card>
@@ -33,7 +37,7 @@ const ProjectAuthCard = ({navigation,project}) => {
                                     }
                                     { pastDay < 1
                                         ? <Text style={cardstyles.dayStyle3}>프로젝트가 끝났습니다.</Text>
-                                        : <Text style={cardstyles.dayStyle3}>남은 인증 {pastDay}개</Text>
+                                        : <Text style={cardstyles.dayStyle3}>남은 일일인증 {pastDay}개</Text>
                                     }
                                 </View>
                             </View>

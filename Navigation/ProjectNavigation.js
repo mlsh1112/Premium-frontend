@@ -7,6 +7,10 @@ import ProjectTrial from '../src/components/ProjectTrial'
 import ProfileView from '../src/components/ProfileView'
 import ProjectMini from '../src/components/ProjectMini'
 import CardNews from '../src/components/CardNews'
+import UpdateProject from '../Screen/UpdateProject/UpdateProject'
+import MyLike from '../src/components/MyLike'
+import Book from '../Screen/makeProjectScreen/Book'
+import Chapter from '../Screen/makeProjectScreen/Chapter'
 const Stack = createStackNavigator();
 
 export default function ProjectNavigation(){
@@ -19,6 +23,10 @@ export default function ProjectNavigation(){
             <Stack.Screen name="ProjectMini" component={ProjectMini} options={{headerShown: false}}/>
             <Stack.Screen name="ProjectTrial" component={ProjectTrial} options={{headerShown: false}}/>
             <Stack.Screen name="CardNews" component={CardNews} options={{headerShown: false}} />
+            <Stack.Screen name="UpdateProject" component={UpdateProject} options={{headerTitle: '프로젝트 업데이트'}}/>
+            <Stack.Screen name="Book" component={Book} options={{headerTitle: "책 선택"}}/>
+            <Stack.Screen name="Chapter" component={Chapter} options={{headerTitle: "챕터 가중치 설정"}}/>
+            <Stack.Screen name="MyLike" component={MyLike} options={{headerTitle: '좋아요 리스트'}} />
         </Stack.Navigator>
         
     );

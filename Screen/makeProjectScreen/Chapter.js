@@ -1,7 +1,6 @@
 import React, { useState,useEffect } from 'react';
-import { ScrollView } from 'react-native';
-import { TextInput } from 'react-native';
 import {
+    ScrollView,
     StyleSheet,
     View,
     Text,
@@ -16,13 +15,26 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CheckBox from '@react-native-community/checkbox';
 import SchedulePopup from './SchedulePopup'
 import {HelpMessage,RenderHelp} from './Help';
+import {Picker} from '@react-native-picker/picker';
+import ExplainModal from './ExplainModal'
 
+function makelist(end){
+  var array = [...Array(end).keys()]
+  console.log(array)
+  return(
+    array.map((value)=> {
+      return <Picker.Item key={value+1} label={(value+1).toString()} value={(value+1).toString()} />
+    })
+  )
+}
 const Chapter = (props) => {
+    const [explainVisible,setExplainVisible] = useState(true)
     const [visibleconfim,setVisibleconfirm] = useState(false)
     const [schedule,setSchedule] = useState({})
     const [book,setBook] = useState()
     const [bookvisible,setBookvisible] = useState(false)
     const [chapters,setChapters] = useState([])
+    // const [chapters,setChapters] = useState( [{"book_id": 63, "created_at": "2021-05-16T13:39:00.699+09:00", "id": 729, "title": "1. 자연수의 혼합 계산", "updated_at": "2021-05-16T13:39:00.699+09:00", "weight": 1}, {"book_id": 63, "created_at": "2021-05-16T13:39:00.699+09:00", "id": 730, "title": "2. 약수와 배수", "updated_at": "2021-05-16T13:39:00.699+09:00", "weight": 1}, {"book_id": 63, "created_at": "2021-05-16T13:39:00.699+09:00", "id": 731, "title": "3. 규칙과 대응", "updated_at": "2021-05-16T13:39:00.699+09:00", "weight": 1}, {"book_id": 63, "created_at": "2021-05-16T13:39:00.699+09:00", "id": 732, "title": "4. 약분과 통분", "updated_at": "2021-05-16T13:39:00.699+09:00", "weight": 1}, {"book_id": 63, "created_at": "2021-05-16T13:39:00.699+09:00", "id": 733, "title": "5. 분수의 덧셈과 뺄셈", "updated_at": "2021-05-16T13:39:00.699+09:00", "weight": 1}, {"book_id": 63, "created_at": "2021-05-16T13:39:00.699+09:00", "id": 734, "title": "6. 다각형의 둘레와 넓이", "updated_at": "2021-05-16T13:39:00.699+09:00", "weight": 1}])
     const [toggleCheckBox, setToggleCheckBox] = useState(false) //false 휴식 허용 true 휴식 없음
     const [rest, setRest] = useState(0) //false 휴식 허용 true 휴식 없음
     const [modalVisible,setModalVisible] = useState(false)
@@ -32,32 +44,37 @@ const Chapter = (props) => {
         setBookvisible(true)
       }
     },[props.route.params?.selectedBook])
-
+    
     function RenderChapter({chapters}){
+      console.log(chapters)
         return(
                     <View style={styles.chapterlist}>
                       {chapters.map((chapter,key) => {
                         return(
-                          <View key={key} style={{flex:1,flexDirection:'row',alignItems: 'center',justifyContent: 'space-between',}}>
+                          <View key={key} style={{flex:1,height:60,flexDirection:'row',alignItems: 'center',justifyContent: 'space-between',marginVertical:3}}>
                               <Text style={styles.textStyle}>
                                 {chapter.title}
                               </Text>
-                              <TextInput 
-                                placeholder='가중치'
-                                style={{backgroundColor: 'white',width:'20%',borderWidth: 1,borderRadius: 10,marginTop: 7,}}
-                                onChangeText={(value)=> {
-                                  const idx = key
-                                  chapters[idx].weight = value
-                                  console.log(chapters[idx])
-                                }}
-                              >{chapters[key].weight}</TextInput>
+                              <View style={{width:' 25%',backgroundColor:'white',borderWidth:1,borderRadius: 20,borderColor: colors.subcolor}}>
+                                <Picker
+                                  selectedValue={chapters[key].weight}
+                                  style={{ height: '100%', width: '100%',}}
+                                  onValueChange={(itemValue)=> {
+                                    const idx = key
+                                    chapters[idx].weight = itemValue
+                                    console.log(chapters[idx])
+                                  }}
+                                >
+                                  {makelist(10)}
+                                </Picker>
+                              </View>
+
                               <TouchableOpacity
-                                style={styles.cancelButton} 
                                 onPress={(e)=>{
                                     deletechapter(key);
                                 }}
                               >
-                                  <Text style={{color:'white',fontWeight: 'bold'}}>챕터 삭제</Text>
+                                  <Icon name="close-box" color={colors.maincolor} size={30} />
                               </TouchableOpacity>
                           </View>
                         )
@@ -120,6 +137,7 @@ const Chapter = (props) => {
     return (
         <ScrollView >
             <View>
+            <ExplainModal visible={explainVisible} setModalVisible={setExplainVisible} />
                 <View style={styles.FormStyle}>
                     <Text style={styles.subtitle}>1. 프로젝트 교재</Text>
                     {bookvisible && (
@@ -135,7 +153,13 @@ const Chapter = (props) => {
                 <View style={styles.FormStyle}>
                     <Text style={styles.subtitle}>
                       2. 챕터별 가중치 설정 (최소 1 이상)
-                      <RenderHelp messagetype={HelpMessage.weight}/>
+                      <TouchableOpacity onPress={() => {
+                        setExplainVisible(true)
+                      }}>
+                        <View style={{marginHorizontal: 5}}>
+                          <Icon name="comment-question-outline" color="red" size={20}/>
+                        </View>
+                      </TouchableOpacity>
                     </Text>
                     <Button onPress={goToChapterSearch}>챕터 불러오기</Button>
                     <RenderChapter chapters={chapters}/>
@@ -208,11 +232,14 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     },
     textStyle: {
-        width: '55%',
+        width: '65%',
+        height: '100%',
+        borderTopLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        backgroundColor: colors.subcolor,
+        textAlignVertical:'center',
         padding: 10,
-        backgroundColor: 'white',
-        fontSize: 15,
-        marginTop: 7,
+        fontSize: 16,
         color: 'black',
       },
     chapterlist: {
@@ -265,6 +292,17 @@ const styles = StyleSheet.create({
     author: {
         paddingHorizontal: 15,
         paddingVertical: 4,
+    },
+    pickerstyle:{
+      width: "20%",
+      marginTop:'1%',
+      paddingVertical: 10,
+      paddingHorizontal: 12,
+      borderWidth: 1,
+      borderRadius: 10,
+      paddingRight: 30,
+      color:"black",
+      backgroundColor: 'white',
     },
   });
 

@@ -7,16 +7,17 @@ import {
     TextInput,
     ScrollView,
     Keyboard,
+    Alert,
   } from 'react-native';
 import { Formik } from "formik";
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
 
-import {Schema, InitValue,tommorow} from './ValueSchema';
-import {HelpMessage,RenderHelp} from './Help';
-import {RenderError} from './ValidMessage';
-import {createproject,getcategories} from '../../src/Api';
-import SwiperModal from './SwiperModal'
+import {Schema,tommorow} from './UpdateSchema';
+import {HelpMessage,RenderHelp} from '../makeProjectScreen/Help';
+import {RenderError} from '../makeProjectScreen/ValidMessage';
+import {getcategories,updateproject} from '../../src/Api';
+
 function makeItem(projectlist){
   const temp = projectlist.map((pr)=>({
       label: pr.title,
@@ -24,19 +25,32 @@ function makeItem(projectlist){
   }));
   return temp;
 }
-function makeItemlist(start,end){
-  var item = []
-  for(var i = start ; i < end + 1 ; i++){
-    item.push({
-      label: `${i}`,
-      value: `${i}`
-    })
+  function makeItemlist(start,end){
+    var item = []
+    for(var i = start ; i < end + 1 ; i++){
+      item.push({
+        label: `${i}`,
+        value: `${i}`
+      })
+    }
+    return item
   }
-  return item
-}
-const ProjectForm =(props)=> {
-    const [modalVisible,setModalVisible] = useState(true)
+
+const UpdateProject =(props)=> {
+    // console.log(props)
+    const {myinfo,latestpr} = props.route.params
     const validationSchema = Schema
+    const InitValue = {
+        title: latestpr.title,
+        startDate: latestpr.started_at, 
+        duration: latestpr.duration,
+        experienceduration: latestpr.experience_period,
+        repeatstrength: latestpr.review_weight,
+        dailyStudyTime: latestpr.required_time,
+        howToAuth: latestpr.mission,
+        projectIntroduce: latestpr.description,
+        deposit: latestpr.deposit,
+      }
     const [isDateTimePickerVisible,setIsDateTimePickerVisible] = useState(false)
     const [category,setCategory] = useState([
       {
@@ -44,43 +58,70 @@ const ProjectForm =(props)=> {
         value: -1,
       }
     ])
-    const [idx,setIdx] = useState(0)
-    const [categoryid,setCategoryid] = useState()
-    const [date,setDate ] = useState(new Date())
-    var timezoneOffset = date.getTimezoneOffset() * 60000
+    var timezoneOffset = new Date().getTimezoneOffset() * 60000
+    const [date,setDate ] = useState(new Date(latestpr.started_at))
+    const conditionfordate = new Date() >= date
+    var experienceend = new Date(latestpr.started_at)
+    experienceend.setDate(experienceend.getDate() + latestpr.experience_period)
+    const conditiondeposit = new Date() > experienceend
+
     const handleSubmitPress = (values) =>{
       console.log("프로젝트 제출 : " + JSON.stringify(values))
-      createproject({
-        "experience_period": values.experienceduration, 
-        "description": values.projectIntroduce, 
-        "deposit": values.deposit,
-        "image": '',
-        "title": values.title,
-        "duration": values.duration,
-        "started_at": values.startDate,
-        "category_id": categoryid,
-        "required_time": values.dailyStudyTime,
-        "review_weight": values.repeatstrength,
-        "mission": values.howToAuth
-      }).then(res => {
-        console.log(res.data)
-        props.navigation.navigate({name: 'Book',params: {projectId: res.data.id}})
-      }).catch(e => {
-        console.log(e.response)
-      })
+      updateproject(latestpr.id,
+        {
+            "project":{
+                "experience_period": values.experienceduration, 
+                "description": values.projectIntroduce, 
+                "deposit": values.deposit,
+                "image": '',
+                "title": values.title,
+                "duration": values.duration,
+                "started_at": values.startDate,
+                "required_time": values.dailyStudyTime,
+                "review_weight": values.repeatstrength,
+                "mission": values.howToAuth
+            }
+        }
+        ).then((res) => {
+            console.log(res.data)
+            if(latestpr.started_at !== values.startDate){
+                Alert.alert("시작 날짜 변경","시작 날짜가 변경되어 일정을 새로 생성하셔야합니다.",[
+                    { text: "확인", onPress: () => {
+                        console.log("확인 누름")
+                        props.navigation.navigate({name: 'Book',params: {projectId: res.data.id}})
+                      }
+                    },]
+                    )
+            }else {
+                Alert.alert("교재 변경","교재를 변경하실 경우 일정 생성도 다시하셔야 합니다.",[
+                    { text: "확인", onPress: () => {
+                        console.log("확인 누름")
+                        props.navigation.navigate({name: 'Book',params: {projectId: res.data.id}})
+                      }
+                    },
+                    { text: "취소", onPress: () => {
+                        console.log("취소 누름")
+                        props.navigation.goBack()
+                      }
+                    }]
+                    )
+               
+            }
+        }).catch(e => {
+            console.log(e)
+        })
     }
     useEffect(() => {
       getcategories().then(res => {
         console.log(res.data)
         setCategory(makeItem(res.data))
       }).catch(e => {
-        console.log(e.response.data)
+        console.log(e)
       })
     },[])
     return (
         <ScrollView>
         <View style={styles.container}>
-        <SwiperModal visible={modalVisible} setModalVisible={setModalVisible} />
             <Formik
               style={styles.FormStyle}
               validationSchema={validationSchema}
@@ -91,28 +132,12 @@ const ProjectForm =(props)=> {
               }}
             >
               {({ handleChange, handleBlur, handleSubmit,setFieldValue, values, errors,touched,}) => (
-              
                 <>
-                <Text style={styles.subtitle}>0. 프로젝트 카테고리 </Text>
-                  <View style={styles.pickerstyle}>
-                    <RNPickerSelect
-                        useNativeAndroidPickerStyle={false}
-                        onValueChange={(value,idx) => {
-                          setCategoryid(value)
-                          setIdx(idx-1)
-                          setFieldValue('categoryid',value)
-                        }}
-                        items={category}
-                        >
-                        {idx < 0 ? <Text></Text> : <Text>{category[idx].label}</Text>}
-                    </RNPickerSelect>
-                  </View>  
-                <RenderError errors={errors.categoryid} touched={touched.categoryid} />
-                
                 <Text style={styles.subtitle}>1. 프로젝트 이름</Text>
                   <TextInput
                     name="title"
-                    placeholder="프로젝트 이름을 입력해주세요"
+                    defaultValue={(values.title).toString()}
+                    placeholder={(latestpr.title).toString()}
                     style={styles.textInput}
                     onChangeText={handleChange('title')}
                     onBlur={handleBlur('title')}
@@ -124,7 +149,9 @@ const ProjectForm =(props)=> {
                 <Text style={styles.subtitle}>2. 프로젝트 시작 일자</Text>
                   <TextInput
                     name="startDate"
+                    editable={!conditionfordate}
                     style={styles.textInput}
+                    defaultValue={latestpr.started_at.substring(0,10)}
                     value={new Date(date - timezoneOffset).toISOString().substring(0,10)}
                     onChangeText={handleChange}
                     onFocus={()=>{
@@ -160,7 +187,8 @@ const ProjectForm =(props)=> {
                   </Text>
                   <TextInput
                     name="duration"
-                    placeholder="프로젝트 기간 입력"
+                    defaultValue={(values.duration).toString()}
+                    placeholder={(latestpr.duration).toString()}
                     style={styles.textInput}
                     onChangeText={value => {
                         const parsedvalue = parseInt(value)
@@ -208,7 +236,8 @@ const ProjectForm =(props)=> {
                 </Text>
                   <TextInput
                     name="dailyStudyTime"
-                    placeholder="최소 학습시간 입력"
+                    defaultValue={(values.dailyStudyTime).toString()}
+                    placeholder={(latestpr.required_time).toString()}
                     style={styles.textInput}
                     onChangeText={value => {
                         const parsedvalue = parseInt(value)
@@ -255,7 +284,7 @@ const ProjectForm =(props)=> {
                 </Text>
                   <TextInput
                     name="howToAuth"
-                    placeholder="프로젝트 일일 인증 미션을 입력해주세요"
+                    placeholder={latestpr.mission}
                     style={[styles.textInput,{height: 100}]}
                     onChangeText={handleChange('howToAuth')}
                     onBlur={handleBlur('howToAuth')}
@@ -268,7 +297,7 @@ const ProjectForm =(props)=> {
                 <Text style={styles.subtitle}>8. 프로젝트 소개</Text>
                   <TextInput
                     name="projectIntroduce"
-                    placeholder="프로젝트 소개를 입력해주세요"
+                    placeholder={latestpr.description}
                     style={[styles.textInput,{height: 100}]}
                     onChangeText={handleChange('projectIntroduce')}
                     onBlur={handleBlur('projectIntroduce')}
@@ -284,7 +313,9 @@ const ProjectForm =(props)=> {
                 </Text>
                   <TextInput
                     name="deposit"
-                    placeholder="프로젝트의 보증금을 입력해주세요. (단위 원)"
+                    editable={!conditiondeposit}
+                    defaultValue={(values.deposit).toString()}
+                    placeholder={(latestpr.deposit).toString()}
                     style={styles.textInput}
                     onChangeText={value => {
                       const parsedvalue = parseInt(value)
@@ -303,12 +334,11 @@ const ProjectForm =(props)=> {
                 
 
                 <View style={styles.button}>
-                  <Button onPress={handleSubmit}>프로젝트 생성하기</Button>
+                  <Button onPress={handleSubmit}>프로젝트 수정하기</Button>
                 </View>
                 </>
               )}
             </Formik>
-            
         </View>
         </ScrollView>
         );
@@ -325,12 +355,22 @@ const styles = StyleSheet.create({
       height: 40,
       width: '90%',
       margin: 10,
-      padding:10,
+      padding: 10,
       backgroundColor: 'white',
       borderWidth: 1,
       borderRadius: 10,
       fontSize:15,
       fontWeight:'bold'
+    },
+    bigtextInput: {
+        height: 100,
+        width: '90%',
+        margin: 10,
+        backgroundColor: 'white',
+        borderWidth: 1,
+        borderRadius: 10,
+        fontSize:15,
+        fontWeight:'bold'
     },
     FormStyle: {
       flexDirection: 'row',
@@ -375,4 +415,4 @@ const styles = StyleSheet.create({
     },
   });
 
-export default ProjectForm;
+export default UpdateProject;
