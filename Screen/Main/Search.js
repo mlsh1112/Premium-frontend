@@ -23,17 +23,13 @@ import {
 import {Searchbar } from 'react-native-paper'
 import { getprojects } from '../../src/Api';
 import ProjectMini from '../../src/components/ProjectMini'
-
 function Search({navigation}) {
   const [Searchblur,SetSearchblur]=useState(false);
   const [SearchData,SetSearchData]=useState("");
-
   const [isLoading,SetIsLoading]=useState(false);
   const [reqData,SetreqData]=useState([])
-  
   let ScreenWidth = Dimensions.get('window').width    //screen 너비
   let ScreenHeight = Dimensions.get('window').height   //height 높이
-  
   const ChangeSearchData=((text)=>{
       if(text){
         SetSearchblur(true);
@@ -44,18 +40,15 @@ function Search({navigation}) {
       SetSearchData(text);
       console.log(SearchData);
     })
-  
     async function SearchVal (){
       if(SearchData.length<=0){
         alert("2글자 이상의 검색어를 입력해주세요")
       }
       const query = {title_or_description_i_cont: SearchData}
       const data = (await getprojects({ q: query})).data
-
       console.log(data)
       SetreqData(data)
     }
-    
     useEffect(()=>{
       if(Searchblur){
         SetSearchblur(false)
@@ -63,7 +56,6 @@ function Search({navigation}) {
       console.log(navigation
 )
     },[reqData])
-  
   return(
     <SafeAreaView style={{flex:1}}>
     <View style={{flex:1}} >
@@ -79,45 +71,38 @@ function Search({navigation}) {
                 onIconPress={SearchVal}
                 onKeyPress={(e)=>{if(e.key==='Enter')
                 console.log('엔터클릭')
-              
             }}
             />
-            
         </View>
       <View style={styles.Searchlist}>
         <FlatList
            style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':'white'}}
            data={reqData}
-           renderItem={({item,index})=>{{
+           keyExtractor={(item,index)=>index.toString()}
+           renderItem={({item})=>
           <TouchableOpacity style={styles.Serach}onPress={()=>{
              console.log(item)
              navigation.navigate('ProjectDetail',{project:item})}}>
-
-              <Image style={styles.thumbnail} source={{url:'https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F464248%3Ftimestamp%3D20210325144241'}}></Image>
+              <Image style={styles.thumbnail} source={cat}>
+              </Image>
               <View>
                 <Text style={styles.Serachtitle}>제목 : {item.title}</Text>
                 <Text style={styles.Serachtitle}>프로젝트 설명 :{item.description} {item.title}</Text>
                 <Text style={styles.Serachtitle}>체험 일수 : {item.experience_period}</Text>
-                
               </View>
             </TouchableOpacity>
-            } 
-          }
         }
           />
         </View>
     </View>
     </SafeAreaView>
   )
-
 }
-
 const styles = StyleSheet.create({
   Searchlist: {
       flex:1,
       padding: 10,
   },
-  
   Serach: {
       margin: 5,
       padding: 15,
@@ -141,5 +126,4 @@ const styles = StyleSheet.create({
       paddingVertical: 4,
   },
 });
-
 export default Search;

@@ -69,6 +69,7 @@ import colors from '../src/colors'
          setToken(res.data.token);
          props.navigation.replace('Main');
        })
+       .catch(err=>console.log(err))
        //props.navigation.replace('Main');
      }
      else {
