@@ -14,8 +14,6 @@ import {
    KeyboardAvoidingView,
  } from 'react-native';
  import CheckBox from '@react-native-community/checkbox';
-import icon from '../assets/ddasup_icon.png'
-import {Picker} from '@react-native-picker/picker';
 import {signup} from '../src/Api';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -23,6 +21,8 @@ import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
 import colors from '../src/colors';
 
 const validationSchema = Yup.object().shape({
+  name: Yup.string()
+    .required("이름을 입력해주세요."),
   email: Yup.string()
     .required("이메일을 입력해주세요.")
     .email("이메일 형식이 아닙니다."),
@@ -50,11 +50,11 @@ const SignUp=(props)=>{
   })
 
   const handleSubmitPress = (values)=>{  
-    console.log(values.email)
+    console.log(values.name)
     signup({
+      "name":values.name,
       "email":values.email,
       "password":values.password,
-      "name":values.Account_Name,
       "phone":values.Phone,
       "type":userType,
      }
@@ -76,15 +76,26 @@ const SignUp=(props)=>{
      <Formik
        style={styles.FormStyle}
        validationSchema={validationSchema}
-       initialValues={{email:'', password:'',Comfirm_password:'',Phone:''}}
+       initialValues={{name:'',email:'', password:'',Comfirm_password:'',Phone:''}}
        onSubmit={(values) => {
          console.log(values)
-         handleSubmit(values)
+         handleSubmitPress(values)
        }}
      >
        {({ handleChange, handleBlur, handleSubmit, values, errors,touched,}) => (
        <View>   
          <>
+         <TextInput
+             name="name"
+             placeholder="    이름"
+             style={styles.textInput}
+             onChangeText={handleChange('name')}
+             onBlur={handleBlur('name')}
+             value={values.name}
+           />
+           {(errors.name && touched.name) &&
+           <Text style={styles.errorText}>{errors.name}</Text>
+           }
           <TextInput
              name="email"
              placeholder="     이메일 주소"
@@ -150,7 +161,7 @@ const SignUp=(props)=>{
           <View style={{flexDirection:'row',marginTop:20}}>
               <Text style={styles.SignUpStyle}
                     onPress={() => props.navigation.pop()}>
-               로그인으로 돌아기기
+               로그인으로 돌아가기
               </Text>
           </View>
          </>

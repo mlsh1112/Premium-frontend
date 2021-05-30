@@ -34,12 +34,6 @@ class Home extends Component {
 
 
         const getData = async()=>{
-            /*await AsyncStorage.getItem('userinfo')
-            .then(res=>{
-                this.setState({user:JSON.parse(res)})
-            })
-            .catch(err=>console.log(err))*/
-
             await getcurrentuser()
             .then(res=>{
                 this.setState({user:res.data})
