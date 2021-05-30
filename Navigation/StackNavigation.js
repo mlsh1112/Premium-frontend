@@ -7,7 +7,7 @@ import Signup from '../Screen/SignUpScreen'
 import Tabnavigation from './BottomTabNav';
 import AdditionalInfo from '../Screen/AdditionalInfo'
 import KakaoLogin from '../Screen/KakaoLogin/KakaoLogin';
-import KakaoAdditionalInfo from '../Screen/KakaoLogin/AdditionalInfo';
+import KakaoAdditionalInfo from '../Screen/KakaoLogin/KakaoAdditionalInfo';
 import CheckUserData from '../Screen/KakaoLogin/CheckUserData';
 
 const Stack = createStackNavigator();

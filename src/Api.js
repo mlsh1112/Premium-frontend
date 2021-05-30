@@ -4,8 +4,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import baseurl from '../config'
 
 
-// const PORT = baseurl.port
-const PORT = baseurl.sungmin
+const PORT = baseurl.port
+// const PORT = baseurl.sungmin
 
 let formheaders = {
     headers: {

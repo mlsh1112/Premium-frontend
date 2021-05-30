@@ -1,58 +1,48 @@
-import React, {Component, useState,createRef,useEffect} from 'react';
+import React, { useState,useEffect} from 'react';
 import {Button} from '../../src/components'
-import axios from 'axios'
 import {
-   SafeAreaView,
    StyleSheet,
-   ScrollView,
    View,
    Text,
-   Image,
-   StatusBar,
    TextInput,
-   TouchableOpacity,
  } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import {signup} from '../../src/Api';
-import {setToken} from '../../src/Asyncstorage';
+import {userUpdate} from '../../src/Api';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
-
 var phoneRegExp = /^\(?([0-1]{3})\)?[-]?([0-9]{4})[-]?([0-9]{4})$/;
 const validationSchema = Yup.object().shape({
     phoneNumber: Yup.string().matches(phoneRegExp, '올바른 전화번호를 입력해주세요.').required('전화번호를 입력해주세요.')
  });
 
-const AdditionalInfo=(props)=>{
-  
-
+const KakaoAdditionalInfo=(props)=>{
   var userType;
   const [isSelected,setSelection]=useState(false);
-
+  console.log(props.route.params.userinfo)
   useEffect(()=>{
-    userType=isSelected?"튜터":"튜티"
+    userType=isSelected?"Tutor":"Tutee"
     console.log(userType);
   })
 
   const handleSubmitPress = (values)=>{  
     console.log(values)
     console.log(userType)
-    //signup({
-    //  "phone": values.phoneNumber,
-    //  "user_type":userType
-    // }
-    //).then(res => {
-    //  console.log(res.data.token);
-    //  setToken(res.data.token);
-    //}).then(() => {
-    //  props.navigation.replace('AuthLoading');
-    //  console.log("Go to Home from kakaologin ");
-    //}).catch(error => {
-    //  alert("이메일 혹은 패스워드를 확인해주세요.")
-    //  console.log(error);
-    //});
-    props.navigation.replace('Main')
+    userUpdate(props.route.params.userinfo.id,
+      {
+          "user":{
+                    "phone":values.phoneNumber,
+                    "type":userType
+                  }
+      }).then(res => {
+        console.log(res.data.token);
+        //setToken(res.data.token);
+      }).then(() => {
+        console.log('update success')
+        props.navigation.replace('Main');
+      }).catch(error => {
+        alert("이메일 혹은 패스워드를 확인해주세요.")
+        console.log(error);
+      });
   }  
 
   return(
@@ -116,10 +106,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom:10,
   },
-  textstyle:{
-    fontSize:20,
-    fontWeight:'bold'
-  },
   FormStyle: {
    flexDirection: 'row',
    height: 40,
@@ -128,37 +114,10 @@ const styles = StyleSheet.create({
    marginRight: 35,
    margin: 10,
  },
-  InputStyle: {
-   flex: 1,
-   color: "black",
-   paddingLeft: 15,
-   paddingRight: 15,
-   borderWidth: 1,
-   borderRadius: 30,
-   borderColor: '#dadae8',
- },
- SignUpQStyle: {
-   color: "black",
-   textAlign: 'center',
-   fontSize: 14,
-   alignSelf: 'center',
-   padding: 10,
- },
- SignUpStyle: {
-   color: "blue",
-   textAlign: 'center',
-   fontWeight: 'bold',
-   fontSize: 14,
-   alignSelf: 'center',
-   padding: 5,
- },
- checkbox:{
-  alignSelf:"center",
-},
-lable:{
-  margin:9,
-},
-errorText: {
+  checkbox:{
+    alignSelf:"center",
+  },
+  errorText: {
     fontSize: 12,
     color: 'red',
   },
@@ -180,4 +139,4 @@ errorText: {
 });
 
 
-export default AdditionalInfo;
+export default KakaoAdditionalInfo;
