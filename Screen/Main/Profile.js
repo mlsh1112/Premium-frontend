@@ -26,7 +26,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-community/async-storage';
 import {TabView} from 'react-native-tab-view';
 import colors from '../../src/colors'
-import {logout,getcurrentuser,getattendances,tutorgetproject,getmylikes} from '../../src/Api';
+import {logout,getcurrentuser,getattendances,tutorgetproject,getlikes} from '../../src/Api';
 import cat from '../../assets/cat2.png'
 import {EachTabViewsProjects,renderTabBar} from '../../src/utils/EachTab'
 
@@ -45,12 +45,19 @@ const Profile = (props) => {
         setMyinfo(res.data)
         if(res.data.type ==='Tutee'){
           getattendances().then(res => {
-            getmylikes().then(res =>{
-              console.log('tutee get their like list complete')
+            getlikes().then(res => {
+              console.log(res.data)
               setMylikelists(res.data)
-            }).catch(e => {
-              console.log(e)
+            }).catch(e=>{
+                console.log(e)
             })
+            // getmylikes().then(res =>{
+              // console.log('tutee get their like list complete')
+              // console.log(res.data)
+              // setMylikelists(res.data)
+            // }).catch(e => {
+              // console.log(e)
+            // })
             setProject(res.data)
           }).catch(e => {
             console.log('-----------------get attendance error----------------')
