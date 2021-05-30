@@ -21,6 +21,7 @@ import {setProjects} from '../../src/Asyncstorage'
 class Home extends Component {
     state={
         subject:'',
+        todayprj:[],
         projects:[],
         myprojects:[],
         tutorproj:[],
@@ -55,10 +56,15 @@ class Home extends Component {
 
             getprojects()
             .then(res=>{
+                const prj=JSON.parse(JSON.stringify(res.data));
+                const shuffled = prj.sort(() => Math.random() - 0.5)
                 this.setState({
-                    projects: res.data
+                    projects: res.data,
+                    todayprj: shuffled
+
                 })
-            }).catch(err=>
+            })
+            .catch(err=>
                 console.log(err)
             )
         }
@@ -148,7 +154,7 @@ class Home extends Component {
                         horizontal={true}
                         showsHorizontalScrollIndicator = {true}
                         style={styles.projectScroll}>
-                    {this.state.projects.map((project,index)=>{
+                    {this.state.todayprj.map((project,index)=>{
                            return <ProjectMini navigation={this.props.navigation} project={project} key={index}></ProjectMini>
                         })}
                     
