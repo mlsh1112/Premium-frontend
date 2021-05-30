@@ -12,12 +12,12 @@ const CheckUserData = (props) => {
         try{
             await getcurrentuser().then(res => {
                 console.log(res.data);
-                //if(res.data.type === ''){
-                //    props.navigation.replace('KakaoAdditionalInfo')
-                //}
-                //else {
-                //    props.navigation.replace('Main')
-                //}
+                if(res.data.type === null){
+                   props.navigation.replace('KakaoAdditionalInfo',{userinfo: res.data})
+                }
+                else {
+                   props.navigation.replace('Main')
+                }
             }).catch(e => console.log(e))
             
         }

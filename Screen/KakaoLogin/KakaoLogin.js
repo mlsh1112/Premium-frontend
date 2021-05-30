@@ -1,7 +1,7 @@
 import React,{useState,useEffect,useRef} from 'react';
 //import {AsyncStorage} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import {WebView} from 'iamport-react-native/node_modules/react-native-webview';
+import {WebView} from 'react-native-webview';
 import baseurl from '../../config';
 import axios from 'axios';
 import {
