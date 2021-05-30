@@ -4,8 +4,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import baseurl from '../config'
 
 
-const PORT = baseurl.port
-// const PORT = baseurl.sungmin
+// const PORT = baseurl.port
+const PORT = baseurl.sungmin
 
 let formheaders = {
     headers: {
@@ -91,6 +91,7 @@ export const paymentstatus = (params) => API.patch(PORT+`/attendances`,params)
 export const createlike = ( params ) => API.post(PORT + '/likes', params)
 export const deletelike = (id) => API.delete(PORT + `/likes/${id}`)
 export const islike = ( params ) => API.get(PORT+`/likes/is_like`, {params})
+export const getlikes = () => API.get(PORT+'/likes')
 export const getcurrentuser = () => API.get(PORT+'/get_current_user')
 export const tutorgetproject = (params) => API.get(PORT+'/projects',{params})
 export const deleteproject = (projectid) => API.delete(PORT+`/projects/${projectid}`)
