@@ -12,7 +12,16 @@ const Button = ({ onPress, children }) => {
     </View>
   );
 };
-
+const KakaoButton = ({ onPress, children }) => {
+  const { button, text } = styles;
+  return (
+    <View style={{flexDirection: 'row'}}>
+      <TouchableOpacity style={styles.kakaobuttonposition} onPress={onPress}>
+                <Text style={styles.kakaobuttonstyle}>{children}</Text>
+        </TouchableOpacity>
+    </View>
+  );
+};
 const styles = {
     buttonposition:{
         width: 327,
@@ -22,11 +31,24 @@ const styles = {
         alignItems: "center",
         borderRadius: 32
     },
+    kakaobuttonposition:{
+      width: 327,
+      height: 50,
+      backgroundColor: "yellow",
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 32
+    },
     buttonstyle:{
         color:'white',
         fontWeight: 'bold',
         fontSize: 20,
-    }
+    },
+    kakaobuttonstyle:{
+      color:'black',
+      fontWeight: 'bold',
+      fontSize: 20,
+  }
 };
 
-export { Button };
+export { Button,KakaoButton };
