@@ -1,26 +1,21 @@
-import React, { useEffect, useState,useRef } from 'react';
-import { Modal, View, Image,Text,TouchableOpacity,ScrollView,Alert,StyleSheet } from 'react-native';
-import {  Card,IconButton,Colors } from 'react-native-paper';
+import React, { useEffect, useState,useContext } from 'react';
+import { View, Image,Text,TouchableOpacity,ScrollView,Alert,StyleSheet } from 'react-native';
+import { Card } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../colors';
 import {Button} from '../components';
 import firebase,{firestore} from '../../FirebaseConfig/Firebase'
-import {createattendances,getproject,getattendances,getcurrentuser,deleteproject,quitproject,getbookforproject} from '../Api'
+import {createattendances,getproject,getattendances,deleteproject,quitproject,getbookforproject} from '../Api'
+import {CurrentUser} from '../utils/CurrentUser'
 
 const ProjectDetail =(props)=> {
-  // console.log(props)
   var [isJoin,setisJoin]=useState(false)
   var [isExperienced,setisExperienced]=useState(true)
   const project=props.route.params.project
   const [latestpr,setLatestpr] = useState(project)
   const [book,setBook] = useState()
-  const [myinfo,setMyinfo] = useState(
-    {
-      "email": "", "id": -1, "image": "", "info": "", "likes_count": -1, "name": "", "phone": "", "status": "", "type": ""
-    }
-  )
+  const [myinfo,setMyinfo] = useContext(CurrentUser)
   const [chatroom,setChatroom] = useState(null)
-  
   const handleAttendence=()=>{
     console.log(project.id)
     createattendances({
@@ -113,35 +108,30 @@ const ProjectDetail =(props)=> {
     props.navigation.navigate('UpdateProject',{latestpr,myinfo})
   }
   useEffect(()=>{
+    console.log('☆☆☆☆☆☆☆☆☆☆☆☆ context ☆☆☆☆☆☆☆☆☆☆☆☆')
+    console.log(myinfo)
+    console.log('☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆')
     const rerender = props.navigation.addListener('focus', e =>{
       console.log("effect is working")
       console.log(chatroom)
       
       getattendances().then(res=>{
-        getcurrentuser().then(res => {
-          console.log("---------------get current user--------------")
-          console.log(res.data)
-          if(res.data.type === 'Tutor'){
-            const groupsRef = firestore.collection('GROUPS').where('projectID','==',project.id)
-            groupsRef.get().then(res => {
-              res.forEach((r)=>{
-                  console.log('--------------------chat target------------------')
-                  setChatroom(r.data())
-              })
-            }).catch(e => {
-                console.log(e)
-            })
-          }
-          setMyinfo(res.data)
-        }).catch(e => {
-          console.log('============get current user error =========')
-          console.log(e.response.status)
-        })
         if(res.data){
           res.data.map((pr)=>{
             if (pr.project.id === project.id && pr.status === 'trial'){
               setisJoin(true)
             }
+          })
+        }
+        if(myinfo.type === 'Tutor'){
+          const groupsRef = firestore.collection('GROUPS').where('projectID','==',project.id)
+          groupsRef.get().then(res => {
+            res.forEach((r)=>{
+                console.log('--------------------chat target------------------')
+                setChatroom(r.data())
+            })
+          }).catch(e => {
+              console.log(e)
           })
         }
         getproject(project.id).then(res => {
@@ -244,9 +234,13 @@ const ProjectDetail =(props)=> {
             :
               (isExperienced ?
                 <View style={styles.inbuttonStyle}>
-                  { isJoin === false
-                    ? (<Button onPress={()=>{handleAttendence()}}>{latestpr.experience_period} DAYS  체험하기</Button> )
-                    : (<Button onPress={()=>{tuteequitproject()}}>프로젝트 그만두기</Button> )
+                  {
+                    myinfo.type !== 'Tutor'
+                    ?( isJoin === false 
+                      ? (<Button onPress={()=>{handleAttendence()}}>{latestpr.experience_period} DAYS  체험하기</Button> )
+                      : (<Button onPress={()=>{tuteequitproject()}}>프로젝트 그만두기</Button> )
+                    )
+                    : null
                   }
                 </View>
               :
