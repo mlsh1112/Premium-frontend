@@ -12,7 +12,7 @@ function Calender(props){
   const [markedDates,setmarkedDates]=useState()
   const [chapter,setchapter]=useState('')
   const [pickday,setpickday]=useState()
-  let Plans=props.plans.options
+
   function DateSet(){
       var days={}
       var now=moment().format('YYYY-MM-DD');
@@ -21,6 +21,8 @@ function Calender(props){
         console.log("null")
       }
       else{
+
+        let Plans=props.plans.options
         const color=[['#FECCBE','#FD8A69'],['#FEEBB6','#FFCD4A'],['#DDECCA','#AFD485'],['#CCD2F0','#9FA9D8']];
         let colorpick=0;
         let experience_period=props.project.project.experience_period
@@ -54,16 +56,31 @@ function Calender(props){
   } 
 
   const checkPlan=(day)=>{
+    let Plans=props.plans.options
     var date=moment(day.dateString);
+    let duringDay=0
     setpickday(day)
     var isplan=false
     Plans.map(plan=>{
       let difStart = date.diff(moment(plan.start_at),'days')
       let difEnd = date.diff(moment(plan.end_at),'days')
-      if(difStart>=0 && difEnd <=0){
+      duringDay += moment(plan.end_at).diff(moment(plan.start_at),'days')
+      let experience_period=props.project.project.experience_period
+      if(Trial){
+          if(duringDay===experience_period){
+            if(difStart>=0 && difEnd <=0){
+              console.log(plan)
+              setchapter(plan.chapter_id)
+              isplan=true
+              }
+          }
+      }
+      else{
+         if(difStart>=0 && difEnd <=0){
         console.log(plan)
         setchapter(plan.chapter_id)
         isplan=true
+        }
       }
     })
 
