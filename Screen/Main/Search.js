@@ -27,7 +27,11 @@ function SearchCard (props){
   return(
 
     <View style={cardstyles.container}>
-      <Card style={cardstyles.cardPosition}>
+      <TouchableOpacity
+        style={cardstyles.cardPosition}
+        onPress={()=>{
+          props.navigation.navigate('ProjectDetail',{project:project})}}> 
+      <Card style={cardstyles.cardstyle}>
         <Text style={cardstyles.prjName}>{project.title}</Text>
         <Text style={cardstyles.txtstyle}>{project.description}</Text>
         <View style={{flexDirection:'row',marginVertical:5}}>
@@ -36,7 +40,10 @@ function SearchCard (props){
         </View>
         <Text style={cardstyles.txtstyle}>{startDate} 부터 시작</Text>
       </Card>
-      <View style={cardstyles.tutorPosition}>
+      </TouchableOpacity>
+      <TouchableOpacity style={cardstyles.tutorPosition}
+      onPress={()=> props.navigation.navigate('ProfileView',{latestpr:project})}
+      >
         <Image
               style={{
                 width: width*0.2,
@@ -49,7 +56,7 @@ function SearchCard (props){
               }}
             />
           <Text style={cardstyles.tutorName}>{tutor.name}</Text>
-      </View>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -131,7 +138,9 @@ const cardstyles = StyleSheet.create({
   },
   cardPosition:{
     flex:3,
-    padding:13,
+  },
+  cardstyle:{
+    padding:15
   },
   tutorPosition:{
     flex:1,
