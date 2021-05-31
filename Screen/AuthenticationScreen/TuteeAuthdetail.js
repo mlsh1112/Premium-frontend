@@ -30,8 +30,10 @@ const TuteeAutdetail=({navigation,route})=>{
     var [chapter,setChapter]=useState()
 
     if(project.status==='trial'){
+              
         pastDay=project.project.experience_period-remainDay
         percent = Math.floor((auths/project.project.experience_period)*100)
+    
     }
     else{
         pastDay=project.project.duration-remainDay
@@ -40,12 +42,14 @@ const TuteeAutdetail=({navigation,route})=>{
     }
     
   useEffect(()=>{
-      console.log(project.id)
+      
        getPlan({
-        "project_id":project.id
+        "project_id": project.id
       }).then((res)=>{
+        console.log("여긴 plan res")
+        console.log(res.data)
          setPlans(res.data);
-         setChapter(plans.chapter)
+         setChapter(res.chapter)
       })
       .catch((err)=>{
         console.log(err)
@@ -231,5 +235,3 @@ const styles={
 
 
 export default TuteeAutdetail
-
-

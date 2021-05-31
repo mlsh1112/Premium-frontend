@@ -9,6 +9,7 @@ import {
    SafeAreaView,
    Image,
    StatusBar,
+  Picker,
    TextInput,
    TouchableOpacity,
    KeyboardAvoidingView,
@@ -59,6 +60,7 @@ const SignUp=(props)=>{
       "type":userType,
      }
     ).then(() => {
+      alert("회원가입이 성공하였습니다.")
       props.navigation.replace('Signin');
       console.log("Go to Home from sign in ");
     }).catch(error => {

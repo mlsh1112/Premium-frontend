@@ -89,7 +89,7 @@ const TuteeAuthList = ({navigation}) => {
         const callApi = async() =>{
             await getattendances()
             .then(res=>{setProjects(res.data)
-                console.log("Tutee list")
+                console.log("Tutee list 겟어텐던스")
             })
             .catch(err=>{console.log(err)})
         }
