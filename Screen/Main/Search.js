@@ -18,12 +18,14 @@ import { getprojects } from '../../src/Api';
 import colors from '../../src/colors';
 import {setSearchHistory} from '../../src/Asyncstorage'
 import AsyncStorage from '@react-native-community/async-storage';
+import Icon from 'react-native-vector-icons/Feather';
 const moment = require("moment");
 function SearchCard (props){
   const {width,height} = useWindowDimensions();
   const project = props.project
   const tutor = props.project.tutor
   const startDate = moment(project.started_at).format('YYYY-MM-DD')
+  console.log(tutor)
   return(
 
     <View style={cardstyles.container}>
@@ -43,7 +45,8 @@ function SearchCard (props){
       </TouchableOpacity>
       <TouchableOpacity style={cardstyles.tutorPosition}
       onPress={()=> props.navigation.navigate('ProfileView',{latestpr:project})}
-      >
+      >{
+        tutor.image!==" "?
         <Image
               style={{
                 width: width*0.2,
@@ -55,6 +58,10 @@ function SearchCard (props){
                 uri:tutor.image
               }}
             />
+            :
+            <Icon name="user" size={50} style={{margin:25}} color="black" />
+      }
+        
           <Text style={cardstyles.tutorName}>{tutor.name}</Text>
       </TouchableOpacity>
     </View>
@@ -87,6 +94,7 @@ function Search({navigation}) {
     })
 
     const setAsync = async(value)=>{
+      console.log(value)
       await sethistory([value,...history])
       await setSearchHistory(history)
     }
@@ -216,7 +224,8 @@ const cardstyles = StyleSheet.create({
       flexDirection:'row',
       padding:10,
       marginVertical:10,
-      borderRadius:10
+      borderRadius:10,
+      width:'100%'
   },
   cardPosition:{
     flex:3,
@@ -227,7 +236,7 @@ const cardstyles = StyleSheet.create({
   tutorPosition:{
     flex:1,
     alignContent:'center',
-    justifyContent:'center'
+    justifyContent:'center',
   },
   tutorName:{
     fontWeight:'bold',
@@ -244,7 +253,8 @@ const cardstyles = StyleSheet.create({
     color:'gray'
   },
   searchCard:{
-    padding:20
+    padding:20,
+    marginBottom:5
   },
   searchTxt:{
     fontSize:15,
