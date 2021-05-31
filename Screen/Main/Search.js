@@ -105,7 +105,8 @@ function Search({navigation}) {
            <Searchbar
                 placeholder="Search"
                 onChangeText={ChangeSearchData}
-                onIconPress={SearchVal}
+                //onIconPress={SearchVal}
+                onSubmitEditing={SearchVal}
                 onKeyPress={(e)=>{if(e.key==='Enter')
                 console.log('엔터클릭')
             }}
