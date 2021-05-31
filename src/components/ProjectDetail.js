@@ -4,7 +4,7 @@ import {  Card,IconButton,Colors } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../colors';
 import {Button} from '../components';
-import {createattendances,getproject,getattendances,getcurrentuser,deleteproject,quitproject} from '../Api'
+import {createattendances,getproject,getattendances,getcurrentuser,deleteproject,quitproject,getbookforproject} from '../Api'
 
 const ProjectDetail =(props)=> {
   // console.log(props)
@@ -12,6 +12,7 @@ const ProjectDetail =(props)=> {
   var [isExperienced,setisExperienced]=useState(true)
   const project=props.route.params.project
   const [latestpr,setLatestpr] = useState(project)
+  const [book,setBook] = useState()
   const [myinfo,setMyinfo] = useState(
     {
       "email": "", "id": -1, "image": "", "info": "", "likes_count": -1, "name": "", "phone": "", "status": "", "type": ""
@@ -87,10 +88,22 @@ const ProjectDetail =(props)=> {
       console.log(error)
     }
   }
+  const gotoupdateproject = () => {
+    console.log('프로젝트 수정하러가기')
+    props.navigation.navigate('UpdateProject',{latestpr,myinfo})
+  }
   useEffect(()=>{
     const rerender = props.navigation.addListener('focus', e =>{
       console.log("effect is working")
       getattendances().then(res=>{
+        getcurrentuser().then(res => {
+          console.log("---------------get current user--------------")
+          console.log(res.data)
+          setMyinfo(res.data)
+        }).catch(e => {
+          console.log('============get current user error =========')
+          console.log(e.response.status)
+        })
         if(res.data){
           res.data.map((pr)=>{
             if (pr.project.id === project.id && pr.status === 'trial'){
@@ -98,16 +111,16 @@ const ProjectDetail =(props)=> {
             }
           })
         }
+        
         getproject(project.id).then(res => {
           console.log("---------------getproject--------------")
           console.log(res.data)
           setLatestpr(res.data)
-          getcurrentuser().then(res => {
+          getbookforproject(res.data.book_id).then(res => {
             console.log(res.data)
-            setMyinfo(res.data)
+            setBook(res.data)
           }).catch(e => {
-            console.log('============get current user error =========')
-            console.log(e.response.status)
+            console.log(e)
           })
         }).catch(e => {
           console.log("---------------getproject error--------------")
@@ -118,10 +131,11 @@ const ProjectDetail =(props)=> {
         console.log("---------------getattendances error--------------")
         console.log(err)
       })
+      
     })
   },[props.navigation])
   return (
-      <View style={styles.position}>
+    <View style={styles.position}>
         <ScrollView>
         <Card style={styles.cardStyle}>
           <View style={{margin:20}}>
@@ -159,38 +173,56 @@ const ProjectDetail =(props)=> {
             <Text style={styles.headStyle} >프로젝트 기간</Text>
             <Text style={styles.describeStyle}>{latestpr.duration} DAYS</Text>
           </View>
+          <View style={styles.eee}>
+            <Text style={styles.headStyle} >시작 날짜</Text>
+            <Text style={styles.describeStyle}>{(latestpr.started_at).substring(0,10)} 부터</Text>
+          </View>
+            {book !== undefined
+              ?(<View style={styles.eee}>
+                  <Text style={styles.headStyle} >교재</Text>
+                  <Image source={{uri: book.image}} style={{width: 200,height: 300}}/>
+                  <Text style={[styles.describeStyle,{marginTop: 5}]}>책 제목 : {book.title}</Text>
+                </View>)
+              : null
+            }
+          
+          </View>
+          <View style={styles.buttonStyle}>
+            {latestpr.tutor.email === myinfo.email
+            ?(
+              <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',height: '70%',}}>
+                  <TouchableOpacity style={{width: '40%',height:'100%',backgroundColor:colors.maincolor,justifyContent:'center',alignItems:'center',borderRadius: 20,}} onPress={() => {gotoupdateproject()}}>
+                    <Text style={{fontSize: 16,color: 'white',fontWeight: 'bold'}}>프로젝트 수정하기</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{width: '40%',height:'100%',backgroundColor:colors.maincolor,justifyContent:'center',alignItems:'center',borderRadius: 20,}} onPress={() => {tutordeleteproject()}}>
+                    <Text style={{fontSize: 16,color: 'white',fontWeight: 'bold'}}>프로젝트 삭제하기</Text>
+                  </TouchableOpacity>
+              </View>
+            )
+            :
+              (isExperienced ?
+                <View style={styles.inbuttonStyle}>
+                  { isJoin === false
+                    ? (<Button onPress={()=>{handleAttendence()}}>{latestpr.experience_period} DAYS  체험하기</Button> )
+                    : (<Button onPress={()=>{tuteequitproject()}}>프로젝트 그만두기</Button> )
+                  }
+                </View>
+              :
+                <View style={styles.inbuttonStyle}>
+                  { isJoin === false 
+                    ? (<Button onPress={()=>{
+                      //handleAttendence()
+                    }}>프로젝트 신청하기</Button> 
+                    )
+                    :(<Button onPress={()=>{tuteequitproject()}}>프로젝트 그만두기</Button> )
+                  }
+                </View>)
+            }
+
           </View>
         </Card>
-        <View style={styles.buttonStyle}>
-          {latestpr.tutor.email === myinfo.email
-          ?(
-            <View style={styles.inbuttonStyle}>
-              <Button onPress={() => {tutordeleteproject()}}>프로젝트 삭제하기</Button>
-            </View>
-          )
-          :
-            (isExperienced ?
-              <View style={styles.inbuttonStyle}>
-                { isJoin === false
-                  ? (<Button onPress={()=>{handleAttendence()}}>{latestpr.experience_period} DAYS  체험하기</Button> )
-                  : (<Button onPress={()=>{tuteequitproject()}}>프로젝트 그만두기</Button> )
-                }
-              </View>
-            :
-              <View style={styles.inbuttonStyle}>
-                { isJoin === false 
-                  ? (<Button onPress={()=>{
-                    //handleAttendence()
-                  }}>프로젝트 신청하기</Button> 
-                  )
-                  :(<Button onPress={()=>{tuteequitproject()}}>프로젝트 그만두기</Button> )
-                }
-              </View>)
-          }
-          
-        </View>
-        </ScrollView>
         
+        </ScrollView>
       </View>
     );
   
@@ -199,10 +231,12 @@ const ProjectDetail =(props)=> {
 
   const styles={
     position:{
-      margin:20
+      //margin:20
+      marginTop:20,
+      marginHorizontal:20
     },
     cardStyle:{
-      height:'89%'
+      height:'100%'
     },
     titleStyle:{
       fontWeight:'bold',
@@ -253,11 +287,10 @@ const ProjectDetail =(props)=> {
       marginBottom:30
     },
     buttonStyle:{
-      marginTop:20,
-      marginRight:25,
       flex:1,
       width: "100%",
       justifyContent:'center',
+      height: 100,
     },
     inbuttonStyle: {
       width:'100%',

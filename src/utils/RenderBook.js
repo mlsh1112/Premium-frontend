@@ -1,17 +1,19 @@
 import React from 'react';
 import {
+    StyleSheet,
     View,
+    Text,
     TouchableOpacity,
     Image,
-    Text,
 } from 'react-native';
 
-export function RenderBook({booklist}){
+
+export function RenderBook({booklist,registerBook}){
     return(
         <View style={styles.booklist}>
                   {booklist.map((book,key) => {
                     return(
-                      <TouchableOpacity style={styles.book} key={key} onPress={()=> console.log(book)}>
+                      <TouchableOpacity style={styles.book} key={key} onPress={()=> registerBook(book)}>
                         <Image style={styles.thumbnail} source={{uri: book.thumbnail}} />
                         <View>
                             <Text style={styles.booktitle}>제목 : {book.title}</Text>
@@ -25,7 +27,6 @@ export function RenderBook({booklist}){
 }
 
 const styles = StyleSheet.create({
-
     booklist: {
         flex:1,
         padding: 10,
@@ -51,5 +52,5 @@ const styles = StyleSheet.create({
     author: {
         paddingHorizontal: 15,
         paddingVertical: 4,
-    },
-  });
+    }
+})

@@ -16,28 +16,28 @@ export default function Tabnavigation(){
     return (
         <TabNavigator.Navigator initialRouteName='Home'>
             <TabNavigator.Screen name="Home" component={ProjectNavi} options={{
-                                tabBarLabel: 'Home',
+                                tabBarLabel: '홈',
                                 tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="home" color={color} size={26} />
           ),
         }}
       />
             <TabNavigator.Screen name="Search" component={Search} options={{
-          tabBarLabel: 'Search',
+          tabBarLabel: '검색',
           tabBarIcon: ({ color }) => (
             <Ionicons name="search" color={color} size={26} />
           ),
         }}
       />
             <TabNavigator.Screen name="Authentication" component={AuthNamvi} options={{
-          tabBarLabel: 'Authentication',
+          tabBarLabel: '인증',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="checkbox-marked-outline" color={color} size={26} />
           ),
         }}
       />
             <TabNavigator.Screen name="Profile" component={createProjectStackNav} options={{
-          tabBarLabel: 'Profile',
+          tabBarLabel: '프로필',
           tabBarIcon: ({ color }) => (
             <Ionicons name="person" color={color} size={26} />
           ),

@@ -12,9 +12,11 @@ const moment = require("moment");
 
 const ProjectAuthCard = ({navigation,project}) => {
     console.log(project)
-    const startDate = moment(project.project.started_at)
-    const now = moment()
-    const remainDay = now.diff(startDate,'days') //시작하는 날짜가 0일차
+    const now = moment().format('YYYY-MM-DD')
+    const startDate = moment(project.project.started_at).format('YYYY-MM-DD')
+    const realnow = moment(now)
+    const realstartDate = moment(startDate)
+    const remainDay = realnow.diff(realstartDate,'days') //시작하는 날짜가 0일차
     var pastDay = project.project.duration
     if(remainDay >= 0){
         pastDay = project.project.duration - remainDay
@@ -27,24 +29,28 @@ const ProjectAuthCard = ({navigation,project}) => {
                     <View style={{margin:15, marginLeft:27}}>
                     <Text style={cardstyles.textstyle}>{project.project.title}</Text>
                     <View style={{marginTop:5}}>
-                    {remainDay >= 0?
-                        <View style={{flexDirection:'row',margin:2}}>
-                        <Text style={cardstyles.dayStyle}>{remainDay+1} </Text>
-                        <Text style={cardstyles.dayStyle2}>번째 인증</Text>
-                        </View>
-                        :
-                        <View style={{flexDirection:'row',margin:2}}>
-                        <Text style={cardstyles.dayStyle}>프로젝트</Text>
-                        <Text style={cardstyles.dayStyle2}> 시작 전입니다.</Text>
-                        </View>
-                        }
-                        {
-                        pastDay<1?
-                        <Text style={cardstyles.dayStyle3}>프로젝트가 끝났습니다.</Text>
-                        :
-                        <Text style={cardstyles.dayStyle3}>남은 일일인증 {pastDay}개</Text>
-
-                    }
+                    {   remainDay >= 0
+                                        ?   <View>
+                                                <View style={{flexDirection:'row',margin:5}}>
+                                                    <Text style={cardstyles.dayStyle}>{remainDay + 1} </Text>
+                                                    <Text style={cardstyles.dayStyle2}>번째 인증</Text>
+                                                </View>
+                                                { pastDay < 1
+                                                    ? <Text style={cardstyles.dayStyle3}>프로젝트가 끝났습니다.</Text>
+                                                    : <Text style={cardstyles.dayStyle3}>남은 일일인증 {pastDay - 1}개</Text>
+                                                }
+                                            </View>
+                                        :   <View>
+                                                <View style={{flexDirection:'row',margin:2}}>
+                                                    <Text style={cardstyles.dayStyle}>프로젝트</Text>
+                                                    <Text style={cardstyles.dayStyle2}> 시작 전입니다.</Text>
+                                                </View>
+                                                { pastDay < 1
+                                                    ? <Text style={cardstyles.dayStyle3}>프로젝트가 끝났습니다.</Text>
+                                                    : <Text style={cardstyles.dayStyle3}>남은 일일인증 {pastDay}개</Text>
+                                                }
+                                            </View>
+                                    }
                     </View>
                     </View>
                 </View>

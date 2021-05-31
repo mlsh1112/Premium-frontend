@@ -6,7 +6,7 @@ import {
     View,
     Text,
     ScrollView,
-
+    LogBox,
   } from 'react-native';
 import { Card } from 'react-native-paper';
 import Calender from '../../src/components/Calender'
@@ -57,13 +57,10 @@ const TuteeAutdetail=({navigation,route})=>{
         console.log(err)
       })
 
+      LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
 
-      
   },[])
-  
-  console.log("------------------1")
   console.log(project)
-  console.log("---------------------2")
   console.log(plans)
   return(
     <ScrollView >
@@ -154,7 +151,7 @@ const TuteeAutdetail=({navigation,route})=>{
 
       <View style={styles.todayplanBack}>
         <Text style={styles.titleTxt}>{project.project.title} 전체 일정 💫</Text>
-        <Calender plans={plans}  project={project}/>
+        <Calender plans={plans} project={project}/>
       </View>
     </ScrollView>
   )

@@ -2,7 +2,7 @@ import React, { Component, useState} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import TodayProject from '../../src/components/TodayProjectHome'
 import ProjectMini from '../../src/components/ProjectMini'
-import {getprojects,getattendances,gettutorprojs} from '../../src/Api'
+import {getprojects,getattendances,gettutorprojs,getcurrentuser} from '../../src/Api'
 import colors from '../../src/colors'
 import homelogo from '../../assets/homeLogo2.png';
 import card1 from '../../assets/cardNews1/cardNews1-001.png'
@@ -20,6 +20,7 @@ import {setProjects} from '../../src/Asyncstorage'
 class Home extends Component {
     state={
         subject:'',
+        todayprj:[],
         projects:[],
         myprojects:[],
         tutorproj:[],
@@ -31,12 +32,11 @@ class Home extends Component {
     componentDidMount() {
         
         const getData = async()=>{
-            await AsyncStorage.getItem('userinfo')
+            await getcurrentuser()
             .then(res=>{
-                this.setState({user:JSON.parse(res)})
+                this.setState({user:res.data})
             })
             .catch(err=>console.log("여긴 겟데이터 에러"+err))
-
 
             if(this.state.user.type==='Tutee'){
                 console.log('User state : tutee')
@@ -53,10 +53,15 @@ class Home extends Component {
 
             getprojects()
             .then(res=>{
+                const prj=JSON.parse(JSON.stringify(res.data));
+                const shuffled = prj.sort(() => Math.random() - 0.5)
                 this.setState({
-                    projects: res.data
+                    projects: res.data,
+                    todayprj: shuffled
+
                 })
-            }).catch(err=>
+            })
+            .catch(err=>
                 console.log(err)
             )
         }
@@ -170,7 +175,7 @@ class Home extends Component {
                         horizontal={true}
                         showsHorizontalScrollIndicator = {true}
                         style={styles.projectScroll}>
-                    {this.state.projects.map((project,index)=>{
+                    {this.state.todayprj.map((project,index)=>{
                            return <ProjectMini navigation={this.props.navigation} project={project} key={index}></ProjectMini>
                         })}
                     
