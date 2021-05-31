@@ -61,6 +61,8 @@ function SearchCard (props){
   )
 }
 
+
+
 function Search({navigation}) {
   const [Searchblur,SetSearchblur]=useState(false);
   const [SearchData,SetSearchData]=useState("");
@@ -84,9 +86,9 @@ function Search({navigation}) {
       SetSearchData(text);
     })
 
-    const setAsync = (value)=>{
-      sethistory([value,...history])
-      setSearchHistory(history)
+    const setAsync = async(value)=>{
+      await sethistory([value,...history])
+      await setSearchHistory(history)
     }
     
     async function SearchVal (){
@@ -95,32 +97,55 @@ function Search({navigation}) {
       }
       else{
         console.log(SearchData)
-        await setEnterSearch(SearchData)
-        await setAsync(SearchData)
+        sethistory([SearchData,...history])
+        setSearchHistory(history)
+        setEnterSearch(SearchData)
+        setAsync(SearchData)
         const query = {title_or_description_i_cont: SearchData}
         const data = (await getprojects({ q: query})).data
         SetreqData(data)
 
       }
     }
-
-
     useEffect(()=>{
       if(Searchblur){
         SetSearchblur(false)
       }
       AsyncStorage.getItem('keyword')
       .then(req => JSON.parse(req))
-      .then(json => setKeywords(json))
+      .then(json =>{ 
+        console.log(json)
+        setKeywords(json)
+      })
       .catch(error => console.log('error!'))
-      // .then(res=>{
-      //   console.log('get keyword',res)
-      //   setKeywords(JSON.parse(JSON.stringify(res)))
-      //   console.log(keywords)
-      // })
-      // .catch(err=>console.log(err))
 
     },[reqData])
+
+    async function pressHistory (value){
+      console.log(value)
+      setEnterSearch(value)
+      setAsync(value)
+      const query = {title_or_description_i_cont: value}
+      const data = (await getprojects({ q: query})).data
+      SetreqData(data)
+    }
+    const SearchHistoryCard = (props) =>{
+      const keyword = props.value
+      return(
+        <TouchableOpacity onPress={()=>pressHistory(keyword)} >
+          <Card style={cardstyles.searchCard}>
+            <Text style={cardstyles.searchTxt}>{keyword}</Text>
+          </Card>
+          
+        </TouchableOpacity>
+      )
+    }
+
+
+
+
+
+
   return(
     <SafeAreaView style={{flex:1}}>
     <View style={{flex:1}} >
@@ -167,8 +192,8 @@ function Search({navigation}) {
                  keywords?
                  <>
                   {
-                    keywords.map((key,index)=>{
-                      return <Text>{key}</Text>
+                    keywords.map((keyword,index)=>{
+                      return <SearchHistoryCard value={keyword} key={index}/>
                     })
                   }
                  </>
@@ -217,6 +242,13 @@ const cardstyles = StyleSheet.create({
   },
   txtstyle:{
     color:'gray'
+  },
+  searchCard:{
+    padding:20
+  },
+  searchTxt:{
+    fontSize:15,
+    fontWeight:'bold'
   }
 })
 
