@@ -7,22 +7,53 @@ import {
     Image,
     Text,
     View,
-    Body,
-    ImageBackground,
-    Button,
     StyleSheet,
-    TextInput,
     Dimensions,
-    ScrollView,
-    StatusBar,
-    Alert,
+    useWindowDimensions,
     FlatList,
     Keyboard,
     TouchableOpacity
   } from 'react-native';
-import {Searchbar } from 'react-native-paper'
+import {Searchbar,Card } from 'react-native-paper'
 import { getprojects } from '../../src/Api';
 import ProjectMini from '../../src/components/ProjectMini'
+import colors from '../../src/colors';
+const moment = require("moment");
+function SearchCard (props){
+  const {width,height} = useWindowDimensions();
+  const project = props.project
+  const tutor = props.project.tutor
+  const startDate = moment(project.started_at).format('YYYY-MM-DD')
+  return(
+
+    <View style={cardstyles.container}>
+      <Card style={cardstyles.cardPosition}>
+        <Text style={cardstyles.prjName}>{project.title}</Text>
+        <Text style={cardstyles.txtstyle}>{project.description}</Text>
+        <View style={{flexDirection:'row',marginVertical:5}}>
+        <Text style={cardstyles.txtstyle}>{project.deposit} 원  |  </Text>
+        <Text style={cardstyles.txtstyle}>{project.duration} 일</Text>
+        </View>
+        <Text style={cardstyles.txtstyle}>{startDate} 부터 시작</Text>
+      </Card>
+      <View style={cardstyles.tutorPosition}>
+        <Image
+              style={{
+                width: width*0.2,
+                height: height*0.1,
+                borderRadius:10,
+                marginLeft:10
+              }}
+              source={{
+                uri:tutor.image
+              }}
+            />
+          <Text style={cardstyles.tutorName}>{tutor.name}</Text>
+      </View>
+    </View>
+  )
+}
+
 function Search({navigation}) {
   const [Searchblur,SetSearchblur]=useState(false);
   const [SearchData,SetSearchData]=useState("");
@@ -53,17 +84,16 @@ function Search({navigation}) {
       if(Searchblur){
         SetSearchblur(false)
       }
-      console.log(navigation
-)
+      console.log(navigation)
     },[reqData])
   return(
     <SafeAreaView style={{flex:1}}>
     <View style={{flex:1}} >
       <View
-                    style={{height:80,
-                    backgroundColor:'#1FCC79',
+            style={{height:80,
+                    backgroundColor:colors.maincolor,
                     justifyContent:'center',
-                    paddingHorizontal:5,
+                    paddingHorizontal:8,
                 }}>
            <Searchbar
                 placeholder="Search"
@@ -73,24 +103,16 @@ function Search({navigation}) {
                 console.log('엔터클릭')
             }}
             />
+            
         </View>
       <View style={styles.Searchlist}>
         <FlatList
-           style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':'white'}}
+           //style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':''}}
            data={reqData}
            keyExtractor={(item,index)=>index.toString()}
-           renderItem={({item})=>
-          <TouchableOpacity style={styles.Serach}onPress={()=>{
-             console.log(item)
-             navigation.navigate('ProjectDetail',{project:item})}}>
-              <Image style={styles.thumbnail} source={cat}>
-              </Image>
-              <View>
-                <Text style={styles.Serachtitle}>제목 : {item.title}</Text>
-                <Text style={styles.Serachtitle}>프로젝트 설명 :{item.description} {item.title}</Text>
-                <Text style={styles.Serachtitle}>체험 일수 : {item.experience_period}</Text>
-              </View>
-            </TouchableOpacity>
+           renderItem={({item,index})=>
+           <SearchCard navigation={navigation} project={item} key={index}></SearchCard>
+
         }
           />
         </View>
@@ -98,6 +120,40 @@ function Search({navigation}) {
     </SafeAreaView>
   )
 }
+
+const cardstyles = StyleSheet.create({
+  container:{
+      flex:1,
+      flexDirection:'row',
+      padding:10,
+      marginVertical:10,
+      borderRadius:10
+  },
+  cardPosition:{
+    flex:3,
+    padding:13,
+  },
+  tutorPosition:{
+    flex:1,
+    alignContent:'center',
+    justifyContent:'center'
+  },
+  tutorName:{
+    fontWeight:'bold',
+    fontSize:16,
+    marginLeft:'25%',
+    padding:7
+  },
+  prjName:{
+    fontSize:17,
+    fontWeight:'bold',
+    marginVertical:5
+  },
+  txtstyle:{
+    color:'gray'
+  }
+})
+
 const styles = StyleSheet.create({
   Searchlist: {
       flex:1,
