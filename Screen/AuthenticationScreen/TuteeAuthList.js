@@ -57,10 +57,14 @@ const ProjectAuthCard = ({navigation,project}) => {
                 </View>
                 </TouchableOpacity>
             </Card>
-
-            <TouchableOpacity style={{}} onPress={()=>{navigation('TuteeAuthdetail',{project,remainDay})}}>
+            {remainDay < 0?
+            <View style={{width:90,height:100}}></View>
+            :
+            <TouchableOpacity  onPress={()=>{navigation('TuteeAuthdetail',{project,remainDay})}}>
                     <Image source={authBtn} style={{width:90,height:100}}></Image>
                     </TouchableOpacity>
+            }
+
             </View>
 
     )
@@ -72,28 +76,11 @@ const TuteeAuthList = ({navigation}) => {
 
 
     useEffect(() => {
-            
-        const getData = async() =>{
-            await AsyncStorage.getItem('userinfo')
-            .then(res=>{
-                setUser(JSON.parse(res))
-            })
-            .catch(err=>console.log(err))
+        console.log("Auth")
+        getattendances()
+        .then(res=>setProjects(res.data))
+        .catch(err => console.log('attendances',err))
 
-            await AsyncStorage.getItem('projects')
-            .then(res=>setProjects(JSON.parse(res)))
-            .catch(err=>console.log(err))
-        }
-
-       // getData()
-        const callApi = async() =>{
-            await getattendances()
-            .then(res=>{setProjects(res.data)
-                console.log("Tutee list 겟어텐던스")
-            })
-            .catch(err=>{console.log(err)})
-        }
-        callApi()
     },[]);
     return (
         <View style={styles.container}>

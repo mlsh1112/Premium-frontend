@@ -105,7 +105,7 @@ const ProjectForm =(props)=> {
                 
 
                 <Text style={styles.subtitle}>2. 프로젝트 시작 일자</Text>
-                  <TextInput
+                  {/* <TextInput
                     name="startDate"
                     style={styles.textInput}
                     value={new Date(date - timezoneOffset).toISOString().substring(0,10)}
@@ -115,26 +115,29 @@ const ProjectForm =(props)=> {
                       setIsDateTimePickerVisible(true)
                       }
                     }
-                  />
-                  {isDateTimePickerVisible && (
+                  /> */}
+                  {/* {isDateTimePickerVisible && ( */}
                       <RNDateTimePicker
                         style={{width: 320, backgroundColor: "white"}}
                         value={new Date()}
                         minimumDate={tommorow}
                         onChange={(event,selectedDate)=> {
                           console.log(event)
+                          console.log(selectedDate)
+                          setFieldValue('startDate',selectedDate)
                           if (event.type === 'set'){
-                            setIsDateTimePickerVisible(false)
+                            // setIsDateTimePickerVisible(false)
                             setDate(selectedDate)
-                            setFieldValue('startDate',selectedDate)
+                            
+                            // setFieldValue('startDate',selectedDate)
                           }
                           else {
-                            setIsDateTimePickerVisible(false)
+                            // setIsDateTimePickerVisible(false)
                             console.log("cancel test")
                           }
                         }}
                       />
-                  )}
+                  {/* )} */}
                 <RenderError errors={errors.startDate} touched={touched.startDate} />
                 
                   <Text style={styles.subtitle}>

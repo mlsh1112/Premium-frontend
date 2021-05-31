@@ -67,33 +67,7 @@ class Home extends Component {
         }
        
         getData()
-    
-        const getApi = async()=>{
-            await getattendances()
-            .then((res)=>{
-                console.log("여긴 콜백x 성공")
-                this.setState({myprojects:res.data})})
-            .catch(err => console.log('콜백 x:attendances',err))
-
-        //    await gettutorprojs()
-          //  .then(res=>this.setState({tutorproj:res.data}))
-            //.catch(err=>console.log("gettutorprojs"+err))
-        }
-
-       getApi()
-
-
-       getprojects()
-        .then(res=>{
-            this.setState({
-                projects: res.data
-            })
-        })
-        .catch(err=>
-            console.log("여긴 겟프로젝트 에러"+err)
-        )
         
-
     }
     
     render() {

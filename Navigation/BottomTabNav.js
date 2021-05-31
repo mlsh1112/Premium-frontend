@@ -36,6 +36,13 @@ export default function Tabnavigation(){
           ),
         }}
       />
+      <TabNavigator.Screen name="Chatting" component={AuthNamvi} options={{
+          tabBarLabel: '채팅',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="chat-outline" color={color} size={26} />
+          ),
+        }}
+      />
             <TabNavigator.Screen name="Profile" component={createProjectStackNav} options={{
           tabBarLabel: '프로필',
           tabBarIcon: ({ color }) => (
