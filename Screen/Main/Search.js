@@ -76,22 +76,24 @@ function Search({navigation}) {
         SetSearchblur(false);
       }
       SetSearchData(text);
-      console.log(SearchData);
+      //console.log(SearchData);
     })
     async function SearchVal (){
       if(SearchData.length<=0){
         alert("2글자 이상의 검색어를 입력해주세요")
       }
-      const query = {title_or_description_i_cont: SearchData}
-      const data = (await getprojects({ q: query})).data
-      console.log(data)
-      SetreqData(data)
+      else{
+        const query = {title_or_description_i_cont: SearchData}
+        const data = (await getprojects({ q: query})).data
+        //console.log(data)
+        SetreqData(data)
+      }
     }
     useEffect(()=>{
       if(Searchblur){
         SetSearchblur(false)
       }
-      console.log(navigation)
+
     },[reqData])
   return(
     <SafeAreaView style={{flex:1}}>
@@ -123,7 +125,7 @@ function Search({navigation}) {
 
         }
           />
-        </View>
+      </View>
     </View>
     </SafeAreaView>
   )
