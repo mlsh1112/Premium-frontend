@@ -7,14 +7,11 @@ import ProjectTrial from '../src/components/ProjectTrial'
 import ProfileView from '../src/components/ProfileView'
 import ProjectMini from '../src/components/ProjectMini'
 import CardNews from '../src/components/CardNews'
-<<<<<<< HEAD
 import Modifyprofile from '../src/components/Modifyprofile'
-=======
 import UpdateProject from '../Screen/UpdateProject/UpdateProject'
 import MyLike from '../src/components/MyLike'
 import Book from '../Screen/makeProjectScreen/Book'
 import Chapter from '../Screen/makeProjectScreen/Chapter'
->>>>>>> 23a8199d51a41b742daf4b5d4bf88f35b2f55323
 const Stack = createStackNavigator();
 
 export default function ProjectNavigation(){
