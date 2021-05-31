@@ -24,7 +24,6 @@ export default function createProjectStackNav(){
             <StackForCreatePrj.Screen name="ProjectForm" component={ProjectForm} options={{title: "프로젝트 생성",headerTitleStyle: {fontWeight: 'bold'}}}/>
             <StackForCreatePrj.Screen name="Book" component={Book} options={{headerTitle: "책 선택",headerTitleStyle: {fontWeight: 'bold'}}}/>
             <StackForCreatePrj.Screen name="Chapter" component={Chapter} options={{headerTitle: "챕터 가중치 설정",headerTitleStyle: {fontWeight: 'bold'}}}/>
-            <StackForCreatePrj.Screen name="Authentication" component={AuthNamvi} />
             <StackForCreatePrj.Screen name="SchoolAuth" component={SchoolAuth} options={{headerTitle: "학교 인증",headerTitleStyle: {fontWeight: 'bold'}}}/>
             <StackForCreatePrj.Screen name="Projectcard" component={Projectcard} options={{headerShown: false}}/>
             <StackForCreatePrj.Screen name="ProjectDetail" component={ProjectDetail} options={{headerTitle: '프로젝트 상세보기',headerTitleStyle: {fontWeight: 'bold'}}}/>

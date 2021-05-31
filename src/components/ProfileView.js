@@ -24,7 +24,7 @@ function ProfileView({ navigation,route }){
             <Card style={styles.cardStyle}>
                 <View style={styles.topPosition}>
                     <View style={styles.profilePosition}> 
-                        <Image source={cat} style={styles.imgStyle}></Image>
+                        <Image source={{uri:project.tutor.image}} style={styles.imgStyle}></Image>
                         <View style={{flexDirection : 'row',alignItems: 'center',justifyContent:'space-between',width:'100%'}}>
                             <View >
                                 <View style={{flexDirection:'row',marginBottom:10}}>

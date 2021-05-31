@@ -7,33 +7,67 @@ import {
     Image,
     Text,
     View,
-    Body,
-    ImageBackground,
-    Button,
     StyleSheet,
-    TextInput,
     Dimensions,
-    ScrollView,
-    StatusBar,
-    Alert,
+    useWindowDimensions,
     FlatList,
     Keyboard,
     TouchableOpacity
   } from 'react-native';
-import {Searchbar } from 'react-native-paper'
+import {Searchbar,Card } from 'react-native-paper'
 import { getprojects } from '../../src/Api';
 import ProjectMini from '../../src/components/ProjectMini'
+import colors from '../../src/colors';
+const moment = require("moment");
+function SearchCard (props){
+  const {width,height} = useWindowDimensions();
+  const project = props.project
+  const tutor = props.project.tutor
+  const startDate = moment(project.started_at).format('YYYY-MM-DD')
+  return(
+
+    <View style={cardstyles.container}>
+      <TouchableOpacity
+        style={cardstyles.cardPosition}
+        onPress={()=>{
+          props.navigation.navigate('ProjectDetail',{project:project})}}> 
+      <Card style={cardstyles.cardstyle}>
+        <Text style={cardstyles.prjName}>{project.title}</Text>
+        <Text style={cardstyles.txtstyle}>{project.description}</Text>
+        <View style={{flexDirection:'row',marginVertical:5}}>
+        <Text style={cardstyles.txtstyle}>{project.deposit} 원  |  </Text>
+        <Text style={cardstyles.txtstyle}>{project.duration} 일</Text>
+        </View>
+        <Text style={cardstyles.txtstyle}>{startDate} 부터 시작</Text>
+      </Card>
+      </TouchableOpacity>
+      <TouchableOpacity style={cardstyles.tutorPosition}
+      onPress={()=> props.navigation.navigate('ProfileView',{latestpr:project})}
+      >
+        <Image
+              style={{
+                width: width*0.2,
+                height: height*0.1,
+                borderRadius:10,
+                marginLeft:10
+              }}
+              source={{
+                uri:tutor.image
+              }}
+            />
+          <Text style={cardstyles.tutorName}>{tutor.name}</Text>
+      </TouchableOpacity>
+    </View>
+  )
+}
 
 function Search({navigation}) {
   const [Searchblur,SetSearchblur]=useState(false);
   const [SearchData,SetSearchData]=useState("");
-
   const [isLoading,SetIsLoading]=useState(false);
   const [reqData,SetreqData]=useState([])
-  
   let ScreenWidth = Dimensions.get('window').width    //screen 너비
   let ScreenHeight = Dimensions.get('window').height   //height 높이
-  
   const ChangeSearchData=((text)=>{
       if(text){
         SetSearchblur(true);
@@ -44,80 +78,97 @@ function Search({navigation}) {
       SetSearchData(text);
       console.log(SearchData);
     })
-  
     async function SearchVal (){
       if(SearchData.length<=0){
         alert("2글자 이상의 검색어를 입력해주세요")
       }
       const query = {title_or_description_i_cont: SearchData}
       const data = (await getprojects({ q: query})).data
-
       console.log(data)
       SetreqData(data)
     }
-    
     useEffect(()=>{
       if(Searchblur){
         SetSearchblur(false)
       }
-      console.log(navigation
-)
+      console.log(navigation)
     },[reqData])
-  
   return(
     <SafeAreaView style={{flex:1}}>
     <View style={{flex:1}} >
       <View
-                    style={{height:80,
-                    backgroundColor:'#1FCC79',
+            style={{height:80,
+                    backgroundColor:colors.maincolor,
                     justifyContent:'center',
-                    paddingHorizontal:5,
+                    paddingHorizontal:8,
                 }}>
            <Searchbar
                 placeholder="Search"
                 onChangeText={ChangeSearchData}
-                onIconPress={SearchVal}
+                //onIconPress={SearchVal}
+                onSubmitEditing={SearchVal}
                 onKeyPress={(e)=>{if(e.key==='Enter')
                 console.log('엔터클릭')
-              
             }}
             />
             
         </View>
       <View style={styles.Searchlist}>
         <FlatList
-           style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':'white'}}
+           //style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':''}}
            data={reqData}
-           renderItem={({item,index})=>{{
-          <TouchableOpacity style={styles.Serach}onPress={()=>{
-             console.log(item)
-             navigation.navigate('ProjectDetail',{project:item})}}>
+           keyExtractor={(item,index)=>index.toString()}
+           renderItem={({item,index})=>
+           <SearchCard navigation={navigation} project={item} key={index}></SearchCard>
 
-              <Image style={styles.thumbnail} source={{url:'https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F464248%3Ftimestamp%3D20210325144241'}}></Image>
-              <View>
-                <Text style={styles.Serachtitle}>제목 : {item.title}</Text>
-                <Text style={styles.Serachtitle}>프로젝트 설명 :{item.description} {item.title}</Text>
-                <Text style={styles.Serachtitle}>체험 일수 : {item.experience_period}</Text>
-                
-              </View>
-            </TouchableOpacity>
-            } 
-          }
         }
           />
         </View>
     </View>
     </SafeAreaView>
   )
-
 }
+
+const cardstyles = StyleSheet.create({
+  container:{
+      flex:1,
+      flexDirection:'row',
+      padding:10,
+      marginVertical:10,
+      borderRadius:10
+  },
+  cardPosition:{
+    flex:3,
+  },
+  cardstyle:{
+    padding:15
+  },
+  tutorPosition:{
+    flex:1,
+    alignContent:'center',
+    justifyContent:'center'
+  },
+  tutorName:{
+    fontWeight:'bold',
+    fontSize:16,
+    marginLeft:'25%',
+    padding:7
+  },
+  prjName:{
+    fontSize:17,
+    fontWeight:'bold',
+    marginVertical:5
+  },
+  txtstyle:{
+    color:'gray'
+  }
+})
 
 const styles = StyleSheet.create({
   Searchlist: {
       flex:1,
       padding: 10,
   },
-  
   Serach: {
       margin: 5,
       padding: 15,
@@ -141,5 +192,4 @@ const styles = StyleSheet.create({
       paddingVertical: 4,
   },
 });
-
 export default Search;
