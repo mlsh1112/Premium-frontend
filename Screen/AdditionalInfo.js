@@ -2,22 +2,18 @@ import React, {Component, useState,createRef,useEffect} from 'react';
 import {Button} from '../src/components'
 import axios from 'axios'
 import {
-   SafeAreaView,
    StyleSheet,
-   ScrollView,
    View,
    Text,
-   Image,
-   StatusBar,
    TextInput,
-   TouchableOpacity,
+   TouchableOpacity
  } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import {userUpdate} from '../src/Api';
 import {setToken} from '../src/Asyncstorage';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
+import colors from '../src/colors'
 
 var phoneRegExp = /^\(?([0-1]{3})\)?[-]?([0-9]{4})[-]?([0-9]{4})$/;
 const validationSchema = Yup.object().shape({
@@ -48,12 +44,11 @@ const AdditionalInfo=(props)=>{
                 }
     }).then(res => {
       console.log(res.data.token);
-      //setToken(res.data.token);
     }).then(() => {
       console.log('update success')
       props.navigation.replace('Main');
     }).catch(error => {
-      alert("이메일 혹은 패스워드를 확인해주세요.")
+      alert("전화번호가 있습니다.")
       console.log(error);
     });
     //props.navigation.replace('Main')
@@ -61,9 +56,9 @@ const AdditionalInfo=(props)=>{
 
   return(
     <View style={styles.container}>
-     <View >
-       <Text style={styles.title}>회원 가입을 위한 추가정보를 입력해주세요</Text>
-       <Text style={styles.title}>이름 : {userName}</Text>
+     <View style={styles.topstyle}>
+       <Text style={styles.title}>Create Account</Text>
+       <Text style={styles.nametitle}>{userName} 님  안녕하세요.</Text>
      </View>
      <Formik
        style={styles.FormStyle}
@@ -77,40 +72,34 @@ const AdditionalInfo=(props)=>{
        {({ handleChange, handleBlur, handleSubmit, values, errors,touched,}) => (
        
          <>
-          <Text style={styles.subtitle}>1. 이름</Text>
-           <TextInput
-             name="user-name"
-             placeholder={userName}
-             style={styles.textInput}
-             onChangeText={handleChange('userName')}
-             onBlur={handleBlur('userName')}
-             value={values.userName}
-           />
-           <Text style={styles.subtitle}>2. 전화 번호</Text>
+           <Text style={styles.subtitle}>전화번호 (- 없이 입력)</Text>
            <TextInput
              name="phone-number"
-             placeholder="010-XXXX-XXXX"
+             placeholder="     전화번호 (- 없이 입력)     "
              style={styles.textInput}
              onChangeText={handleChange('phoneNumber')}
              onBlur={handleBlur('phoneNumber')}
              value={values.phoneNumber}
-             keyboardType="number-pad"
            />
            {(errors.phoneNumber && touched.phoneNumber) &&
            <Text style={styles.errorText}>{errors.phoneNumber}</Text>
            }
            
-           <View>
-              <Text style={styles.subtitle}>당신은 튜터 입니까?</Text>
+           <View style={{marginVertical:30,flexDirection:'row'}}>
+              <Text style={styles.typeQtxt}>Tutor로 가입하시겠습니까?</Text>
               <CheckBox
                 value={isSelected}
                 onValueChange={setSelection}
                 style={styles.checkbox}
+                lineWidth={3}
+                tintColor={'white'}
               />
-           </View>
-           <View style={styles.button}>
-             <Button onPress={handleSubmit}>추가 정보 기입 완료하기</Button>
-           </View>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity style={styles.buttonposition} onPress={handleSubmit}>
+                <Text style={styles.buttonstyle}>가입하기</Text>
+              </TouchableOpacity>
+          </View>
          </>
        )}
      </Formik>
@@ -124,11 +113,20 @@ const styles = StyleSheet.create({
       flex : 1,
       justifyContent:'center',
       alignItems:'center',
+      backgroundColor:colors.maincolor,
+  },
+  topstyle:{
+    marginVertical:30
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom:10,
+    color:'white',
+    fontSize:33,
+    fontWeight:'bold',
+    elevation: 5,
+    shadowColor: '#5B7459',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
   },
   textstyle:{
     fontSize:20,
@@ -168,6 +166,7 @@ const styles = StyleSheet.create({
  },
  checkbox:{
   alignSelf:"center",
+  marginLeft:40,
 },
 lable:{
   margin:9,
@@ -177,19 +176,71 @@ errorText: {
     color: 'red',
   },
   textInput: {
-    height: 40,
+    height: 50,
     width: '90%',
-    margin: 10,
+    marginVertical: 10,
     backgroundColor: 'white',
-    borderWidth: 1,
     borderRadius: 10,
     fontSize:15,
-    fontWeight:'bold'
+    fontWeight:'bold',
+    elevation: 5,
+    shadowColor: 'gray',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    borderRadius:20 
   },
   subtitle: {
     width: "90%",
-    fontWeight:"bold",
-    fontSize: 18,
+    fontSize: 15,
+    marginLeft:40
+},
+nametitle: {
+  color:'white',
+  width: "90%",
+  fontWeight:'bold',
+  fontSize: 18,
+  marginLeft:40,
+  marginTop:10
+},
+typeQtxt:{
+  color:'white',
+  fontSize:20,
+  fontWeight:'bold',
+  elevation: 5,
+  shadowColor: '#5B7459',
+  shadowOffset: { width: 0, height: 5 },
+  shadowOpacity: 0.5,
+  shadowRadius: 5,
+},
+ PickerBox: {
+  position:'absolute',
+  height: 40,
+  width: '35%',
+  margin: 10,
+  backgroundColor: 'white',
+  borderWidth: 1,
+  borderRadius: 10,  
+},
+buttonposition:{
+  width: 327,
+  height: 50,
+  backgroundColor: 'white',
+  justifyContent: "center",
+  alignItems: "center",
+  borderRadius: 32,
+  elevation: 5,
+  shadowColor: 'grey',
+  shadowOffset: { width: 0, height: 5 },
+  shadowOpacity: 0.5,
+  shadowRadius: 5,
+  borderRadius:20 
+    
+},
+buttonstyle:{
+  color:colors.maincolor,
+  fontWeight: 'bold',
+  fontSize: 20,
 }
 });
 

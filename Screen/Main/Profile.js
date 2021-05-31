@@ -99,13 +99,19 @@ const Profile = (props) => {
         return <EachTabViewsProjects project={finishedproject} navigation={props.navigation} usertype={myinfo.type}/>
     }
   };
+
+  const handleChangeProfile=()=>{
+    props.navigation.navigate('Modifyprofile',{myinfo});
+    
+  }
   
   const handleLogoutPress = ()=> {  //로그아웃 function
     console.log('로그아웃 버튼 눌림!')
     logout().then(res => {
       console.log('로그아웃 성공!!!')
       AsyncStorage.removeItem('token');
-      props.navigation.popToTop()
+      RNRestart.Restart();
+          
     }).catch(e => {
       console.log('================== 로그아웃 에러 ==================')
       console.log(e.response)
@@ -154,6 +160,19 @@ const Profile = (props) => {
               }
             </View>
           </View>
+          <TouchableOpacity style={{
+            backgroundColor: colors.maincolor,
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 32,
+            marginTop: 30,
+            width: 100,
+            height:30,
+            marginBottom:50,
+            marginLeft:5
+            }} onPress={handleChangeProfile}>
+            <Text style={styles.modifybuttonstyle}>개인 정보 수정</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.buttonposition} onPress={handleLogoutPress}>
               <Text style={styles.buttonstyle}>로그 아웃</Text>
           </TouchableOpacity>
@@ -316,6 +335,11 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       fontSize: 18,
   },
+  modifybuttonstyle:{
+    color:'white',
+    fontWeight: 'bold',
+    fontSize: 12,
+},
   buttonposition_createpro:{
     width: 140,
     height: 30,

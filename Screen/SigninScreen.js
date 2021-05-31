@@ -67,9 +67,9 @@ import colors from '../src/colors'
        .then(res=>{
          console.log(res.data.token)
          setToken(res.data.token);
-         props.navigation.replace('Main');
+         props.navigation.replace('CheckUser');
        })
-       //props.navigation.replace('Main');
+       .catch(err=>console.log(err))
      }
      else {
        console.log('register success')
@@ -80,7 +80,6 @@ import colors from '../src/colors'
           props.navigation.navigate('AdditionalInfo',{name:user_name, userID:res.data})
         })
         .catch(err=>console.log(err))
-       //props.navigation.navigate('AdditionalInfo',{name:user_name,userID:'ss'});
      }
  
    }

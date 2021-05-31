@@ -1,6 +1,5 @@
 import React, { Component, useState} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-
 import TodayProject from '../../src/components/TodayProjectHome'
 import ProjectMini from '../../src/components/ProjectMini'
 import {getprojects,getattendances,gettutorprojs,getcurrentuser} from '../../src/Api'
@@ -21,6 +20,7 @@ import {setProjects} from '../../src/Asyncstorage'
 class Home extends Component {
     state={
         subject:'',
+        todayprj:[],
         projects:[],
         myprojects:[],
         tutorproj:[],
@@ -30,21 +30,13 @@ class Home extends Component {
         super(props);
     }
     componentDidMount() {
-
-
-
+        
         const getData = async()=>{
-            /*await AsyncStorage.getItem('userinfo')
-            .then(res=>{
-                this.setState({user:JSON.parse(res)})
-            })
-            .catch(err=>console.log(err))*/
-
             await getcurrentuser()
             .then(res=>{
                 this.setState({user:res.data})
             })
-            .catch(err=>console.log(err))
+            .catch(err=>console.log("여긴 겟데이터 에러"+err))
 
             if(this.state.user.type==='Tutee'){
                 console.log('User state : tutee')
@@ -61,17 +53,46 @@ class Home extends Component {
 
             getprojects()
             .then(res=>{
+                const prj=JSON.parse(JSON.stringify(res.data));
+                const shuffled = prj.sort(() => Math.random() - 0.5)
                 this.setState({
-                    projects: res.data
+                    projects: res.data,
+                    todayprj: shuffled
+
                 })
-            }).catch(err=>
+            })
+            .catch(err=>
                 console.log(err)
             )
         }
        
         getData()
+    
+        const getApi = async()=>{
+            await getattendances()
+            .then((res)=>{
+                console.log("여긴 콜백x 성공")
+                this.setState({myprojects:res.data})})
+            .catch(err => console.log('콜백 x:attendances',err))
+
+        //    await gettutorprojs()
+          //  .then(res=>this.setState({tutorproj:res.data}))
+            //.catch(err=>console.log("gettutorprojs"+err))
+        }
+
+       getApi()
 
 
+       getprojects()
+        .then(res=>{
+            this.setState({
+                projects: res.data
+            })
+        })
+        .catch(err=>
+            console.log("여긴 겟프로젝트 에러"+err)
+        )
+        
 
     }
     
@@ -154,7 +175,7 @@ class Home extends Component {
                         horizontal={true}
                         showsHorizontalScrollIndicator = {true}
                         style={styles.projectScroll}>
-                    {this.state.projects.map((project,index)=>{
+                    {this.state.todayprj.map((project,index)=>{
                            return <ProjectMini navigation={this.props.navigation} project={project} key={index}></ProjectMini>
                         })}
                     
