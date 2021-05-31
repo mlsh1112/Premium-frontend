@@ -1,5 +1,14 @@
 # 2021 Capstone Premium Team Frontend
 
+
+
+
+<div align="center">
+
+  <img src="./appicon/icon1.png" style="width:30px;height:30px;">
+  <!-- <img src="./appicon/icon2.png" style="width:200px"> -->
+
+</div>
 초기 설정
         https://reactnative.dev/docs/environment-setup
 
