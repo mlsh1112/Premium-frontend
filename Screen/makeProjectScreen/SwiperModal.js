@@ -9,7 +9,6 @@ import {
   Image
 } from "react-native";
 import {Button} from '../../src/components/Button';
-import explain from '../../assets/일정생성설명.png' 
 import explain1 from '../../assets/explain1.png'
 import explain2 from '../../assets/explain2.png'
 import explain3 from '../../assets/explain3.png'

@@ -9,7 +9,7 @@ import Profile from '../Screen/Main/Profile';
 import createProjectStackNav from './CreateProjectStackNav';
 import ProjectNavi from './ProjectNavigation';
 import AuthNamvi from './AuthNavigation';
-
+import ChattingNavi from './ChattingNavi'
 const TabNavigator = createBottomTabNavigator();
 
 export default function Tabnavigation(){
@@ -36,7 +36,7 @@ export default function Tabnavigation(){
           ),
         }}
       />
-      <TabNavigator.Screen name="Chatting" component={AuthNamvi} options={{
+      <TabNavigator.Screen name="Chatting" component={ChattingNavi} options={{
           tabBarLabel: '채팅',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="chat-outline" color={color} size={26} />
