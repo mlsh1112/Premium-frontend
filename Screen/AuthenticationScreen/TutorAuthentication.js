@@ -17,6 +17,7 @@ const moment = require("moment");
 
 const TutorAuthentication = ({navigation,route }) => {
     const [tutees,setTutees] = useState();
+    const [numofauth,setNumofauth] = useState(0)
     const [fin,setFin]=useState(true)
     const project=route.params.project
     const startDate = moment(project.started_at)
@@ -28,7 +29,8 @@ const TutorAuthentication = ({navigation,route }) => {
         pastDay = project.duration - remainDay
     }
     console.log(project)
-    useEffect(()=>{    
+    useEffect(()=>{
+        navigation.addListener('focus', ()=>{
             gettutees({
                 "project_id":project.id
             })
@@ -41,21 +43,32 @@ const TutorAuthentication = ({navigation,route }) => {
                 console.log('--------------get tutees 에러 ---------------')
                 console.log(err)
             })
+        })
     },[])
 
-    function TuteeListComponent({tutee,navigation}){
+    function TuteeListComponent({tutee,navigation,project}){
         const tuteeinfo=tutee.target
-        return(
-            <View style={styles.tuteeBarStyle}>
-                <Icons name='face' size={30} style={{marginLeft:'8%'}} ></Icons>
-                <Text style={styles.tuteenameStyle}>{tuteeinfo.name}</Text>
-                <TouchableOpacity style={styles.tuteeBtnPosition} onPress={()=>{navigation.push('TutorAuthCheck',tutee)}}>
-                    <View>
-                        <Text style={styles.BtntextStyle}>인증 확인</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-        )
+        // console.log(project)
+        console.log('---------------------')
+        console.log(tuteeinfo)
+        console.log(tutee)
+        console.log('---------------------')
+        // if(now.diff(moment(tutee.created_at),'days') === 0 && tutee.status !== 'confirm'){
+        if(tutee.status !== 'confirm'){
+            return(
+                <View style={styles.tuteeBarStyle}>
+                    <Icons name='face' size={30} style={{marginLeft:'8%'}} ></Icons>
+                    <Text style={styles.tuteenameStyle}>{tuteeinfo.name}</Text>
+                    <TouchableOpacity style={styles.tuteeBtnPosition} onPress={()=>{navigation.push('TutorAuthCheck',{tutee,project})}}>
+                        <View>
+                            <Text style={styles.BtntextStyle}>인증 확인</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            )
+        }else {
+            return(null)
+        }
     }
 
     return (
@@ -82,7 +95,8 @@ const TutorAuthentication = ({navigation,route }) => {
                         { tutees
                             ? (<View style={styles.tuteelistview}>
                                     {tutees.map((tutee,index)=>{
-                                            return <TuteeListComponent tutee={tutee} navigation={navigation} key={index}/>   
+
+                                            return <TuteeListComponent tutee={tutee} navigation={navigation} key={index} project={project}/>   
                                         })
                                     }
                               </View>)
