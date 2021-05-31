@@ -138,6 +138,7 @@ const Messsage = (props) => {
             scrollToBottom={true}
             scrollToBottomComponent={scrollToBottomComponent}
             renderLoading={renderLoading}
+            renderUsernameOnMessage={true}
         />
     )
 }
