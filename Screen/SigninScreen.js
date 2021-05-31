@@ -25,7 +25,6 @@
  import icon from '../assets/ddasup_icon.png'
  import jwtDecode from "jwt-decode";
 import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authentication';
-import colors from '../src/colors'
  const validationSchema = Yup.object().shape({
    email: Yup.string()
      .required("이메일을 입력해주세요.")
@@ -211,7 +210,7 @@ import colors from '../src/colors'
            buttonType={AppleButton.Type.SIGN_IN}
            style={{
              marginTop:20,
-             width: 160, // You must specify a width
+             width: 180, // You must specify a width
              height: 45, // You must specify a height
            }}
            onPress={() => onAppleButtonPress()}
