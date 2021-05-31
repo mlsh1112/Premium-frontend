@@ -9,7 +9,7 @@ export function makeCategoryItem(projectlist){
     return temp;
   }
 
-export  function makePickerItemlist(start,end){
+export function makePickerItemlist(start,end){
     var item = []
     for(var i = start ; i < end + 1 ; i++){
       item.push({
