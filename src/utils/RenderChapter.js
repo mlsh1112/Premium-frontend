@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useRef} from 'react';
 import {
     StyleSheet,
     View,
@@ -12,6 +12,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export function RenderChapter({chapters,deletechapter}){
     console.log(chapters)
+    const pickerRef = useRef()
+    function open(){
+      pickerRef.current.focus();
+    }
+    function close(){
+      pickerRef.current.blur()
+    }
       return(
                   <View style={styles.chapterlist}>
                     {chapters.map((chapter,key) => {
@@ -22,6 +29,7 @@ export function RenderChapter({chapters,deletechapter}){
                             </Text>
                             <View style={{width:' 25%',backgroundColor:'white',borderWidth:1,borderRadius: 20,borderColor: colors.subcolor}}>
                               <Picker
+                              mode='dialog'
                                 selectedValue={chapters[key].weight}
                                 style={{ height: '100%', width: '100%',}}
                                 onValueChange={(itemValue)=> {

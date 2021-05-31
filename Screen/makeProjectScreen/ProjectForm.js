@@ -30,6 +30,7 @@ const ProjectForm =(props)=> {
     const [date,setDate ] = useState(new Date())
     var timezoneOffset = date.getTimezoneOffset() * 60000
     const [datetype,setDatetype] = useState()
+    
     const handleSubmitPress = (values) =>{
       console.log("프로젝트 제출 : ", values)
       createproject({
@@ -60,9 +61,9 @@ const ProjectForm =(props)=> {
         console.log(e.response.data)
       })
       if (Platform.OS === 'ios'){
-        setCalendartype('inline')
+        setDatetype('inline')
       }else {
-        setCalendartype('defalut')
+        setDatetype('defalut')
       }
     },[])
 
@@ -126,7 +127,6 @@ const ProjectForm =(props)=> {
                       <RNDateTimePicker
                         style={{width: 320, backgroundColor: "white"}}
                         value={new Date()}
-                        display={calendartype}
                         minimumDate={tommorow}
                         display={datetype}
                         onChange={(event,selectedDate)=> {
