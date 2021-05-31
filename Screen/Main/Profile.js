@@ -51,13 +51,6 @@ const Profile = (props) => {
             }).catch(e=>{
                 console.log(e)
             })
-            // getmylikes().then(res =>{
-              // console.log('tutee get their like list complete')
-              // console.log(res.data)
-              // setMylikelists(res.data)
-            // }).catch(e => {
-              // console.log(e)
-            // })
             setProject(res.data)
           }).catch(e => {
             console.log('-----------------get attendance error----------------')
@@ -94,7 +87,7 @@ const Profile = (props) => {
   const renderScene = ({route}) =>{
     switch (route.key) {
       case 'first':
-        return <EachTabViewsProjects project={project} navigation={props.navigation} usertype={myinfo.type}/>;
+        return <EachTabViewsProjects project={project} navigation={props.navigation} usertype={myinfo.type} />;
       case 'second':
         return <EachTabViewsProjects project={finishedproject} navigation={props.navigation} usertype={myinfo.type}/>
     }
@@ -117,15 +110,7 @@ const Profile = (props) => {
       console.log(e.response)
     })
   }
-  const gotoChatroom = () => {
-    console.log('채팅룸 입장')
-    // console.log(project)
-    if (myinfo.type === 'Tutee'){
-      props.navigation.navigate('Chatroom',{myinfo,latestpr:project})
-    }else{
-      props.navigation.navigate('Chatroom',{myinfo,latestpr:project})
-    }
-  }
+
   const goToCreateProject = () => {
     console.log("프로젝트 생성하러가기");
     props.navigation.navigate('ProjectForm');
@@ -147,7 +132,10 @@ const Profile = (props) => {
     {showscreen && (
         <View style={{flexDirection:'row',marginTop:30,paddingHorizontal:20}}>
           <View style={{width: '30%',justifyContent:'center',alignItems:'flex-start'}}>
-            <Image source={cat} style={styles.avatar} />
+            {myinfo.image === ' '
+              ?<Image source={cat} style={styles.avatar} />
+              :<Image source={{uri: myinfo.image}} style={styles.avatar} />
+            }
           </View>
           <View style={{width:'70%'}}>
             <View style={[styles.userinfoWrapper,{height:50}]}>
@@ -178,20 +166,6 @@ const Profile = (props) => {
               </TouchableOpacity>
             </View>
           </View>
-          {/* <TouchableOpacity style={{
-            backgroundColor: colors.maincolor,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 32,
-            marginTop: 30,
-            width: 100,
-            height:30,
-            marginBottom:50,
-            marginLeft:5
-            
-            }} onPress={handleChangeProfile}>
-            <Text style={styles.modifybuttonstyle}>개인 정보 수정</Text>
-          </TouchableOpacity> */}
         </View>
     )}
     
