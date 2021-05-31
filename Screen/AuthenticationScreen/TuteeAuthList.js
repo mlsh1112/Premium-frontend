@@ -18,6 +18,7 @@ const ProjectAuthCard = ({navigation,project}) => {
     const realstartDate = moment(startDate)
     const remainDay = realnow.diff(realstartDate,'days') //시작하는 날짜가 0일차
     var pastDay = project.project.duration
+
     if(remainDay >= 0){
         pastDay = project.project.duration - remainDay
     }
@@ -33,7 +34,7 @@ const ProjectAuthCard = ({navigation,project}) => {
                                         ?   <View>
                                                 <View style={{flexDirection:'row',margin:5}}>
                                                     <Text style={cardstyles.dayStyle}>{remainDay + 1} </Text>
-                                                    <Text style={cardstyles.dayStyle2}>번째 인증</Text>
+                                                    <Text style={cardstyles.dayStyle2}>일 차</Text>
                                                 </View>
                                                 { pastDay < 1
                                                     ? <Text style={cardstyles.dayStyle3}>프로젝트가 끝났습니다.</Text>
@@ -57,7 +58,7 @@ const ProjectAuthCard = ({navigation,project}) => {
                 </TouchableOpacity>
             </Card>
 
-            <TouchableOpacity style={{}} onPress={()=>{navigation('TuteeAuthdetail',{project})}}>
+            <TouchableOpacity style={{}} onPress={()=>{navigation('TuteeAuthdetail',{project,remainDay})}}>
                     <Image source={authBtn} style={{width:90,height:100}}></Image>
                     </TouchableOpacity>
             </View>

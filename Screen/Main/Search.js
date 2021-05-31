@@ -1,7 +1,6 @@
 import React, { Component, useState } from 'react';
 import { CircularCard } from "react-native-circular-card-view";
 import {SafeAreaView} from "react-native"
-import cat from '../../assets/cat2.png'
 import { useEffect } from 'react';
 import {
     Image,
@@ -16,7 +15,6 @@ import {
   } from 'react-native';
 import {Searchbar,Card } from 'react-native-paper'
 import { getprojects } from '../../src/Api';
-import ProjectMini from '../../src/components/ProjectMini'
 import colors from '../../src/colors';
 const moment = require("moment");
 function SearchCard (props){
@@ -64,10 +62,12 @@ function SearchCard (props){
 function Search({navigation}) {
   const [Searchblur,SetSearchblur]=useState(false);
   const [SearchData,SetSearchData]=useState("");
+  const [enterSearch,setEnterSearch]=useState('');
   const [isLoading,SetIsLoading]=useState(false);
   const [reqData,SetreqData]=useState([])
   let ScreenWidth = Dimensions.get('window').width    //screen 너비
   let ScreenHeight = Dimensions.get('window').height   //height 높이
+
   const ChangeSearchData=((text)=>{
       if(text){
         SetSearchblur(true);
@@ -76,22 +76,31 @@ function Search({navigation}) {
         SetSearchblur(false);
       }
       SetSearchData(text);
-      console.log(SearchData);
     })
+
+    
     async function SearchVal (){
       if(SearchData.length<=0){
         alert("2글자 이상의 검색어를 입력해주세요")
       }
-      const query = {title_or_description_i_cont: SearchData}
-      const data = (await getprojects({ q: query})).data
-      console.log(data)
-      SetreqData(data)
+      else{
+        //console.log(SearchData)
+        setEnterSearch(SearchData)
+        const query = {title_or_description_i_cont: SearchData}
+        const data = (await getprojects({ q: query})).data
+
+        SetreqData(data)
+
+      }
     }
+
+
     useEffect(()=>{
       if(Searchblur){
         SetSearchblur(false)
       }
-      console.log(navigation)
+
+
     },[reqData])
   return(
     <SafeAreaView style={{flex:1}}>
@@ -103,7 +112,7 @@ function Search({navigation}) {
                     paddingHorizontal:8,
                 }}>
            <Searchbar
-                placeholder="Search"
+                placeholder="검색어를 입력해주세요"
                 onChangeText={ChangeSearchData}
                 //onIconPress={SearchVal}
                 onSubmitEditing={SearchVal}
@@ -114,16 +123,31 @@ function Search({navigation}) {
             
         </View>
       <View style={styles.Searchlist}>
-        <FlatList
-           //style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':''}}
-           data={reqData}
-           keyExtractor={(item,index)=>index.toString()}
-           renderItem={({item,index})=>
-           <SearchCard navigation={navigation} project={item} key={index}></SearchCard>
+        {reqData&&enterSearch?
+            <>
+              {reqData.length>0?
+                      <FlatList
+                        //style={{backgroundColor:Searchblur? 'rgba(0,0,0,0.3)':''}}
+                        data={reqData}
+                        keyExtractor={(item,index)=>index.toString()}
+                        renderItem={({item,index})=>
+                          <SearchCard navigation={navigation} project={item} key={index}></SearchCard>
+                          }
+                      />
+              :
+              <View>
+                <Text style={styles.searchtxt}>찾는 프로젝트가 없습니다.</Text>
+
+              </View>
+              }
+            </>
+          :
+               <>
+               </>
 
         }
-          />
-        </View>
+
+      </View>
     </View>
     </SafeAreaView>
   )
@@ -191,5 +215,10 @@ const styles = StyleSheet.create({
       paddingHorizontal: 15,
       paddingVertical: 4,
   },
+  searchtxt:{
+    margin:10,
+    fontSize:20,
+    color:'gray'
+  }
 });
 export default Search;
