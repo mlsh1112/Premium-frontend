@@ -15,7 +15,7 @@ import { object } from 'yup';
 
 function Calender(props){
 
-  let Trial=props.project.status=='trial'?false:false;
+  let Trial=props.project.status=='trial'?true:false;
   const [TrialDay,setTrialDay]=useState()
   const [markedDates,setmarkedDates]=useState()
   const [CalenderDay,SetCalendderDay]=useState([])
