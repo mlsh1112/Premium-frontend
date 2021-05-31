@@ -11,7 +11,8 @@ import { useEffect,useState } from 'react';
 function Calender(props){
   let Trial=props.project.status==='trial'?true:false;
   const [markedDates,setmarkedDates]=useState()
-  console.log('markedDates',markedDates)
+  const [chapter,setchapter]=useState('')
+  let Plans=props.plans.options
   function DateSet(){
       var days={}
       var now=moment().format('YYYY-MM-DD');
@@ -22,7 +23,6 @@ function Calender(props){
       else{
         const color=[['#FECCBE','#FD8A69'],['#FEEBB6','#FFCD4A'],['#DDECCA','#AFD485'],['#CCD2F0','#9FA9D8']];
         let colorpick=0;
-        var Plans=props.plans.options
         let experience_period=props.project.project.experience_period
         let duringDay=0
         Plans.map((item)=>{
@@ -51,10 +51,20 @@ function Calender(props){
        setmarkedDates(days);
 
       }
-      
-      
-      
   } 
+
+  const checkPlan=(day)=>{
+    console.log(day)
+    var date=moment(day.dateString);
+    Plans.map(plan=>{
+      let difStart = date.diff(moment(plan.start_at),'days')
+      let difEnd = date.diff(moment(plan.end_at),'days')
+
+      if(difStart>=0 && difEnd <=0){
+        setchapter(plan.chapter_id)
+      }
+    })
+  }
 
   useEffect(()=>{
     DateSet()
@@ -66,11 +76,18 @@ function Calender(props){
           markedDates={markedDates}
           markingType={'period'}
           style={{borderRadius:25, height:350}}
-          onDayPress={(day) => {console.log('selected day', day)}}
+          onDayPress={(day) => {checkPlan(day)}}
           theme={{
             todayTextColor: 'skyblue',
           }}
          />
+         {
+           chapter ?
+           <Text>{chapter}</Text>
+           :
+           <Text></Text>
+         }
+         
         </View>
     )
 }
