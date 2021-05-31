@@ -117,6 +117,15 @@ const Profile = (props) => {
       console.log(e.response)
     })
   }
+  const gotoChatroom = () => {
+    console.log('채팅룸 입장')
+    // console.log(project)
+    if (myinfo.type === 'Tutee'){
+      props.navigation.navigate('Chatroom',{myinfo,latestpr:project})
+    }else{
+      props.navigation.navigate('Chatroom',{myinfo,latestpr:project})
+    }
+  }
   const goToCreateProject = () => {
     console.log("프로젝트 생성하러가기");
     props.navigation.navigate('ProjectForm');
@@ -136,12 +145,18 @@ const Profile = (props) => {
   return (
     <SafeAreaView style={styles.container}>
     {showscreen && (
-      <View style={styles.userInfoSection}>
-        <View style={{flexDirection: 'row', marginTop: 15}}>
-          <Image source={cat} style={styles.avatar} />
-          <View style={{marginLeft: 20}}>
-            <Title style={[styles.title, {marginTop:15,marginBottom: 5,}]}>{myinfo.name}</Title>
-            <View>
+        <View style={{flexDirection:'row',marginTop:30,paddingHorizontal:20}}>
+          <View style={{width: '30%',justifyContent:'center',alignItems:'flex-start'}}>
+            <Image source={cat} style={styles.avatar} />
+          </View>
+          <View style={{width:'70%'}}>
+            <View style={[styles.userinfoWrapper,{height:50}]}>
+              <Text style={{fontSize:20,fontWeight:'bold'}}>{myinfo.name}</Text>
+              <TouchableOpacity style={styles.buttonposition} onPress={handleChangeProfile}>
+                  <Text style={[styles.buttonstyle,{fontSize: 14}]}>개인 정보 수정</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.userinfoWrapper}>
               { myinfo.type === "Tutor"
                 ? (<View>
                     <Icon name="teach" color="#F63D3D" size={20}/>
@@ -158,9 +173,12 @@ const Profile = (props) => {
                   </View>
                   )
               }
+              <TouchableOpacity style={styles.buttonposition} onPress={handleLogoutPress}>
+                  <Text style={styles.buttonstyle}>로그 아웃</Text>
+              </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity style={{
+          {/* <TouchableOpacity style={{
             backgroundColor: colors.maincolor,
             justifyContent: "center",
             alignItems: "center",
@@ -173,28 +191,25 @@ const Profile = (props) => {
             
             }} onPress={handleChangeProfile}>
             <Text style={styles.modifybuttonstyle}>개인 정보 수정</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonposition} onPress={handleLogoutPress}>
-              <Text style={styles.buttonstyle}>로그 아웃</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
-      </View>
     )}
     
     {showscreen && (
-      <View style={styles.userInfoSection}>
-        <View style={styles.row}>
-          <Icon name="school" color="#777777" size={20} style={{textAlignVertical:'center'}}/>
-          <Text style={{color:"#777777", marginLeft: 20,textAlignVertical:'center'}}>{school}</Text>
-        </View>
-        { myinfo.type === "Tutor" && myinfo.status === "approved"
-            ? (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToCreateProject}>
+        <View style={{height: 30,flexDirection: 'row',justifyContent:'space-between',paddingHorizontal: 20,marginTop:10}}>
+          <View style={{flexDirection:'row'}}>
+            <Icon name="school" color="#777777" size={20} style={{textAlignVertical:'center', marginLeft: 10}}/>
+            <Text style={{color:"#777777", marginLeft: 10,textAlignVertical:'center'}}>{school}</Text>
+          </View>
+          { myinfo.type === "Tutor" && myinfo.status === "approved"
+            ? (<TouchableOpacity style={[styles.buttonposition,{width: 140,}]} onPress={goToCreateProject}>
                 <Text style={styles.buttonstyle}>프로젝트 생성</Text>
                </TouchableOpacity>)
-            : (<TouchableOpacity style={styles.buttonposition_createpro} onPress={goToAuth}>
+            : (<TouchableOpacity style={[styles.buttonposition,{width: 140,}]} onPress={goToAuth}>
                 <Text style={styles.buttonstyle}>인증하러가기</Text>
                </TouchableOpacity>)}
-      </View>
+        </View>
+     
     )}
 
     {showscreen && (
@@ -248,11 +263,10 @@ const styles = StyleSheet.create({
   container:{
     flex: 1,
   },
-  userInfoSection: {
-    paddingHorizontal: 30,
-    marginTop: 10,
-    marginBottom: 10,
-    alignContent: 'center',
+  userinfoWrapper: {
+    flexDirection:'row', 
+    justifyContent:'space-between',
+    alignItems: 'center'
   },
   infoBoxWrapper: {
     justifyContent: "space-around",
@@ -298,26 +312,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderRadius: 50,
   },
-  CardContainer: {
-    padding: 20,
-    elevation: 5,
-    borderRadius: 4,
-    borderWidth: 0.5,
-    borderColor: '#d6d7da',
-    margin: 20,
-    elevation: 5
-  },
-  CardTitle: {
-      width: '100%',
-      fontWeight: 'bold',
-      fontSize: 20,
-      padding: 3
-  },
-  CardContent: {
-      width: '100%',
-      fontSize: 12,
-      padding: 3
-  },
+  
   buttonposition:{
     width: 100,
     height: 30,
@@ -325,11 +320,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 32,
-    marginTop: 30,
-    position: 'absolute',
-    right: 10,
-    textAlignVertical: 'top',
-    bottom: 10
+    
   },
   buttonstyle:{
       color:'white',

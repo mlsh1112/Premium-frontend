@@ -16,7 +16,9 @@ import test from "./config"
 const BookAPI = axios.create({
   headers: { 'Authorization': test },
 });
-
+import {decode, encode} from 'base-64'
+if (!global.btoa) {  global.btoa = encode }
+if (!global.atob) { global.atob = decode }
 
 
 import {
