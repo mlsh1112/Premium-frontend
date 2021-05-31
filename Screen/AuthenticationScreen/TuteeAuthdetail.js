@@ -24,7 +24,7 @@ const TuteeAutdetail=({navigation,route})=>{
     
     var requireTime = project.project.required_time
     var reviewTime = 0
-    requireTime===0?reviewTime = 0: reviewTime = Math.floor(project.project.review_weight/requireTime)
+    requireTime===0?reviewTime = 0: reviewTime = Math.floor(requireTime/project.project.review_weight)
     var studyTime = requireTime-reviewTime
     var [plans,setPlans]=useState()
     var [chapter,setChapter]=useState()
@@ -130,12 +130,12 @@ const TuteeAutdetail=({navigation,route})=>{
         <View style={styles.todayTxt}>
           <Text style={styles.todayblackTxt}>⦁ 공부 시간 : </Text>
           <Text style={styles.todayredTxt}>{studyTime}</Text>
-          <Text style={styles.todayblackTxt}> 시간</Text>
+          <Text style={styles.todayblackTxt}> 분</Text>
         </View>
         <View style={styles.todayTxt}>
           <Text style={styles.todayblackTxt}>⦁ 복습 시간 : </Text>
           <Text style={styles.todayredTxt}>{reviewTime}</Text>
-          <Text style={styles.todayblackTxt}> 시간</Text>
+          <Text style={styles.todayblackTxt}> 분</Text>
         </View>
           <Text style={styles.todayblackTxt}>⦁ 인증 방법</Text>
           <View style={{flexDirection:'row'}}>
