@@ -35,7 +35,7 @@ const TuteeAutdetail=({navigation,route})=>{
         percent = Math.floor((auths/project.project.experience_period)*100)
     
     }
-    else{
+    else if(project.status==='full'){
         pastDay=project.project.duration-remainDay
         percent = Math.floor((auths/project.project.duration)*100)
 
@@ -44,12 +44,12 @@ const TuteeAutdetail=({navigation,route})=>{
   useEffect(()=>{
       
        getPlan({
-        "project_id": project.id
+        "project_id": project.project.id
       }).then((res)=>{
         console.log("여긴 plan res")
         console.log(res.data)
          setPlans(res.data);
-         setChapter(res.chapter)
+         setChapter(res.data.chapter)
       })
       .catch((err)=>{
         console.log(err)

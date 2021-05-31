@@ -7,6 +7,7 @@ import {
     TextInput,
     ScrollView,
     Keyboard,
+    Platform
   } from 'react-native';
 import { Formik } from "formik";
 import RNDateTimePicker from '@react-native-community/datetimepicker';
@@ -28,7 +29,7 @@ const ProjectForm =(props)=> {
     const [categoryid,setCategoryid] = useState()
     const [date,setDate ] = useState(new Date())
     var timezoneOffset = date.getTimezoneOffset() * 60000
-
+    const [calendartype,setCalendartype] = useState()
     const handleSubmitPress = (values) =>{
       console.log("프로젝트 제출 : ", values)
       createproject({
@@ -58,6 +59,11 @@ const ProjectForm =(props)=> {
       }).catch(e => {
         console.log(e.response.data)
       })
+      if (Platform.OS === 'ios'){
+        setCalendartype('inline')
+      }else {
+        setCalendartype('defalut')
+      }
     },[])
 
     return (
@@ -105,7 +111,7 @@ const ProjectForm =(props)=> {
                 
 
                 <Text style={styles.subtitle}>2. 프로젝트 시작 일자</Text>
-                  {/* <TextInput
+                   <TextInput
                     name="startDate"
                     style={styles.textInput}
                     value={new Date(date - timezoneOffset).toISOString().substring(0,10)}
@@ -115,29 +121,44 @@ const ProjectForm =(props)=> {
                       setIsDateTimePickerVisible(true)
                       }
                     }
-                  /> */}
-                  {/* {isDateTimePickerVisible && ( */}
+                  /> 
+                  {isDateTimePickerVisible && (
                       <RNDateTimePicker
                         style={{width: 320, backgroundColor: "white"}}
                         value={new Date()}
+                        display={calendartype}
                         minimumDate={tommorow}
                         onChange={(event,selectedDate)=> {
-                          console.log(event)
+                          console.log(event.type)
                           console.log(selectedDate)
-                          setFieldValue('startDate',selectedDate)
-                          if (event.type === 'set'){
-                            // setIsDateTimePickerVisible(false)
+                          // setFieldValue('startDate',selectedDate)
+                          if(Platform.OS === 'android'){
+                            if (event.type === 'set'){
+                              setIsDateTimePickerVisible(false)
+                              setDate(selectedDate)
+                              setFieldValue('startDate',selectedDate)
+                            }
+                            else {
+                              setIsDateTimePickerVisible(false)
+                              console.log("cancel test")
+                            }
+                          }else {
+                            setIsDateTimePickerVisible(false)
                             setDate(selectedDate)
-                            
-                            // setFieldValue('startDate',selectedDate)
+                            setFieldValue('startDate',selectedDate)
                           }
-                          else {
-                            // setIsDateTimePickerVisible(false)
-                            console.log("cancel test")
-                          }
+                          // if (event.type === 'set'){
+                          //   setIsDateTimePickerVisible(false)
+                          //   setDate(selectedDate)
+                          //   setFieldValue('startDate',selectedDate)
+                          // }
+                          // else {
+                          //   setIsDateTimePickerVisible(false)
+                          //   console.log("cancel test")
+                          // }
                         }}
                       />
-                  {/* )} */}
+                  )}
                 <RenderError errors={errors.startDate} touched={touched.startDate} />
                 
                   <Text style={styles.subtitle}>
