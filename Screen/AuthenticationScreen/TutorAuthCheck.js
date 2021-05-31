@@ -67,7 +67,6 @@ const TutorAuthCheck = ({navigation, route}) => {
                   }
                 }
             ])
-            navigation.pop()
         }).catch(e => {
             console.log(e)
         })
