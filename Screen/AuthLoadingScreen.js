@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,useContext} from 'react';
 //import {AsyncStorage} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {
@@ -6,7 +6,11 @@ import {
     View, 
     ActivityIndicator,
   } from 'react-native';
+import {getcurrentuser} from '../src/Api'
+import {CurrentUser} from '../src/utils/CurrentUser'
+
 const AuthLoading = (props) => {
+    const [currentuser,setCurrentUser] = useContext(CurrentUser)
     const deletokenfortest = async() => { //asyncstorage 테스트용 token 삭제
         try{
             await AsyncStorage.removeItem('token');
@@ -22,7 +26,13 @@ const AuthLoading = (props) => {
             console.log("token in authloading : " + item)
             if (item){
                 console.log("there is token")
-                props.navigation.replace('Main');
+                getcurrentuser().then(res => {
+                    console.log(res.data)
+                    setCurrentUser(res.data)
+                    props.navigation.replace('Main');
+                }).catch(e=>{
+                    console.log(e)
+                })
                 console.log("Go to Main");
             }
             else{
@@ -35,9 +45,9 @@ const AuthLoading = (props) => {
         };
     };
     useEffect(() => {
-     // deletokenfortest();
+    //  deletokenfortest();
         CheckUserToken(props);
-    });
+    },[]);
     return (
         <View style={styles.container}>
             <ActivityIndicator color="black" />
