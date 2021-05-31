@@ -126,7 +126,7 @@ const Profile = (props) => {
   };
 
   const handleChangeProfile=()=>{
-    props.navigation.navigate('Modifyprofile');
+    props.navigation.navigate('Modifyprofile',{myinfo});
     
   }
   
@@ -135,7 +135,8 @@ const Profile = (props) => {
     logout().then(res => {
       console.log(res)
       AsyncStorage.removeItem('token');
-      props.navigation.popToTop()
+      RNRestart.Restart();
+          
     }).catch(e => {
       console.log('================== 로그아웃 에러 ==================')
       console.log(e.response)

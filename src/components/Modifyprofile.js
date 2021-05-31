@@ -1,4 +1,5 @@
 import React, {Component, useState,createRef,useEffect} from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import {Button} from '../components/Button'
 import axios from 'axios'
 import {
@@ -13,10 +14,11 @@ import {
    TouchableOpacity,
    KeyboardAvoidingView,
  } from 'react-native';
+import RNRestart from 'react-native-restart';
 
 import { Formik } from "formik";
 import * as Yup from "yup";
-
+import {userUpdate,logout,} from "../Api"
 import CheckBox from '@react-native-community/checkbox';
 
 const validationSchema = Yup.object().shape({
@@ -38,12 +40,32 @@ const validationSchema = Yup.object().shape({
 
 const Modifyprofile=(props)=>{
   
-  const [selectedPicker,setSelectedPicker]=useState("은행 선택")
   var userType;
   const [isSelected,setSelection]=useState(false);
 
-  const handleSubmitPress = ()=>{  
-    console.log("개인 정보 수정")
+  const handleSubmitPress = (values)=>{
+    console.log(props.route.params.myinfo.id)
+     userUpdate(props.route.params.myinfo.id,
+       {
+           "user":{
+                     "password":values.password,
+                     "name":values.Name,
+                     "phone":values.Phone,
+                     "type":userType
+                   }
+       }).then(res => {
+
+        logout().then(()=>{
+          console.log("로그아웃 성공")
+          AsyncStorage.removeItem('token');
+          RNRestart.Restart();
+          alert("개인 정보 수정 성공");})
+       })
+       .catch(error => {
+         alert("전화번호가 있습니다.")
+         console.log(error);
+       });
+  
   }  
   useEffect(()=>{
     userType=isSelected?"Tutor":"Tutee"

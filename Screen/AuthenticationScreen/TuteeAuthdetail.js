@@ -3,14 +3,10 @@ import React, { Component, useEffect, useState } from 'react';
 import {getPlan} from '../../src/Api'
 import {Button} from '../../src/components/Button'
 import {
-    StyleSheet,
-    TouchableOpacity,
     View,
     Text,
     ScrollView,
-    TextInput,
-    LogBox,
-    Keyboard,
+
   } from 'react-native';
 import { Card } from 'react-native-paper';
 import Calender from '../../src/components/Calender'
@@ -24,24 +20,51 @@ const TuteeAutdetail=({navigation,route})=>{
     const project=route.params.project
     var startDate=new Date().getTime() - new Date(project.created_at).getTime();
     var remainDay=Math.floor(startDate / (1000 * 60 * 60 * 24))
-    var pastDay=project.project.experience_period-remainDay
-    var auths=3
-    var percent = Math.floor((auths/project.project.experience_period)*100)
-    console.log(project)
-    var Trial_Comment=`현재 체험기간 ${pastDay} 일 남았습니다. `
+    var pastDay= 0
+    var auths=project.auth_count
+    var percent = 0
+    
+    var requireTime = project.project.required_time
+    var reviewTime = 0
+    requireTime===0?reviewTime = 0: reviewTime = Math.floor(project.project.review_weight/requireTime)
+    var studyTime = requireTime-reviewTime
+    var [plans,setPlans]=useState()
+    var [chapter,setChapter]=useState()
 
+    if(project.status==='trial'){
+              
+        pastDay=project.project.experience_period-remainDay
+        percent = Math.floor((auths/project.project.experience_period)*100)
+    
+    }
+    else{
+        pastDay=project.project.duration-remainDay
+        percent = Math.floor((auths/project.project.duration)*100)
 
+    }
+    
   useEffect(()=>{
-      /*console.log((project.id))
-      getPlan("83").then((res)=>{
-        console.log(res);
+      
+       getPlan({
+        "project_id": project.id
+      }).then((res)=>{
+        console.log("여긴 plan res")
+        console.log(res.data)
+         setPlans(res.data);
+         setChapter(res.chapter)
       })
       .catch((err)=>{
         console.log(err)
-      })*/
-      LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
-  })
+      })
 
+
+      
+  },[])
+  
+  console.log("------------------1")
+  console.log(project)
+  console.log("---------------------2")
+  console.log(plans)
   return(
     <ScrollView >
       <View style={styles.cardBack}>
@@ -80,10 +103,10 @@ const TuteeAutdetail=({navigation,route})=>{
 
       <View alignItems='center' style={{padding:30}}>
         {
-          pastDay=true?
+          pastDay<=0?
           <View>
             {
-              project.status=false?
+              project.status==='trial'?
               <Button onPress={()=>{navigation.navigate('ExperienceAuth',{project,percent})}}>프로젝트 신청하기</Button>
               :
               <Button onPress={()=>{navigation.navigate('AuthPayBack',project)}}>보증금 환급받기 </Button>
@@ -98,32 +121,40 @@ const TuteeAutdetail=({navigation,route})=>{
 
       <View style={styles.todayplanBack}>
         <Text style={styles.titleTxt}>Today 일정 👻 </Text>
+        {
+          pastDay<=0?
+          <Card style={styles.cardStyle}>
+            <Text style={styles.grayDayTxt}>종료된 프로젝트 입니다!</Text>
+          </Card>
+        :
         <Card style={styles.cardStyle}>
-          <View style={styles.todayTxt}>
-            <Text style={styles.todayblackTxt}>⦁ 오늘 진행할 챕터 : </Text>
-            <Text style={styles.todayredTxt}> 1. 집합</Text>
+        <View style={styles.todayTxt}>
+          <Text style={styles.todayblackTxt}>⦁ 오늘 진행할 챕터 : {chapter}</Text>
+          <Text style={styles.todayredTxt}> {}</Text>
+        </View>
+        <View style={styles.todayTxt}>
+          <Text style={styles.todayblackTxt}>⦁ 공부 시간 : </Text>
+          <Text style={styles.todayredTxt}>{studyTime}</Text>
+          <Text style={styles.todayblackTxt}> 시간</Text>
+        </View>
+        <View style={styles.todayTxt}>
+          <Text style={styles.todayblackTxt}>⦁ 복습 시간 : </Text>
+          <Text style={styles.todayredTxt}>{reviewTime}</Text>
+          <Text style={styles.todayblackTxt}> 시간</Text>
+        </View>
+          <Text style={styles.todayblackTxt}>⦁ 인증 방법</Text>
+          <View style={{flexDirection:'row'}}>
+            <MaterialCommunityIcons name='checkbox-marked-outline' size={26} color={colors.maincolor} style={{margin:4}}/>
+            <Text style={{margin:4,color:'grey',fontSize:16}}>{project.project.mission}</Text>
           </View>
-          <View style={styles.todayTxt}>
-            <Text style={styles.todayblackTxt}>⦁ 공부 시간 : </Text>
-            <Text style={styles.todayredTxt}>3</Text>
-            <Text style={styles.todayblackTxt}> 시간</Text>
-          </View>
-          <View style={styles.todayTxt}>
-            <Text style={styles.todayblackTxt}>⦁ 복습 시간 : </Text>
-            <Text style={styles.todayredTxt}>1</Text>
-            <Text style={styles.todayblackTxt}> 시간</Text>
-          </View>
-            <Text style={styles.todayblackTxt}>⦁ 인증 방법</Text>
-            <View style={{flexDirection:'row'}}>
-              <MaterialCommunityIcons name='checkbox-marked-outline' size={26} color={colors.maincolor} style={{margin:4}}/>
-              <Text style={{margin:4,color:'grey',fontSize:16}}>{project.mission}</Text>
-            </View>
-        </Card>
+      </Card>
+        }
+
       </View>
 
       <View style={styles.todayplanBack}>
         <Text style={styles.titleTxt}>{project.project.title} 전체 일정 💫</Text>
-        <Calender props={project.id}/>
+        <Calender plans={plans}  project={project}/>
       </View>
     </ScrollView>
   )
@@ -209,5 +240,3 @@ const styles={
 
 
 export default TuteeAutdetail
-
-
