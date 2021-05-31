@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity ,Image} from 'react-native';
 import colors from '../colors'
-
+import kakaobtn from '../../assets/kakao_login_large_narrow.png'
 const Button = ({ onPress, children }) => {
   const { button, text } = styles;
   return (
@@ -12,12 +12,13 @@ const Button = ({ onPress, children }) => {
     </View>
   );
 };
-const KakaoButton = ({ onPress, children }) => {
+const KakaoButton = ({ onPress }) => {
   const { button, text } = styles;
   return (
     <View style={{flexDirection: 'row'}}>
-      <TouchableOpacity style={styles.kakaobuttonposition} onPress={onPress}>
-                <Text style={styles.kakaobuttonstyle}>{children}</Text>
+      <TouchableOpacity onPress={onPress} style={styles.kakaobuttonposition}>
+                <Image style={styles.kakaobuttonstyle}
+                        source={kakaobtn}/>
         </TouchableOpacity>
     </View>
   );
@@ -34,10 +35,8 @@ const styles = {
     kakaobuttonposition:{
       width: 327,
       height: 50,
-      backgroundColor: "yellow",
       justifyContent: "center",
       alignItems: "center",
-      borderRadius: 32
     },
     buttonstyle:{
         color:'white',
@@ -45,9 +44,9 @@ const styles = {
         fontSize: 20,
     },
     kakaobuttonstyle:{
-      color:'black',
-      fontWeight: 'bold',
-      fontSize: 20,
+      width:190,
+      height:45,
+      borderRadius:10
   }
 };
 
