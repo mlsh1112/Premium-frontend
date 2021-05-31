@@ -152,8 +152,8 @@ const Profile = (props) => {
           <View style={{width:'70%'}}>
             <View style={[styles.userinfoWrapper,{height:50}]}>
               <Text style={{fontSize:20,fontWeight:'bold'}}>{myinfo.name}</Text>
-              <TouchableOpacity style={styles.buttonposition} onPress={gotoChatroom}>
-                  <Text style={styles.buttonstyle}>채팅방</Text>
+              <TouchableOpacity style={styles.buttonposition} onPress={handleChangeProfile}>
+                  <Text style={[styles.buttonstyle,{fontSize: 14}]}>개인 정보 수정</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.userinfoWrapper}>
@@ -178,7 +178,7 @@ const Profile = (props) => {
               </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity style={{
+          {/* <TouchableOpacity style={{
             backgroundColor: colors.maincolor,
             justifyContent: "center",
             alignItems: "center",
@@ -190,10 +190,7 @@ const Profile = (props) => {
             marginLeft:5
             }} onPress={handleChangeProfile}>
             <Text style={styles.modifybuttonstyle}>개인 정보 수정</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonposition} onPress={handleLogoutPress}>
-              <Text style={styles.buttonstyle}>로그 아웃</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
     )}
     
