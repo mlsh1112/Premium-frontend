@@ -29,7 +29,7 @@ const ProjectForm =(props)=> {
     const [categoryid,setCategoryid] = useState()
     const [date,setDate ] = useState(new Date())
     var timezoneOffset = date.getTimezoneOffset() * 60000
-    const [calendartype,setCalendartype] = useState()
+    const [datetype,setDatetype] = useState()
     const handleSubmitPress = (values) =>{
       console.log("프로젝트 제출 : ", values)
       createproject({
@@ -128,10 +128,9 @@ const ProjectForm =(props)=> {
                         value={new Date()}
                         display={calendartype}
                         minimumDate={tommorow}
+                        display={datetype}
                         onChange={(event,selectedDate)=> {
-                          console.log(event.type)
-                          console.log(selectedDate)
-                          // setFieldValue('startDate',selectedDate)
+                          console.log(event)
                           if(Platform.OS === 'android'){
                             if (event.type === 'set'){
                               setIsDateTimePickerVisible(false)
@@ -147,15 +146,6 @@ const ProjectForm =(props)=> {
                             setDate(selectedDate)
                             setFieldValue('startDate',selectedDate)
                           }
-                          // if (event.type === 'set'){
-                          //   setIsDateTimePickerVisible(false)
-                          //   setDate(selectedDate)
-                          //   setFieldValue('startDate',selectedDate)
-                          // }
-                          // else {
-                          //   setIsDateTimePickerVisible(false)
-                          //   console.log("cancel test")
-                          // }
                         }}
                       />
                   )}
