@@ -67,7 +67,7 @@ function Calender(props){
           style={{borderRadius:25, height:350}}
 
           theme={{
-            todayTextColor: 'red',
+            todayTextColor: 'skyblue',
           }}
          />
         </View>

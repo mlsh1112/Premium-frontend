@@ -26,42 +26,23 @@ export function RenderChapter({chapters,deletechapter}){
       return(
                   <View style={styles.chapterlist}>
                     {chapters.map((chapter,key) => {
-                        console.log(chapter.weight)
+                        // console.log(chapter.weight)
                       return(
                         <View key={key} style={{flex:1,height:60,flexDirection:'row',alignItems: 'center',justifyContent: 'space-between',marginVertical:3}}>
                             <Text style={styles.textStyle}>
                               {chapter.title}
                             </Text>
-                                {/* <View style={styles.pickerstyle}> */}
-                                <RNPickerSelect
-                                      //value={chapter.weight}
-                                      useNativeAndroidPickerStyle={false}
-                                      onValueChange={(value) => {
-                                        chapter.weight = value
-                                        console.log(chapter)
-                                      }}
-                                      items={makePickerItemlist(1,10)}  
-                                      style={{ ...pickerSelectStyles }}
-                                      placeholder={{}}
-                                      fixAndroidTouchableBug={true}
-                                    />
-                                  
-                                {/* </View>   */}
-                            {/* <View style={{width:' 25%',backgroundColor:'white',borderWidth:1,borderRadius: 20,borderColor: colors.subcolor}}>
-                              <Picker
-                              mode='dialog'
-                                selectedValue={chapters[key].weight}
-                                style={{ height: '100%', width: '100%',}}
-                                onValueChange={(itemValue)=> {
-                                  const idx = key
-                                  chapters[idx].weight = itemValue
-                                  console.log(chapters[idx])
+                            <RNPickerSelect
+                                useNativeAndroidPickerStyle={false}
+                                onValueChange={(value) => {
+                                  chapter.weight = value
+                                  console.log(chapters)
                                 }}
-                              >
-                                {makelist(10)}
-                              </Picker>
-                            </View> */}
-
+                                items={makePickerItemlist(1,10)}  
+                                style={{ ...pickerSelectStyles }}
+                                placeholder={{}}
+                                fixAndroidTouchableBug={true}
+                            />
                             <TouchableOpacity
                               onPress={(e)=>{
                                   deletechapter(key);
@@ -106,8 +87,8 @@ export function RenderChapter({chapters,deletechapter}){
           color:"black",
           backgroundColor: 'white',
         },
-      });
-      const pickerSelectStyles = StyleSheet.create({
+    });
+    const pickerSelectStyles = StyleSheet.create({
         inputIOS: {
             fontSize: 16,
             height:'100%',
@@ -134,7 +115,5 @@ export function RenderChapter({chapters,deletechapter}){
           borderRadius: 15,
           color: 'black',
           
-        },
-    
-        
-      });
+        },  
+    });
