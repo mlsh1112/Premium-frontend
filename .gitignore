@@ -64,6 +64,6 @@ config.js
 
 #google-service json
 google-services.json
-
+GoogleService-info.plist
 #firebase init 설정
 Firebase.js 
