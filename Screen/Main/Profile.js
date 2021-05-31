@@ -188,6 +188,7 @@ const Profile = (props) => {
             height:30,
             marginBottom:50,
             marginLeft:5
+            
             }} onPress={handleChangeProfile}>
             <Text style={styles.modifybuttonstyle}>개인 정보 수정</Text>
           </TouchableOpacity> */}

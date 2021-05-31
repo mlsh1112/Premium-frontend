@@ -28,7 +28,7 @@ const ProjectForm =(props)=> {
     const [categoryid,setCategoryid] = useState()
     const [date,setDate ] = useState(new Date())
     var timezoneOffset = date.getTimezoneOffset() * 60000
-
+    const [datetype,setDatetype] = useState()
     const handleSubmitPress = (values) =>{
       console.log("프로젝트 제출 : ", values)
       createproject({
@@ -58,6 +58,11 @@ const ProjectForm =(props)=> {
       }).catch(e => {
         console.log(e.response.data)
       })
+      if (Platform.OS === 'ios'){
+        setDatetype('inline')
+      }else {
+        setDatetype('default')
+      }
     },[])
 
     return (
@@ -121,16 +126,23 @@ const ProjectForm =(props)=> {
                         style={{width: 320, backgroundColor: "white"}}
                         value={new Date()}
                         minimumDate={tommorow}
+                        display={datetype}
                         onChange={(event,selectedDate)=> {
                           console.log(event)
-                          if (event.type === 'set'){
+                          if(Platform.OS === 'android'){
+                            if (event.type === 'set'){
+                              setIsDateTimePickerVisible(false)
+                              setDate(selectedDate)
+                              setFieldValue('startDate',selectedDate)
+                            }
+                            else {
+                              setIsDateTimePickerVisible(false)
+                              console.log("cancel test")
+                            }
+                          }else {
                             setIsDateTimePickerVisible(false)
                             setDate(selectedDate)
                             setFieldValue('startDate',selectedDate)
-                          }
-                          else {
-                            setIsDateTimePickerVisible(false)
-                            console.log("cancel test")
                           }
                         }}
                       />

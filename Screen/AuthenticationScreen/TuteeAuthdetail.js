@@ -44,12 +44,12 @@ const TuteeAutdetail=({navigation,route})=>{
   useEffect(()=>{
       
        getPlan({
-        "project_id": project.id
+        "project_id": project.project.id
       }).then((res)=>{
         console.log("여긴 plan res")
         console.log(res.data)
          setPlans(res.data);
-         setChapter(res.chapter)
+         setChapter(plans.chapter)
       })
       .catch((err)=>{
         console.log(err)
