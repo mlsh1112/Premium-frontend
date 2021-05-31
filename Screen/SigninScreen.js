@@ -43,8 +43,8 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
     }
   }, []);
   async function onAppleButtonPress() {
-
-    console.log('apple login')
+    try{
+      console.log('apple login')
    // performs login request
    const appleAuthRequestResponse = await appleAuth.performRequest({
      requestedOperation: appleAuth.Operation.LOGIN,
@@ -82,6 +82,11 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
      }
  
    }
+    }
+    catch{
+      console.log('Apple Login 진행 실패')
+    }
+    
  }
    const handleSubmitPress = (values) =>{
       login({
@@ -218,7 +223,7 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
        : null
       }
       <View style={styles.button}>
-        <KakaoButton onPress={()=> props.navigation.navigate('KakaoLogin')}>카카오 로그인</KakaoButton>
+        <KakaoButton onPress={()=> props.navigation.navigate('KakaoLogin')}/>
       </View>
       <View style={{flexDirection:'row',marginTop:20}}>
         <Text style={styles.SignUpQStyle}>따숲이 처음이신가요?</Text>
