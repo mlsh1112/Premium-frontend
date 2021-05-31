@@ -33,8 +33,8 @@ export function RenderChapter({chapters,deletechapter}){
                               {chapter.title}
                             </Text>
                                 {/* <View style={styles.pickerstyle}> */}
-                                  <RNPickerSelect
-                                      value={chapter.weight}
+                                <RNPickerSelect
+                                      //value={chapter.weight}
                                       useNativeAndroidPickerStyle={false}
                                       onValueChange={(value) => {
                                         chapter.weight = value

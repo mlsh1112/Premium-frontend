@@ -13,12 +13,13 @@ function Calender(props){
   const [markedDates,setmarkedDates]=useState()
   function DateSet(){
       var days={}
+      var now=moment().format('YYYY-MM-DD');
       if(!props.plans)
       {
         console.log("null")
       }
       else{
-        const color=[['#F3F1E0','#878F7D'],['#5C7210','#A3C821'],['#EFA519','#C8880E'],['#049413','#09CD1D']];
+        const color=[['#FECCBE','#FD8A69'],['#FEEBB6','#FFCD4A'],['#DDECCA','#AFD485'],['#CCD2F0','#9FA9D8']];
         let colorpick=0;
         var Plans=props.plans.options
         let experience_period=props.project.project.experience_period
@@ -35,11 +36,11 @@ function Calender(props){
             if(Trial&&duringDay>experience_period){}
             else{
               if(PalnDays==0){
-                Object.assign(days,{[start_date]:{disabled: true, startingDay: true, color: color[colorpick%color.length][1], endingDay: true , textColor: 'white'}})      
+                Object.assign(days,{[start_date]:{disabled: true, startingDay: true, color: color[colorpick%color.length][1], endingDay: true , textColor: 'black'}})      
               }
               else{
                   for(let j=1;j<=PalnDays;j++){ 
-                    Object.assign(days,{[start_date]:{startingDay: true, color: color[colorpick%color.length][0] , textColor: 'white', }},{[moment(start_date).add(j,"d").format("YYYY-MM-DD")]:{ color: color[colorpick%color.length][1], textColor: 'white'}},{[end_date]:{endingDay: true, color: color[colorpick%color.length][0], textColor: 'white'}})    
+                    Object.assign(days,{[start_date]:{startingDay: true, color: color[colorpick%color.length][0] , textColor: 'black', }},{[moment(start_date).add(j,"d").format("YYYY-MM-DD")]:{ color: color[colorpick%color.length][1], textColor: 'gray'}},{[end_date]:{endingDay: true, color: color[colorpick%color.length][0], textColor: 'black'}})    
                   }
               }
             }
@@ -64,6 +65,10 @@ function Calender(props){
           markedDates={markedDates}
           markingType={'period'}
           style={{borderRadius:25, height:350}}
+
+          theme={{
+            todayTextColor: 'red',
+          }}
          />
         </View>
     )
