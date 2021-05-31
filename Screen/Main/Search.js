@@ -16,6 +16,8 @@ import {
 import {Searchbar,Card } from 'react-native-paper'
 import { getprojects } from '../../src/Api';
 import colors from '../../src/colors';
+import {setSearchHistory} from '../../src/Asyncstorage'
+import AsyncStorage from '@react-native-community/async-storage';
 const moment = require("moment");
 function SearchCard (props){
   const {width,height} = useWindowDimensions();
@@ -65,9 +67,13 @@ function Search({navigation}) {
   const [enterSearch,setEnterSearch]=useState('');
   const [isLoading,SetIsLoading]=useState(false);
   const [reqData,SetreqData]=useState([])
+  const [history,sethistory]=useState([])
+  const [keywords,setKeywords]=useState()
   let ScreenWidth = Dimensions.get('window').width    //screen 너비
   let ScreenHeight = Dimensions.get('window').height   //height 높이
 
+      
+  
   const ChangeSearchData=((text)=>{
       if(text){
         SetSearchblur(true);
@@ -78,17 +84,21 @@ function Search({navigation}) {
       SetSearchData(text);
     })
 
+    const setAsync = (value)=>{
+      sethistory([value,...history])
+      setSearchHistory(history)
+    }
     
     async function SearchVal (){
       if(SearchData.length<=0){
         alert("2글자 이상의 검색어를 입력해주세요")
       }
       else{
-        //console.log(SearchData)
-        setEnterSearch(SearchData)
+        console.log(SearchData)
+        await setEnterSearch(SearchData)
+        await setAsync(SearchData)
         const query = {title_or_description_i_cont: SearchData}
         const data = (await getprojects({ q: query})).data
-
         SetreqData(data)
 
       }
@@ -99,7 +109,16 @@ function Search({navigation}) {
       if(Searchblur){
         SetSearchblur(false)
       }
-
+      AsyncStorage.getItem('keyword')
+      .then(req => JSON.parse(req))
+      .then(json => setKeywords(json))
+      .catch(error => console.log('error!'))
+      // .then(res=>{
+      //   console.log('get keyword',res)
+      //   setKeywords(JSON.parse(JSON.stringify(res)))
+      //   console.log(keywords)
+      // })
+      // .catch(err=>console.log(err))
 
     },[reqData])
   return(
@@ -143,6 +162,19 @@ function Search({navigation}) {
             </>
           :
                <>
+               <Text style={styles.searchtxt}>최근 검색어</Text>
+               {
+                 keywords?
+                 <>
+                  {
+                    keywords.map((key,index)=>{
+                      return <Text>{key}</Text>
+                    })
+                  }
+                 </>
+                 :
+                 <></>
+               }
                </>
 
         }

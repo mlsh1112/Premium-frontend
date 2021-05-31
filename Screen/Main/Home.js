@@ -1,5 +1,4 @@
 import React, { Component, useState} from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
 import TodayProject from '../../src/components/TodayProjectHome'
 import ProjectMini from '../../src/components/ProjectMini'
 import {getprojects,getattendances,gettutorprojs,getcurrentuser} from '../../src/Api'
