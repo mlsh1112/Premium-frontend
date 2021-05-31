@@ -8,16 +8,22 @@ import {
     useWindowDimensions,
     ScrollView,
     TouchableOpacity,
+    Alert
   } from 'react-native';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from '../../src/components';
-
+import {tuteeauthconfirm} from '../../src/Api'
 
 const TutorAuthCheck = ({navigation, route}) => {
-    const tutee=route.params
+    const {tutee,project}=route.params
     const [submittedfiles,setSubmittedfiles] = useState(tutee.images)
     const {width} = useWindowDimensions();
-    
+    console.log('===================================')
+    console.log(tutee.id)
+    console.log(tutee.target.id)
+    console.log(project.id)
+    console.log(tutee)
+    console.log('===================================')
     const renderimagepopup = (key) => {
         console.log('show image')
         navigation.navigate('TuteeAuthPopUp',{imagesource: submittedfiles[key].image_url})
@@ -45,6 +51,26 @@ const TutorAuthCheck = ({navigation, route}) => {
           </ScrollView>
         );
     }
+    function confirmauth(){
+        tuteeauthconfirm(tutee.id,{
+            'project_id': project.id,
+            'tutee_id': tutee.target.id,
+            'auth':{
+                'status': 'confirm'
+            }
+        }).then(res=>{
+            console.log(res)
+            Alert.alert('','인증 확인이 완료되었습니다!',[
+                { text: "OK", onPress: () => {
+                    console.log("확인 누름")
+                    navigation.pop()
+                  }
+                }
+            ])
+        }).catch(e => {
+            console.log(e)
+        })
+    }
     return (
         <View style={styles.container}>
             <View style={styles.tuteeBarStyle}>
@@ -57,7 +83,7 @@ const TutorAuthCheck = ({navigation, route}) => {
         <View style={styles.fileboxStyle}>
             <RenderSubmitFiles pickedfiles={submittedfiles}/>
         </View>
-            <Button onPress={() => navigation.pop()}>{tutee.target.name} 님  인증 확인 ✌️</Button>
+            <Button onPress={confirmauth}>{tutee.target.name} 님  인증 확인 ✌️</Button>
         </View>
     );
     
