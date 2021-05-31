@@ -4,6 +4,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 import { Container } from 'native-base';
 
+import {SafeAreaView} from 'react-native';
 import Header from './Header';
 import Home from './Home';
 import PaymentTest from './PaymentTest';
@@ -12,7 +13,6 @@ import PaymentResult from './PaymentResult';
 import CertificationTest from './CertificationTest';
 import Certification from './Certification';
 import CertificationResult from './CertificationResult';
-import TuteeAuthlist from '../AuthenticationScreen/TuteeAuthList'
 import NavigationService from './NavigationService';
 
 const noHeader = {
@@ -22,15 +22,19 @@ const noHeader = {
 };
 
 const hideHeader = {
+  headerTitle: "결제 준비",
   headerShown: false,
 };
+
+const showHeader = {
+  headerTitle: "결제",
+  headerTitleStyle: {fontWeight: 'bold'}
+};
+
+
 const AppNavigator = createStackNavigator({
   Home: {
     screen: Home,
-    navigationOptions: noHeader,
-  },
-  TuteeAuthlist: {
-    screen: TuteeAuthlist,
     navigationOptions: noHeader,
   },
   PaymentTest: {
@@ -39,7 +43,7 @@ const AppNavigator = createStackNavigator({
   },
   Payment: {
     screen: Payment,
-    navigationOptions: noHeader,
+    navigationOptions: showHeader,
   },
   PaymentResult: {
     screen: PaymentResult,
@@ -94,7 +98,8 @@ export default function App({navigation,route}) {
     }
   }
   return (
-    <Container>
+
+    <Container >
       {isHeaderShow && <Header title={headerTitle} />}
       <AppContainer
         ref={navigatorRef => {
