@@ -11,6 +11,7 @@ import { useEffect,useState } from 'react';
 function Calender(props){
   let Trial=props.project.status==='trial'?true:false;
   const [markedDates,setmarkedDates]=useState()
+  console.log('markedDates',markedDates)
   function DateSet(){
       var days={}
       var now=moment().format('YYYY-MM-DD');
@@ -65,7 +66,7 @@ function Calender(props){
           markedDates={markedDates}
           markingType={'period'}
           style={{borderRadius:25, height:350}}
-
+          onDayPress={(day) => {console.log('selected day', day)}}
           theme={{
             todayTextColor: 'skyblue',
           }}
