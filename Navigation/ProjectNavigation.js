@@ -7,9 +7,7 @@ import ProjectTrial from '../src/components/ProjectTrial'
 import ProfileView from '../src/components/ProfileView'
 import ProjectMini from '../src/components/ProjectMini'
 import CardNews from '../src/components/CardNews'
-import Chatroom from '../Screen/chatting/Chatroom'
 import CreateChatRoom from '../Screen/chatting/CreateChatRoom'
-import Message from '../Screen/chatting/Message'
 import DeleteChatRoom from '../Screen/chatting/DeleteChatRoom'
 import Profile from '../Screen/Main/Profile';
 import Modifyprofile from '../src/components/Modifyprofile'
@@ -17,6 +15,7 @@ import UpdateProject from '../Screen/UpdateProject/UpdateProject'
 import MyLike from '../src/components/MyLike'
 import Book from '../Screen/makeProjectScreen/Book'
 import Chapter from '../Screen/makeProjectScreen/Chapter'
+
 const Stack = createStackNavigator();
 
 export default function ProjectNavigation(){
@@ -31,10 +30,8 @@ export default function ProjectNavigation(){
             <Stack.Screen name="Modifyprofile" component={Modifyprofile} options={{headerShown: false}}/>
             <Stack.Screen name="ProjectTrial" component={ProjectTrial} options={{headerShown: false}}/>
             <Stack.Screen name="CardNews" component={CardNews} options={{headerShown: false}} />
-            <Stack.Screen name="Chatroom" component={Chatroom} />
             <Stack.Screen name="CreateChatRoom" component={CreateChatRoom} options={{headerShown: false}}/>
             <Stack.Screen name="DeleteChatRoom" component={DeleteChatRoom} options={{headerShown: false}}/>
-            <Stack.Screen name="Message" component={Message} options={({ route }) => ({title: route.params.item.groupName})}/>
             <Stack.Screen name="UpdateProject" component={UpdateProject} options={{headerTitle: '프로젝트 업데이트',headerTitleStyle: {fontWeight: 'bold'}}}/>
             <Stack.Screen name="Book" component={Book} options={{headerTitle: "책 선택",headerTitleStyle: {fontWeight: 'bold'}}}/>
             <Stack.Screen name="Chapter" component={Chapter} options={{headerTitle: "챕터 가중치 설정",headerTitleStyle: {fontWeight: 'bold'}}}/>
