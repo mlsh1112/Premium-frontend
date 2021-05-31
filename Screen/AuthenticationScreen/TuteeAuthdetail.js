@@ -16,10 +16,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 
 const TuteeAutdetail=({navigation,route})=>{
- 
     const project=route.params.project
-    var startDate=new Date().getTime() - new Date(project.created_at).getTime();
-    var remainDay=Math.floor(startDate / (1000 * 60 * 60 * 24))
+    var remainDay=route.params.remainDay+1
     var pastDay= 0
     var auths=project.auth_count
     var percent = 0

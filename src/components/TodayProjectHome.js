@@ -38,7 +38,7 @@ class Projectcard extends Component {
                         pastDay-1<0?
                         <Text style={styles.dayStyle3}>프로젝트가 끝났습니다.</Text>
                         :
-                        <Text style={styles.dayStyle3}>남은 인증 {pastDay}개</Text>
+                        <Text style={styles.dayStyle3}>남은 인증 {pastDay-1}개</Text>
 
                     }
                     </View>

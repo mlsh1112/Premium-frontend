@@ -25,7 +25,6 @@
  import icon from '../assets/ddasup_icon.png'
  import jwtDecode from "jwt-decode";
 import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authentication';
-import colors from '../src/colors'
  const validationSchema = Yup.object().shape({
    email: Yup.string()
      .required("이메일을 입력해주세요.")
@@ -44,8 +43,8 @@ import colors from '../src/colors'
     }
   }, []);
   async function onAppleButtonPress() {
-
-    console.log('apple login')
+    try{
+      console.log('apple login')
    // performs login request
    const appleAuthRequestResponse = await appleAuth.performRequest({
      requestedOperation: appleAuth.Operation.LOGIN,
@@ -83,6 +82,11 @@ import colors from '../src/colors'
      }
  
    }
+    }
+    catch{
+      console.log('Apple Login 진행 실패')
+    }
+    
  }
    const handleSubmitPress = (values) =>{
       login({
@@ -211,7 +215,7 @@ import colors from '../src/colors'
            buttonType={AppleButton.Type.SIGN_IN}
            style={{
              marginTop:20,
-             width: 160, // You must specify a width
+             width: 180, // You must specify a width
              height: 45, // You must specify a height
            }}
            onPress={() => onAppleButtonPress()}
@@ -219,7 +223,7 @@ import colors from '../src/colors'
        : null
       }
       <View style={styles.button}>
-        <KakaoButton onPress={()=> props.navigation.navigate('KakaoLogin')}>카카오 로그인</KakaoButton>
+        <KakaoButton onPress={()=> props.navigation.navigate('KakaoLogin')}/>
       </View>
       <View style={{flexDirection:'row',marginTop:20}}>
         <Text style={styles.SignUpQStyle}>따숲이 처음이신가요?</Text>
