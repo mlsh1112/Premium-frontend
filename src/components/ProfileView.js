@@ -11,6 +11,7 @@ import {getproject} from '../Api'
 function ProfileView({ navigation,route }){
     const project = route.params.latestpr
     const [latestpr,setLatestpr]=useState()
+    const [numoflike,setNumoflike]=useState(0)
     useEffect(()=>{
         getproject(project.id).then(res => {
             setLatestpr(res.data)
@@ -23,7 +24,7 @@ function ProfileView({ navigation,route }){
             <Card style={styles.cardStyle}>
                 <View style={styles.topPosition}>
                     <View style={styles.profilePosition}> 
-                        <Image source={cat} style={styles.imgStyle}></Image>
+                        <Image source={{uri:project.tutor.image}} style={styles.imgStyle}></Image>
                         <View style={{flexDirection : 'row',alignItems: 'center',justifyContent:'space-between',width:'100%'}}>
                             <View >
                                 <View style={{flexDirection:'row',marginBottom:10}}>
@@ -37,7 +38,7 @@ function ProfileView({ navigation,route }){
                                 </View>
                             </View>
                             <View>
-                                {latestpr !== undefined ? <Like tutor={latestpr.tutor} likecondition={false}/> : <></>}
+                                {latestpr !== undefined ? <Like tutor={latestpr.tutor} likecondition={false} likeid={0} setNumoflike={setNumoflike}/> : <></>}
                             </View>
                         </View>
                         

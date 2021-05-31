@@ -17,45 +17,66 @@ const moment = require("moment");
 
 const TutorAuthentication = ({navigation,route }) => {
     const [tutees,setTutees] = useState();
-    const [fin,setFin]=useState(true)
     const project=route.params.project
-    const startDate = moment(project.started_at)
-    const now = moment()
-    const remainDay = now.diff(startDate,'days') //시작하는 날짜가 0일차
+    console.log(project)
+    const [howmany,setHowmany]=useState(0)
+    
+    const now = moment().format('YYYY-MM-DD')
+    const startDate = moment(project.started_at).format('YYYY-MM-DD')
+    const realnow = moment(now)
+    const realstartDate = moment(startDate)
+    const remainDay = realnow.diff(realstartDate,'days')
     var pastDay = project.duration
     // var pastDay = 0
     if(remainDay >= 0){
         pastDay = project.duration - remainDay
     }
     console.log(project)
-    useEffect(()=>{    
+    useEffect(()=>{
+        navigation.addListener('focus', ()=>{
             gettutees({
                 "project_id":project.id
             })
             .then(res=>{
-                const filteredauth = res.data.filter((auth) => {
-                    return now.diff(auth.created_at,'days') === 0
+                const todayauth = res.data.filter((auth) => {
+                    const created = moment(auth.created_at).format('YYYY-MM-DD')
+                    const realcreated_at = moment(created)
+                    console.log(realnow,realcreated_at)
+                    return realnow.diff(realcreated_at,'days') === 0
                 })
-                setTutees(filteredauth)
+                const todaynotconfirmedauth = todayauth.filter((auth)=>{
+                    return auth.status !=='confirm'
+                })
+                setTutees(todaynotconfirmedauth)
+                setHowmany(todayauth.length - todaynotconfirmedauth.length)
             }).catch(err=>{
                 console.log('--------------get tutees 에러 ---------------')
                 console.log(err)
             })
+        })
     },[])
 
-    function TuteeListComponent({tutee,navigation}){
+    function TuteeListComponent({tutee,navigation,project}){
         const tuteeinfo=tutee.target
+        // console.log(project)
+        console.log('---------------------')
+        console.log(tuteeinfo)
+        console.log(tutee)
+        console.log('---------------------')
+        // if(now.diff(moment(tutee.created_at),'days') === 0 && tutee.status !== 'confirm'){
+        
         return(
             <View style={styles.tuteeBarStyle}>
                 <Icons name='face' size={30} style={{marginLeft:'8%'}} ></Icons>
                 <Text style={styles.tuteenameStyle}>{tuteeinfo.name}</Text>
-                <TouchableOpacity style={styles.tuteeBtnPosition} onPress={()=>{navigation.push('TutorAuthCheck',tutee)}}>
+                <TouchableOpacity style={styles.tuteeBtnPosition} onPress={()=>{navigation.push('TutorAuthCheck',{tutee,project})}}>
                     <View>
                         <Text style={styles.BtntextStyle}>인증 확인</Text>
                     </View>
                 </TouchableOpacity>
             </View>
         )
+        
     }
 
     return (
@@ -69,8 +90,8 @@ const TutorAuthentication = ({navigation,route }) => {
                     <Text style={styles.percentStyle}>{remainDay +1} / {project.duration}</Text>
                 </View>
                 <View style={styles.precentPosition}>
-                    <Text style={styles.authTextStyle}>인증 진행률</Text>
-                    <Text style={styles.percentStyle}>30%</Text>
+                    <Text style={styles.authTextStyle}>오늘 인증 완료</Text>
+                    <Text style={styles.percentStyle}>{howmany} 명</Text>
                 </View>
             </View >
 
@@ -82,7 +103,8 @@ const TutorAuthentication = ({navigation,route }) => {
                         { tutees
                             ? (<View style={styles.tuteelistview}>
                                     {tutees.map((tutee,index)=>{
-                                            return <TuteeListComponent tutee={tutee} navigation={navigation} key={index}/>   
+
+                                            return <TuteeListComponent tutee={tutee} navigation={navigation} key={index} project={project}/>   
                                         })
                                     }
                               </View>)

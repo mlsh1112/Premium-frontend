@@ -9,7 +9,7 @@
  import AsyncStorage from '@react-native-community/async-storage';
  import jwt_decode from "jwt-decode"
  import React,{useEffect} from 'react';
- import {Button} from '../src/components'
+ import {Button,KakaoButton} from '../src/components'
  import {
    StyleSheet,
    View,
@@ -67,9 +67,9 @@ import colors from '../src/colors'
        .then(res=>{
          console.log(res.data.token)
          setToken(res.data.token);
-         props.navigation.replace('Main');
+         props.navigation.replace('CheckUser');
        })
-       //props.navigation.replace('Main');
+       .catch(err=>console.log(err))
      }
      else {
        console.log('register success')
@@ -80,7 +80,6 @@ import colors from '../src/colors'
           props.navigation.navigate('AdditionalInfo',{name:user_name, userID:res.data})
         })
         .catch(err=>console.log(err))
-       //props.navigation.navigate('AdditionalInfo',{name:user_name,userID:'ss'});
      }
  
    }
@@ -219,6 +218,9 @@ import colors from '../src/colors'
          />
        : null
       }
+      <View style={styles.button}>
+        <KakaoButton onPress={()=> props.navigation.navigate('KakaoLogin')}>카카오 로그인</KakaoButton>
+      </View>
       <View style={{flexDirection:'row',marginTop:20}}>
         <Text style={styles.SignUpQStyle}>따숲이 처음이신가요?</Text>
         <Text style={styles.SignUpStyle}

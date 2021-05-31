@@ -1,21 +1,22 @@
-import React, { Component ,useEffect} from 'react';
+import React,{useState,useEffect} from 'react';
 import {
     StyleSheet,
     View, 
     ActivityIndicator,
-} from 'react-native'
-import {getcurrentuser} from '../src/Api'
+  } from 'react-native';
+import {getcurrentuser} from '../../src/Api';
 
-const CheckUser=(props)=>{
+const CheckUserData = (props) => {
+    
     const CheckCurrentUser = async(props) => {
         try{
             await getcurrentuser().then(res => {
                 console.log(res.data);
-                if(res.data.type === ''){
-                    props.navigation.replace('AdditionalInfo')
+                if(res.data.type === null){
+                   props.navigation.replace('KakaoAdditionalInfo',{userinfo: res.data})
                 }
                 else {
-                    props.navigation.replace('Main')
+                   props.navigation.replace('Main')
                 }
             }).catch(e => console.log(e))
             
@@ -32,7 +33,7 @@ const CheckUser=(props)=>{
             <ActivityIndicator color="black" />
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container : {
@@ -41,5 +42,4 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
   });
-
-export default CheckUser;
+export default CheckUserData;

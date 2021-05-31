@@ -13,11 +13,11 @@ import {createlike, deletelike,islike} from '../Api';
 const Like = (props) => {
     const [like,setLike] = useState(props.likecondition);
     const [numOfLike,setNumOfLike] = useState(props.tutor.likes_count) //api 요청보내서 받아옴
-    const [likeid,setLikeid] = useState()
+    const [likeid,setLikeid] = useState(props.likeid)
     useEffect(() => {
-        console.log(props.tutor.id)
-        console.log(props.likecondition)
-        if(!props.likecondition){
+        console.log(props.setNumoflike)
+        console.log(props)
+        if(!like){
             islike(
                 {
                     "like":{
@@ -52,12 +52,14 @@ const Like = (props) => {
             ).then(res => {
                 console.log(res.data)
                 setLikeid(res.data.id)
+                props.setNumoflike((prev) => prev +1)
             }).catch(e => console.log(e))
         }else {
             setNumOfLike((prev) => prev - 1)
             console.log('좋아요 취소 id : ',likeid)
             deletelike(likeid).then(res => {
                 console.log(res)
+                props.setNumoflike((prev) => prev - 1)
             }).catch(e => {
                 console.log('★★★★★★★★★★★★★★★★★★')
                 console.log(e)
