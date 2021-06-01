@@ -3,7 +3,6 @@ import {
     StyleSheet,
     View,
     Text,
-    Image,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../../src/colors'

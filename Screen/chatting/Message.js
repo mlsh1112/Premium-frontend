@@ -1,9 +1,9 @@
 import React,{useState,useEffect} from 'react';
 import { GiftedChat,Bubble,Send } from 'react-native-gifted-chat';
 import {Alert,View,ActivityIndicator} from 'react-native'
-import firebase,{firestore} from '../../FirebaseConfig/Firebase'
 import colors from '../../src/colors'
 import { IconButton } from 'react-native-paper';
+import firestore from '@react-native-firebase/firestore'
 
 const Messsage = (props) => {
     console.log('////////////////////////////////')
@@ -14,8 +14,10 @@ const Messsage = (props) => {
     const[isJoin,setIsJoin] = useState(false)
 
     useEffect(()=> {
-        const db = firestore
-        var messages = []
+        console.log('------------- item ---------------')
+        console.log(item)
+        console.log('------------- ---- ---------------')
+        const db = firestore()
         checkUser()
         const unsubscribe = db.collection('message').doc(item.groupID).collection('messages').orderBy('createdAt', 'desc').onSnapshot(snapshot => setMessages(
             snapshot.docs.map(doc => ({
@@ -29,7 +31,7 @@ const Messsage = (props) => {
     },[])
 
     function checkUser(){
-        firestore.collection('members').doc(item.groupID).collection('member').where('userID','==',myinfo.id)
+        firestore().collection('members').doc(item.groupID).collection('member').where('userID','==',myinfo.id)
         .get().then(querySnapshot => {
             if(querySnapshot.size >0){
                 querySnapshot.forEach((doc)=>{
@@ -48,10 +50,10 @@ const Messsage = (props) => {
         })
     }
     function joinGroup(){
-        const groupMemberRef = firestore.collection('members').doc(item.groupID).collection('member').doc()
+        const groupMemberRef = firestore().collection('members').doc(item.groupID).collection('member').doc()
         groupMemberRef.set({
             userID: myinfo.id,
-        }).then(docRef=> {
+        }).then(()=> {
             Alert.alert("환영합니다.")
         }).catch(e => {
             console.log(e)
@@ -76,7 +78,7 @@ const Messsage = (props) => {
 
     function handleSend(newMessage = [],myinfo) {
         console.log(newMessage)
-        const MessageRef = firestore.collection("message").doc(item.groupID).collection('messages').doc()
+        const MessageRef = firestore().collection("message").doc(item.groupID).collection('messages').doc()
         setMessages(GiftedChat.append(messages, newMessage))
         const {_id,createdAt,text,user} = newMessage[0]
         MessageRef.set({
