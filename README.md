@@ -2,7 +2,7 @@
 
 
 
-# About Premium Server
+# About Premium frontend
 
 <div align="center">
   
@@ -21,7 +21,13 @@ Common factors
  - npm : 6.14.11
  - node.js : 14.16.0
  - target SDK : 29
-
+ - react-native-webview: "^11.6.2"
+ - buildToolsVersion = "29.0.3"
+ - minSdkVersion = 21 
+ - compileSdkVersion = 29
+ - targetSdkVersion = 29
+ - kotlinVersion = '1.3.72'
+ 
  for android
 
  for ios
