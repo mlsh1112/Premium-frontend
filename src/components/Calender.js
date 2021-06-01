@@ -22,7 +22,7 @@ function Calender(props){
       }
       else{
 
-        let Plans=props.plans.options
+        let Plans=props.plans
         const color=[['#FECCBE','#FD8A69'],['#FEEBB6','#FFCD4A'],['#DDECCA','#AFD485'],['#CCD2F0','#9FA9D8']];
         let colorpick=0;
         let experience_period=props.project.project.experience_period
@@ -56,7 +56,7 @@ function Calender(props){
   } 
 
   const checkPlan=(day)=>{
-    let Plans=props.plans.options
+    let Plans=props.plans
     var date=moment(day.dateString);
     let duringDay=0
     setpickday(day)
@@ -69,16 +69,14 @@ function Calender(props){
       if(Trial){
           if(duringDay===experience_period){
             if(difStart>=0 && difEnd <=0){
-              console.log(plan)
-              setchapter(plan.chapter_id)
+              setchapter(plan.chapter.title)
               isplan=true
               }
           }
       }
       else{
          if(difStart>=0 && difEnd <=0){
-        console.log(plan)
-        setchapter(plan.chapter_id)
+        setchapter(plan.chapter.title)
         isplan=true
         }
       }
@@ -90,7 +88,6 @@ function Calender(props){
   useEffect(()=>{
     DateSet()
   },[props])
-  
     return(
         <View style={{  paddingTop: 20,bottom:20, flex: 1 }}>
         <Calendar

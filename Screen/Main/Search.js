@@ -25,7 +25,7 @@ function SearchCard (props){
   const project = props.project
   const tutor = props.project.tutor
   const startDate = moment(project.started_at).format('YYYY-MM-DD')
-  console.log(tutor)
+
   return(
 
     <View style={cardstyles.container}>
@@ -84,19 +84,14 @@ function Search({navigation}) {
       
   
   const ChangeSearchData=((text)=>{
-      if(text){
-        SetSearchblur(true);
-      }
-      else{
-        SetSearchblur(false);
-      }
       SetSearchData(text);
     })
 
-    const setAsync = async(value)=>{
+    const setAsync = (value)=>{
       console.log(value)
-      await sethistory([value,...history])
-      await setSearchHistory(history)
+      sethistory([value,...history])
+      setSearchHistory(history)
+      console.log('asny',history)
     }
     
     async function SearchVal (){
@@ -130,12 +125,12 @@ function Search({navigation}) {
     },[reqData])
 
     async function pressHistory (value){
-      console.log(value)
       setEnterSearch(value)
       setAsync(value)
       const query = {title_or_description_i_cont: value}
       const data = (await getprojects({ q: query})).data
       SetreqData(data)
+      console.log('press',history)
     }
     const SearchHistoryCard = (props) =>{
       const keyword = props.value

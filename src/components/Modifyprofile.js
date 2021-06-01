@@ -7,12 +7,7 @@ import {
    ScrollView,
    View,
    Text,
-   SafeAreaView,
-   Image,
-   StatusBar,
    TextInput,
-   TouchableOpacity,
-   KeyboardAvoidingView,
  } from 'react-native';
 import RNRestart from 'react-native-restart';
 

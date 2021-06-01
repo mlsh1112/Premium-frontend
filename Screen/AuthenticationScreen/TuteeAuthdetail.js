@@ -46,10 +46,9 @@ const TuteeAutdetail=({navigation,route})=>{
        getPlan({
         "project_id": project.project.id
       }).then((res)=>{
-        console.log("여긴 plan res")
-        console.log(res.data)
+        //console.log(res.data)
          setPlans(res.data);
-         setChapter(res.data.chapter)
+         //setChapter(res.data.chapter)
       })
       .catch((err)=>{
         console.log(err)
@@ -58,8 +57,6 @@ const TuteeAutdetail=({navigation,route})=>{
       LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
 
   },[])
-  console.log(project)
-  console.log(plans)
   return(
     <ScrollView >
       <View style={styles.cardBack}>
