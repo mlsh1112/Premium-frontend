@@ -223,7 +223,7 @@ import appleAuth,{ AppleButton } from '@invertase/react-native-apple-authenticat
        : null
       }
       <View style={styles.button}>
-        <KakaoButton onPress={()=> props.navigation.navigate('KakaoLogin')}/>
+        <KakaoButton onPress={()=> props.navigation.replace('KakaoLogin')}/>
       </View>
       <View style={{flexDirection:'row',marginTop:20}}>
         <Text style={styles.SignUpQStyle}>따숲이 처음이신가요?</Text>
