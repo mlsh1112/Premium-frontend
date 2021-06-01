@@ -16,7 +16,7 @@ import CreateChatRoom from '../Screen/chatting/CreateChatRoom'
 import DeleteChatRoom from '../Screen/chatting/DeleteChatRoom'
 import UpdateProject from '../Screen/UpdateProject/UpdateProject'
 import Modifyprofile from '../src/components/Modifyprofile'
-
+import UserProfileUpload from '../src/components/UserProfileUpload'
 import MyLike from '../src/components/MyLike'
 const StackForCreatePrj = createStackNavigator();
 
@@ -39,6 +39,7 @@ export default function createProjectStackNav(){
             <StackForCreatePrj.Screen name="UpdateProject" component={UpdateProject} options={{headerTitle: '프로젝트 업데이트',headerTitleStyle: {fontWeight: 'bold'}}} />
             <StackForCreatePrj.Screen name="MyLike" component={MyLike} options={{headerTitle: '좋아요 리스트',headerTitleStyle: {fontWeight: 'bold'}}} />
             <StackForCreatePrj.Screen name="Modifyprofile" component={Modifyprofile} options={{headerTitle: '개인 정보 수정',headerTitleStyle: {fontWeight: 'bold'}}}/>
+            <StackForCreatePrj.Screen name="UserProfileUpload" component={UserProfileUpload} options={{headerTitle: '프로필 사진 업로드',headerTitleStyle: {fontWeight: 'bold'}}}/>
         </StackForCreatePrj.Navigator>
     );
 }

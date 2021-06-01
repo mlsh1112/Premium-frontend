@@ -46,7 +46,7 @@ const AdditionalInfo=(props)=>{
       console.log(res.data.token);
     }).then(() => {
       console.log('update success')
-      props.navigation.replace('Main');
+      props.navigation.replace('AuthLoading');
     }).catch(error => {
       alert("전화번호가 있습니다.")
       console.log(error);
