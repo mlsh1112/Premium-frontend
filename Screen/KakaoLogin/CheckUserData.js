@@ -16,7 +16,7 @@ const CheckUserData = (props) => {
                    props.navigation.replace('KakaoAdditionalInfo',{userinfo: res.data})
                 }
                 else {
-                   props.navigation.replace('Main')
+                   props.navigation.replace('AuthLoading')
                 }
             }).catch(e => console.log(e))
             
