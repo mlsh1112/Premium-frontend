@@ -16,12 +16,16 @@ import {
 import {Searchbar,Card } from 'react-native-paper'
 import { getprojects } from '../../src/Api';
 import colors from '../../src/colors';
+import {setSearchHistory} from '../../src/Asyncstorage'
+import AsyncStorage from '@react-native-community/async-storage';
+import Icon from 'react-native-vector-icons/Feather';
 const moment = require("moment");
 function SearchCard (props){
   const {width,height} = useWindowDimensions();
   const project = props.project
   const tutor = props.project.tutor
   const startDate = moment(project.started_at).format('YYYY-MM-DD')
+
   return(
 
     <View style={cardstyles.container}>
@@ -41,7 +45,8 @@ function SearchCard (props){
       </TouchableOpacity>
       <TouchableOpacity style={cardstyles.tutorPosition}
       onPress={()=> props.navigation.navigate('ProfileView',{latestpr:project})}
-      >
+      >{
+        tutor.image!==" "?
         <Image
               style={{
                 width: width*0.2,
@@ -53,11 +58,17 @@ function SearchCard (props){
                 uri:tutor.image
               }}
             />
+            :
+            <Icon name="user" size={50} style={{margin:25}} color="black" />
+      }
+        
           <Text style={cardstyles.tutorName}>{tutor.name}</Text>
       </TouchableOpacity>
     </View>
   )
 }
+
+
 
 function Search({navigation}) {
   const [Searchblur,SetSearchblur]=useState(false);
@@ -65,43 +76,79 @@ function Search({navigation}) {
   const [enterSearch,setEnterSearch]=useState('');
   const [isLoading,SetIsLoading]=useState(false);
   const [reqData,SetreqData]=useState([])
+  const [history,sethistory]=useState([])
+  const [keywords,setKeywords]=useState()
   let ScreenWidth = Dimensions.get('window').width    //screen 너비
   let ScreenHeight = Dimensions.get('window').height   //height 높이
 
+      
+  
   const ChangeSearchData=((text)=>{
-      if(text){
-        SetSearchblur(true);
-      }
-      else{
-        SetSearchblur(false);
-      }
       SetSearchData(text);
     })
 
+    const setAsync = (value)=>{
+      console.log(value)
+      sethistory([value,...history])
+      setSearchHistory(history)
+      console.log('asny',history)
+    }
     
     async function SearchVal (){
       if(SearchData.length<=0){
         alert("2글자 이상의 검색어를 입력해주세요")
       }
       else{
-        //console.log(SearchData)
+        console.log(SearchData)
+        sethistory([SearchData,...history])
+        setSearchHistory(history)
         setEnterSearch(SearchData)
+        setAsync(SearchData)
         const query = {title_or_description_i_cont: SearchData}
         const data = (await getprojects({ q: query})).data
-
         SetreqData(data)
 
       }
     }
-
-
     useEffect(()=>{
       if(Searchblur){
         SetSearchblur(false)
       }
-
+      AsyncStorage.getItem('keyword')
+      .then(req => JSON.parse(req))
+      .then(json =>{ 
+        console.log(json)
+        setKeywords(json)
+      })
+      .catch(error => console.log('error!'))
 
     },[reqData])
+
+    async function pressHistory (value){
+      setEnterSearch(value)
+      setAsync(value)
+      const query = {title_or_description_i_cont: value}
+      const data = (await getprojects({ q: query})).data
+      SetreqData(data)
+      console.log('press',history)
+    }
+    const SearchHistoryCard = (props) =>{
+      const keyword = props.value
+      return(
+        <TouchableOpacity onPress={()=>pressHistory(keyword)} >
+          <Card style={cardstyles.searchCard}>
+            <Text style={cardstyles.searchTxt}>{keyword}</Text>
+          </Card>
+          
+        </TouchableOpacity>
+      )
+    }
+
+
+
+
+
+
   return(
     <SafeAreaView style={{flex:1}}>
     <View style={{flex:1}} >
@@ -143,6 +190,19 @@ function Search({navigation}) {
             </>
           :
                <>
+               <Text style={styles.searchtxt}>최근 검색어</Text>
+               {
+                 keywords?
+                 <>
+                  {
+                    keywords.map((keyword,index)=>{
+                      return <SearchHistoryCard value={keyword} key={index}/>
+                    })
+                  }
+                 </>
+                 :
+                 <></>
+               }
                </>
 
         }
@@ -159,7 +219,8 @@ const cardstyles = StyleSheet.create({
       flexDirection:'row',
       padding:10,
       marginVertical:10,
-      borderRadius:10
+      borderRadius:10,
+      width:'100%'
   },
   cardPosition:{
     flex:3,
@@ -170,7 +231,7 @@ const cardstyles = StyleSheet.create({
   tutorPosition:{
     flex:1,
     alignContent:'center',
-    justifyContent:'center'
+    justifyContent:'center',
   },
   tutorName:{
     fontWeight:'bold',
@@ -185,6 +246,14 @@ const cardstyles = StyleSheet.create({
   },
   txtstyle:{
     color:'gray'
+  },
+  searchCard:{
+    padding:20,
+    marginBottom:5
+  },
+  searchTxt:{
+    fontSize:15,
+    fontWeight:'bold'
   }
 })
 

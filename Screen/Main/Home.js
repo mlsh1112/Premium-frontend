@@ -1,8 +1,7 @@
-import React, { Component, useState} from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
+import React, { Component } from 'react';
 import TodayProject from '../../src/components/TodayProjectHome'
 import ProjectMini from '../../src/components/ProjectMini'
-import {getprojects,getattendances,gettutorprojs,getcurrentuser} from '../../src/Api'
+import {getprojects,getattendances,gettutorprojs} from '../../src/Api'
 import colors from '../../src/colors'
 import homelogo from '../../assets/homeLogo2.png';
 import card1 from '../../assets/cardNews1/cardNews1-001.png'
@@ -15,30 +14,26 @@ import {
     Image
   } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import {setProjects} from '../../src/Asyncstorage'
+import {CurrentUser} from '../../src/utils/CurrentUser'
 
 class Home extends Component {
+    static contextType = CurrentUser
     state={
         subject:'',
         todayprj:[],
         projects:[],
         myprojects:[],
         tutorproj:[],
-        user:[]
     };
     constructor(props) {
         super(props);
     }
     componentDidMount() {
-        
+        console.log('☆☆☆☆☆☆☆☆☆☆☆ context ☆☆☆☆☆☆☆☆☆☆')
+        console.log(this.context)
+        console.log('☆☆☆☆☆☆☆☆☆☆☆ ☆☆☆☆ ☆☆☆☆☆☆☆☆☆☆')
         const getData = async()=>{
-            await getcurrentuser()
-            .then(res=>{
-                this.setState({user:res.data})
-            })
-            .catch(err=>console.log("여긴 겟데이터 에러"+err))
-
-            if(this.state.user.type==='Tutee'){
+            if(this.context[0].type==='Tutee'){
                 console.log('User state : tutee')
                 await getattendances()
                 .then(res=>this.setState({myprojects:res.data}))
@@ -58,7 +53,6 @@ class Home extends Component {
                 this.setState({
                     projects: res.data,
                     todayprj: shuffled
-
                 })
             })
             .catch(err=>
@@ -67,11 +61,11 @@ class Home extends Component {
         }
        
         getData()
-        
     }
     
     render() {
-        console.log('USER',this.state.user)
+        // console.log('USER',this.state.user)
+        console.log('USER',this.context)
         return (
             <View style={styles.container}>
                 <View style={styles.logoposition} >
@@ -79,9 +73,9 @@ class Home extends Component {
                <ScrollView >
 
                <View style={styles.today}>
-                    <Text style={styles.todaytext}>{this.state.user.name} 님의 오늘의 인증!</Text>
+                    <Text style={styles.todaytext}>{this.context[0].name} 님의 오늘의 인증!</Text>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={true} style={{width:"100%",height:"100%"}}>
-                        {this.state.user.type==='Tutor'?
+                        {this.context[0].type==='Tutor'?
                         <View>
                         {this.state.tutorproj?
                             <View style={{flexDirection:'row'}}>
@@ -119,10 +113,6 @@ class Home extends Component {
                             }
                             </View>
                         }
-                    
-
-                        
-                 
                     </ScrollView>
                 </View>
                 <View style={{marginTop:30,margin:20}}>

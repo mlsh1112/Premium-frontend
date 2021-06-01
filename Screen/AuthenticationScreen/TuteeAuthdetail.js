@@ -13,7 +13,7 @@ import Calender from '../../src/components/Calender'
 import colors from '../../src/colors'
 import ProgressBar from "react-native-animated-progress";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+const moment = require("moment");
 
 const TuteeAutdetail=({navigation,route})=>{
     const project=route.params.project
@@ -21,13 +21,13 @@ const TuteeAutdetail=({navigation,route})=>{
     var pastDay= 0
     var auths=project.auth_count
     var percent = 0
-    
     var requireTime = project.project.required_time
     var reviewTime = 0
     requireTime===0?reviewTime = 0: reviewTime = Math.floor(requireTime/project.project.review_weight)
     var studyTime = requireTime-reviewTime
     var [plans,setPlans]=useState()
     var [chapter,setChapter]=useState()
+
 
     if(project.status==='trial'){
               
@@ -41,25 +41,33 @@ const TuteeAutdetail=({navigation,route})=>{
 
     }
     
+  const todayChapter= (plansT)=>{
+    const now = moment()
+    plansT.map(plan=>{
+      let difStart = now.diff(moment(plan.start_at),'days')
+      let difEnd = now.diff(moment(plan.end_at),'days')
+      if(difStart>=0 && difEnd <=0) setChapter(plan.chapter.title)
+    })
+  }
   useEffect(()=>{
       
        getPlan({
         "project_id": project.project.id
       }).then((res)=>{
-        console.log("여긴 plan res")
-        console.log(res.data)
-         setPlans(res.data);
-         setChapter(res.data.chapter)
+        setPlans(res.data);
+        todayChapter(res.data)
       })
       .catch((err)=>{
         console.log(err)
       })
+      
+
 
       LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
 
   },[])
-  console.log(project)
-  console.log(plans)
+
+
   return(
     <ScrollView >
       <View style={styles.cardBack}>

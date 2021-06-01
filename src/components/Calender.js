@@ -1,18 +1,18 @@
 const moment = require("moment");
 import React, { Component } from 'react';
-import {Calendar,CalenderList,Agenda, CalendarList} from 'react-native-calendars';
+import {Calendar,} from 'react-native-calendars';
 import {
-    StyleSheet,
-    TouchableOpacity,
     View,
     Text,
   } from 'react-native';
+import {Card} from 'react-native-paper'
 import { useEffect,useState } from 'react';
 function Calender(props){
   let Trial=props.project.status==='trial'?true:false;
   const [markedDates,setmarkedDates]=useState()
   const [chapter,setchapter]=useState('')
-  let Plans=props.plans.options
+  const [pickday,setpickday]=useState()
+
   function DateSet(){
       var days={}
       var now=moment().format('YYYY-MM-DD');
@@ -21,6 +21,8 @@ function Calender(props){
         console.log("null")
       }
       else{
+
+        let Plans=props.plans
         const color=[['#FECCBE','#FD8A69'],['#FEEBB6','#FFCD4A'],['#DDECCA','#AFD485'],['#CCD2F0','#9FA9D8']];
         let colorpick=0;
         let experience_period=props.project.project.experience_period
@@ -54,22 +56,38 @@ function Calender(props){
   } 
 
   const checkPlan=(day)=>{
-    console.log(day)
+    let Plans=props.plans
     var date=moment(day.dateString);
+    let duringDay=0
+    setpickday(day)
+    var isplan=false
     Plans.map(plan=>{
       let difStart = date.diff(moment(plan.start_at),'days')
       let difEnd = date.diff(moment(plan.end_at),'days')
-
-      if(difStart>=0 && difEnd <=0){
-        setchapter(plan.chapter_id)
+      duringDay += moment(plan.end_at).diff(moment(plan.start_at),'days')
+      let experience_period=props.project.project.experience_period
+      if(Trial){
+          if(duringDay===experience_period){
+            if(difStart>=0 && difEnd <=0){
+              setchapter(plan.chapter.title)
+              isplan=true
+              }
+          }
+      }
+      else{
+         if(difStart>=0 && difEnd <=0){
+        setchapter(plan.chapter.title)
+        isplan=true
+        }
       }
     })
+
+    if(!isplan) setchapter('')
   }
 
   useEffect(()=>{
     DateSet()
   },[props])
-  
     return(
         <View style={{  paddingTop: 20,bottom:20, flex: 1 }}>
         <Calendar
@@ -83,7 +101,10 @@ function Calender(props){
          />
          {
            chapter ?
-           <Text>{chapter}</Text>
+           <Card style={styles.cardPosition}>
+             <Text>{pickday.year}년 {pickday.month}월 {pickday.day}일의 일정 😎</Text>
+           <Text style={styles.planTxt}>{chapter}</Text>
+           </Card>
            :
            <Text></Text>
          }
@@ -92,5 +113,15 @@ function Calender(props){
     )
 }
 
-
+const styles = {
+  cardPosition:{
+    marginTop:20,
+    padding:20
+  },
+  planTxt:{
+    fontWeight:'bold',
+    fontSize:20,
+    margin:8
+  }
+}
 export default Calender;
