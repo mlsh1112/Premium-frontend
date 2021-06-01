@@ -13,7 +13,7 @@ import Calender from '../../src/components/Calender'
 import colors from '../../src/colors'
 import ProgressBar from "react-native-animated-progress";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+const moment = require("moment");
 
 const TuteeAutdetail=({navigation,route})=>{
     const project=route.params.project
@@ -21,13 +21,13 @@ const TuteeAutdetail=({navigation,route})=>{
     var pastDay= 0
     var auths=project.auth_count
     var percent = 0
-    
     var requireTime = project.project.required_time
     var reviewTime = 0
-    requireTime===0?reviewTime = 0: reviewTime = Math.floor(project.project.review_weight/requireTime)
+    requireTime===0?reviewTime = 0: reviewTime = Math.floor(requireTime/project.project.review_weight)
     var studyTime = requireTime-reviewTime
     var [plans,setPlans]=useState()
     var [chapter,setChapter]=useState()
+
 
     if(project.status==='trial'){
               
@@ -35,31 +35,39 @@ const TuteeAutdetail=({navigation,route})=>{
         percent = Math.floor((auths/project.project.experience_period)*100)
     
     }
-    else{
+    else if(project.status==='full'){
         pastDay=project.project.duration-remainDay
         percent = Math.floor((auths/project.project.duration)*100)
 
     }
     
+  const todayChapter= (plansT)=>{
+    const now = moment()
+    plansT.map(plan=>{
+      let difStart = now.diff(moment(plan.start_at),'days')
+      let difEnd = now.diff(moment(plan.end_at),'days')
+      if(difStart>=0 && difEnd <=0) setChapter(plan.chapter.title)
+    })
+  }
   useEffect(()=>{
       
        getPlan({
         "project_id": project.project.id
       }).then((res)=>{
-        console.log("여긴 plan res")
-        console.log(res.data)
-         setPlans(res.data);
-         setChapter(plans.chapter)
+        setPlans(res.data);
+        todayChapter(res.data)
       })
       .catch((err)=>{
         console.log(err)
       })
+      
+
 
       LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
 
   },[])
-  console.log(project)
-  console.log(plans)
+
+
   return(
     <ScrollView >
       <View style={styles.cardBack}>
@@ -130,12 +138,12 @@ const TuteeAutdetail=({navigation,route})=>{
         <View style={styles.todayTxt}>
           <Text style={styles.todayblackTxt}>⦁ 공부 시간 : </Text>
           <Text style={styles.todayredTxt}>{studyTime}</Text>
-          <Text style={styles.todayblackTxt}> 시간</Text>
+          <Text style={styles.todayblackTxt}> 분</Text>
         </View>
         <View style={styles.todayTxt}>
           <Text style={styles.todayblackTxt}>⦁ 복습 시간 : </Text>
           <Text style={styles.todayredTxt}>{reviewTime}</Text>
-          <Text style={styles.todayblackTxt}> 시간</Text>
+          <Text style={styles.todayblackTxt}> 분</Text>
         </View>
           <Text style={styles.todayblackTxt}>⦁ 인증 방법</Text>
           <View style={{flexDirection:'row'}}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useRef} from 'react';
 import {
     StyleSheet,
     View,
@@ -16,6 +16,13 @@ import RNPickerSelect from 'react-native-picker-select';
 
 export function RenderChapter({chapters,deletechapter}){
     console.log(chapters)
+    const pickerRef = useRef()
+    function open(){
+      pickerRef.current.focus();
+    }
+    function close(){
+      pickerRef.current.blur()
+    }
       return(
                   <View style={styles.chapterlist}>
                     {chapters.map((chapter,key) => {

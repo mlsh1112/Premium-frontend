@@ -53,3 +53,12 @@ export const setProjects = async(projects)=>{
         console.log("AsyncStorage setting Error: " + error.message);
     }
 }
+
+export const setSearchHistory = async(keyword) =>{
+    try{
+        await AsyncStorage.setItem('keyword',JSON.stringify(keyword))
+    }
+    catch (error){
+        console.log("AsyncStorage setting Error: " + error.message);
+    }
+}

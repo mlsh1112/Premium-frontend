@@ -9,15 +9,17 @@ import {
 import TuteeAuthList from '../AuthenticationScreen/TuteeAuthList'
 import TutorAuthList from '../AuthenticationScreen/TutorAuthList'
 import AsyncStorage from '@react-native-community/async-storage';
-
+import {getcurrentuser} from '../../src/Api'
 const Authentication = ({navigation}) => {
   const [userType, setuserType] = useState('');
-
+  const [type,setType]=useState('')
   useEffect(() => {
     async function getData(){
-      const type = await AsyncStorage.getItem('type');
-      console.log(type)
-      setuserType(type)
+      await getcurrentuser()
+      .then(res=>{
+        setuserType(res.data.type)
+      })
+      .catch(err=>console.log("여긴 겟데이터 에러"+err))
     }
     getData()
   },[])
@@ -31,8 +33,10 @@ const Authentication = ({navigation}) => {
           userType==='' 
           ? null 
           : ( userType === 'Tutor'
-            ?<TutorAuthList navigation={navigation}></TutorAuthList>
-            :<TuteeAuthList navigation={navigation}></TuteeAuthList>)   
+            ?
+              <TutorAuthList navigation={navigation}></TutorAuthList>
+            :
+              <TuteeAuthList navigation={navigation}></TuteeAuthList>)   
         }
     </View>
   );

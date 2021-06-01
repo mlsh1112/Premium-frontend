@@ -7,12 +7,7 @@ import {
    ScrollView,
    View,
    Text,
-   SafeAreaView,
-   Image,
-   StatusBar,
    TextInput,
-   TouchableOpacity,
-   KeyboardAvoidingView,
  } from 'react-native';
 import RNRestart from 'react-native-restart';
 
@@ -39,10 +34,6 @@ const validationSchema = Yup.object().shape({
  });
 
 const Modifyprofile=(props)=>{
-  
-  var userType;
-  const [isSelected,setSelection]=useState(false);
-
   const handleSubmitPress = (values)=>{
     console.log(props.route.params.myinfo.id)
      userUpdate(props.route.params.myinfo.id,
@@ -50,8 +41,7 @@ const Modifyprofile=(props)=>{
            "user":{
                      "password":values.password,
                      "name":values.Name,
-                     "phone":values.Phone,
-                     "type":userType
+                     "phone":values.Phone
                    }
        }).then(res => {
 
@@ -67,32 +57,37 @@ const Modifyprofile=(props)=>{
        });
   
   }  
-  useEffect(()=>{
-    userType=isSelected?"Tutor":"Tutee"
-    console.log(userType);
-  })
 
   return(
     <View style={styles.container}>
-     <SafeAreaView>
-     <View style={{marginTop:10}}>
-       <Text style={styles.title}>개인 정보 수정</Text>
-     </View>
      <Formik
        style={styles.FormStyle}
        validationSchema={validationSchema}
-       initialValues={{email:'', password:'',Comfirm_password:'',Name:'',Phone:''}}
+       initialValues={{ password:'',Comfirm_password:'',Name:'',Phone:''}}
        onSubmit={(values) => {
          console.log(values)
          handleSubmitPress(values)
        }}
      >
        {({ handleChange, handleBlur, handleSubmit, values, errors,touched,}) => (
-       <ScrollView style={{alignSelf:'center'}}>   
-         <>
+             <>
+       <ScrollView>
+         
+       <TextInput
+             name="Name"
+             placeholder="        이름"
+             style={styles.textInput}
+             onChangeText={handleChange('Name')}
+             onBlur={handleBlur('Name')}
+             value={values.Name}
+           />
+           {(errors.Name && touched.Name) &&
+           <Text style={styles.errorText}>{errors.Name}</Text>
+           }
+
            <TextInput
              name="password"
-             placeholder="Password"
+             placeholder="        비밀번호"
              style={styles.textInput}
              onChangeText={handleChange('password')}
              onBlur={handleBlur('password')}
@@ -104,7 +99,7 @@ const Modifyprofile=(props)=>{
            }
            <TextInput
              name="Confirm_password"
-             placeholder="Confirm_Password"
+             placeholder="        비밀번호 확인"
              style={styles.textInput}
              onChangeText={handleChange('Comfirm_password')}
              onBlur={handleBlur('Comfirm_password')}
@@ -116,19 +111,8 @@ const Modifyprofile=(props)=>{
            }
 
            <TextInput
-             name="Name"
-             placeholder="Name"
-             style={styles.textInput}
-             onChangeText={handleChange('Name')}
-             onBlur={handleBlur('Name')}
-             value={values.Name}
-           />
-           {(errors.Name && touched.Name) &&
-           <Text style={styles.errorText}>{errors.Name}</Text>
-           }
-           <TextInput
              name="Phone"
-             placeholder="Please enter only the number without '-' "
+             placeholder="        전화번호 '-' 없이 입력         "
              style={styles.textInput}
              onChangeText={handleChange('Phone')}
              onBlur={handleBlur('Phone')}
@@ -137,26 +121,17 @@ const Modifyprofile=(props)=>{
            {(errors.Phone && touched.Phone) &&
            <Text style={styles.errorText}>{errors.Phone}</Text>
            }
-
-              <CheckBox
-                value={isSelected}
-                onValueChange={setSelection}
-                style={styles.checkbox}
-              />
-            <Text style={{alignSelf:'center'}}>당신은 튜터 입니까?</Text> 
-           
-                 
-           <View style={styles.Button}>
-             <Button onPress={handleSubmitPress}>개인 정보 수정 완료</Button>
-           </View>
-        
-         </>
+                
+         
          </ScrollView>
+
+            <View style={styles.Button}>
+            <Button onPress={handleSubmit}>개인 정보 수정 완료</Button>
+            </View>
+            </>
        )}
      </Formik>
      
-     
-     </SafeAreaView>
    </View>
    
 
@@ -168,96 +143,38 @@ const styles = StyleSheet.create({
       flex : 1,
       justifyContent:'center',
       alignItems:'center',
-  },
-  textstyle:{
-    fontSize:20,
-    fontWeight:'bold'
+      marginTop:50
   },
   FormStyle: {
-   flexDirection: 'row',
    height: 40,
    marginTop: 20,
-   marginLeft: 35,
-   marginRight: 35,
    margin: 10,
  },
- 
- PickerBox: {
-  position:'absolute',
-  height: 40,
-  width: '35%',
-  margin: 10,
-  backgroundColor: 'white',
-  borderWidth: 1,
-  borderRadius: 10,  
-},
-
-AccountInput: {
-  height: 40,
-  width: '55%',
-  margin: 10,
-  backgroundColor: 'white',
-  borderWidth: 1,
-  borderRadius: 10,
-  fontSize:15,
-  fontWeight:'bold'
-    
-},
 errorText: {
   fontSize: 12,
   color: 'red',
   alignSelf:'center'
 },
  textInput: {
-  height: 40,
-  width: '90%',
-  margin: 10,
+  height: 50,
+  width: 350,
+  margin: 20,
   backgroundColor: 'white',
-  borderWidth: 1,
   borderRadius: 10,
   fontSize:15,
-  fontWeight:'bold'
+  fontWeight:'bold',
+  elevation: 5,
+  shadowColor: 'gray',
+  shadowOffset: { width: 0, height: 3 },
+  shadowOpacity: 0.5,
+  shadowRadius: 5,
+  borderRadius:20 
     
 },
-  InputStyle: {
-   flex: 1,
-   color: "black",
-   paddingLeft: 15,
-   paddingRight: 15,
-   borderWidth: 1,
-   borderRadius: 30,
-   borderColor: '#dadae8',
- },
- SignUpQStyle: {
-   color: "black",
-   textAlign: 'center',
-   fontSize: 14,
-   alignSelf: 'center',
-   padding: 10,
- },
- SignUpStyle: {
-   color: "blue",
-   textAlign: 'center',
-   fontWeight: 'bold',
-   fontSize: 14,
-   alignSelf: 'center',
-   padding: 5,
- },
- title: {
-  fontSize: 36,
-  fontWeight: "bold",
-  marginBottom:10,
-  alignSelf:"center"
-},
- checkbox:{
-  alignSelf:"center",
-},
-lable:{
-  margin:9,
-},
+ 
 Button:{
-  marginTop:10,
-  alignSelf:"center"
+  alignSelf:"center",
+  marginBottom:30
 }
 });
 

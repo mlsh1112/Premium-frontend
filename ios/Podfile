@@ -26,6 +26,10 @@ target 'first' do
  # post_install do |installer|
  #   flipper_post_install(installer)
  # end
+ use_flipper!({ 'Flipper-Folly' => '2.3.0' }) # update this part
+  post_install do |installer|
+    flipper_post_install(installer)
+  end
 end
 
 target 'first-tvOS' do

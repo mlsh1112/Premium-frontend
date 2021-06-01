@@ -7,6 +7,7 @@ import {
     TextInput,
     ScrollView,
     Keyboard,
+    Platform
   } from 'react-native';
 import { Formik } from "formik";
 import RNDateTimePicker from '@react-native-community/datetimepicker';
@@ -29,6 +30,7 @@ const ProjectForm =(props)=> {
     const [date,setDate ] = useState(new Date())
     var timezoneOffset = date.getTimezoneOffset() * 60000
     const [datetype,setDatetype] = useState()
+    
     const handleSubmitPress = (values) =>{
       console.log("프로젝트 제출 : ", values)
       createproject({
@@ -61,7 +63,7 @@ const ProjectForm =(props)=> {
       if (Platform.OS === 'ios'){
         setDatetype('inline')
       }else {
-        setDatetype('default')
+        setDatetype('defalut')
       }
     },[])
 
@@ -110,7 +112,7 @@ const ProjectForm =(props)=> {
                 
 
                 <Text style={styles.subtitle}>2. 프로젝트 시작 일자</Text>
-                  <TextInput
+                   <TextInput
                     name="startDate"
                     style={styles.textInput}
                     value={new Date(date - timezoneOffset).toISOString().substring(0,10)}
@@ -120,7 +122,7 @@ const ProjectForm =(props)=> {
                       setIsDateTimePickerVisible(true)
                       }
                     }
-                  />
+                  /> 
                   {isDateTimePickerVisible && (
                       <RNDateTimePicker
                         style={{width: 320, backgroundColor: "white"}}
