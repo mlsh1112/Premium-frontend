@@ -31,12 +31,12 @@ const TuteeAutdetail=({navigation,route})=>{
 
     if(project.status==='trial'){
               
-        pastDay=project.project.experience_period-remainDay
+        pastDay=route.params.pastDay
         percent = Math.floor((auths/project.project.experience_period)*100)
     
     }
     else if(project.status==='full'){
-        pastDay=project.project.duration-remainDay
+        pastDay=route.params.pastDay
         percent = Math.floor((auths/project.project.duration)*100)
 
     }
@@ -54,6 +54,7 @@ const TuteeAutdetail=({navigation,route})=>{
        getPlan({
         "project_id": project.project.id
       }).then((res)=>{
+        console.log(res.data)
         setPlans(res.data);
         todayChapter(res.data)
       })
@@ -66,7 +67,6 @@ const TuteeAutdetail=({navigation,route})=>{
       LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
 
   },[])
-
 
   return(
     <ScrollView >

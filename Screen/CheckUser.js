@@ -15,7 +15,7 @@ const CheckUser=(props)=>{
                     props.navigation.replace('AdditionalInfo')
                 }
                 else {
-                    props.navigation.replace('Main')
+                    props.navigation.replace('AuthLoading')
                 }
             }).catch(e => console.log(e))
             

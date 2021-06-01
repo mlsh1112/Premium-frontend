@@ -60,7 +60,7 @@ const ProjectAuthCard = ({navigation,project}) => {
             {remainDay < 0?
             <View style={{width:90,height:100}}></View>
             :
-            <TouchableOpacity  onPress={()=>{navigation('TuteeAuthdetail',{project,remainDay})}}>
+            <TouchableOpacity  onPress={()=>{navigation('TuteeAuthdetail',{project,remainDay,pastDay})}}>
                     <Image source={authBtn} style={{width:90,height:100}}></Image>
                     </TouchableOpacity>
             }
@@ -73,7 +73,12 @@ const ProjectAuthCard = ({navigation,project}) => {
 const TuteeAuthList = ({navigation}) => {
     const [projects, setProjects] = useState();
     const [user,setUser]=useState();
+    navigation.addListener('focus', e => {
+        getattendances()
+        .then(res=>setProjects(res.data))
+        .catch(err => console.log('attendances',err))
 
+    })
 
     useEffect(() => {
         console.log("Auth")
