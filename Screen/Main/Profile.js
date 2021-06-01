@@ -21,7 +21,7 @@ import {
   Caption,
   Text,
 } from 'react-native-paper';
-
+import FontIcon from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-community/async-storage';
 import {TabView} from 'react-native-tab-view';
@@ -144,8 +144,8 @@ const Profile = (props) => {
           <View style={{width:'70%'}}>
             <View style={[styles.userinfoWrapper,{height:50}]}>
               <Text style={{fontSize:20,fontWeight:'bold'}}>{myinfo.name}</Text>
-              <TouchableOpacity style={styles.buttonposition} onPress={handleChangeProfile}>
-                  <Text style={[styles.buttonstyle,{fontSize: 14}]}>개인 정보 수정</Text>
+                <TouchableOpacity  onPress={handleChangeProfile}>
+                <FontIcon name='gear' size={30}/>
               </TouchableOpacity>
             </View>
             <View style={styles.userinfoWrapper}>

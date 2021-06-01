@@ -40,7 +40,6 @@ const validationSchema = Yup.object().shape({
 
 const Modifyprofile=(props)=>{
   
-  var userType;
   const [isSelected,setSelection]=useState(false);
 
   const handleSubmitPress = (values)=>{
@@ -50,8 +49,7 @@ const Modifyprofile=(props)=>{
            "user":{
                      "password":values.password,
                      "name":values.Name,
-                     "phone":values.Phone,
-                     "type":userType
+                     "phone":values.Phone
                    }
        }).then(res => {
 
@@ -67,17 +65,10 @@ const Modifyprofile=(props)=>{
        });
   
   }  
-  useEffect(()=>{
-    userType=isSelected?"Tutor":"Tutee"
-    console.log(userType);
-  })
 
   return(
     <View style={styles.container}>
      <SafeAreaView>
-     <View style={{marginTop:10}}>
-       <Text style={styles.title}>개인 정보 수정</Text>
-     </View>
      <Formik
        style={styles.FormStyle}
        validationSchema={validationSchema}
@@ -137,17 +128,9 @@ const Modifyprofile=(props)=>{
            {(errors.Phone && touched.Phone) &&
            <Text style={styles.errorText}>{errors.Phone}</Text>
            }
-
-              <CheckBox
-                value={isSelected}
-                onValueChange={setSelection}
-                style={styles.checkbox}
-              />
-            <Text style={{alignSelf:'center'}}>당신은 튜터 입니까?</Text> 
-           
                  
            <View style={styles.Button}>
-             <Button onPress={handleSubmitPress}>개인 정보 수정 완료</Button>
+             <Button onPress={handleSubmit}>개인 정보 수정 완료</Button>
            </View>
         
          </>
