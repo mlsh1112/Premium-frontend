@@ -1,15 +1,10 @@
-import React,{ useEffect, useState } from 'react';
+import React,{ useEffect } from 'react';
 import {
     StyleSheet,
-    ScrollView,
     View,
-    Text,
-    Image,
-    TextInput,
     ActivityIndicator
   } from 'react-native';
-import firebase,{firestore} from '../../FirebaseConfig/Firebase'
-import {updateproject} from '../../src/Api'
+import firestore from '@react-native-firebase/firestore'
 
 const DeleteChatRoom = (props) => {
     const {myinfo,latestpr,chatroom} = props.route.params
@@ -23,21 +18,24 @@ const DeleteChatRoom = (props) => {
     
     function deletegroup() {
         console.log(chatroom.groupID)
-        firestore.collection('members').doc(chatroom.groupID).collection('member').get().then(res =>{
+        const memberRef = firestore().collection('members').doc(chatroom.groupID).collection('member')
+        const messageRef = firestore().collection('message').doc(chatroom.groupID).collection('messages')
+        const groupRef = firestore().collection('GROUPS').doc(chatroom.groupID)
+        memberRef.get().then(res =>{
             res.forEach(r => {
                 console.log(r.id)
-                firestore.collection('members').doc(chatroom.groupID).collection('member').doc(r.id).delete()
+                memberRef.doc(r.id).delete()
             })
         }).catch(e => console.log(e))
-        firestore.collection('messages').doc(chatroom.groupID).collection('message').get().then(res =>{
+        messageRef.get().then(res =>{
             res.forEach(r => {
                 console.log(r.id)
-                firestore.collection('members').doc(chatroom.groupID).collection('member').doc(r.id).delete()
+                messageRef.doc(r.id).delete()
             })
         }).catch(e => console.log(e))
-        firestore.collection('GROUPS').doc(chatroom.groupID).delete().then(res => {
+        groupRef.delete().then(res => {
             alert(latestpr.title + ' 채팅방'+ ' 삭제가 완료되었습니다.')
-                            props.navigation.popToTop()
+            props.navigation.popToTop()
         }).catch(e=>{
             console.log(e)
         })

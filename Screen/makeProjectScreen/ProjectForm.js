@@ -63,7 +63,7 @@ const ProjectForm =(props)=> {
       if (Platform.OS === 'ios'){
         setDatetype('inline')
       }else {
-        setDatetype('defalut')
+        setDatetype('default')
       }
     },[])
 

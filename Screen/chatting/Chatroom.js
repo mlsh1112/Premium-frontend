@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useRef} from 'react';
-import firebase,{firestore} from '../../FirebaseConfig/Firebase'
+import firestore from '@react-native-firebase/firestore'
 import {
     StyleSheet,
     View,
@@ -10,9 +10,6 @@ import GroupsItem from './GroupItem'
 import {getcurrentuser,getattendances,tutorgetproject} from '../../src/Api';
 
 const Chatroom = (props) => {
-    // const {myinfo,latestpr} = props.route.params
-    // const [myinfo, setMyinfo] = useState({"email": "", "id": -1, "image": "", "info": "", "likes_count": -1, "name": "", "phone": "", "status": "", "type": ""})
-    // const [latestpr,setProject] = useState([])
     const myinfo = useRef()
     const latestpr = useRef()
     const [groups,setGroups] = useState([])
@@ -23,11 +20,9 @@ const Chatroom = (props) => {
     useEffect(()=>{
         props.navigation.addListener('focus', e => {
           getcurrentuser().then(res => {
-            // setMyinfo(res.data)
             myinfo.current = res.data
             if(res.data.type ==='Tutee'){
               getattendances().then(res => {
-                // setProject(res.data)
                 latestpr.current = res.data
                 getChats(latestpr.current,myinfo.current)
               }).catch(e => {
@@ -40,7 +35,6 @@ const Chatroom = (props) => {
                 q: {tutor_id_eq: res.data.id}
               }).then(res => {
                 console.log('tutor get project list complete')
-                // setProject(res.data)
                 latestpr.current = res.data
                 getChats(latestpr.current,myinfo.current)
               }).catch(e => {
@@ -56,7 +50,7 @@ const Chatroom = (props) => {
     },[])
 
     function getChats(latestpr,myinfo){
-        const db = firestore
+        const db = firestore()
         var groupArray = []
         console.log('====================')
         console.log(latestpr)
@@ -69,8 +63,7 @@ const Chatroom = (props) => {
             })
             groupArray = groupArray.filter((group)=>{
                     var check = 0
-                    latestpr.map((pr)=> {
-                        
+                    latestpr.map((pr)=> { 
                         if(myinfo.type ==='Tutee'){
                             if( pr.project.id === group.projectID){
                                 check = 1

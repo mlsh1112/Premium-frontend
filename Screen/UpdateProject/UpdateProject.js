@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {Button} from '../../src/components'
 import {
     StyleSheet,
@@ -8,6 +8,7 @@ import {
     ScrollView,
     Keyboard,
     Alert,
+    Platform,
   } from 'react-native';
 import { Formik } from "formik";
 import RNDateTimePicker from '@react-native-community/datetimepicker';
@@ -41,7 +42,7 @@ const UpdateProject =(props)=> {
     var experienceend = new Date(latestpr.started_at)
     experienceend.setDate(experienceend.getDate() + latestpr.experience_period)
     const conditiondeposit = new Date() > experienceend
-
+    const [datetype,setDatetype] = useState()
     const handleSubmitPress = (values) =>{
       console.log("프로젝트 제출 : " + JSON.stringify(values))
       updateproject(latestpr.id,
@@ -88,7 +89,13 @@ const UpdateProject =(props)=> {
             console.log(e)
         })
     }
-    
+    useEffect(() => {
+      if (Platform.OS === 'ios'){
+        setDatetype('inline')
+      }else {
+        setDatetype('default')
+      }
+    },[])
     return (
         <ScrollView>
         <View style={styles.container}>
@@ -135,16 +142,23 @@ const UpdateProject =(props)=> {
                         style={{width: 320, backgroundColor: "white"}}
                         value={new Date()}
                         minimumDate={tommorow}
+                        display={datetype}
                         onChange={(event,selectedDate)=> {
                           console.log(event)
-                          if (event.type === 'set'){
+                          if(Platform.OS === 'android'){
+                            if (event.type === 'set'){
+                              setIsDateTimePickerVisible(false)
+                              setDate(selectedDate)
+                              setFieldValue('startDate',selectedDate)
+                            }
+                            else {
+                              setIsDateTimePickerVisible(false)
+                              console.log("cancel test")
+                            }
+                          }else {
                             setIsDateTimePickerVisible(false)
                             setDate(selectedDate)
                             setFieldValue('startDate',selectedDate)
-                          }
-                          else {
-                            setIsDateTimePickerVisible(false)
-                            console.log("cancel test")
                           }
                         }}
                       />
