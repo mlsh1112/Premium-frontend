@@ -31,7 +31,7 @@ const KakaoLogin = (props) => {
         console.log(res.token)
         console.log("=============================")
         AsyncStorage.setItem('token', res.token);
-        props.navigation.navigate('CheckUserData')
+        props.navigation.replace('CheckUserData')
       }
     };
     
