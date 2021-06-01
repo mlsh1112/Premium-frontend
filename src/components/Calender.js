@@ -8,7 +8,11 @@ import {
 import {Card} from 'react-native-paper'
 import { useEffect,useState } from 'react';
 function Calender(props){
-  let Trial=props.project.status==='trial'?true:false;
+  let Trial=false
+  props.project.status==='trial'?
+  Trial=true:Trial=false
+
+  let experience_period=props.project.project.experience_period 
   const [markedDates,setmarkedDates]=useState()
   const [chapter,setchapter]=useState('')
   const [pickday,setpickday]=useState()
@@ -22,10 +26,8 @@ function Calender(props){
         let Plans=props.plans
         const color=[['#FECCBE','#FD8A69'],['#FEEBB6','#FFCD4A'],['#DDECCA','#AFD485'],['#CCD2F0','#9FA9D8']];
         let colorpick=0;
-        let experience_period=props.project.project.experience_period
-        let duringDay=0
         let experienceEnd=moment(Plans[0].start_at).add(experience_period-1,"d")
-        console.log(experienceEnd)
+       
         Plans.map((item)=>{
             colorpick++
             var start_date=moment(item.start_at).format("YYYY-MM-DD")
@@ -40,7 +42,6 @@ function Calender(props){
               var experFinStart =date_start.diff(experienceEnd,'days')
               var experFinEnd = date_end.diff(experienceEnd,'days')
 
-              
               // 체험기간 마감 이전일 경우
               if(experFinStart<0){
                 //프로젝트 기한이 하루인 경우
@@ -57,7 +58,6 @@ function Calender(props){
                   }
                   //체험판 마감이 프로젝트 마감보다 먼저인 경우
                   else{
-                    console.log(experienceEnd,date_end)
                     for(let j=1;j<(experFinStart*-1);j++){ 
                       Object.assign(days,{[start_date]:{startingDay: true, color: color[colorpick%color.length][0] , textColor: 'black', }},{[moment(start_date).add(j,"d").format("YYYY-MM-DD")]:{ color: color[colorpick%color.length][1], textColor: 'gray'}},{[experienceEnd.format("YYYY-MM-DD")]:{endingDay: true, color: color[colorpick%color.length][0], textColor: 'black'}})    
                     }
@@ -78,7 +78,6 @@ function Calender(props){
               }
             }
 
-            duringDay+=PalnDays
         })
        setmarkedDates(days);
 
@@ -86,24 +85,24 @@ function Calender(props){
   } 
 
   const checkPlan=(day)=>{
-
     let Plans=props.plans
     var date=moment(day.dateString);
-    let duringDay=0
     setpickday(day)
     var isplan=false
+    let experienceEnd=moment(Plans[0].start_at).add(experience_period-1,"d")
     Plans.map(plan=>{
       let difStart = date.diff(moment(plan.start_at),'days')
       let difEnd = date.diff(moment(plan.end_at),'days')
-      duringDay += moment(plan.end_at).diff(moment(plan.start_at),'days')
-      let experience_period=props.project.project.experience_period
+      let experFinEnd = date.diff(experienceEnd,'days')
+
       if(Trial){
-          if(duringDay===experience_period){
-            if(difStart>=0 && difEnd <=0){
-              setchapter(plan.chapter.title)
-              isplan=true
-              }
-          }
+        if(experFinEnd<=0){
+          if(difStart>=0 && difEnd <=0){
+            setchapter(plan.chapter.title)
+            isplan=true
+            }
+        }
+
       }
       else{
          if(difStart>=0 && difEnd <=0){
