@@ -30,7 +30,6 @@ const TuteeAutdetail=({navigation,route})=>{
 
 
     if(project.status==='trial'){
-              
         pastDay=route.params.pastDay
         percent = Math.floor((auths/project.project.experience_period)*100)
     

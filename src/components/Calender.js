@@ -14,20 +14,19 @@ function Calender(props){
   const [pickday,setpickday]=useState()
   const DateSet=()=>{
       var days={}
-      var now=moment().format('YYYY-MM-DD');
       if(!props.plans)
       {
         console.log("null")
       }
       else{
-        console.log(props.plans)
         let Plans=props.plans
         const color=[['#FECCBE','#FD8A69'],['#FEEBB6','#FFCD4A'],['#DDECCA','#AFD485'],['#CCD2F0','#9FA9D8']];
         let colorpick=0;
         let experience_period=props.project.project.experience_period
         let duringDay=0
+        let experienceEnd=moment(Plans[0].start_at).add(experience_period-1,"d")
+        console.log(experienceEnd)
         Plans.map((item)=>{
-          console.log(item)
             colorpick++
             var start_date=moment(item.start_at).format("YYYY-MM-DD")
             var end_date=moment(item.end_at).format("YYYY-MM-DD")
@@ -36,19 +35,35 @@ function Calender(props){
             var date_end=moment(item.end_at);
             var PalnDays=date_end.diff(date_start,'days')
 
-            console.log(duringDay)
-            if(Trial){
-              var PalnDays=experience_period
-              if(duringDay>= experience_period){}
-              else{
+            if(Trial)
+            {
+              var experFinStart =date_start.diff(experienceEnd,'days')
+              var experFinEnd = date_end.diff(experienceEnd,'days')
+
+              
+              // 체험기간 마감 이전일 경우
+              if(experFinStart<0){
+                //프로젝트 기한이 하루인 경우
                 if(PalnDays==0){
                   Object.assign(days,{[start_date]:{disabled: true, startingDay: true, color: color[colorpick%color.length][1], endingDay: true , textColor: 'black'}})      
                 }
+                //프로젝트 기한이 여러 날일 경우
                 else{
+                  //프로젝트 마감이 체험판 마감일 전일 경우
+                  if(experFinEnd<0){
                     for(let j=1;j<=PalnDays;j++){ 
-                      Object.assign(days,{[start_date]:{startingDay: true, color: color[colorpick%color.length][0] , textColor: 'black', }},{[moment(start_date).add(j,"d").format("YYYY-MM-DD")]:{ color: color[colorpick%color.length][1], textColor: 'gray'}},{[moment(start_date).add(experience_period,"d").format("YYYY-MM-DD")]:{endingDay: true, color: color[colorpick%color.length][0], textColor: 'black'}})    
+                      Object.assign(days,{[start_date]:{startingDay: true, color: color[colorpick%color.length][0] , textColor: 'black', }},{[moment(start_date).add(j,"d").format("YYYY-MM-DD")]:{ color: color[colorpick%color.length][1], textColor: 'gray'}},{[end_date]:{endingDay: true, color: color[colorpick%color.length][0], textColor: 'black'}})    
                     }
+                  }
+                  //체험판 마감이 프로젝트 마감보다 먼저인 경우
+                  else{
+                    console.log(experienceEnd,date_end)
+                    for(let j=1;j<(experFinStart*-1);j++){ 
+                      Object.assign(days,{[start_date]:{startingDay: true, color: color[colorpick%color.length][0] , textColor: 'black', }},{[moment(start_date).add(j,"d").format("YYYY-MM-DD")]:{ color: color[colorpick%color.length][1], textColor: 'gray'}},{[experienceEnd.format("YYYY-MM-DD")]:{endingDay: true, color: color[colorpick%color.length][0], textColor: 'black'}})    
+                    }
+                  }
                 }
+
               }
             }
             else{
@@ -72,7 +87,6 @@ function Calender(props){
 
   const checkPlan=(day)=>{
 
-    console.log(props.plan)
     let Plans=props.plans
     var date=moment(day.dateString);
     let duringDay=0
@@ -101,9 +115,13 @@ function Calender(props){
 
     if(!isplan) setchapter('')
   }
+
+
   useEffect(()=>{
     DateSet()
   },[props])
+
+
     return(
         <View style={{  paddingTop: 20,bottom:20, flex: 1 }}>
         <Calendar
