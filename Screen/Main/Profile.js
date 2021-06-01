@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {useState,useEffect, useRef} from 'react';
+import React, {useState,useEffect, useRef,useContext} from 'react';
 import RNRestart from 'react-native-restart';
 import {
   StyleSheet,
@@ -29,9 +29,10 @@ import colors from '../../src/colors'
 import {logout,getcurrentuser,getattendances,tutorgetproject,getlikes} from '../../src/Api';
 import cat from '../../assets/cat2.png'
 import {EachTabViewsProjects,renderTabBar} from '../../src/utils/EachTab'
+import {CurrentUser} from '../../src/utils/CurrentUser'
 
 const Profile = (props) => {
-  const [myinfo,setMyinfo] = useState({"email": "", "id": -1, "image": "", "info": "", "likes_count": -1, "name": "", "phone": "", "status": "", "type": ""})
+  const [myinfo,setMyinfo] = useContext(CurrentUser)
   const showscreen = useRef(false)
   const [project,setProject] = useState([])
   const [finishedproject,setFinishedProject] = useState([]);
@@ -42,6 +43,9 @@ const Profile = (props) => {
     const rerender = props.navigation.addListener('focus', e => {
       console.log("welcome back")
       getcurrentuser().then(res => {
+        console.log('◇◇◇◇◇◇◇◇◇get current user◇◇◇◇◇◇◇◇')
+        console.log(res.data)
+        console.log('◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇◇')
         setMyinfo(res.data)
         if(res.data.type ==='Tutee'){
           getattendances().then(res => {
