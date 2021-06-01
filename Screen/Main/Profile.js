@@ -135,12 +135,12 @@ const Profile = (props) => {
     <SafeAreaView style={styles.container}>
     {showscreen && (
         <View style={{flexDirection:'row',marginTop:30,paddingHorizontal:20}}>
-          <View style={{width: '30%',justifyContent:'center',alignItems:'flex-start'}}>
+          <TouchableOpacity style={{width: '30%',justifyContent:'center',alignItems:'flex-start'}} onPress={()=> props.navigation.navigate('UserProfileUpload')}>
             {myinfo.image === ' '
               ?<Image source={cat} style={styles.avatar} />
               :<Image source={{uri: myinfo.image}} style={styles.avatar} />
             }
-          </View>
+          </TouchableOpacity>
           <View style={{width:'70%'}}>
             <View style={[styles.userinfoWrapper,{height:50}]}>
               <Text style={{fontSize:20,fontWeight:'bold'}}>{myinfo.name}</Text>
