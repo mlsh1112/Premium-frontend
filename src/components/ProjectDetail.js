@@ -4,7 +4,7 @@ import { Card } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../colors';
 import {Button} from '../components';
-import firebase,{firestore} from '../../FirebaseConfig/Firebase'
+import firestore from '@react-native-firebase/firestore'
 import {createattendances,getproject,getattendances,deleteproject,quitproject,getbookforproject} from '../Api'
 import {CurrentUser} from '../utils/CurrentUser'
 
@@ -124,7 +124,7 @@ const ProjectDetail =(props)=> {
           })
         }
         if(myinfo.type === 'Tutor'){
-          const groupsRef = firestore.collection('GROUPS').where('projectID','==',project.id)
+          const groupsRef = firestore().collection('GROUPS').where('projectID','==',project.id)
           groupsRef.get().then(res => {
             res.forEach((r)=>{
                 console.log('--------------------chat target------------------')
@@ -142,6 +142,7 @@ const ProjectDetail =(props)=> {
             console.log(res.data)
             setBook(res.data)
           }).catch(e => {
+            console.log('----------- get book error ------------')
             console.log(e)
           })
         }).catch(e => {
