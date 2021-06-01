@@ -7,20 +7,25 @@ import {
     View,
     Text,
     ScrollView,
-    Dimensions
+    Dimensions,
+    LogBox,
+    StatusBar
   } from 'react-native';
 import {Button} from '../../src/components'
-import { gettutees } from '../../src/Api';
-
-
+import { gettutees,getPlan } from '../../src/Api';
+import Calender from '../../src/components/Calender'
+import { Card } from 'react-native-paper';
 const moment = require("moment");
-
+LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
 const TutorAuthentication = ({navigation,route }) => {
+    const calendarform = new Object({'project':route.params.project})
+    console.log(calendarform)
     const [tutees,setTutees] = useState();
+    const [notconfirmed,setNotconfirmed] = useState();
     const project=route.params.project
-    console.log(project)
     const [howmany,setHowmany]=useState(0)
-    
+    var [plans,setPlans]=useState()
+    var [chapter,setChapter]=useState()
     const now = moment().format('YYYY-MM-DD')
     const startDate = moment(project.started_at).format('YYYY-MM-DD')
     const realnow = moment(now)
@@ -31,7 +36,17 @@ const TutorAuthentication = ({navigation,route }) => {
     if(remainDay >= 0){
         pastDay = project.duration - remainDay
     }
+    console.log('☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆')
     console.log(project)
+    console.log('☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆')
+    const todayChapter= (plansT)=>{
+        const now = moment()
+        plansT.map(plan=>{
+          let difStart = now.diff(moment(plan.start_at),'days')
+          let difEnd = now.diff(moment(plan.end_at),'days')
+          if(difStart>=0 && difEnd <=0) setChapter(plan.chapter.title)
+        })
+      }
     useEffect(()=>{
         navigation.addListener('focus', ()=>{
             gettutees({
@@ -47,8 +62,27 @@ const TutorAuthentication = ({navigation,route }) => {
                 const todaynotconfirmedauth = todayauth.filter((auth)=>{
                     return auth.status !=='confirm'
                 })
+                const nottodayauth = res.data.filter((auth)=> {
+                    const created = moment(auth.created_at).format('YYYY-MM-DD')
+                    const realcreated_at = moment(created)
+                    console.log(realnow,realcreated_at)
+                    return realnow.diff(realcreated_at,'days') !== 0
+                })
+                const nottodaynotconfirm = nottodayauth.filter((auth)=> {
+                    return auth.status !== 'confirm'
+                })
+                setNotconfirmed(nottodaynotconfirm)
                 setTutees(todaynotconfirmedauth)
                 setHowmany(todayauth.length - todaynotconfirmedauth.length)
+                getPlan({
+                    "project_id": project.id
+                  }).then((res)=>{
+                    setPlans(res.data);
+                    todayChapter(res.data)
+                  })
+                  .catch((err)=>{
+                    console.log(err)
+                  })
             }).catch(err=>{
                 console.log('--------------get tutees 에러 ---------------')
                 console.log(err)
@@ -80,10 +114,8 @@ const TutorAuthentication = ({navigation,route }) => {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={{flexDirection:'row'}}>
-                <Text style={styles.prjtitlestlye}>{route.params.project.title}</Text>
-            </View>
+        
+            <ScrollView>
             <View style={styles.authratestyle}>        
                 <View style={styles.precentPosition}>
                     <Text style={styles.presentTextStyle}>현재 진행률</Text>
@@ -94,12 +126,15 @@ const TutorAuthentication = ({navigation,route }) => {
                     <Text style={styles.percentStyle}>{howmany} 명</Text>
                 </View>
             </View >
-
+            <View style={styles.todayplanBack}>
+              <Text style={styles.titleTxt}>전체일정 💫</Text>
+              <Calender plans={plans} project={calendarform}/>
+            </View>
             <View style={{marginRight:'55%', marginBottom:'5%'}}>
-                <Text style={styles.authtuteeStyle}>   오늘 인증 한 튜티</Text>
+                <Text style={styles.authtuteeStyle}>   오늘의 인증</Text>
             </View>
             {   pastDay > 0 
-                    ?   (<ScrollView>
+                    ?   (<View style={{alignItems:'center'}}>
                         { tutees
                             ? (<View style={styles.tuteelistview}>
                                     {tutees.map((tutee,index)=>{
@@ -110,7 +145,7 @@ const TutorAuthentication = ({navigation,route }) => {
                               </View>)
                             : null
                         }    
-                        </ScrollView>)
+                        </View>)
                     :   (<View>
                             <View style={{marginTop:100,marginBottom:195}}>
                                 <Text style={styles.paytxtStyle}>이 프로젝트는 완료된 프로젝트 입니다!</Text>
@@ -120,21 +155,45 @@ const TutorAuthentication = ({navigation,route }) => {
                             </Button>
                         </View>)   
             }
-        </View>
-    );
+            { !notconfirmed
+              ? (<View style={{marginRight:'55%', marginBottom:'5%'}}>
+                    <Text style={styles.authtuteeStyle}>   확인이 안된 인증</Text>
+                </View>)
+              : null
+            }
+            { notconfirmed
+                ? (<View style={styles.tuteelistview}>
+                        {notconfirmed.map((tutee,index)=>{
+                                return <TuteeListComponent tutee={tutee} navigation={navigation} key={index} project={project}/>   
+                            })
+                        }
+                  </View>)
+                : null
+            }  
+        </ScrollView>
+        
+        );
+        
+    }
     
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex : 1,
-        justifyContent:'center',
-        alignItems: 'center',
-        margin:'3%',
-    },
-    precentPosition:{
-        flex:1,
-        margin: 20,
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            justifyContent:'center'
+        },
+        authratestyle:{
+            flexDirection:'row',
+            borderColor:'#D0DBEA',
+            borderBottomWidth:2,
+            marginBottom:10,
+            justifyContent:'center',
+            alignItems: 'center',
+            width:'100%',
+            height:Dimensions.get('window').height*0.2,
+        },
+        precentPosition:{
+            flex:1,
+            margin: 20,
         justifyContent:'center',
         alignItems: 'center',
         height:'100%',
@@ -143,13 +202,13 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
         fontSize:20,
         color:colors.maincolor,
-        marginBottom:'20%'
+        marginBottom:'10%'
     },
     authTextStyle:{
         fontWeight:'bold',
         fontSize:20,
         color:'#FF6464',
-        marginBottom:'20%'
+        marginBottom:'10%'
     },
     percentStyle:{
         fontWeight:'bold',
@@ -197,21 +256,23 @@ const styles = StyleSheet.create({
         fontSize:24,
         fontWeight:'bold',
     },
-    authratestyle:{
-        flexDirection:'row',
-        borderColor:'#D0DBEA',
-        borderBottomWidth:2,marginBottom:'5%',
-        justifyContent:'center',
-        alignItems: 'center',
-        width:'100%',
-        height:'20%'
-    },
     tuteelistview: {
         flex:1,
         justifyContent:'center',
         alignItems:'center',
         width: (Dimensions.get('window').width * 0.9)
-    }
+    },
+    todayplanBack:{
+        flex:1,
+        padding:20,
+        
+      },
+      titleTxt:{
+        fontWeight:'bold',
+        fontSize:20,
+        paddingLeft:8,
+        paddingBottom:13
+      },
   });
 
 export default TutorAuthentication;
