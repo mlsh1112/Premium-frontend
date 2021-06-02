@@ -14,7 +14,8 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
-  useWindowDimensions, 
+  useWindowDimensions,
+  Alert 
 } from 'react-native';
 import {
   Title,
@@ -40,6 +41,7 @@ const Profile = (props) => {
   const [school,setSchool] = useState('아주대학교');
   const [mylikelists,setMylikelists] = useState([])
   const [modalVisible,setModalVisible] = useState(false)
+
   useEffect(() => {
     const rerender = props.navigation.addListener('focus', e => {
       console.log("welcome back")
@@ -118,7 +120,11 @@ const Profile = (props) => {
 
   const goToCreateProject = () => {
     console.log("프로젝트 생성하러가기");
-    props.navigation.navigate('ProjectForm');
+    if(project.length >0){
+      Alert.alert('이미 생성된 프로젝트가 있습니다.','튜터는 한번에 1개의 프로젝트만 진행하실 수 있습니다. 기존의 프로젝트를 삭제하시거나 수정해주세요.')
+    }else {
+      props.navigation.navigate('ProjectForm');
+    }
   }
   const goToAuth = () => {
     console.log("인증하러 하러가기");
