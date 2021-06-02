@@ -10,8 +10,8 @@ import colors from './colors';
 import { launchCamera,launchImageLibrary } from 'react-native-image-picker';
 
 const Imagepicker = (props) => {
-  const [imageSource, setImageSource] = useState('');
-  
+  const [imageSource, setImageSource] = useState(props.defaultimage);
+  console.log(props)
   const options = {
     title: 'Load Photo',
     mediaType: 'photo',
@@ -34,8 +34,10 @@ const Imagepicker = (props) => {
         console.log("user take picture!!")
         console.log(response)
         console.log(response.uri)
-        props.getImage(response)
-        setImageSource(response.uri);
+        if(response.uri !== undefined){
+          props.getImage(response)
+          setImageSource(response.uri);
+        }
       }
     });
   };
@@ -49,8 +51,10 @@ const Imagepicker = (props) => {
         console.log("user pick picture!!")
         console.log("=================================")
         console.log(response.uri)
-        props.getImage(response)
-        setImageSource(response.uri);
+        if(response.uri !== undefined){
+          props.getImage(response)
+          setImageSource(response.uri);
+        }
       }
     });
   };

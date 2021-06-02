@@ -30,6 +30,7 @@ import {logout,getcurrentuser,getattendances,tutorgetproject,getlikes} from '../
 import cat from '../../assets/cat2.png'
 import {EachTabViewsProjects,renderTabBar} from '../../src/utils/EachTab'
 import {CurrentUser} from '../../src/utils/CurrentUser'
+import LoadingModal from '../../src/components/LoadingModal'
 
 const Profile = (props) => {
   const [myinfo,setMyinfo] = useContext(CurrentUser)
@@ -38,7 +39,7 @@ const Profile = (props) => {
   const [finishedproject,setFinishedProject] = useState([]);
   const [school,setSchool] = useState('아주대학교');
   const [mylikelists,setMylikelists] = useState([])
-  
+  const [modalVisible,setModalVisible] = useState(false)
   useEffect(() => {
     const rerender = props.navigation.addListener('focus', e => {
       console.log("welcome back")
@@ -104,14 +105,14 @@ const Profile = (props) => {
   
   const handleLogoutPress = ()=> {  //로그아웃 function
     console.log('로그아웃 버튼 눌림!')
-    logout().then(res => {
+    setModalVisible(true)
+    logout().then(async(res) => {
       console.log('로그아웃 성공!!!')
-      AsyncStorage.removeItem('token');
-      RNRestart.Restart();
-          
+      await AsyncStorage.removeItem('token');
+      RNRestart.Restart()
     }).catch(e => {
       console.log('================== 로그아웃 에러 ==================')
-      console.log(e.response)
+      console.log(e)
     })
   }
 
@@ -185,7 +186,8 @@ const Profile = (props) => {
                </TouchableOpacity>)
             : (<TouchableOpacity style={[styles.buttonposition,{width: 140,}]} onPress={goToAuth}>
                 <Text style={styles.buttonstyle}>인증하러가기</Text>
-               </TouchableOpacity>)}
+               </TouchableOpacity>)
+          }
         </View>
      
     )}
@@ -233,6 +235,7 @@ const Profile = (props) => {
         initialLayout={{ width: layout.width }}
       />
     )}
+    <LoadingModal visible={modalVisible}/>
     </SafeAreaView >
   );
 };
