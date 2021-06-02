@@ -32,11 +32,14 @@ function Calender(props){
             colorpick++
             var start_date=moment(item.start_at).format("YYYY-MM-DD")
             var end_date=moment(item.end_at).format("YYYY-MM-DD")
-            
             var date_start=moment(item.start_at);
             var date_end=moment(item.end_at);
             var PalnDays=date_end.diff(date_start,'days')
 
+            if( item.holiday ==='holiday'){
+              end_date = moment(item.end_at).subtract(1,'days').format("YYYY-MM-DD")
+              PalnDays-=1
+          }
             if(Trial)
             {
               var experFinStart =date_start.diff(experienceEnd,'days')
@@ -67,7 +70,6 @@ function Calender(props){
               }
             }
             else{
-              var PalnDays=date_end.diff(date_start,'days')
               if(PalnDays==0){
                 Object.assign(days,{[start_date]:{disabled: true, startingDay: true, color: color[colorpick%color.length][1], endingDay: true , textColor: 'black'}})      
               }
@@ -94,7 +96,9 @@ function Calender(props){
       let difStart = date.diff(moment(plan.start_at),'days')
       let difEnd = date.diff(moment(plan.end_at),'days')
       let experFinEnd = date.diff(experienceEnd,'days')
-
+      if( plan.holiday ==='holiday'){
+        difEnd = date.diff(moment(plan.end_at).subtract(1,'days'),'days')
+    }
       if(Trial){
         if(experFinEnd<=0){
           if(difStart>=0 && difEnd <=0){

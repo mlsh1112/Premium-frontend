@@ -31,7 +31,7 @@ const AuthLoading = (props) => {
                     setCurrentUser(res.data)
                     props.navigation.replace('Main');
                 }).catch(e=>{
-                    console.log(e)
+                    console.log('setCurrentUser',e)
                 })
                 console.log("Go to Main");
             }
