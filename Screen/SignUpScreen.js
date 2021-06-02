@@ -30,7 +30,8 @@ const validationSchema = Yup.object().shape({
   password: Yup.string()
     .required("비밀번호를 입력해주세요."),
   Comfirm_password: Yup.string()
-    .required("비밀번호 확인을 입력해주세요."),
+    .required("비밀번호 확인을 입력해주세요.")
+    .oneOf([Yup.ref("password")], "비밀번호가 다릅니다."),
   Phone:Yup.number()
   .integer("숫자만 입력해주세요")
   .min(8)  
