@@ -101,7 +101,7 @@ const Profile = (props) => {
   };
 
   const handleChangeProfile=()=>{
-    props.navigation.navigate('Modifyprofile',{myinfo});
+    props.navigation.navigate('Modifyprofile',{myinfo,project});
     
   }
   
@@ -158,8 +158,10 @@ const Profile = (props) => {
             <View style={styles.userinfoWrapper}>
               { myinfo.type === "Tutor"
                 ? (<View>
-                    <Icon name="teach" color="#F63D3D" size={20}/>
-                    <Text style={styles.caption,{color:"#F63D3D"}}>{myinfo.type}</Text>
+                    <View style={{flexDirection:'row'}}>
+                      <Icon name="teach" color="#F63D3D" size={20}/>
+                      <Text style={styles.caption,{color:"#F63D3D"}}>{myinfo.type}</Text>
+                    </View> 
                     <Text style={styles.caption,{color:"#F48705"}}>[ {myinfo.status} ]</Text>
                   </View>
                   )
@@ -206,7 +208,7 @@ const Profile = (props) => {
         </View>
         <View style={styles.infoBox}>
           <Title>{finishedproject.length}</Title>
-          <Caption>완료한 프로젝트</Caption>
+          <Caption>종료된 프로젝트</Caption>
         </View>   
         
         {
