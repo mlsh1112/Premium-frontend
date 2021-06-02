@@ -9,7 +9,7 @@ import {Card} from 'react-native-paper'
 import { useEffect,useState } from 'react';
 function Calender(props){
   let Trial=false
-  props.project.status==='trial'?
+  props.project.status!=='trial'?
   Trial=true:Trial=false
 
   let experience_period=props.project.project.experience_period 
