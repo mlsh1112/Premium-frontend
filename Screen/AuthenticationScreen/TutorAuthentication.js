@@ -9,17 +9,16 @@ import {
     ScrollView,
     Dimensions,
     LogBox,
-    StatusBar
   } from 'react-native';
 import {Button} from '../../src/components'
 import { gettutees,getPlan } from '../../src/Api';
 import Calender from '../../src/components/Calender'
-import { Card } from 'react-native-paper';
+
 const moment = require("moment");
 LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+
 const TutorAuthentication = ({navigation,route }) => {
     const calendarform = new Object({'project':route.params.project})
-    console.log(calendarform)
     const [tutees,setTutees] = useState();
     const [notconfirmed,setNotconfirmed] = useState();
     const project=route.params.project
@@ -32,7 +31,7 @@ const TutorAuthentication = ({navigation,route }) => {
     const realstartDate = moment(startDate)
     const remainDay = realnow.diff(realstartDate,'days')
     var pastDay = project.duration
-    // var pastDay = 0
+    
     if(remainDay >= 0){
         pastDay = project.duration - remainDay
     }
@@ -56,7 +55,6 @@ const TutorAuthentication = ({navigation,route }) => {
                 const todayauth = res.data.filter((auth) => {
                     const created = moment(auth.created_at).format('YYYY-MM-DD')
                     const realcreated_at = moment(created)
-                    console.log(realnow,realcreated_at)
                     return realnow.diff(realcreated_at,'days') === 0
                 })
                 const todaynotconfirmedauth = todayauth.filter((auth)=>{
@@ -65,15 +63,12 @@ const TutorAuthentication = ({navigation,route }) => {
                 const nottodayauth = res.data.filter((auth)=> {
                     const created = moment(auth.created_at).format('YYYY-MM-DD')
                     const realcreated_at = moment(created)
-                    console.log(realnow,realcreated_at)
                     return realnow.diff(realcreated_at,'days') !== 0
                 })
                 const nottodaynotconfirm = nottodayauth.filter((auth)=> {
                     return auth.status !== 'confirm'
                 })
-                setNotconfirmed(nottodaynotconfirm)
-                setTutees(todaynotconfirmedauth)
-                setHowmany(todayauth.length - todaynotconfirmedauth.length)
+                
                 getPlan({
                     "project_id": project.id
                   }).then((res)=>{
@@ -83,6 +78,9 @@ const TutorAuthentication = ({navigation,route }) => {
                   .catch((err)=>{
                     console.log(err)
                   })
+                setNotconfirmed(nottodaynotconfirm)
+                setTutees(todaynotconfirmedauth)
+                setHowmany(todayauth.length - todaynotconfirmedauth.length)
             }).catch(err=>{
                 console.log('--------------get tutees 에러 ---------------')
                 console.log(err)
@@ -92,12 +90,6 @@ const TutorAuthentication = ({navigation,route }) => {
 
     function TuteeListComponent({tutee,navigation,project}){
         const tuteeinfo=tutee.target
-        // console.log(project)
-        console.log('---------------------')
-        console.log(tuteeinfo)
-        console.log(tutee)
-        console.log('---------------------')
-        // if(now.diff(moment(tutee.created_at),'days') === 0 && tutee.status !== 'confirm'){
         
         return(
             <View style={styles.tuteeBarStyle}>
@@ -155,12 +147,9 @@ const TutorAuthentication = ({navigation,route }) => {
                             </Button>
                         </View>)   
             }
-            { !notconfirmed
-              ? (<View style={{marginRight:'55%', marginBottom:'5%'}}>
+                <View style={{marginRight:'55%', marginBottom:'5%'}}>
                     <Text style={styles.authtuteeStyle}>   확인이 안된 인증</Text>
-                </View>)
-              : null
-            }
+                </View>
             { notconfirmed
                 ? (<View style={styles.tuteelistview}>
                         {notconfirmed.map((tutee,index)=>{
@@ -176,24 +165,24 @@ const TutorAuthentication = ({navigation,route }) => {
         
     }
     
-    const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            justifyContent:'center'
-        },
-        authratestyle:{
-            flexDirection:'row',
-            borderColor:'#D0DBEA',
-            borderBottomWidth:2,
-            marginBottom:10,
-            justifyContent:'center',
-            alignItems: 'center',
-            width:'100%',
-            height:Dimensions.get('window').height*0.2,
-        },
-        precentPosition:{
-            flex:1,
-            margin: 20,
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent:'center'
+    },
+    authratestyle:{
+        flexDirection:'row',
+        borderColor:'#D0DBEA',
+        borderBottomWidth:2,
+        marginBottom:10,
+        justifyContent:'center',
+        alignItems: 'center',
+        width:'100%',
+        height:Dimensions.get('window').height*0.2,
+    },
+    precentPosition:{
+        flex:1,
+        margin: 20,
         justifyContent:'center',
         alignItems: 'center',
         height:'100%',
@@ -266,13 +255,13 @@ const TutorAuthentication = ({navigation,route }) => {
         flex:1,
         padding:20,
         
-      },
-      titleTxt:{
+    },
+    titleTxt:{
         fontWeight:'bold',
         fontSize:20,
         paddingLeft:8,
         paddingBottom:13
-      },
-  });
+    },
+});
 
 export default TutorAuthentication;
