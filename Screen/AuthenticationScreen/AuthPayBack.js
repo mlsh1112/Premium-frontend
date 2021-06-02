@@ -25,7 +25,9 @@ const AuthPay=({navigation,route})=>{
     console.log(project)
     function handleSubmit(){
         console.log('press')
-        projectrefund(project.id).then(res => {
+        projectrefund({
+            'project_id' : project.id
+        }).then(res => {
             console.log(res)
             Alert.alert('보증금 환급 신청이 완료되었습니다.')
             navigation.navigate('Authentication')
