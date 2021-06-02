@@ -33,6 +33,8 @@ import {EachTabViewsProjects,renderTabBar} from '../../src/utils/EachTab'
 import {CurrentUser} from '../../src/utils/CurrentUser'
 import LoadingModal from '../../src/components/LoadingModal'
 
+const moment = require("moment");
+
 const Profile = (props) => {
   const [myinfo,setMyinfo] = useContext(CurrentUser)
   const showscreen = useRef(false)
@@ -41,7 +43,9 @@ const Profile = (props) => {
   const [school,setSchool] = useState('아주대학교');
   const [mylikelists,setMylikelists] = useState([])
   const [modalVisible,setModalVisible] = useState(false)
-
+  const now = moment().format('YYYY-MM-DD')
+  const realnow = moment(now)
+  
   useEffect(() => {
     const rerender = props.navigation.addListener('focus', e => {
       console.log("welcome back")
@@ -58,7 +62,19 @@ const Profile = (props) => {
             }).catch(e=>{
                 console.log(e)
             })
-            setProject(res.data)
+            console.log(res.data)
+            const finished = res.data.filter((pr)=>{
+              const startDate = moment(pr.project.started_at).format('YYYY-MM-DD')
+              const realstartDate = moment(startDate)
+              return realnow.diff(realstartDate,'days') > pr.project.duration -1
+            })
+            const inprogress = res.data.filter((pr)=>{
+              const startDate = moment(pr.project.started_at).format('YYYY-MM-DD')
+              const realstartDate = moment(startDate)
+              return realnow.diff(realstartDate,'days') <= pr.project.duration -1
+            })
+            setFinishedProject(finished)
+            setProject(inprogress)
           }).catch(e => {
             console.log('-----------------get attendance error----------------')
             console.log(e)
@@ -69,7 +85,19 @@ const Profile = (props) => {
             q: {tutor_id_eq: res.data.id}
           }).then(res => {
             console.log('tutor get project list complete')
-            setProject(res.data)
+            console.log(res.data)
+            const finished = res.data.filter((pr)=>{
+              const startDate = moment(pr.started_at).format('YYYY-MM-DD')
+              const realstartDate = moment(startDate)
+              return realnow.diff(realstartDate,'days') > pr.duration - 1
+            })
+            const inprogress = res.data.filter((pr)=>{
+              const startDate = moment(pr.started_at).format('YYYY-MM-DD')
+              const realstartDate = moment(startDate)
+              return realnow.diff(realstartDate,'days') <= pr.duration - 1
+            })
+            setFinishedProject(finished)
+            setProject(inprogress)
           }).catch(e => {
             console.log("=======get tutor project error========")
             console.log(e)
