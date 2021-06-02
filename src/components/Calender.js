@@ -29,6 +29,7 @@ function Calender(props){
         let experienceEnd=moment(Plans[0].start_at).add(experience_period-1,"d")
        
         Plans.map((item)=>{
+          console.log(item)
             colorpick++
             var start_date=moment(item.start_at).format("YYYY-MM-DD")
             var end_date=moment(item.end_at).format("YYYY-MM-DD")

@@ -36,7 +36,7 @@ const TuteeAutdetail=({navigation,route})=>{
     }
     else if(project.status==='full'){
         pastDay=route.params.pastDay
-        percent = Math.floor((auths/project.project.duration)*100)
+        percent =Math.floor((auths/project.project.duration)*100)
 
     }
     
