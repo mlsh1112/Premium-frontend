@@ -12,6 +12,16 @@ const Button = ({ onPress, children }) => {
     </View>
   );
 };
+const DestroyButton = ({ onPress, children }) => {
+  const { button, text } = styles;
+  return (
+    <View style={{flexDirection: 'row'}}>
+      <TouchableOpacity style={[styles.buttonposition,{backgroundColor:'red'}]} onPress={onPress}>
+                <Text style={[styles.buttonstyle,{color:'black'}]}>{children}</Text>
+        </TouchableOpacity>
+    </View>
+  );
+};
 const KakaoButton = ({ onPress }) => {
   const { button, text } = styles;
   return (
@@ -47,7 +57,7 @@ const styles = {
       width:190,
       height:45,
       borderRadius:10
-  }
+  },
 };
 
-export { Button,KakaoButton };
+export { Button,KakaoButton,DestroyButton };
