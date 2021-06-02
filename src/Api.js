@@ -98,7 +98,7 @@ export const deleteproject = (projectid) => API.delete(PORT+`/projects/${project
 export const quitproject = (params) => API.delete(PORT+'/attendances',{params})
 export const getPlan=(params)=>API.get(PORT+'/options',{params})
 export const submitauth = (formData) => FORMAPI.post(PORT+"/auths/", formData)
-export const projectrefund = (projectid) => API.get(PORT+`/projects/${projectid}/refund`)
+export const projectrefund = (params) => API.get(PORT+`/projects/refund`,{params})
 export const getmylikes = () => API.get(PORT+'/users/mylikes')
 export const getbookforproject = (id) => API.get(PORT+`/books/${id}`)
 export const appleLogin = (params) => API.get(PORT+'/apple/login',{params})

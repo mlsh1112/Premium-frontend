@@ -47,7 +47,8 @@ const Chapter = (props) => {
       }
       else {
         console.log('챕터가져오기 수행!!! : '+ book.title)
-        const query = {title: book.title}
+        // const query = {title: book.title}
+        const query = {isbn: book.isbn}
         getchapter({ book: query }).then(res => {
             res.data.chapters.map((chapter)=> {
                 chapter.weight = 1
