@@ -8,10 +8,17 @@ import firestore from '@react-native-firebase/firestore'
 import {createattendances,getproject,getattendances,deleteproject,quitproject,getbookforproject} from '../Api'
 import {CurrentUser} from '../utils/CurrentUser'
 
+const moment = require("moment");
+
 const ProjectDetail =(props)=> {
+  const project=props.route.params.project
+  const now = moment().format('YYYY-MM-DD')
+  const startDate = moment(project.started_at).format('YYYY-MM-DD')
+  const realnow = moment(now)
+  const realstartDate = moment(startDate)
+  const remainDay = realnow.diff(realstartDate,'days')// >=0 이면 프로젝트 시작
   var [isJoin,setisJoin]=useState(false)
   var [isExperienced,setisExperienced]=useState(true)
-  const project=props.route.params.project
   const [latestpr,setLatestpr] = useState(project)
   const [book,setBook] = useState()
   const [myinfo,setMyinfo] = useContext(CurrentUser)
@@ -238,7 +245,10 @@ const ProjectDetail =(props)=> {
                   {
                     myinfo.type !== 'Tutor'
                     ?( isJoin === false 
-                      ? (<Button onPress={()=>{handleAttendence()}}>{latestpr.experience_period} DAYS  체험하기</Button> )
+                      ? (remainDay < 0
+                          ?<Button onPress={()=>{handleAttendence()}}>{latestpr.experience_period} DAYS  체험하기</Button> 
+                          :<Button> 이미 시작된 프로젝트입니다.</Button>
+                        )
                       : (<Button onPress={()=>{tuteequitproject()}}>프로젝트 그만두기</Button> )
                     )
                     : null
