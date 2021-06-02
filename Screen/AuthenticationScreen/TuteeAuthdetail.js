@@ -28,7 +28,6 @@ const TuteeAutdetail=({navigation,route})=>{
     var [plans,setPlans]=useState()
     var [chapter,setChapter]=useState()
 
-
     if(project.status==='trial'){
         pastDay=route.params.pastDay
         percent = Math.floor((auths/project.project.experience_period)*100)
@@ -74,7 +73,7 @@ const TuteeAutdetail=({navigation,route})=>{
         <Card style={styles.cardStyle}>
           <View style={styles.dayTextPosition}>
             <View style={styles.textPosition}>
-              <Text style={styles.redDayText}>{remainDay}</Text><Text style={styles.blackDayTxt}>일 차  |</Text>
+              <Text style={styles.redDayText}>{remainDay+5}</Text><Text style={styles.blackDayTxt}>일 차  |</Text>
             </View>
             <View style={styles.textPosition}>
               <Text style={styles.redDayText}>{auths+1}</Text><Text style={styles.blackDayTxt}>번째 인증</Text>
