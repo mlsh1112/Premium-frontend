@@ -90,6 +90,14 @@ function Search({navigation}) {
     const setAsync = (value)=>{
       console.log(value)
       sethistory([value,...history])
+      console.log('add history',history)
+      AsyncStorage.getItem('keyword')
+      .then(req => JSON.parse(req))
+      .then(json =>{ 
+        console.log(json)
+       setKeywords(json)
+      })
+      .catch(error => console.log(error))
       setSearchHistory((history))
       console.log('asny',history)
     }
@@ -126,7 +134,6 @@ function Search({navigation}) {
 
     async function pressHistory (value){
       setEnterSearch(value)
-     // setAsync(value)
       const query = {title_or_description_i_cont: value}
       const data = (await getprojects({ q: query})).data
       SetreqData(data)
