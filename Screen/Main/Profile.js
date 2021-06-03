@@ -64,14 +64,12 @@ const Profile = (props) => {
             })
             console.log(res.data)
             const finished = res.data.filter((pr)=>{
-              const startDate = moment(pr.project.started_at).format('YYYY-MM-DD')
-              const realstartDate = moment(startDate)
-              return realnow.diff(realstartDate,'days') > pr.project.duration -1
+              console.log(pr.project.status)
+              return pr.status === 'done'
             })
             const inprogress = res.data.filter((pr)=>{
-              const startDate = moment(pr.project.started_at).format('YYYY-MM-DD')
-              const realstartDate = moment(startDate)
-              return realnow.diff(realstartDate,'days') <= pr.project.duration -1
+              console.log(pr.project.status)
+              return pr.status !== 'done'
             })
             setFinishedProject(finished)
             setProject(inprogress)
@@ -87,14 +85,12 @@ const Profile = (props) => {
             console.log('tutor get project list complete')
             console.log(res.data)
             const finished = res.data.filter((pr)=>{
-              const startDate = moment(pr.started_at).format('YYYY-MM-DD')
-              const realstartDate = moment(startDate)
-              return realnow.diff(realstartDate,'days') > pr.duration - 1
+              console.log(pr.status)
+              return pr.status === 'done'
             })
             const inprogress = res.data.filter((pr)=>{
-              const startDate = moment(pr.started_at).format('YYYY-MM-DD')
-              const realstartDate = moment(startDate)
-              return realnow.diff(realstartDate,'days') <= pr.duration - 1
+              console.log(pr.status)
+              return pr.status !== 'done'
             })
             setFinishedProject(finished)
             setProject(inprogress)
