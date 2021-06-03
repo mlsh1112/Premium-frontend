@@ -27,7 +27,7 @@ const ProjectAuthCard = ({navigation,project}) => {
             <Card >
             <TouchableOpacity onPress={()=> navigation('ProjectDetail',project)}>
                 <View style={cardstyles.card} >
-                    <View style={{margin:15, marginLeft:27}}>
+                    <View style={{justifyContent:'center',height:'100%',paddingHorizontal:15}}>
                     <Text style={cardstyles.textstyle}>{project.project.title}</Text>
                     <View style={{marginTop:5}}>
                     {   remainDay >= 0
@@ -60,7 +60,7 @@ const ProjectAuthCard = ({navigation,project}) => {
             {remainDay < 0?
             <View style={{width:90,height:100}}></View>
             :
-            <TouchableOpacity  onPress={()=>{navigation('TuteeAuthdetail',{project,remainDay,pastDay})}}>
+            <TouchableOpacity style={{justifyContent:'center'}} onPress={()=>{navigation('TuteeAuthdetail',{project,remainDay,pastDay})}}>
                     <Image source={authBtn} style={{width:90,height:100}}></Image>
                     </TouchableOpacity>
             }

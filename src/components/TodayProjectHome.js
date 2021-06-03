@@ -20,9 +20,9 @@ class Projectcard extends Component {
             <View style={{flexDirection:'row',backgroundColor:'white',marginLeft:25,borderRadius:8,height:110}}>
             <Card >
                 <View style={styles.card} >
-                    <View style={{justifyContent:'center',height:'100%',paddingHorizontal:8,}}>
+                    <View style={{justifyContent:'center',height:'100%',paddingHorizontal:15,}}>
                     <Text style={styles.textstyle}>{project.title}</Text>
-                    <View style={{}}>
+                    <View>
                         {remainDay >= 0?
                         <View style={{flexDirection:'row',margin:2}}>
                         <Text style={styles.dayStyle}>{remainDay+1} </Text>
@@ -44,7 +44,8 @@ class Projectcard extends Component {
                     </View>
                 </View>
             </Card>
-            <TouchableOpacity onPress={()=>{ this.props.navigation.navigate('Authentication',{project})}}>
+
+            <TouchableOpacity style={{justifyContent:'center'}} onPress={()=>{ this.props.navigation.navigate('Authentication',{project})}}>
                     <Image source={authBtn} style={{width:90,height:100}}></Image>
                     </TouchableOpacity>
             </View>

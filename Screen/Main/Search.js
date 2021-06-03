@@ -77,7 +77,7 @@ function Search({navigation}) {
   const [isLoading,SetIsLoading]=useState(false);
   const [reqData,SetreqData]=useState([])
   const [history,sethistory]=useState([])
-  const [keywords,setKeywords]=useState()
+  const [keywords,setKeywords]=useState([])
   let ScreenWidth = Dimensions.get('window').width    //screen 너비
   let ScreenHeight = Dimensions.get('window').height   //height 높이
 
@@ -90,7 +90,7 @@ function Search({navigation}) {
     const setAsync = (value)=>{
       console.log(value)
       sethistory([value,...history])
-      setSearchHistory(history)
+      setSearchHistory((history))
       console.log('asny',history)
     }
     
@@ -118,15 +118,15 @@ function Search({navigation}) {
       .then(req => JSON.parse(req))
       .then(json =>{ 
         console.log(json)
-        setKeywords(json)
+       setKeywords(json)
       })
-      .catch(error => console.log('error!'))
+      .catch(error => console.log(error))
 
     },[reqData])
 
     async function pressHistory (value){
       setEnterSearch(value)
-      setAsync(value)
+     // setAsync(value)
       const query = {title_or_description_i_cont: value}
       const data = (await getprojects({ q: query})).data
       SetreqData(data)
@@ -143,8 +143,6 @@ function Search({navigation}) {
         </TouchableOpacity>
       )
     }
-
-
 
 
 
@@ -192,7 +190,7 @@ function Search({navigation}) {
                <>
                <Text style={styles.searchtxt}>최근 검색어</Text>
                {
-                 keywords?
+                 keywords.length!==0?
                  <>
                   {
                     keywords.map((keyword,index)=>{
