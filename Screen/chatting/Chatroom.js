@@ -23,6 +23,7 @@ const Chatroom = (props) => {
             myinfo.current = res.data
             if(res.data.type ==='Tutee'){
               getattendances().then(res => {
+                console.log(res.data)
                 latestpr.current = res.data
                 getChats(latestpr.current,myinfo.current)
               }).catch(e => {
@@ -89,7 +90,7 @@ const Chatroom = (props) => {
             keyExtractor={(item, index) => 'key' + index}
             renderItem={({ item }) => (
               <View>
-                <TouchableOpacity onPress={() => {props.navigation.navigate('Message',{ item: item,myinfo:myinfo.current})}}>
+                <TouchableOpacity onPress={() => {props.navigation.navigate('Message',{ item: item,myinfo:myinfo.current,latestpr})}}>
                   <GroupsItem item={item} />
                 </TouchableOpacity>
               </View>
