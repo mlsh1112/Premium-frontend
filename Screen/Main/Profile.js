@@ -33,8 +33,6 @@ import {EachTabViewsProjects,renderTabBar} from '../../src/utils/EachTab'
 import {CurrentUser} from '../../src/utils/CurrentUser'
 import LoadingModal from '../../src/components/LoadingModal'
 
-const moment = require("moment");
-
 const Profile = (props) => {
   const [myinfo,setMyinfo] = useContext(CurrentUser)
   const showscreen = useRef(false)
@@ -43,8 +41,6 @@ const Profile = (props) => {
   const [school,setSchool] = useState('아주대학교');
   const [mylikelists,setMylikelists] = useState([])
   const [modalVisible,setModalVisible] = useState(false)
-  const now = moment().format('YYYY-MM-DD')
-  const realnow = moment(now)
   
   useEffect(() => {
     const rerender = props.navigation.addListener('focus', e => {
@@ -143,8 +139,8 @@ const Profile = (props) => {
   }
 
   const goToCreateProject = () => {
-    console.log("프로젝트 생성하러가기");
-    if(project.length >0){
+    console.log("프로젝트 생성하러가기 ",project[0].able_start);
+    if(!project[0].able_start){
       Alert.alert('이미 생성된 프로젝트가 있습니다.','튜터는 한번에 1개의 프로젝트만 진행하실 수 있습니다. 기존의 프로젝트를 삭제하시거나 수정해주세요.')
     }else {
       props.navigation.navigate('ProjectForm');
