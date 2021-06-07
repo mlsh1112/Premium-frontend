@@ -9,16 +9,35 @@ const Messsage = (props) => {
     console.log('////////////////////////////////')
     console.log(props.route.params.myinfo)
     console.log('////////////////////////////////')
-    const {myinfo,item} = props.route.params
+    const {myinfo,item,latestpr} = props.route.params
     const [messages, setMessages] = useState([])
     const[isJoin,setIsJoin] = useState(false)
 
     useEffect(()=> {
         console.log('------------- item ---------------')
-        console.log(item)
+        console.log(latestpr.current)
         console.log('------------- ---- ---------------')
+        if(myinfo.type === 'Tutee'){
+            const project = latestpr.current.filter((pr)=>{
+                console.log(pr,item.projectID)
+                return pr.project.id === item.projectID
+            })
+            console.log('filtered project', project,item)
+            if(project[0].pay_status === 'unpaid' && project[0].project.status === 'running'){
+                Alert.alert('체험기간이 지났습니다.','채팅방에 참여하시기 위해선 프로젝트 정식 참여를 위한 보증금 결제가 필요합니다.',[
+                    {
+                        text: '확인',
+                        onPress: () => {
+                            props.navigation.goBack()
+                        }
+                    }
+                ])
+            }else {
+                checkUser()
+            }
+        }
+        
         const db = firestore()
-        checkUser()
         const unsubscribe = db.collection('message').doc(item.groupID).collection('messages').orderBy('createdAt', 'desc').onSnapshot(snapshot => setMessages(
             snapshot.docs.map(doc => ({
                 _id: doc.data()._id,
@@ -27,27 +46,28 @@ const Messsage = (props) => {
                 user: doc.data().user,
             }))
             ));
-            return unsubscribe;
+        return unsubscribe;
     },[])
 
     function checkUser(){
-        firestore().collection('members').doc(item.groupID).collection('member').where('userID','==',myinfo.id)
-        .get().then(querySnapshot => {
-            if(querySnapshot.size >0){
-                querySnapshot.forEach((doc)=>{
-                    if(doc.data() != null){
-                        setIsJoin(true)
-                    }else {
-                        setIsJoin(false)
-                        showAlertToJoin()
-                    }
-                })
-            }else {
-                showAlertToJoin()
-            }
-        }).catch(e => {
-            console.log(e)
-        })
+        console.log('check user')
+            firestore().collection('members').doc(item.groupID).collection('member').where('userID','==',myinfo.id)
+            .get().then(querySnapshot => {
+                if(querySnapshot.size >0){
+                    querySnapshot.forEach((doc)=>{
+                        if(doc.data() != null){
+                            setIsJoin(true)
+                        }else {
+                            setIsJoin(false)
+                            showAlertToJoin()
+                        }
+                    })
+                }else {
+                    showAlertToJoin()
+                }
+            }).catch(e => {
+                console.log(e)
+            })
     }
     function joinGroup(){
         const groupMemberRef = firestore().collection('members').doc(item.groupID).collection('member').doc()
