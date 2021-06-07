@@ -1,4 +1,4 @@
-import React, {Component, useState,createRef,useEffect} from 'react';
+import React from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Button,DestroyButton} from '../components/Button'
 import {
@@ -7,6 +7,7 @@ import {
    View,
    Text,
    TextInput,
+   Alert
  } from 'react-native';
 import RNRestart from 'react-native-restart';
 
@@ -63,20 +64,31 @@ const Modifyprofile=(props)=>{
     if(project.length >=1){
       alert('참여하신 프로젝트가 있어 탈퇴가 불가능합니다.')
     }else{
-      console.log('탈퇴진행중')
-      userdestroy(myinfo.id).then(res=>{
-        console.log(res.data)
-        logout().then(async()=>{
-          console.log("로그아웃 성공")
-          await AsyncStorage.removeItem('token');
-          alert("개인 정보 수정 성공");
-          RNRestart.Restart();
-        }).catch(e=>{
-          console.log(e)
-        })
-      }).catch(e=>{
-        console.log(e)
-      })
+      Alert.alert('회원탈퇴','정말 회원탈퇴를 진행하시겠습니까?',[
+        {
+          text: '확인', onPress: () => {
+            console.log('탈퇴진행중')
+            userdestroy(myinfo.id).then(res=>{
+              console.log(res.data)
+              logout().then(async()=>{
+                console.log("로그아웃 성공")
+                await AsyncStorage.removeItem('token');
+                alert("회원 탈퇴 성공");
+                RNRestart.Restart();
+              }).catch(e=>{
+                console.log(e)
+              })
+            }).catch(e=>{
+              console.log(e)
+            })      
+          }
+        },
+        {
+          text: '취소', onPress: () => {
+            
+          }
+        },
+      ])
     }
   }
   return(
